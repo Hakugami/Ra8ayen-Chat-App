@@ -1,24 +1,24 @@
 package model.entities;
 
 public class ChatGroup {
-    private int id;
+    private int groupId;
     private String name;
     private int adminId;
     private String creationDate;
 
-    public ChatGroup(int id, String name, int adminId, String creationDate) {
-        this.id = id;
+    public ChatGroup(int groupId, String name, int adminId, String creationDate) {
+        this.groupId = groupId;
         this.name = name;
         this.adminId = adminId;
         this.creationDate = creationDate;
     }
 
-    public int getId() {
-        return id;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public String getName() {
@@ -49,7 +49,7 @@ public class ChatGroup {
     public String toString() {
 
             return "ChatGroup{" +
-                    "id=" + id +
+                    "id=" + groupId +
                     ", name='" + name + '\'' +
                     ", adminId=" + adminId +
                     ", creationDate='" + creationDate + '\'' +

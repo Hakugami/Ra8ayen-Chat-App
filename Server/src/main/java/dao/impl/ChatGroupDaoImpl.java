@@ -80,7 +80,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, chatGroup.getName());
             statement.setInt(2, chatGroup.getAdminId());
-            statement.setInt(3, chatGroup.getId());
+            statement.setInt(3, chatGroup.getGroupId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,7 +92,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
         String query = "DELETE FROM ChatGroups WHERE GroupID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, chatGroup.getId());
+            statement.setInt(1, chatGroup.getGroupId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
