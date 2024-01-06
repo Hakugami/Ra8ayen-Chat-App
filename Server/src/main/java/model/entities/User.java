@@ -3,11 +3,11 @@ package model.entities;
 public class User {
 
     // user attributes
-    private int id;
+    private int userID;
     private String phoneNumber;
-    private String name;
-    private String email;
-    private int profilePicture;
+    private String userName;
+    private String emailAddress;
+    private byte[] profilePicture;
     private String passwordHash;
     private Gender gender;
     private String country;
@@ -25,19 +25,18 @@ public class User {
         Online, Offline, Busy, Away
     }
 
+    // user constructor
     public User() {
 
     }
 
-    // user constructor
-    public User(int id, String phoneNumber, String name, String email,
-            int profilePicture, String passwordHash, Gender gender,
-            String country, String dateOfBirth, String bio, UserStatus userStatus,
+    public User(int userID, String phoneNumber, String userName, String emailAddress, byte[] profilePicture,
+            String passwordHash, Gender gender, String country, String dateOfBirth, String bio, UserStatus userStatus,
             String lastLogin) {
-        this.id = id;
+        this.userID = userID;
         this.phoneNumber = phoneNumber;
-        this.name = name;
-        this.email = email;
+        this.userName = userName;
+        this.emailAddress = emailAddress;
         this.profilePicture = profilePicture;
         this.passwordHash = passwordHash;
         this.gender = gender;
@@ -47,26 +46,28 @@ public class User {
         this.userStatus = userStatus;
         this.lastLogin = lastLogin;
     }
+
+    
     // user methods
 
     // user setters
-    public void setId(int id) {
-        this.id = id;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
-    public void setProfilePicture(int profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
 
@@ -97,26 +98,26 @@ public class User {
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
+    
 
     // user getters
-
-    public int getId() {
-        return id;
+      public int getUserID() {
+        return userID;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public int getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 
@@ -148,11 +149,17 @@ public class User {
         return lastLogin;
     }
 
+    
+
     @Override
     public String toString() {
-        return "User [id=" + id + ", phoneNumber=" + phoneNumber + ", name=" + name + ", email=" + email + ", gender="
-                + gender + ", country=" + country + ", dateOfBirth=" + dateOfBirth + ", userStatus=" + userStatus
-                + ", lastLogin=" + lastLogin + "]";
+        return "User [userID=" + userID + ", phoneNumber=" + phoneNumber + ", userName=" + userName + ", emailAddress="
+                + emailAddress + ", gender=" + gender + ", country=" + country + ", dateOfBirth=" + dateOfBirth
+                + ", bio=" + bio + ", userStatus=" + userStatus + ", lastLogin=" + lastLogin + "]";
     }
 
+  
+   
+  
+    
 }
