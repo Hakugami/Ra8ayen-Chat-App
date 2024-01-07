@@ -54,4 +54,15 @@ public class GroupChatMessage {
     public void setMessageDate(String messageDate) {
         this.messageDate = messageDate;
     }
+
+    @Override
+    public String toString() {
+                return "GroupChatMessage{" +
+                        "GroupMessageId=" + GroupMessageId +
+                        ", groupId=" + groupId +
+                        ", senderId=" + senderId +
+                        ", messageContent='" + messageContent + '\'' +
+                        ", messageDate='" + messageDate + '\'' +
+                        '}';
+    }
 }
