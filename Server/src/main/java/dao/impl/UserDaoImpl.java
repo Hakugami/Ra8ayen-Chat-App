@@ -1,5 +1,8 @@
 package dao.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -11,7 +14,7 @@ import model.entities.User.UserStatus;
 import model.entities.UserTable;
 import persistence.connection.DataSourceSingleton;
 
-public class UserDaoImp implements UserDao {
+public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(int userId) {
@@ -52,7 +55,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void addUser(User user) {
-        String query = "INSERT INTO User (PhoneNumber, DisplayName, EmailAddress, " +
+        String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
                 "ProfilePicture, PasswordHash, Gender, Country, DateOfBirth, Bio, UserStatus, LastLogin) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -69,7 +72,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        String query = "UPDATE User SET " +
+        String query = "UPDATE UserAccounts SET " +
                 "DisplayName = ?, EmailAddress = ?, " +
                 "ProfilePicture = ?, PasswordHash = ?, Gender = ?, Country = ?, " +
                 "DateOfBirth = ?, Bio = ?, UserStatus = ?" +
@@ -87,7 +90,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void deleteUser(int userId) {
-        String query = "DELETE FROM User WHERE UserID = ?";
+        String query = "DELETE FROM UserAccounts WHERE UserID = ?";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -102,18 +105,18 @@ public class UserDaoImp implements UserDao {
     // create user using resultSet or convert resultSet from db to user object
     // may throwing checked exceptions(SQLException)
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {
-        int userID = resultSet.getInt(UserTable.USER_ID.name());
-        String phoneNumber = resultSet.getString(UserTable.PHONE_NUMBER.name());
-        String displayName = resultSet.getString(UserTable.DISPLAY_NAME.name());
-        String emailAddress = resultSet.getString(UserTable.EMAIL_ADDRESS.name());
-        byte[] profilePicture = resultSet.getBytes(UserTable.PROFILE_PICTURE.name());
-        String passwordHash = resultSet.getString(UserTable.PASSWORD_HASH.name());
-        Gender gender = Gender.valueOf(resultSet.getString(UserTable.GENDER.name()));
-        String country = resultSet.getString(UserTable.COUNTRY.name());
-        String dateOfBirth = resultSet.getDate(UserTable.DATE_OF_BIRTH.name()).toString();
-        String bio = resultSet.getString(UserTable.BIO.name());
-        UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserTable.USER_STATUS.name()));
-        String lastLogin = resultSet.getDate(UserTable.LAST_LOGIN.name()).toString();
+        int userID = resultSet.getInt(UserTable.UserID.name());
+        String phoneNumber = resultSet.getString(UserTable.PhoneNumber.name());
+        String displayName = resultSet.getString(UserTable.DisplayName.name());
+        String emailAddress = resultSet.getString(UserTable.EmailAddress.name());
+        byte[] profilePicture = resultSet.getBytes(UserTable.ProfilePicture.name());
+        String passwordHash = resultSet.getString(UserTable.PasswordHash.name());
+        Gender gender = Gender.valueOf(resultSet.getString(UserTable.Gender.name()));
+        String country = resultSet.getString(UserTable.Country.name());
+        String dateOfBirth = resultSet.getDate(UserTable.DateOfBirth.name()).toLocalDate().toString();
+        String bio = resultSet.getString(UserTable.Bio.name());
+        UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserTable.UserStatus.name()));
+        String lastLogin = resultSet.getTimestamp(UserTable.LastLogin.name()).toLocalDateTime().toString();
 
         return new User(userID, phoneNumber, displayName, emailAddress, profilePicture,
                 passwordHash, gender, country, dateOfBirth, bio, userStatus, lastLogin);
@@ -128,10 +131,11 @@ public class UserDaoImp implements UserDao {
         /* Gender */
         statement.setString(6, user.getGender().name());
         statement.setString(7, user.getCountry());
-        statement.setDate(8, Date.valueOf(user.getDateOfBirth()));
+        statement.setDate(8, Date.valueOf(LocalDate.parse(user.getDateOfBirth())));
         statement.setString(9, user.getBio());
         statement.setString(10, user.getUserStatus().name());
-        statement.setTimestamp(11, Timestamp.valueOf(user.getLastLogin()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        statement.setTimestamp(11, Timestamp.valueOf(LocalDateTime.parse(user.getLastLogin(), formatter)));
     }
 
     private void update(PreparedStatement statement, User user) throws SQLException {
