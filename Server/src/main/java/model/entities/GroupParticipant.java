@@ -34,4 +34,14 @@ public class GroupParticipant {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+
+                return "GroupParticipant{" +
+                        "groupMemberId=" + groupMemberId +
+                        ", groupId=" + groupId +
+                        ", userId=" + userId +
+                        '}';
+    }
 }
