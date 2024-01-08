@@ -11,7 +11,7 @@ import java.util.List;
 public class GroupParticipantDaoImpl implements GroupParticipantDao {
 
     @Override
-    public GroupParticipant findById(int id) {
+    public GroupParticipant get(int id) {
         String query = "SELECT * FROM GroupParticipants WHERE GroupMemberID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -28,7 +28,7 @@ public class GroupParticipantDaoImpl implements GroupParticipantDao {
     }
 
     @Override
-    public List<GroupParticipant> findAll() {
+    public List<GroupParticipant> getAll() {
         List<GroupParticipant> groupParticipants = new ArrayList<>();
         String query = "SELECT * FROM GroupParticipants";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();

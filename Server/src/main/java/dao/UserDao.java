@@ -4,11 +4,11 @@ import java.util.List;
 
 import model.entities.User;
 
-public interface UserDao {
+public interface UserDao extends Dao<User> {
 
-    User getUserById(int userId);
-    List<User> getAllUsers();
-    void addUser(User user);
-    void updateUser(User user);
-    void deleteUser(int userId);
+    User get(int userId);
+    List<User> getAll();
+    void save(User user);
+    void update(User user);
+    void delete(int userId);
 } 

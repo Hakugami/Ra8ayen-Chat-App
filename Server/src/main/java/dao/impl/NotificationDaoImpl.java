@@ -2,14 +2,14 @@ package dao.impl;
 
 import dao.NotificationDao;
 import persistence.connection.DataSourceSingleton;
-import java.util.stream.Stream;
+
 import java.sql.*;
 import java.util.*;
 import model.entities.*;
 
 public class NotificationDaoImpl implements NotificationDao {
     @Override
-    public Optional<Notification> getNotificationBySenderId(int id) {
+    public Notification get(int id) {
         String query = "SELECT * FROM usernotifications WHERE SenderID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -26,7 +26,7 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
-    public Stream<Notification> getAllNotifications() {
+    public List<Notification> getAll() {
         List<Notification> notifications = new ArrayList<>();
         String query = "SELECT * FROM usernotifications";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -42,7 +42,7 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
-    public void addNotification(Notification notification) {
+    public void save(Notification notification) {
         String query = "INSERT INTO usernotifications (UserID, SenderID, MessageContent, NotificationTimestamp) VALUES (?, ?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -57,7 +57,7 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
-    public void deleteNotification(Notification notification) {
+    public void delete(Notification notification) {
         String query = "DELETE FROM usernotifications WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -69,7 +69,7 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
-    public void updateNotification(Notification notification) {
+    public void update(Notification notification) {
         String query = "UPDATE usernotifications SET MessageContent = ? WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

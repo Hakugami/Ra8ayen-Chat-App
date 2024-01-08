@@ -4,12 +4,12 @@ import model.entities.ChatGroup;
 
 import java.util.List;
 
-public interface ChatGroupDao {
-    ChatGroup getChatGroupById(int id);
+public interface ChatGroupDao extends Dao<ChatGroup>{
+    ChatGroup get(int id);
     ChatGroup getChatGroupByName(String name);
-    List<ChatGroup> findAllChatGroups();
-    void saveChatGroup(ChatGroup chatGroup);
-    void updateChatGroup(ChatGroup chatGroup);
-    void deleteChatGroup(ChatGroup chatGroup);
+    List<ChatGroup> getAll();
+    void save(ChatGroup chatGroup);
+    void update(ChatGroup chatGroup);
+    void delete(ChatGroup chatGroup);
 
 }

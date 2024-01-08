@@ -4,9 +4,9 @@ import model.entities.GroupChatMessage;
 
 import java.util.List;
 
-public interface GroupChatMessageDao {
-    GroupChatMessage findById(int id);
-    List<GroupChatMessage> findAll();
+public interface GroupChatMessageDao extends Dao<GroupChatMessage> {
+    GroupChatMessage get(int id);
+    List<GroupChatMessage> getAll();
     void save(GroupChatMessage groupChatMessage);
     void update(GroupChatMessage groupChatMessage);
     void delete(GroupChatMessage groupChatMessage);

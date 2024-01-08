@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GroupChatMessageDaoImpl implements GroupChatMessageDao {
     @Override
-    public GroupChatMessage findById(int id) {
+    public GroupChatMessage get(int id) {
         String query = "SELECT * FROM GroupChatMessages WHERE GroupMessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -27,7 +27,7 @@ public class GroupChatMessageDaoImpl implements GroupChatMessageDao {
     }
 
     @Override
-    public List<GroupChatMessage> findAll() {
+    public List<GroupChatMessage> getAll() {
         List<GroupChatMessage> groupChatMessages = new ArrayList<>();
         String query = "SELECT * FROM GroupChatMessages";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();

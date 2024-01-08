@@ -17,7 +17,7 @@ import java.util.Properties;
 
 public class MessageDaoImpl implements MessageDao {
     @Override
-    public void sendMessage(Message message) {
+    public void save(Message message) {
         String query= "INSERT INTO UserMessages(SenderID, ReceiverID, MessageContent,MessageTimestamp,FontStyle,FontColor,TextBackground,FontSize,Bold,Italic,Underline,Emoji) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -29,7 +29,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> getMessages(int sender, int receiver) {
+    public List<Message> get(int sender, int receiver) {
         String query = "SELECT * FROM UserMessages where SenderID = ? and ReceiverID = ? ";
         List<Message> result= new ArrayList<>();
         try(Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -53,8 +53,49 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public void updateMessage(Message message) {
-        String query = "UPDATE usermessages SET MessageContent = ? WHERE MessageID = ?";
+    public List<Message> getAll() {
+        String query = "SELECT * FROM UserMessages";
+        List<Message> result= new ArrayList<>();
+        try(Connection connection = DataSourceSingleton.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+        ){
+            try (ResultSet resultSet = statement.executeQuery()){
+                while (resultSet.next()){
+                    Message message ;
+                    message=getMessageFromResultSet(resultSet);
+                    result.add(message);
+                }
+
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public Message get(int senderId) {
+        String query = "SELECT * FROM UserMessages where SenderID = ? ";
+        Message message = new Message();
+        try(Connection connection = DataSourceSingleton.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+        ){
+            statement.setInt(1,senderId);
+            try (ResultSet resultSet = statement.executeQuery()){
+                while (resultSet.next()){
+                    message=getMessageFromResultSet(resultSet);
+                }
+
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+    @Override
+    public void update(Message message) {
+        String query = "UPDATE UserMessages SET MessageContent = ? WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForUpdate(statement,message);
@@ -65,7 +106,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public void deleteMessage(Message message) {
+    public void delete(Message message) {
         String query = "DELETE FROM usermessages  WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

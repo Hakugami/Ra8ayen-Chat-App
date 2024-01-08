@@ -11,7 +11,7 @@ import java.util.List;
 public class ChatGroupDaoImpl implements ChatGroupDao {
 
     @Override
-    public ChatGroup getChatGroupById(int id) {
+    public ChatGroup get(int id) {
         String query = "SELECT * FROM ChatGroups WHERE GroupID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -45,7 +45,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public List<ChatGroup> findAllChatGroups() {
+    public List<ChatGroup> getAll() {
         List<ChatGroup> chatGroups = new ArrayList<>();
         String query = "SELECT * FROM ChatGroups";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -61,7 +61,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public void saveChatGroup(ChatGroup chatGroup) {
+    public void save(ChatGroup chatGroup) {
         String query = "INSERT INTO ChatGroups (GroupName, CreatedByUserID) VALUES (?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -74,7 +74,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public void updateChatGroup(ChatGroup chatGroup) {
+    public void update(ChatGroup chatGroup) {
         String query = "UPDATE ChatGroups SET GroupName = ?, CreatedByUserID = ? WHERE GroupID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -88,7 +88,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public void deleteChatGroup(ChatGroup chatGroup) {
+    public void delete(ChatGroup chatGroup) {
         String query = "DELETE FROM ChatGroups WHERE GroupID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

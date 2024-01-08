@@ -17,7 +17,7 @@ import persistence.connection.DataSourceSingleton;
 public class UserDaoImpl implements UserDao {
 
     @Override
-    public User getUserById(int userId) {
+    public User get(int userId) {
 
         User user = null;
         String query = "SELECT * FROM UserAccounts WHERE UserID = ?";
@@ -38,7 +38,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         List<User> Users = new ArrayList<>();
         String query = "SELECT * FROM UserAccounts";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -54,7 +54,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void addUser(User user) {
+    public void save(User user) {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
                 "ProfilePicture, PasswordHash, Gender, Country, DateOfBirth, Bio, UserStatus, LastLogin) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -71,7 +71,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         String query = "UPDATE UserAccounts SET " +
                 "DisplayName = ?, EmailAddress = ?, " +
                 "ProfilePicture = ?, PasswordHash = ?, Gender = ?, Country = ?, " +
@@ -89,7 +89,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void delete(User user) {
+        String query = "DELETE FROM UserAccounts WHERE UserID = ?";
+
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, user.getUserID());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(int userId) {
         String query = "DELETE FROM UserAccounts WHERE UserID = ?";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
