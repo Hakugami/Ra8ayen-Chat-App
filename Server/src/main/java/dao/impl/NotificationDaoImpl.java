@@ -16,13 +16,13 @@ public class NotificationDaoImpl implements NotificationDao {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return Optional.of(createNotification(resultSet));
+                    return createNotification(resultSet);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class NotificationDaoImpl implements NotificationDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return notifications.stream();
+        return notifications;
     }
 
     @Override
