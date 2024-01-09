@@ -4,25 +4,32 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Message {
-    int MessageId;
-    int senderId;
-    int receiverId;
-    String messageContent;
-    LocalDateTime time;
-    String fontStyle;
-    String fontColor;
-    String textBackground;
-    int fontSize;
-    boolean bold;
-    boolean italic ;
-    boolean underline;
-    String emoji;
+   private int MessageId;
+    private int senderId;
+    private int receiverId;
+    private String messageContent;
+    private LocalDateTime time;
+    private String fontStyle;
+    private String fontColor;
+    private String textBackground;
+    private int fontSize;
+    private boolean bold;
+    private boolean italic ;
+    private boolean underline;
+    private String emoji;
+    private flag flag;
 
+
+
+
+    public enum flag{
+        user, client;;
+    }
     public Message(){
 
     }
 
-    public Message(int senderId, int receiverId, String messageContent, LocalDateTime time, String fontStyle, String fontColor, String textBackground, int fontSize, boolean bold, boolean italic, boolean underline, String emoji) {
+    public Message(int senderId, int receiverId, String messageContent, LocalDateTime time, String fontStyle, String fontColor, String textBackground, int fontSize, boolean bold, boolean italic, boolean underline, String emoji, flag flag) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.messageContent = messageContent;
@@ -35,7 +42,9 @@ public class Message {
         this.italic = italic;
         this.underline = underline;
         this.emoji = emoji;
+        this.flag = flag;
     }
+
 
     public int getSenderId() {
         return senderId;
@@ -140,4 +149,24 @@ public class Message {
     public void setMessageId(int messageId) {
         MessageId = messageId;
     }
+    public boolean isBold() {
+        return bold;
+    }
+
+    public boolean isItalic() {
+        return italic;
+    }
+
+    public boolean isUnderline() {
+        return underline;
+    }
+
+    public Message.flag getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Message.flag flag) {
+        this.flag = flag;
+    }
+
 }
