@@ -1,5 +1,5 @@
 module Shared {
-    exports Services.Interfaces;
+    exports dto.Interfaces;
 
     requires java.rmi;
     requires java.sql;
