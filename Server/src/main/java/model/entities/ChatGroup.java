@@ -1,16 +1,28 @@
 package model.entities;
 
+import dao.Dao;
+
+import java.util.Date;
+
 public class ChatGroup {
     private int groupId;
     private String name;
     private int adminId;
     private String creationDate;
+    private String lastModified;
+    private boolean isGroup;
+
 
     public ChatGroup(int groupId, String name, int adminId, String creationDate) {
         this.groupId = groupId;
         this.name = name;
         this.adminId = adminId;
         this.creationDate = creationDate;
+    }
+
+    public ChatGroup(String name, int adminId) {
+        this.name = name;
+        this.adminId = adminId;
     }
 
     public int getGroupId() {
@@ -45,6 +57,21 @@ public class ChatGroup {
         this.creationDate = creationDate;
     }
 
+    public String getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public boolean isGroup() {
+        return isGroup;
+    }
+
+    public void setGroup(boolean group) {
+        isGroup = group;
+    }
     @Override
     public String toString() {
 

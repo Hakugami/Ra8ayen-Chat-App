@@ -1,22 +1,19 @@
 package model.entities;
 
 public class GroupParticipant {
-    private int groupMemberId;
     private int groupId;
-    private int userId;
+    private int participantUserId;
+    private String participantStartDate;
 
-    public GroupParticipant(int groupMemberId, int groupId, int userId) {
-        this.groupMemberId = groupMemberId;
+    public GroupParticipant(int groupId, int participantid, String participantStartDate) {
         this.groupId = groupId;
-        this.userId = userId;
+        this.participantUserId = participantid;
+        this.participantStartDate = participantStartDate;
     }
 
-    public int getGroupMemberId() {
-        return groupMemberId;
-    }
-
-    public void setGroupMemberId(int groupMemberId) {
-        this.groupMemberId = groupMemberId;
+    public GroupParticipant(int groupId, int participantid) {
+        this.groupId = groupId;
+        this.participantUserId = participantid;
     }
 
     public int getGroupId() {
@@ -27,21 +24,28 @@ public class GroupParticipant {
         this.groupId = groupId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getParticipantUserId() {
+        return participantUserId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setParticipantUserId(int participantUserId) {
+        this.participantUserId = participantUserId;
+    }
+
+    public String getParticipantStartDate() {
+        return participantStartDate;
+    }
+
+    public void setParticipantStartDate(String participantStartDate) {
+        this.participantStartDate = participantStartDate;
     }
 
     @Override
     public String toString() {
-
-                return "GroupParticipant{" +
-                        "groupMemberId=" + groupMemberId +
-                        ", groupId=" + groupId +
-                        ", userId=" + userId +
-                        '}';
+        return "GroupParticipant{" +
+                "groupId=" + groupId +
+                ", participantId=" + participantUserId +
+                ", participantStartDate='" + participantStartDate + '\'' +
+                '}';
     }
 }
