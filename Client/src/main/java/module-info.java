@@ -4,6 +4,9 @@ module org.example.client {
     requires javafx.fxml;
     requires java.rmi;
     requires java.sql;
+    requires de.jensd.fx.glyphs.fontawesome;
+    requires de.jensd.fx.glyphs.commons;
+    requires com.jfoenix;
 
 
     opens org.example.client to javafx.fxml;
