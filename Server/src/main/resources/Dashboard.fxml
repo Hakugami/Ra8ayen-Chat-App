@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="vbRoot" alignment="CENTER" prefHeight="571.0" prefWidth="760.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo1.DashboardController">
+    <HBox prefHeight="159.0" prefWidth="760.0" VBox.vgrow="ALWAYS">
+        <VBox prefHeight="159.0" prefWidth="190.0" HBox.hgrow="ALWAYS">
+            <Label text="Online Users" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="45.0" top="10.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Label>
+            <Label text="50" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="80.0" top="25.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox prefHeight="159.0" prefWidth="190.0" HBox.hgrow="ALWAYS">
+            <Label text="Offline Users" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="45.0" top="10.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Label>
+            <Label text="50" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="80.0" top="25.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox prefHeight="159.0" prefWidth="190.0" HBox.hgrow="ALWAYS">
+            <Label text="Male Users" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="45.0" top="10.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Label>
+            <Label text="50" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="80.0" top="25.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+        <VBox prefHeight="159.0" prefWidth="190.0" HBox.hgrow="ALWAYS">
+            <Label text="Female Users" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="45.0" top="10.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="19.0" />
+                </font>
+            </Label>
+            <Label text="50" textFill="#e67e51">
+                <VBox.margin>
+                    <Insets left="80.0" top="25.0" />
+                </VBox.margin>
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+        </VBox>
+    </HBox>
+   <HBox>
+      <children>
+         <PieChart id="pieChart" fx:id="genderPieChart" />
+         <PieChart id="pieChart" fx:id="countryPieChart" />
+      </children>
+      <VBox.margin>
+         <Insets bottom="150.0" />
+      </VBox.margin>
+   </HBox>
+</VBox>
