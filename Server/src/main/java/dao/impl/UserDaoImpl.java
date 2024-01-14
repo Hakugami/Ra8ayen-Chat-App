@@ -116,6 +116,26 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+
+    public User getUserByPhoneNumber(String phoneNumber) {
+        User user = null;
+        String query = "SELECT * FROM UserAccounts WHERE PhoneNumber = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, phoneNumber);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = convertResultSetToUser(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     // create user using resultSet or convert resultSet from db to user object
     // may throwing checked exceptions(SQLException)
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {

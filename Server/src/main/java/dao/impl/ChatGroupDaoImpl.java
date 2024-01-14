@@ -44,6 +44,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
         return null;
     }
 
+
     @Override
     public List<ChatGroup> getAll() {
         List<ChatGroup> chatGroups = new ArrayList<>();

@@ -4,6 +4,6 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="vbRoot" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/18"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo1.UserListViewController">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserListViewController">
     <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
 </VBox>

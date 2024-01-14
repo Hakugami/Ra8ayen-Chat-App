@@ -6,17 +6,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbRoot" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo1.ServiceStartController">
+<VBox fx:id="vbRoot" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ServiceStartController">
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="629.0" VBox.vgrow="ALWAYS">
       <VBox.margin>
          <Insets />
       </VBox.margin>
-      <Button id="greenButton" fx:id="startButton" mnemonicParsing="false" onAction="#handleStartButtonClick" prefHeight="58.0" prefWidth="150.0" text="Start Server">
+      <Button id="greenButton" fx:id="startButton" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" text="Start Server">
          <HBox.margin>
             <Insets right="170.0" />
          </HBox.margin>
       </Button>
-      <Button id="redButton" fx:id="shutdownButton" mnemonicParsing="false" onAction="#handleShutdownButtonClick" prefHeight="58.0" prefWidth="150.0" text="Shutdown Server" />
+      <Button id="redButton" fx:id="shutdownButton" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" text="Shutdown Server" />
    </HBox>
    <ProgressIndicator id = "progressIndicator" fx:id="progressIndicator">
       <VBox.margin>

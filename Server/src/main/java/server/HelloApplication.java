@@ -14,7 +14,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         DataModel dataModel = new DataModel();
-        FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("Server.fxml"));
+        FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("/Fxml/Server.fxml"));
         rootLoader.load();
         ServerController serverController = rootLoader.getController();
         serverController.initModel(dataModel);

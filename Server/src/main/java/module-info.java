@@ -1,6 +1,7 @@
 module server {
     requires javafx.controls;
     requires javafx.fxml;
+    requires  java.naming;
 
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
@@ -11,4 +12,6 @@ module server {
 
     opens server to javafx.fxml;
     exports server;
+    exports controllers to javafx.fxml;
+    opens controllers to javafx.fxml;
 }

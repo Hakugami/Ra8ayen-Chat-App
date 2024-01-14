@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vbRoot" alignment="CENTER" prefHeight="571.0" prefWidth="760.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo1.DashboardController">
+<VBox fx:id="vbRoot" alignment="CENTER" prefHeight="571.0" prefWidth="760.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
     <HBox prefHeight="159.0" prefWidth="760.0" VBox.vgrow="ALWAYS">
         <VBox prefHeight="159.0" prefWidth="190.0" HBox.hgrow="ALWAYS">
             <Label text="Online Users" textFill="#e67e51">

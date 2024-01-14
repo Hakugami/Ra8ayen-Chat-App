@@ -6,12 +6,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vbRoot" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.demo1.AnnouncementController">
+<VBox fx:id="vbRoot" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AnnouncementController">
     <TextArea fx:id="announcementTextArea" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
       <font>
          <Font size="24.0" />
       </font></TextArea>
-    <Button id="windows7" fx:id="announcementButton" onAction="#handleButtonClick" prefHeight="40.0" prefWidth="174.0" text="Announce">
+    <Button id="windows7" fx:id="announcementButton"  prefHeight="40.0" prefWidth="174.0" text="Announce">
       <VBox.margin>
          <Insets bottom="10.0" />
       </VBox.margin>

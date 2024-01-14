@@ -19,7 +19,7 @@ public class ServerController {
 
     public void setSubSceneInitialNode()
     {
-        btnUsers.fire();
+       // btnUsers.fire();
     }
 
     public void handleBtnOnActionUsers()
