@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="210.0" spacing="30.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
+   <children>
+      <Pane prefHeight="77.0" prefWidth="80.0">
+         <children>
+   
+   
+            <ImageView fx:id="ImagId">
+               <clip>
+                  <Circle fx:id="imageClip" centerX="30" centerY="30" radius="30" />
+              </clip>
+   
+            </ImageView>
+         </children>
+         <HBox.margin>
+            <Insets top="10.0" />
+         </HBox.margin>
+      </Pane>
+      <Label fx:id="Name" layoutX="10.0" prefHeight="61.0" prefWidth="74.0" text="Rawda">
+         <padding>
+            <Insets top="40.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <HBox.margin>
+            <Insets top="-13.0" />
+         </HBox.margin>
+      </Label>
+      <Circle fx:id="status" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+         <HBox.margin>
+            <Insets left="10.0" right="5.0" top="30.0" />
+         </HBox.margin>
+      </Circle>
+   </children>
+</HBox>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@../../CssStyles/Chat.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+   <children>
+      <HBox prefHeight="61.0" prefWidth="900.0" styleClass="header">
+         <children>
+            <Pane prefHeight="37.0" prefWidth="57.0">
+               <children>
+                  <ImageView fx:id="ImagContact">
+                     <clip>
+                        <Circle fx:id="imageClip" centerX="20" centerY="20" radius="20" />
+                     </clip>
+
+                  </ImageView>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="20.0" top="5.0" />
+               </HBox.margin>
+            </Pane>
+            <Label fx:id="NameContact" text="Label" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="20.0" top="10.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <ListView prefHeight="502.0" prefWidth="900.0" styleClass="list_View" />
+      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="40.0">
+         <children>
+            <TextField prefHeight="53.0" prefWidth="824.0" styleClass="send-message">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding></TextField>
+            <Button mnemonicParsing="false" prefHeight="53.0" prefWidth="77.0" styleClass="Button_style" text="Button" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font></Button>
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>
