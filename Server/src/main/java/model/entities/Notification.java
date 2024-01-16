@@ -5,22 +5,18 @@ public class Notification {
     int receiverId;
     int senderId;
     String notificationSendDate;
-    String messageContent;
+    String notificationMessage;
 
-    public Notification(int notificationId, int receiverId, int senderId, String notificationSendDate, String messageContent) {
+    public Notification(int notificationId, int receiverId, int senderId, String notificationSendDate, String notificationMessage) {
         this.notificationId = notificationId;
         this.receiverId = receiverId;
         this.senderId = senderId;
         this.notificationSendDate = notificationSendDate;
-        this.messageContent = messageContent;
+        this.notificationMessage = notificationMessage;
     }
 
     public int getNotificationId() {
         return notificationId;
-    }
-
-    public void setNotificationId(int notificationId) {
-        this.notificationId = notificationId;
     }
 
     public int getReceiverId() {
@@ -47,12 +43,12 @@ public class Notification {
         this.notificationSendDate = notificationSendDate;
     }
 
-    public String getMessageContent() {
-        return messageContent;
+    public String getNotificationMessage() {
+        return notificationMessage;
     }
 
-    public void setMessageContent(String messageContent) {
-        this.messageContent = messageContent;
+    public void setNotificationMessage(String notificationMessage) {
+        this.notificationMessage = notificationMessage;
     }
 
     @Override
@@ -62,7 +58,7 @@ public class Notification {
                 ", receiverId=" + receiverId +
                 ", senderId=" + senderId +
                 ", notificationSendDate='" + notificationSendDate + '\'' +
-                ", messageContent='" + messageContent + '\'' +
+                ", notificationMessage='" + notificationMessage + '\'' +
                 '}';
     }
 }

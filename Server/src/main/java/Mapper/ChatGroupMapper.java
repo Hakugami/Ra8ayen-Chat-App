@@ -1,24 +1,23 @@
 package Mapper;
 
-import dao.ChatGroupDao;
-import dao.UserDao;
-import dao.impl.ChatGroupDaoImpl;
+import dao.ChatDao;
+import dao.impl.ChatDaoImpl;
 import dao.impl.UserDaoImpl;
-import model.entities.ChatGroup;
+import model.entities.Chat;
 
 public class ChatGroupMapper {
-    private ChatGroupDao chatGroupDao;
+    private ChatDao chatDao;
     private UserDaoImpl userDao;
 
     public ChatGroupMapper(){
-        chatGroupDao = new ChatGroupDaoImpl();
+        chatDao = new ChatDaoImpl();
         userDao = new UserDaoImpl();
     }
 
-    public ChatGroup addChatGroup(String groupName, String phoneNumber){
-        ChatGroup chatGroup = new ChatGroup(groupName, userDao.getUserByPhoneNumber(phoneNumber).getUserID());
-        chatGroupDao.save(chatGroup);
-        return chatGroup;
+    public Chat addChatGroup(String groupName, String phoneNumber){
+        Chat chat = new Chat(groupName, userDao.getUserByPhoneNumber(phoneNumber).getUserID());
+        chatDao.save(chat);
+        return chat;
     }
 
 }

@@ -43,7 +43,7 @@ public class NotificationDaoImpl implements NotificationDao {
 
     @Override
     public void save(Notification notification) {
-        String query = "INSERT INTO usernotifications (UserID, SenderID, MessageContent, NotificationTimestamp) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage, NotificationSentDate) VALUES (?, ?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getReceiverId());
@@ -70,7 +70,7 @@ public class NotificationDaoImpl implements NotificationDao {
 
     @Override
     public void update(Notification notification) {
-        String query = "UPDATE usernotifications SET MessageContent = ? WHERE NotificationID = ?";
+        String query = "UPDATE usernotifications SET NotificationMessage = ? WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, notification.getMessageContent());
@@ -83,10 +83,10 @@ public class NotificationDaoImpl implements NotificationDao {
 
     private Notification createNotification(ResultSet resultSet) throws SQLException {
         int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
-        int receiverId = resultSet.getInt(NotificationTable.USERID.name());
+        int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
         int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
-        String notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONTIMESTAMP.name()).toString();
-        String notificationMessageContent = resultSet.getString(NotificationTable.MESSAGECONTENT.name());
+        String notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONSENTDATE.name()).toString();
+        String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
 
         return new Notification(notificationId, receiverId, senderId, notificationSendDate, notificationMessageContent);
     }

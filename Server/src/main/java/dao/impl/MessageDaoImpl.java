@@ -18,7 +18,7 @@ import java.util.Properties;
 public class MessageDaoImpl implements MessageDao {
     @Override
     public void save(Message message) {
-        String query= "INSERT INTO UserMessages(SenderID, ReceiverID, MessageContent,MessageTimestamp,FontStyle,FontColor,TextBackground,FontSize,Bold,Italic,Underline,Emoji) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query= "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForInsert(statement,message);
@@ -30,7 +30,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public List<Message> get(int sender, int receiver) {
-        String query = "SELECT * FROM UserMessages where SenderID = ? and ReceiverID = ? ";
+        String query = "SELECT * FROM Messages where SenderID = ? and ReceiverID = ? ";
         List<Message> result= new ArrayList<>();
         try(Connection connection = DataSourceSingleton.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -54,7 +54,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public List<Message> getAll() {
-        String query = "SELECT * FROM UserMessages";
+        String query = "SELECT * FROM Messages";
         List<Message> result= new ArrayList<>();
         try(Connection connection = DataSourceSingleton.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -75,7 +75,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public Message get(int senderId) {
-        String query = "SELECT * FROM UserMessages where SenderID = ? ";
+        String query = "SELECT * FROM Messages where SenderID = ? ";
         Message message = new Message();
         try(Connection connection = DataSourceSingleton.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -95,7 +95,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public void update(Message message) {
-        String query = "UPDATE UserMessages SET MessageContent = ? WHERE MessageID = ?";
+        String query = "UPDATE Messages SET MessageContent = ? WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForUpdate(statement,message);
@@ -107,7 +107,7 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public void delete(Message message) {
-        String query = "DELETE FROM usermessages  WHERE MessageID = ?";
+        String query = "DELETE FROM Messages  WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForDelete(statement,message);
@@ -128,14 +128,6 @@ public class MessageDaoImpl implements MessageDao {
         statement.setInt(2,message.getReceiverId());
         statement.setString(3,message.getMessageContent());
         statement.setString(4,message.getTime().toString());
-        statement.setString(5,message.getFontStyle());
-        statement.setString(6,message.getFontColor());
-        statement.setString(7,message.getTextBackground());
-        statement.setInt(8,message.getFontSize());
-        statement.setBoolean(9,message.getBold());
-        statement.setBoolean(10,message.getItalic());
-        statement.setBoolean(11,message.getUnderline());
-        statement.setString(12,message.getEmoji());
     }
     private Message getMessageFromResultSet(ResultSet resultSet) throws SQLException {
         Message message = new Message();
@@ -145,14 +137,7 @@ public class MessageDaoImpl implements MessageDao {
         message.setReceiverId(resultSet.getInt(MessageTable.ReceiverID.name));
         message.setMessageContent(resultSet.getString(MessageTable.MessageContent.name));
         message.setTime(LocalDateTime.parse(resultSet.getString(MessageTable.MessageTimestamp.name),formatter));
-        message.setFontStyle(resultSet.getString(MessageTable.MessageFontStyle.name));
-        message.setFontColor(resultSet.getString(MessageTable.MessageFontColor.name));
-        message.setTextBackground(resultSet.getString(MessageTable.TextBackground.name));
-        message.setFontSize(resultSet.getInt(MessageTable.FontSize.name));
-        message.setBold(resultSet.getBoolean(MessageTable.Bold.name));
-        message.setItalic(resultSet.getBoolean(MessageTable.Italic.name));
-        message.setUnderline(resultSet.getBoolean(MessageTable.Underline.name));
-        message.setEmoji(resultSet.getString(MessageTable.Emoji.name));
+        message.setAttachment(resultSet.getBoolean(resultSet.getInt(MessageTable.IsAttachment.name)));
         return  message;
     }
 }

@@ -1,27 +1,27 @@
 package model.entities;
 
-public class GroupParticipant {
-    private int groupId;
+public class ChatParticipant {
+    private int chatId;
     private int participantUserId;
     private String participantStartDate;
 
-    public GroupParticipant(int groupId, int participantid, String participantStartDate) {
-        this.groupId = groupId;
-        this.participantUserId = participantid;
+    public ChatParticipant(int chatId, int participantUserId, String participantStartDate) {
+        this.chatId = chatId;
+        this.participantUserId = participantUserId;
         this.participantStartDate = participantStartDate;
     }
 
-    public GroupParticipant(int groupId, int participantid) {
-        this.groupId = groupId;
-        this.participantUserId = participantid;
+    public ChatParticipant(int chatId, int participantUserId) {
+        this.chatId = chatId;
+        this.participantUserId = participantUserId;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public int getChatId() {
+        return chatId;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
     }
 
     public int getParticipantUserId() {
@@ -42,8 +42,8 @@ public class GroupParticipant {
 
     @Override
     public String toString() {
-        return "GroupParticipant{" +
-                "groupId=" + groupId +
+        return "ChatParticipant{" +
+                "chatId=" + chatId +
                 ", participantId=" + participantUserId +
                 ", participantStartDate='" + participantStartDate + '\'' +
                 '}';

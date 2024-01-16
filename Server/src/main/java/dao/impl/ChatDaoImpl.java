@@ -1,24 +1,24 @@
 package dao.impl;
 
-import dao.ChatGroupDao;
-import model.entities.ChatGroup;
+import dao.ChatDao;
+import model.entities.Chat;
 import persistence.connection.DataSourceSingleton;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatGroupDaoImpl implements ChatGroupDao {
+
+public class ChatDaoImpl implements ChatDao {
 
     @Override
-    public ChatGroup get(int id) {
-        String query = "SELECT * FROM ChatGroups WHERE GroupID = ?";
+    public Chat get(int id) {
+        String query = "SELECT * FROM Chat WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createChatGroupFromResultSet(resultSet);
+                    return createChatFromResultSet(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -28,14 +28,14 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public ChatGroup getChatGroupByName(String name) {
-        String query = "SELECT * FROM ChatGroups WHERE GroupName = ?";
+    public Chat getChatByName(String name) {
+        String query = "SELECT * FROM Chat WHERE ChatName = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return createChatGroupFromResultSet(resultSet);
+                    return createChatFromResultSet(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -46,14 +46,14 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
 
 
     @Override
-    public List<ChatGroup> getAll() {
-        List<ChatGroup> chatGroups = new ArrayList<>();
-        String query = "SELECT * FROM ChatGroups";
+    public List<Chat> getAll() {
+        List<Chat> chatGroups = new ArrayList<>();
+        String query = "SELECT * FROM Chat";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
-                chatGroups.add(createChatGroupFromResultSet(resultSet));
+                chatGroups.add(createChatFromResultSet(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,12 +62,13 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public void save(ChatGroup chatGroup) {
-        String query = "INSERT INTO ChatGroups (GroupName, CreatedByUserID) VALUES (?, ?)";
+    public void save(Chat chat) {
+        String query = "INSERT INTO Chat (ChatName, AdminID, ChatImage) VALUES (?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, chatGroup.getName());
-            statement.setInt(2, chatGroup.getAdminId());
+            statement.setString(1, chat.getName());
+            statement.setInt(2, chat.getAdminId());
+            statement.setBinaryStream(3, chat.g);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +76,7 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public void update(ChatGroup chatGroup) {
+    public void update(Chat chatGroup) {
         String query = "UPDATE ChatGroups SET GroupName = ?, CreatedByUserID = ? WHERE GroupID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -89,8 +90,8 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
     }
 
     @Override
-    public void delete(ChatGroup chatGroup) {
-        String query = "DELETE FROM ChatGroups WHERE GroupID = ?";
+    public void delete(Chat chatGroup) {
+        String query = "DELETE FROM Chat WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatGroup.getGroupId());
@@ -100,11 +101,11 @@ public class ChatGroupDaoImpl implements ChatGroupDao {
         }
     }
 
-    private ChatGroup createChatGroupFromResultSet(ResultSet resultSet) throws SQLException {
+    private Chat createChatFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("GroupID");
         String name = resultSet.getString("GroupName");
         int adminId = resultSet.getInt("CreatedByUserID");
         String creationDate = resultSet.getTimestamp("CreationTimestamp").toString();
-        return new ChatGroup(id, name, adminId, creationDate);
+        return new Chat(id, name, adminId, creationDate);
     }
 }

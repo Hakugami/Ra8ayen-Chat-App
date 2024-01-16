@@ -1,36 +1,37 @@
 package model.entities;
 
-import dao.Dao;
-
-import java.util.Date;
-
-public class ChatGroup {
-    private int groupId;
+public class Chat {
+    private int chatId;
     private String name;
+    private String chatImage;
     private int adminId;
     private String creationDate;
     private String lastModified;
-    private boolean isGroup;
 
-
-    public ChatGroup(int groupId, String name, int adminId, String creationDate) {
-        this.groupId = groupId;
+    public Chat(int chatId, String name, int adminId, String chatImage, String creationDate, String lastModified) {
+        this.chatId = chatId;
         this.name = name;
         this.adminId = adminId;
         this.creationDate = creationDate;
+        this.chatImage = chatImage;
+        this.lastModified = lastModified;
     }
 
-    public ChatGroup(String name, int adminId) {
+    public Chat(String name, int adminId) {
         this.name = name;
         this.adminId = adminId;
     }
 
-    public int getGroupId() {
-        return groupId;
+    public int getChatId() {
+        return chatId;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public int getChatIdId() {
+        return chatId;
+    }
+
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
     }
 
     public String getName() {
@@ -65,21 +66,23 @@ public class ChatGroup {
         this.lastModified = lastModified;
     }
 
-    public boolean isGroup() {
-        return isGroup;
+    public String getChatImage() {
+        return chatImage;
     }
 
-    public void setGroup(boolean group) {
-        isGroup = group;
+    public void setChatImage(String chatImage) {
+        this.chatImage = chatImage;
     }
+
     @Override
     public String toString() {
 
             return "ChatGroup{" +
-                    "id=" + groupId +
+                    "id=" + chatId +
                     ", name='" + name + '\'' +
                     ", adminId=" + adminId +
                     ", creationDate='" + creationDate + '\'' +
+                    ", lastModified='" + lastModified + '\'' +
                     '}';
     }
 }
