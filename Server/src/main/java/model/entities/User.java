@@ -15,6 +15,7 @@ public class User {
     private String bio;
     private UserStatus userStatus;
     private String lastLogin;
+    private UserMode userMode;
 
     // enum classes
     public enum Gender {
@@ -22,8 +23,12 @@ public class User {
     }
 
     public enum UserStatus {
-        Online, Offline, Busy, Away
+        Online, Offline
     }
+    public enum UserMode{
+         Busy, Away,Available
+    }
+
 
     // user constructor
     public User() {
@@ -32,6 +37,7 @@ public class User {
 
     public User(int userID, String phoneNumber, String userName, String emailAddress, byte[] profilePicture,
             String passwordHash, Gender gender, String country, String dateOfBirth, String bio, UserStatus userStatus,
+            UserMode userMode,
             String lastLogin) {
         this.userID = userID;
         this.phoneNumber = phoneNumber;
@@ -44,6 +50,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.bio = bio;
         this.userStatus = userStatus;
+        this.userMode = userMode;
         this.lastLogin = lastLogin;
     }
 
@@ -51,6 +58,9 @@ public class User {
     // user methods
 
     // user setters
+
+
+
     public void setUserID(int userID) {
         this.userID = userID;
     }
@@ -94,6 +104,10 @@ public class User {
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }
+    public void setUsermode(UserMode usermode) {
+        this.userMode = usermode;
+    }
+
 
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
@@ -144,6 +158,9 @@ public class User {
     public UserStatus getUserStatus() {
         return userStatus;
     }
+    public UserMode getUsermode() {
+        return userMode;
+    }
 
     public String getLastLogin() {
         return lastLogin;
@@ -151,12 +168,7 @@ public class User {
 
     
 
-    @Override
-    public String toString() {
-        return "User [userID=" + userID + ", phoneNumber=" + phoneNumber + ", userName=" + userName + ", emailAddress="
-                + emailAddress + ", gender=" + gender + ", country=" + country + ", dateOfBirth=" + dateOfBirth
-                + ", bio=" + bio + ", userStatus=" + userStatus + ", lastLogin=" + lastLogin + "]";
-    }
+
 
   
    
