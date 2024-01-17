@@ -11,6 +11,7 @@ module server {
     requires java.sql;
     requires Shared;
     requires org.mapstruct;
+    requires java.desktop;
 
     opens server to javafx.fxml;
     exports server;
