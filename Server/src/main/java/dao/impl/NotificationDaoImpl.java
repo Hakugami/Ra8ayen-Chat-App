@@ -48,7 +48,7 @@ public class NotificationDaoImpl implements NotificationDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getReceiverId());
             statement.setInt(2, notification.getSenderId());
-            statement.setString(3, notification.getMessageContent());
+            statement.setString(3, notification.getNotificationMessage());
             statement.setString(4, notification.getNotificationSendDate());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -73,7 +73,7 @@ public class NotificationDaoImpl implements NotificationDao {
         String query = "UPDATE usernotifications SET NotificationMessage = ? WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, notification.getMessageContent());
+            statement.setString(1, notification.getNotificationMessage());
             statement.setInt(2, notification.getNotificationId());
             statement.executeUpdate();
         } catch (SQLException e) {

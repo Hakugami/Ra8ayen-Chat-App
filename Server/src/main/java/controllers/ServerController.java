@@ -12,42 +12,22 @@ import javafx.scene.layout.StackPane;
 
 public class ServerController {
 
-
-    @FXML private StackPane spSubScene;
-    @FXML private Button btnUsers;
-    private DataModel dataModel;
+    @FXML
+    private StackPane spSubScene;
+    @FXML
+    private Button settingsButton;
 
     public void setSubSceneInitialNode()
     {
-       // btnUsers.fire();
-    }
-
-    public void handleBtnOnActionUsers()
-    {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("UserListView.fxml"));
-            loader.load();
-            UserListViewController listView = loader.getController();
-
-            listView.initModel(dataModel);
-
-            spSubScene.getChildren().clear();
-            spSubScene.getChildren().add(listView.getVBoxRoot());
-        }
-        catch (IOException ex)
-        {
-            System.out.println();
-        }
+        settingsButton.fire();
     }
     public void handleBtnOnActionAnnouncement()
     {
         try
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Announcement.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Announcement.fxml"));
             loader.load();
             AnnouncementController announcementController = loader.getController();
-            announcementController.init();
 
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(announcementController.getVBoxRoot());
@@ -62,7 +42,7 @@ public class ServerController {
     {
         try
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ServiceStart.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/ServiceStart.fxml"));
             loader.load();
             ServiceStartController serviceStartController = loader.getController();
             serviceStartController.init();
@@ -80,11 +60,10 @@ public class ServerController {
     {
         try
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Dashboard.fxml"));
             loader.load();
             DashboardController dashboardController = loader.getController();
             dashboardController.init();
-
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(dashboardController.getVBoxRoot());
         }
@@ -92,13 +71,6 @@ public class ServerController {
         {
             System.out.println();
         }
-    }
-    public void initModel(DataModel model)
-    {
-        if (this.dataModel != null) {
-            throw new IllegalStateException("Model can only be initialized once");
-        }
-        this.dataModel = model;
     }
 
 }

@@ -1,4 +1,4 @@
-package controllers;
+/*package controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -26,3 +26,5 @@ public class UserListViewController {
         listView.setItems(FXCollections.observableArrayList(model.simulateGetDataFromDatabase()));
     }
 }
+
+ */

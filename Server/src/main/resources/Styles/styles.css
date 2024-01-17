@@ -106,7 +106,7 @@
 }
 
 
-#windows7 {
+#announcementButton {
     -fx-background-color:
             #707070,
             linear-gradient(#fcfcfc, #f3f3f3),
@@ -118,7 +118,7 @@
     -fx-font-size: 14px;
 }
 
-#windows7:hover {
+#announcementButton:hover {
     -fx-background-color:
             #3c7fb1,
             linear-gradient(#fafdfe, #e8f5fc),

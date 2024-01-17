@@ -51,9 +51,9 @@
                     <FontIcon iconColor="WHITE" iconLiteral="dashicons-megaphone" iconSize="25"/>
                 </graphic>
             </Button>
-            <Button id="sidebarButtons" fx:id="btnUsers" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="10.0"
+            <Button id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="10.0"
                     layoutY="223.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="55.0"
-                    text="Users" textFill="#e7e5e5" onAction="#handleBtnOnActionUsers">
+                    text="Users" textFill="#e7e5e5">
                 <padding>
                     <Insets left="60.0"/>
                 </padding>
@@ -61,7 +61,7 @@
                     <FontIcon iconColor="#fcf9f9" iconLiteral="dashicons-list-view" iconSize="25"/>
                 </graphic>
             </Button>
-            <Button id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
+            <Button fx:id="settingsButton" id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
                     maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="55.0"
                     text="Settings" textFill="#e7e5e5" onAction="#handleBtnOnActionServiceStart">
                 <padding>
@@ -74,7 +74,7 @@
             <StackPane prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                 <VBox alignment="CENTER" prefHeight="157.0" prefWidth="256.0"
                       style="-fx-background-color: transparent;">
-                    <Label text="TEAM MEMBERS" textFill="#e7e5e5">
+                    <Label text="TEAM MEMBERS" textFill="#ffffff">
                         <font>
                             <Font size="16.0"/>
                         </font>
@@ -82,22 +82,22 @@
                             <Insets/>
                         </VBox.margin>
                     </Label>
-                    <Label text="ISLAM" textFill="#e7e5e5">
+                    <Label text="ISLAM" textFill="#ffffff">
                         <VBox.margin>
                             <Insets top="10.0"/>
                         </VBox.margin>
                     </Label>
-                    <Label text="RASHIDA" textFill="#e7e5e5">
+                    <Label text="RASHIDA" textFill="#ffffff">
                         <VBox.margin>
                             <Insets top="10.0"/>
                         </VBox.margin>
                     </Label>
-                    <Label text="HAJAR" textFill="#e7e5e5">
+                    <Label text="HAJAR" textFill="#ffffff">
                         <VBox.margin>
                             <Insets top="10.0"/>
                         </VBox.margin>
                     </Label>
-                    <Label layoutX="111.0" layoutY="78.0" text="MOSTAFA" textFill="#e7e5e5">
+                    <Label layoutX="111.0" layoutY="78.0" text="MOSTAFA" textFill="#ffffff">
                         <VBox.margin>
                             <Insets top="10.0"/>
                         </VBox.margin>

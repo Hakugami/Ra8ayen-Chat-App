@@ -15,15 +15,4 @@ public class AnnouncementController {
         return vbRoot;
     }
 
-    public void init() {
-        announcementTextArea = new TextArea();
-        announcementButton = new Button();
-
-    }
-
-
-    @FXML
-    private void handleButtonClick() {
-        System.out.println("Button clicked!");
-    }
 }

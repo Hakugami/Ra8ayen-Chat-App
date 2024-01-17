@@ -18,7 +18,7 @@ import java.util.Properties;
 public class MessageDaoImpl implements MessageDao {
     @Override
     public void save(Message message) {
-        String query= "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query= "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment) VALUES(?,?,?,?,?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForInsert(statement,message);

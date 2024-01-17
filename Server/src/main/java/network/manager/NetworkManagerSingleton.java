@@ -1,17 +1,25 @@
 package network.manager;
 
+import lookupnames.LookUpNames;
+
+import java.rmi.Naming;
+import java.rmi.NoSuchObjectException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 public class NetworkManagerSingleton {
     private static NetworkManagerSingleton instance;
     private Registry registry;
     private static final int PORT = 1099;
+    private boolean isServerRunning;
 
     private NetworkManagerSingleton() {
         try {
             registry = LocateRegistry.createRegistry(PORT);
+            isServerRunning = false;
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -23,17 +31,34 @@ public class NetworkManagerSingleton {
         }
         return instance;
     }
-    void start() {
+    public synchronized boolean isServerRunning() {
+        return isServerRunning;
+    }
+    public synchronized void setServerRunning(boolean isServerRunning) {
+        this.isServerRunning = isServerRunning;
+    }
+    public void start() {
         try {
             registry = LocateRegistry.createRegistry(PORT);
+            for(LookUpNames bind : LookUpNames.values()) {
+                //Naming.rebind(bind.name());
+                System.out.println(bind.name());
+            }
+            setServerRunning(true);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            e.getCause();
         }
     }
 
-    void stop() {
+    public void stop() {
         try {
-          //  registry.unbind("ChatServer");
+            for(String bind : registry.list()) {
+                Remote stub = registry.lookup(bind);
+                UnicastRemoteObject.unexportObject(stub, true);
+                Naming.unbind(bind);
+            }
+            UnicastRemoteObject.unexportObject(registry, true);
+            setServerRunning(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
