@@ -1,5 +1,6 @@
 package dao.impl;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,6 +38,7 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
+
     @Override
     public List<User> getAll() {
         List<User> Users = new ArrayList<>();
@@ -56,11 +58,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void save(User user) {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
-                "ProfilePicture, PasswordHash, Gender, Country, DateOfBirth, Bio, UserStatus, LastLogin) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "PasswordHash,Gender,Country,DateOfBirth,LastLogin) " +
+                "VALUES (?, ?, ?, ?,?,?,?,?,?)";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             add(statement, user);
             statement.executeUpdate();
@@ -74,14 +76,14 @@ public class UserDaoImpl implements UserDao {
     public void update(User user) {
         String query = "UPDATE UserAccounts SET " +
                 "DisplayName = ?, EmailAddress = ?, " +
-                "ProfilePicture = ?, PasswordHash = ?, Gender = ?, Country = ?, " +
-                "DateOfBirth = ?, Bio = ?, UserStatus = ?" +
+                "ProfilePicture = ?, PasswordHash = ?, " +
+                "Bio = ?,UserStatus = ?, UserMode = ?" +
                 "WHERE UserID = ?";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)) {
-                update(statement, user);
-                statement.executeUpdate();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            update(statement, user);
+            statement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,53 +138,47 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    // create user using resultSet or convert resultSet from db to user object
-    // may throwing checked exceptions(SQLException)
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {
         int userID = resultSet.getInt(UserTable.UserID.name());
         String phoneNumber = resultSet.getString(UserTable.PhoneNumber.name());
         String displayName = resultSet.getString(UserTable.DisplayName.name());
         String emailAddress = resultSet.getString(UserTable.EmailAddress.name());
-        byte[] profilePicture = resultSet.getBytes(UserTable.ProfilePicture.name());
+        Blob imageBlob = resultSet.getBlob(UserTable.ProfilePicture.name());
+        byte[] profilePicture = imageBlob.getBytes(1, (int) imageBlob.length());
         String passwordHash = resultSet.getString(UserTable.PasswordHash.name());
         Gender gender = Gender.valueOf(resultSet.getString(UserTable.Gender.name()));
         String country = resultSet.getString(UserTable.Country.name());
         String dateOfBirth = resultSet.getDate(UserTable.DateOfBirth.name()).toLocalDate().toString();
         String bio = resultSet.getString(UserTable.Bio.name());
         UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserTable.UserStatus.name()));
+        User.UserMode userMode = User.UserMode.valueOf(resultSet.getString(UserTable.UserMode.name()));
         String lastLogin = resultSet.getTimestamp(UserTable.LastLogin.name()).toLocalDateTime().toString();
 
         return new User(userID, phoneNumber, displayName, emailAddress, profilePicture,
-                passwordHash, gender, country, dateOfBirth, bio, userStatus, lastLogin);
+                passwordHash, gender, country, dateOfBirth, bio, userStatus,userMode, lastLogin);
     }
 
     private void add(PreparedStatement statement, User user) throws SQLException {
         statement.setString(1, user.getPhoneNumber());
         statement.setString(2, user.getUserName());
         statement.setString(3, user.getEmailAddress());
-        statement.setBytes(4, user.getProfilePicture());
-        statement.setString(5, user.getPasswordHash());
-        /* Gender */
-        statement.setString(6, user.getGender().name());
-        statement.setString(7, user.getCountry());
-        statement.setDate(8, Date.valueOf(LocalDate.parse(user.getDateOfBirth())));
-        statement.setString(9, user.getBio());
-        statement.setString(10, user.getUserStatus().name());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        statement.setTimestamp(11, Timestamp.valueOf(LocalDateTime.parse(user.getLastLogin(), formatter)));
+        statement.setString(4, user.getPasswordHash());
+        statement.setString(5, user.getGender().name());
+        statement.setString(6, user.getCountry());
+        statement.setDate(8, Date.valueOf(user.getDateOfBirth()));
+        statement.setTimestamp(9, Timestamp.valueOf(user.getCountry()));
     }
 
     private void update(PreparedStatement statement, User user) throws SQLException {
 
         statement.setString(1, user.getUserName());
         statement.setString(2, user.getEmailAddress());
-        statement.setBytes(3, user.getProfilePicture());
+        ByteArrayInputStream input = new ByteArrayInputStream(user.getProfilePicture());
+        statement.setBinaryStream(3, input);
         statement.setString(4, user.getPasswordHash());
-        statement.setString(5, user.getGender().name());
-        statement.setString(6, user.getCountry());
-        statement.setDate(7, Date.valueOf(user.getDateOfBirth()));
-        statement.setString(8, user.getBio());
-        statement.setString(9, user.getUserStatus().name());
+        statement.setString(5, user.getBio());
+        statement.setString(6, user.getUserStatus().name().toString());
+        statement.setString(7, user.getUsermode().name().toString());
 
     }
 
