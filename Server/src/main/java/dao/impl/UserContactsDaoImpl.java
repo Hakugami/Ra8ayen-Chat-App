@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.UserContactsDao;
+import model.entities.User;
 import model.entities.UserContacts;
 import persistence.connection.DataSourceSingleton;
 
@@ -81,6 +82,23 @@ public class UserContactsDaoImpl implements UserContactsDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public List<UserContacts> getContactById(User user) {
+        List<UserContacts> userContactsList = new ArrayList<>();
+        String query = "SELECT * FROM UserContacts WHERE UserID = ? AND FriendID = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                userContactsList.add(createUserContactsFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userContactsList;
     }
 
     private UserContacts createUserContactsFromResultSet(ResultSet resultSet) throws SQLException {

@@ -10,6 +10,10 @@ public class UserContacts {
         UserID = userID;
         this.creationDate = creationDate;
     }
+    public UserContacts(int UserId, int friendID){
+        this.UserID = UserId;
+        this.FriendID = friendID;
+    }
 
     public int getFriendID() {
         return FriendID;
