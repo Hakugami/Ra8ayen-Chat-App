@@ -2,6 +2,8 @@ package dao.impl;
 
 import dao.ChatParticipantsDao;
 import model.entities.ChatParticipant;
+import model.entities.ChatParticipantTable;
+import model.entities.ChatTable;
 import persistence.connection.DataSourceSingleton;
 
 import java.sql.*;
@@ -120,9 +122,9 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
     }
 
     private ChatParticipant createChatParticipantFromResultSet(ResultSet resultSet) throws SQLException {
-        int chatId = resultSet.getInt("ChatID");
-        int participantUserId = resultSet.getInt("ParticipantUserID");
-        LocalDateTime participantStartDate = resultSet.getTimestamp("ParticipantStartDate").toLocalDateTime();
+        int chatId = resultSet.getInt(ChatParticipantTable.ChatID.name());
+        int participantUserId = resultSet.getInt(ChatParticipantTable.ParticipantUserID.name());
+        LocalDateTime participantStartDate = resultSet.getTimestamp(ChatParticipantTable.ParticipantStartDate.name()).toLocalDateTime();
         return new ChatParticipant(chatId, participantUserId, participantStartDate.toString());
     }
 }

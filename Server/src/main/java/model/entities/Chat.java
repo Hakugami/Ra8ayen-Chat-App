@@ -3,12 +3,12 @@ package model.entities;
 public class Chat {
     private int chatId;
     private String name;
-    private String chatImage;
+    private byte[] chatImage;
     private int adminId;
     private String creationDate;
     private String lastModified;
 
-    public Chat(int chatId, String name, int adminId, String chatImage, String creationDate, String lastModified) {
+    public Chat(int chatId, String name, int adminId, byte[] chatImage, String creationDate, String lastModified) {
         this.chatId = chatId;
         this.name = name;
         this.adminId = adminId;
@@ -66,11 +66,11 @@ public class Chat {
         this.lastModified = lastModified;
     }
 
-    public String getChatImage() {
+    public byte[] getChatImage() {
         return chatImage;
     }
 
-    public void setChatImage(String chatImage) {
+    public void setChatImage(byte[] chatImage) {
         this.chatImage = chatImage;
     }
 
