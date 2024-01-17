@@ -2,7 +2,7 @@ package dto.requests;
 
 import java.io.Serializable;
 
-public class CreateGroupChatRequest implements Serializable {
+public class CreateGroupChatRequest implements Serializable, Request {
     private String userPhoneNumber;
     private String groupName;
 

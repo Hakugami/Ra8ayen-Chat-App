@@ -9,6 +9,8 @@ module server {
     requires java.rmi;
     requires mysql.connector.j;
     requires java.sql;
+    requires Shared;
+    requires org.mapstruct;
 
     opens server to javafx.fxml;
     exports server;

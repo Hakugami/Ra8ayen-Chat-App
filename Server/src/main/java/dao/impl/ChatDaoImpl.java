@@ -3,10 +3,11 @@ package dao.impl;
 import dao.ChatDao;
 import model.entities.Chat;
 import persistence.connection.DataSourceSingleton;
+
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ChatDaoImpl implements ChatDao {
 
@@ -44,7 +45,6 @@ public class ChatDaoImpl implements ChatDao {
         return null;
     }
 
-
     @Override
     public List<Chat> getAll() {
         List<Chat> chatGroups = new ArrayList<>();
@@ -68,7 +68,7 @@ public class ChatDaoImpl implements ChatDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, chat.getName());
             statement.setInt(2, chat.getAdminId());
-            statement.setBinaryStream(3, chat.g);
+            statement.setString(3, chat.getChatImage());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,13 +76,14 @@ public class ChatDaoImpl implements ChatDao {
     }
 
     @Override
-    public void update(Chat chatGroup) {
-        String query = "UPDATE ChatGroups SET GroupName = ?, CreatedByUserID = ? WHERE GroupID = ?";
+    public void update(Chat chat) {
+        String query = "UPDATE Chat SET ChatName = ?, AdminID = ?, ChatImage = ? WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, chatGroup.getName());
-            statement.setInt(2, chatGroup.getAdminId());
-            statement.setInt(3, chatGroup.getGroupId());
+            statement.setString(1, chat.getName());
+            statement.setInt(2, chat.getAdminId());
+            statement.setString(3, chat.getChatImage());
+            statement.setInt(4, chat.getChatId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,11 +91,11 @@ public class ChatDaoImpl implements ChatDao {
     }
 
     @Override
-    public void delete(Chat chatGroup) {
+    public void delete(Chat chat) {
         String query = "DELETE FROM Chat WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, chatGroup.getGroupId());
+            statement.setInt(1, chat.getChatId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,10 +103,13 @@ public class ChatDaoImpl implements ChatDao {
     }
 
     private Chat createChatFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("GroupID");
-        String name = resultSet.getString("GroupName");
-        int adminId = resultSet.getInt("CreatedByUserID");
-        String creationDate = resultSet.getTimestamp("CreationTimestamp").toString();
-        return new Chat(id, name, adminId, creationDate);
+        int id = resultSet.getInt("ChatID");
+        String name = resultSet.getString("ChatName");
+        int adminId = resultSet.getInt("AdminID");
+        Blob imageBlob = resultSet.getBlob("ChatImage");
+        String image = imageBlob == null ? null : new String(imageBlob.getBytes(1, (int) imageBlob.length()));
+        String creationDate = resultSet.getTimestamp("CreationDate").toString();
+        String lastModified = resultSet.getTimestamp("LastModified").toString();
+        return new Chat(id, name, adminId, image, creationDate, lastModified);
     }
 }

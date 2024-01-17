@@ -1,4 +1,5 @@
 module Shared {
+    exports dto.requests;
 
 
     requires java.rmi;
