@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import network.manager.NetworkManagerSingleton;
+
 import java.io.IOException;
 
 public class ServerApplication extends Application {
@@ -19,6 +21,17 @@ public class ServerApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+
+        if(NetworkManagerSingleton.getInstance().isServerRunning()) {
+            NetworkManagerSingleton.getInstance().stop();
+        }
+
+        System.exit(0);
     }
 
     public static void main(String[] args) {
