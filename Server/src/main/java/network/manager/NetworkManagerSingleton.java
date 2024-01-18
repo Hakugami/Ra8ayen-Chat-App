@@ -1,5 +1,6 @@
 package network.manager;
 
+import controllers.AuthenticationControllerSingleton;
 import lookupnames.LookUpNames;
 
 import java.net.MalformedURLException;
@@ -37,17 +38,35 @@ public class NetworkManagerSingleton {
     }
     public void start() {
         try {
-            registry = LocateRegistry.createRegistry(PORT);
-            for(LookUpNames bind : LookUpNames.values()) {
-                //Naming.rebind(bind.name());
-                System.out.println(bind.name());
-            }
+
+            AuthenticationControllerSingleton.getInstance();
+//            for(LookUpNames bind : LookUpNames.values()) {
+//                //Naming.rebind(bind.name());
+//                System.out.println(bind.name());
+//            }
             setServerRunning(true);
         } catch (RemoteException e) {
             e.getCause();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
     }
-
+//
+//public void start() {
+//    try {
+//        if (!isServerRunning()) {
+//            registry = LocateRegistry.createRegistry(PORT);
+//            AuthenticationControllerSingleton.getInstance();
+//            setServerRunning(true);
+//            while (isServerRunning()) {
+//                // Wait for client connections
+//                Thread.sleep(1000);
+//            }
+//        }
+//    } catch (RemoteException | MalformedURLException | InterruptedException e) {
+//        throw new RuntimeException(e);
+//    }
+//}
     public void stop() {
         try {
             for(String bind : registry.list()) {

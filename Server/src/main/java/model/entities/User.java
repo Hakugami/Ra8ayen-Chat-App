@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.Date;
+
 public class User {
 
     // user attributes
@@ -11,7 +13,7 @@ public class User {
     private String passwordHash;
     private Gender gender;
     private String country;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String bio;
     private UserStatus userStatus;
     private String lastLogin;
@@ -36,7 +38,7 @@ public class User {
     }
 
     public User(int userID, String phoneNumber, String userName, String emailAddress, byte[] profilePicture,
-            String passwordHash, Gender gender, String country, String dateOfBirth, String bio, UserStatus userStatus,
+            String passwordHash, Gender gender, String country, Date dateOfBirth, String bio, UserStatus userStatus,
             UserMode userMode,
             String lastLogin) {
         this.userID = userID;
@@ -93,7 +95,7 @@ public class User {
         this.country = country;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -147,7 +149,7 @@ public class User {
         return country;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 

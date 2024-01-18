@@ -12,10 +12,10 @@ public class UpdateUserRequest {
     private UserStatus userStatus;
     private UserMode userMode;
 
-    public enum UserStatus {
-        Online, Offline, Busy, Away
-    }
 
+    public enum UserStatus {
+        Online, Offline
+    }
     public enum UserMode{
         Busy, Away,Available
     }

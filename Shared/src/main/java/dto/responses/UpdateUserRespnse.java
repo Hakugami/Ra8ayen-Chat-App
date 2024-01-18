@@ -17,7 +17,7 @@ public class UpdateUserRespnse {
     private String errorMessage;
 
     public enum UserStatus {
-        Online, Offline, Busy, Away
+        Online, Offline
     }
     public enum UserMode{
         Busy, Away,Available

@@ -59,7 +59,7 @@ public class UserDaoImpl implements UserDao {
     public void save(User user) {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
                 "PasswordHash,Gender,Country,DateOfBirth,LastLogin) " +
-                "VALUES (?, ?, ?, ?,?,?,?,?,?)";
+                "VALUES (?, ?, ?, ?,?,?,?,?)";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -144,11 +144,14 @@ public class UserDaoImpl implements UserDao {
         String displayName = resultSet.getString(UserTable.DisplayName.name());
         String emailAddress = resultSet.getString(UserTable.EmailAddress.name());
         Blob imageBlob = resultSet.getBlob(UserTable.ProfilePicture.name());
-        byte[] profilePicture = imageBlob.getBytes(1, (int) imageBlob.length());
+        byte[] profilePicture =  null;
+        if (imageBlob != null) {
+            profilePicture = imageBlob.getBytes(1, (int) imageBlob.length());
+        }
         String passwordHash = resultSet.getString(UserTable.PasswordHash.name());
         Gender gender = Gender.valueOf(resultSet.getString(UserTable.Gender.name()));
         String country = resultSet.getString(UserTable.Country.name());
-        String dateOfBirth = resultSet.getDate(UserTable.DateOfBirth.name()).toLocalDate().toString();
+        Date dateOfBirth = resultSet.getDate(UserTable.DateOfBirth.name());
         String bio = resultSet.getString(UserTable.Bio.name());
         UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserTable.UserStatus.name()));
         User.UserMode userMode = User.UserMode.valueOf(resultSet.getString(UserTable.UserMode.name()));
@@ -165,8 +168,9 @@ public class UserDaoImpl implements UserDao {
         statement.setString(4, user.getPasswordHash());
         statement.setString(5, user.getGender().name());
         statement.setString(6, user.getCountry());
-        statement.setDate(8, Date.valueOf(user.getDateOfBirth()));
-        statement.setTimestamp(9, Timestamp.valueOf(user.getCountry()));
+        statement.setDate(7, new java.sql.Date(user.getDateOfBirth().getTime()));
+        //get the latest Time stamp
+        statement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
     }
 
     private void update(PreparedStatement statement, User user) throws SQLException {
