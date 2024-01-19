@@ -1,8 +1,8 @@
 package model.entities;
 public enum NotificationTable {
     NOTIFICATIONID,
-    USERID,
+    RECEIVERID,
     SENDERID,
-    MESSAGECONTENT,
-    NOTIFICATIONTIMESTAMP
+    NOTIFICATIONMESSAGE,
+    NOTIFICATIONSENTDATE
 }

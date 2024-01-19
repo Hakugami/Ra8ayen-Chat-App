@@ -2,31 +2,31 @@ package dao.impl;
 
 import dao.NotificationDao;
 import persistence.connection.DataSourceSingleton;
-import java.util.stream.Stream;
+
 import java.sql.*;
 import java.util.*;
 import model.entities.*;
 
 public class NotificationDaoImpl implements NotificationDao {
     @Override
-    public Optional<Notification> getNotificationBySenderId(int id) {
+    public Notification get(int id) {
         String query = "SELECT * FROM usernotifications WHERE SenderID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return Optional.of(createNotification(resultSet));
+                    return createNotification(resultSet);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public Stream<Notification> getAllNotifications() {
+    public List<Notification> getAll() {
         List<Notification> notifications = new ArrayList<>();
         String query = "SELECT * FROM usernotifications";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -38,17 +38,17 @@ public class NotificationDaoImpl implements NotificationDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return notifications.stream();
+        return notifications;
     }
 
     @Override
-    public void addNotification(Notification notification) {
-        String query = "INSERT INTO usernotifications (UserID, SenderID, MessageContent, NotificationTimestamp) VALUES (?, ?, ?, ?)";
+    public void save(Notification notification) {
+        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage, NotificationSentDate) VALUES (?, ?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getReceiverId());
             statement.setInt(2, notification.getSenderId());
-            statement.setString(3, notification.getMessageContent());
+            statement.setString(3, notification.getNotificationMessage());
             statement.setString(4, notification.getNotificationSendDate());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -57,7 +57,7 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
-    public void deleteNotification(Notification notification) {
+    public void delete(Notification notification) {
         String query = "DELETE FROM usernotifications WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -69,11 +69,11 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
-    public void updateNotification(Notification notification) {
-        String query = "UPDATE usernotifications SET MessageContent = ? WHERE NotificationID = ?";
+    public void update(Notification notification) {
+        String query = "UPDATE usernotifications SET NotificationMessage = ? WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, notification.getMessageContent());
+            statement.setString(1, notification.getNotificationMessage());
             statement.setInt(2, notification.getNotificationId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -83,10 +83,10 @@ public class NotificationDaoImpl implements NotificationDao {
 
     private Notification createNotification(ResultSet resultSet) throws SQLException {
         int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
-        int receiverId = resultSet.getInt(NotificationTable.USERID.name());
+        int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
         int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
-        String notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONTIMESTAMP.name()).toString();
-        String notificationMessageContent = resultSet.getString(NotificationTable.MESSAGECONTENT.name());
+        String notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONSENTDATE.name()).toString();
+        String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
 
         return new Notification(notificationId, receiverId, senderId, notificationSendDate, notificationMessageContent);
     }

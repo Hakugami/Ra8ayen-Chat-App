@@ -6,14 +6,8 @@ public enum MessageTable {
     ReceiverID("ReceiverID"),
     MessageContent("MessageContent"),
     MessageTimestamp("MessageTimestamp"),
-    MessageFontStyle("FontStyle"),
-    MessageFontColor("FontColor"),
-    TextBackground("TextBackground"),
-    FontSize("FontSize"),
-    Bold("Bold"),
-    Italic("Italic"),
-    Underline("Underline"),
-    Emoji("Emoji");
+    IsAttachment("IsAttachment");
+
     public String name;
     MessageTable(String name){
         this.name= name;

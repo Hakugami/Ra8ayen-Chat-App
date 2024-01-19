@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane stylesheets="@../../CssStyles/Contacts.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
+   <children>
+      <HBox>
+         <children>
+            <ImageView fx:id="ImagProfile">
+               <clip>
+                  <Circle fx:id="imageClip" centerX="40" centerY="40" radius="40" />
+               </clip>
+
+            </ImageView>
+            <Label prefHeight="36.0" prefWidth="145.0" text="Rashida Mohamed" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets top="35.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="-5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <VBox layoutX="-1.0" layoutY="105.0" prefHeight="495.0" prefWidth="300.0">
+         <children>
+            <ListView fx:id="ListViewId" prefHeight="501.0" prefWidth="300.0" />
+         </children>
+      </VBox>
+      <TextField layoutY="72.0" prefHeight="31.0" prefWidth="300.0" styleClass="search-field" />
+   </children>
+</AnchorPane>

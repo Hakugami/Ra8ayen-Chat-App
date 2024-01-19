@@ -13,5 +13,6 @@ public enum UserTable {
     DateOfBirth,
     Bio,
     UserStatus,
+    UserMode,
     LastLogin;
 }

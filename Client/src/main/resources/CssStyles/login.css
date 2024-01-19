@@ -1,0 +1,16 @@
+.root{
+    -fx-background-color : #ffffffff;
+}
+
+#imgBox {
+    //css instructions here
+    -fx-background-color :  #5a14a0;
+    -fx-background-radius: 10 0 0 10;
+
+}
+
+#loginBox{
+    -fx-background-color :  #f9dbdb;
+    -fx-background-radius : 0 10 10 0;
+
+}
