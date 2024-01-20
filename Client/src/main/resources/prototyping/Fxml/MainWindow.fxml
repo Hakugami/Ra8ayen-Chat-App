@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="mainBorderPane" stylesheets="@../Styles/NeoOrange/MainWindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx2.controllers.MainWindowController">
+     <top>
+       <HBox fx:id="customTitleBar" styleClass="custom_title_bar">
+            <Button fx:id="minimizeButton" styleClass="window_button" text="−" />
+            <Button fx:id="maximizeButton" styleClass="window_button" text="□" />
+            <Button fx:id="closeButton" styleClass="window_button" text="x" />
+       </HBox>
+   </top>
+   <center>
+      <AnchorPane prefHeight="750.0" prefWidth="1115.0">
+         <HBox layoutX="278.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane prefHeight="750.0" prefWidth="43.0">
+               <fx:include source="NeoSideNavBar.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </AnchorPane>
+            <AnchorPane fx:id="swappableMenu" prefHeight="750.0" prefWidth="218.0">
+               <fx:include source="Contacts.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               <Button fx:id="addContact_btn" layoutX="14.0" layoutY="678.0" mnemonicParsing="false" styleClass="add_button" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0">
+                  <graphic>
+                     <FontAwesomeIconView glyphName="PLUS" />
+                  </graphic>
+               </Button>
+            </AnchorPane>
+            <AnchorPane prefHeight="750.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <fx:include source="ChatWindow.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              </AnchorPane>
+         </HBox>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="root" prefHeight="50.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx2.controllers.ContactTileController">
+   <HBox prefHeight="100.0" prefWidth="200.0">
+      <AnchorPane prefWidth="40.0">
+         <FontAwesomeIconView glyphName="USER" layoutX="1.0" layoutY="64.0" size="40" text="" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-10.0" AnchorPane.topAnchor="30.0" />
+      </AnchorPane>
+      <AnchorPane prefHeight="100.0" prefWidth="172.0">
+         <Text fx:id="contactName" layoutX="58.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact1" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="41.0" />
+      </AnchorPane>
+   </HBox>
+   <Circle fx:id="statusCircle" fill="DODGERBLUE" layoutX="256.0" layoutY="52.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+</AnchorPane>

@@ -1,0 +1,78 @@
+.main_menu_container {
+    -fx-background-color: #696969;
+    -fx-alignment: center;
+
+}
+
+.left_container{
+    -fx-background-color: #808080;
+    -fx-border-color: #000000;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 5, 0, 0, 4);
+}
+
+.title_container{
+    -fx-alignment: top-center;
+    -fx-padding: 10;
+}
+
+.title_container FontAwesomeIconView{
+    -fx-fill: #ECF39E;
+}
+
+.title_container Text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 1.5em;
+}
+
+/* Navigation Menu */
+
+.menu_container {
+    -fx-alignment: top-center;
+}
+
+.menu_container Button{
+    -fx-background-color: #696969;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+
+}
+
+.menu_container Button:hover{
+    -fx-background-color: #FFA500;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+
+}
+
+.menu_container Button:pressed{
+    -fx-background-color: #FFA500;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+
+}
+
+
+.menu_container Button FontAwesomIconView{
+    -fx-fill: #ffffff;
+}
+
+.menu_container Button:hover FontAwesomIconView{
+    -fx-fill: #000000;
+}
+
+.menu_container Button:pressed FontAwesomIconView{
+    -fx-fill: #000000;
+}
+
+.user_icon_container{
+    -fx-alignment: bottom-center;
+    -fx-padding: 10;
+}

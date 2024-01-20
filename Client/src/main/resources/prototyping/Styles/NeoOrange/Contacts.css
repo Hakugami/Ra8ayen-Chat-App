@@ -1,0 +1,67 @@
+.contacts_container{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-color: #000000;
+
+}
+
+.contacts_list_view{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+}
+
+.contacts_list_view .list-cell{
+    -fx-padding: 10;
+    -fx-border-color: #000000;
+    -fx-border-width: 0 0 1 0;
+}
+
+.contacts_list_view .list-cell:empty{
+    -fx-border-width: 0;
+}
+
+.contacts_list_view .list-cell:selected{
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+}
+
+.contacts_button{
+    -fx-background-color: #000000;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-pref-width: 40;
+    -fx-pref-height: 30;
+}
+
+.contacts_button:hover{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 40;
+    -fx-pref-height: 30;
+    -fx-cursor: hand;
+}
+
+.contacts_text_field{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-pref-width: 300;
+    -fx-pref-height: 30;
+}
+
+.contacts_text_field:focused{
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}

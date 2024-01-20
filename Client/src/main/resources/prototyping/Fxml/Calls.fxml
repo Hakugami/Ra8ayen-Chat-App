@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="350.0" styleClass="contacts_container" stylesheets="@../Styles/Minimalist/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.javafx2.controllers.CallsController">
+   <AnchorPane layoutX="18.0" prefHeight="140.0" prefWidth="322.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+      <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Calls" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="newCall_btn" layoutX="195.0" layoutY="18.0" mnemonicParsing="false" styleClass="contacts_button" text="New chat" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="filter_btn" layoutX="261.0" layoutY="18.0" mnemonicParsing="false" styleClass="contacts_button" text="Filter" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="20.0" />
+      <TextField fx:id="search_field" layoutX="85.0" layoutY="92.0" styleClass="contacts_text_field" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+   </AnchorPane>
+   <ListView fx:id="calls_list" layoutX="15.0" layoutY="166.0" prefHeight="550.0" prefWidth="322.0" styleClass="contacts_list_view" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+</AnchorPane>

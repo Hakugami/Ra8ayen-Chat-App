@@ -1,6 +1,8 @@
 package dto.Controller;
 
-public interface CallBackController {
+import java.rmi.Remote;
+
+public interface CallBackController extends Remote {
     public void refreshOnlineList() throws Exception;
     public void refreshGroupChatList() throws Exception;
     public void refreshGroupChatMessageList() throws Exception;
@@ -10,4 +12,5 @@ public interface CallBackController {
     public void addNewContact() throws Exception;
     public void deleteGroupChat() throws Exception;
     public void deleteContact() throws Exception;
+    public void receiveMessage() throws Exception;
 }
