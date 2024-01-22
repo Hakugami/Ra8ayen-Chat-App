@@ -16,7 +16,7 @@ jobs:
     - name: Ensure prototyping branch exists
       run: |
         if [ ! -d ".git/refs/heads/prototyping" ]; then
-          git checkout -b prototyping origin/prototyping
+          git fetch origin prototyping:prototyping
         fi
 
     - name: Merge development into prototyping
