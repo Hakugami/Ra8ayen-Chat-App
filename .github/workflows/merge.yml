@@ -23,8 +23,12 @@ jobs:
       run: |
         git checkout prototyping
         git pull origin development
-        git merge --no-ff --no-commit origin/development  # Use --no-ff to preserve merge commit
-        git checkout --theirs .  # Keep changes from development branch in case of conflicts
-        git add .
+
+        # Merge changes from development branch using recursive strategy
+        git merge --no-ff --no-commit -s recursive -X theirs origin/development
+
+        # Complete the merge commit
         git commit -m "Merge development into prototyping"
+
+        # Push the merge commit to prototyping branch
         git push origin prototyping
