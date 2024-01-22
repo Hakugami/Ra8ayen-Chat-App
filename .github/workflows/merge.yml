@@ -24,10 +24,9 @@ jobs:
         git checkout prototyping
         git pull --rebase origin development  # Use rebase to avoid conflicts
 
-        # Auto-resolve conflicts using "theirs" strategy
-        git -c user.email="actions@github.com" -c user.name="GitHub Actions" \
-          -c merge.conflictStyle=diff3 \
-          -c merge.strategy=recursive -c merge.ours=HEAD -c merge.theirs=origin/development \
-          rebase --skip
-
-        git push origin prototyping
+        # Attempt to rebase
+        if git rebase --continue; then
+          git push origin prototyping
+        else
+          echo "Conflict encountered. Resolve conflicts manually and commit changes."
+        fi
