@@ -1,4 +1,4 @@
-name: Merge Development into Prototyping (dev branch)
+name: Merge Development into Prototyping
 
 on:
   push:
@@ -13,9 +13,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Ensure prototyping branch exists
+      run: |
+        if [ ! -d ".git/refs/heads/prototyping" ]; then
+          git checkout -b prototyping origin/prototyping
+        fi
+
     - name: Merge development into prototyping
       run: |
         git checkout prototyping
-        git pull origin development
         git pull --rebase origin development  # Use rebase to avoid conflicts
         git push origin prototyping
