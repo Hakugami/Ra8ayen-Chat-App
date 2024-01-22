@@ -29,4 +29,5 @@ jobs:
           git push origin prototyping
         else
           echo "Conflict encountered. Resolve conflicts manually and commit changes."
+          exit 1
         fi
