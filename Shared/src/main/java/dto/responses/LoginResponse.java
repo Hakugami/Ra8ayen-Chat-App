@@ -37,4 +37,12 @@ public class LoginResponse implements Serializable {
         this.error = error;
     }
 
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+                "token='" + token + '\'' +
+                ", success=" + success +
+                ", error='" + error + '\'' +
+                '}';
+    }
 }

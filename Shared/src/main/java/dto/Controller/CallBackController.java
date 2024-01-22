@@ -1,16 +1,17 @@
 package dto.Controller;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 public interface CallBackController extends Remote {
-    public void refreshOnlineList() throws Exception;
-    public void refreshGroupChatList() throws Exception;
-    public void refreshGroupChatMessageList() throws Exception;
-    public void refreshPrivateChatList() throws Exception;
-    public void refreshPrivateChatMessageList() throws Exception;
-    public void addNewGroupChat() throws Exception;
-    public void addNewContact() throws Exception;
-    public void deleteGroupChat() throws Exception;
-    public void deleteContact() throws Exception;
-    public void receiveMessage() throws Exception;
+   /* public void refreshOnlineList() throws RemoteException;
+    public void refreshGroupChatList() throws RemoteException;
+    public void refreshGroupChatMessageList() throws RemoteException;
+    public void refreshPrivateChatList() throws RemoteException;
+    public void refreshPrivateChatMessageList() throws RemoteException;
+    public void addNewGroupChat() throws RemoteException;
+    public void addNewContact() throws RemoteException;
+    public void deleteGroupChat() throws RemoteException;
+    public void deleteContact() throws RemoteException;*/
+    void receiveAnnouncement(String announcement) throws RemoteException;
 }

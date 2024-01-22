@@ -11,7 +11,7 @@
       <font>
          <Font size="24.0" />
       </font></TextArea>
-    <Button fx:id="announcementButton"  prefHeight="40.0" prefWidth="174.0" text="Announce">
+    <Button fx:id="announcementButton" prefHeight="40.0" prefWidth="174.0" text="Announce" onAction="#handleAnnouncementButtonAction">
       <VBox.margin>
          <Insets bottom="10.0" />
       </VBox.margin>

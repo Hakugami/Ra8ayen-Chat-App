@@ -1,8 +1,7 @@
 package network.manager;
 
-import controllers.AuthenticationControllerSingleton;
+import controllers.OnlineControllerImpl;
 import lookupnames.LookUpNames;
-
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -30,43 +29,25 @@ public class NetworkManagerSingleton {
         }
         return instance;
     }
-    public synchronized boolean isServerRunning() {
+    public boolean isServerRunning() {
         return isServerRunning;
     }
-    public synchronized void setServerRunning(boolean isServerRunning) {
+    public void setServerRunning(boolean isServerRunning) {
         this.isServerRunning = isServerRunning;
     }
     public void start() {
         try {
-
-            AuthenticationControllerSingleton.getInstance();
-//            for(LookUpNames bind : LookUpNames.values()) {
-//                //Naming.rebind(bind.name());
-//                System.out.println(bind.name());
-//            }
+//            AuthenticationControllerSingleton.getInstance();
+            for(LookUpNames bind : LookUpNames.values()) {
+                Naming.rebind(bind.name(), new OnlineControllerImpl());
+                System.out.println(bind.name());
+            }
             setServerRunning(true);
-        } catch (RemoteException e) {
+        } catch (RemoteException | MalformedURLException e) {
             e.getCause();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
         }
     }
-//
-//public void start() {
-//    try {
-//        if (!isServerRunning()) {
-//            registry = LocateRegistry.createRegistry(PORT);
-//            AuthenticationControllerSingleton.getInstance();
-//            setServerRunning(true);
-//            while (isServerRunning()) {
-//                // Wait for client connections
-//                Thread.sleep(1000);
-//            }
-//        }
-//    } catch (RemoteException | MalformedURLException | InterruptedException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
+
     public void stop() {
         try {
             for(String bind : registry.list()) {
@@ -85,3 +66,4 @@ public class NetworkManagerSingleton {
         return registry;
     }
 }
+
