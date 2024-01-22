@@ -22,12 +22,9 @@ jobs:
     - name: Merge development into prototyping
       run: |
         git checkout prototyping
-        git pull --rebase origin development  # Use rebase to avoid conflicts
-
-        # Attempt to rebase
-        if git rebase --continue; then
-          git push origin prototyping
-        else
-          echo "Conflict encountered. Resolve conflicts manually and commit changes."
-          exit 1
-        fi
+        git pull origin development
+        git merge --no-ff --no-commit origin/development  # Use --no-ff to preserve merge commit
+        git checkout --theirs .  # Keep changes from development branch in case of conflicts
+        git add .
+        git commit -m "Merge development into prototyping"
+        git push origin prototyping
