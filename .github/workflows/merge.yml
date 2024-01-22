@@ -22,5 +22,5 @@ jobs:
     - name: Merge development into prototyping
       run: |
         git checkout prototyping
-        git pull --no-rebase --no-ff -s recursive -X theirs origin development
+        git pull --no-rebase --no-ff --allow-unrelated-histories -s recursive -X theirs origin development
         git push origin prototyping
