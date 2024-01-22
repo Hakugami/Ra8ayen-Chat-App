@@ -22,13 +22,5 @@ jobs:
     - name: Merge development into prototyping
       run: |
         git checkout prototyping
-        git pull origin development
-
-        # Merge changes from development branch using recursive strategy
-        git merge --no-ff --no-commit -s recursive -X theirs origin/development
-
-        # Complete the merge commit
-        git commit -m "Merge development into prototyping"
-
-        # Push the merge commit to prototyping branch
+        git pull --no-rebase --no-ff -s recursive -X theirs origin development
         git push origin prototyping
