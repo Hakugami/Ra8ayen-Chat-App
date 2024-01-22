@@ -2,10 +2,11 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class DashboardController {
-    private @FXML VBox vbRoot;
+    private VBox vbRoot;
     @FXML
     private PieChart genderPieChart;
     @FXML

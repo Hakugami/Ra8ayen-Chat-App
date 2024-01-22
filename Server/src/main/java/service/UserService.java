@@ -1,7 +1,7 @@
 package service;
 
 import Mapper.RegisterMapper;
-import Mapper.RegisterMapperImpl;
+//import Mapper.RegisterMapperImpl;
 import dao.impl.UserDaoImpl;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
@@ -14,7 +14,7 @@ public class UserService {
     public UserDaoImpl userDaoImpl;
 
     public UserService() {
-        registerMapper = new RegisterMapperImpl();
+        //registerMapper = new RegisterMapperImpl();
         userDaoImpl = new UserDaoImpl();
     }
 
