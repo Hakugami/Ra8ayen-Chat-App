@@ -6,7 +6,7 @@ import java.util.List;
 public interface ChatParticipantsDao extends Dao<ChatParticipant> {
     ChatParticipant get(int id);
     List<ChatParticipant> getAll();
-    void save(ChatParticipant chatParticipant);
-    void update(ChatParticipant chatParticipant);
-    void delete(ChatParticipant chatParticipant);
+    boolean save(ChatParticipant chatParticipant);
+    boolean update(ChatParticipant chatParticipant);
+    boolean delete(ChatParticipant chatParticipant);
 }

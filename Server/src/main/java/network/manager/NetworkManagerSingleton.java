@@ -19,7 +19,7 @@ public class NetworkManagerSingleton {
             registry = LocateRegistry.createRegistry(PORT);
             isServerRunning = false;
         } catch (RemoteException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -37,14 +37,13 @@ public class NetworkManagerSingleton {
     }
     public void start() {
         try {
-//            AuthenticationControllerSingleton.getInstance();
             for(LookUpNames bind : LookUpNames.values()) {
                 Naming.rebind(bind.name(), new OnlineControllerImpl());
                 System.out.println(bind.name());
             }
             setServerRunning(true);
         } catch (RemoteException | MalformedURLException e) {
-            e.getCause();
+            System.out.println(e.getMessage());
         }
     }
 
