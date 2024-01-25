@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -15,11 +15,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" stylesheets="@../Styles/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="loginXml" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="750.0" stylesheets="@../CssStyles/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
-      <HBox alignment="CENTER" layoutX="4.8" layoutY="-4.8" prefWidth="750.0" spacing="1.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+      <HBox alignment="CENTER" layoutX="4.8" layoutY="-4.8" prefWidth="750.0" spacing="1.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <VBox id="imgBox" alignment="TOP_CENTER" prefHeight="0.0" prefWidth="250.0" spacing="5.0">
+            <VBox id="imgBox" alignment="TOP_CENTER" prefHeight="511.0" prefWidth="494.0" spacing="5.0">
                <children>
                   <ImageView fitHeight="268.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -51,12 +51,7 @@
                   </Label>
                   <HBox spacing="8.0" VBox.vgrow="NEVER">
                      <children>
-                        <FontAwesomeIconView glyphName="PHONE" text="">
-                           <HBox.margin>
-                              <Insets top="16.0" />
-                           </HBox.margin>
-                        </FontAwesomeIconView>
-                        <TextField prefHeight="42.0" prefWidth="250.0" promptText="Phone Number" style="-fx-background-radius: 15;" />
+                        <TextField id="txtField" fx:id="phoneNumberField" promptText="Phone Number" />
                      </children>
                      <VBox.margin>
                         <Insets left="116.0" right="64.0" top="60.0" />
@@ -64,18 +59,13 @@
                   </HBox>
                   <HBox spacing="8.0" VBox.vgrow="NEVER">
                      <children>
-                        <FontAwesomeIconView glyphName="KEY" text="">
-                           <HBox.margin>
-                              <Insets top="16.0" />
-                           </HBox.margin>
-                        </FontAwesomeIconView>
-                        <PasswordField prefHeight="42.0" prefWidth="250.0" promptText="Password" style="-fx-background-radius: 15;" />
+                        <PasswordField id="txtField" fx:id="passwordField" prefHeight="42.0" prefWidth="250.0" promptText="Password" />
                      </children>
                      <VBox.margin>
                         <Insets left="116.0" right="64.0" top="8.0" />
                      </VBox.margin>
                   </HBox>
-                  <JFXButton style="-fx-background-color: #5a14a0; -fx-background-radius: 15;" text="Login" textFill="WHITE">
+                  <JFXButton onAction="#handleLoginButton" style="-fx-background-color: #5a14a0; -fx-background-radius: 15;" text="Login" textFill="WHITE">
                      <font>
                         <Font name="Times New Roman Bold" size="18.0" />
                      </font>
@@ -89,12 +79,15 @@
                            <font>
                               <Font name="Times New Roman" size="14.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </Label>
-                        <Label text="Create your account" textFill="#3a0d82">
+                        <Hyperlink onAction="#go_to_sign_up_xml" prefHeight="0.0" prefWidth="122.0" text="Create your account" textFill="#3a0d82">
                            <font>
-                              <Font name="Times New Roman" size="14.0" />
+                              <Font name="System Bold" size="12.0" />
                            </font>
-                        </Label>
+                        </Hyperlink>
                      </children>
                      <VBox.margin>
                         <Insets top="32.0" />
