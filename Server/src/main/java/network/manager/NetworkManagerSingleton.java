@@ -50,13 +50,15 @@ public class NetworkManagerSingleton {
 
     public void stop() {
         try {
+            setServerRunning(false);
             for(String bind : registry.list()) {
                 Remote stub = registry.lookup(bind);
-                UnicastRemoteObject.unexportObject(stub, true);
+                if(stub != null) {
+                    UnicastRemoteObject.unexportObject(stub, true);
+                }
                 Naming.unbind(bind);
             }
             UnicastRemoteObject.unexportObject(registry, true);
-            setServerRunning(false);
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
             System.out.println(e.getMessage());
         }

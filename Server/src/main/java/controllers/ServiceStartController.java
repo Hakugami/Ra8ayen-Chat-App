@@ -12,10 +12,6 @@ public class ServiceStartController {
     @FXML
     private VBox vbRoot;
     @FXML
-    private Button startButton;
-    @FXML
-    private Button shutdownButton;
-    @FXML
     private ProgressIndicator progressIndicator;
 
     public VBox getVBoxRoot() {
@@ -35,6 +31,7 @@ public class ServiceStartController {
         try {
             NetworkManagerSingleton.getInstance().start();
             progressIndicator.setStyle("-fx-progress-color: green;");
+            System.out.println("Server started.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -43,8 +40,11 @@ public class ServiceStartController {
     @FXML
     private void handleShutdownButtonClick() {
         try {
-            NetworkManagerSingleton.getInstance().stop();
-            progressIndicator.setStyle("-fx-progress-color: red;");
+            if (NetworkManagerSingleton.getInstance().isServerRunning()) {
+                NetworkManagerSingleton.getInstance().stop();
+                progressIndicator.setStyle("-fx-progress-color: red;");
+                System.out.println("Server stopped.");
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

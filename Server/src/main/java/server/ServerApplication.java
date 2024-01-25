@@ -1,18 +1,14 @@
 package server;
 
 import controllers.ServerController;
-import dto.Controller.CallBackController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import network.manager.NetworkManagerSingleton;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerApplication extends Application {
-    public static Map<String, CallBackController> clients = new ConcurrentHashMap<>();
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("/Fxml/Server.fxml"));
