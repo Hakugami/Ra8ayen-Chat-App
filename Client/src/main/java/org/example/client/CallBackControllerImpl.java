@@ -1,6 +1,8 @@
 package org.example.client;
 
 import dto.Controller.CallBackController;
+import javafx.application.Platform;
+import org.controlsfx.control.Notifications;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -10,9 +12,8 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     protected CallBackControllerImpl() throws RemoteException {
         super();
     }
-
     @Override
-    public void receiveAnnouncement(String announcement) {
-        System.out.println("New announcement: " + announcement);
+    public void receiveAnnouncement(String announcement, String announcementTitle) {
+        Platform.runLater(()->Notifications.create().title(announcementTitle).text(announcement).showInformation());
     }
 }

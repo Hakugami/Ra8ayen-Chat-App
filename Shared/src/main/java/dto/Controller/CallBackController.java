@@ -13,5 +13,5 @@ public interface CallBackController extends Remote {
     public void addNewContact() throws RemoteException;
     public void deleteGroupChat() throws RemoteException;
     public void deleteContact() throws RemoteException;*/
-    void receiveAnnouncement(String announcement) throws RemoteException;
+    void receiveAnnouncement(String announcement, String announcementTitle) throws RemoteException;
 }
