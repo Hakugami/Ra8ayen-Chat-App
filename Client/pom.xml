@@ -46,11 +46,7 @@
       <artifactId>javafx-fxml</artifactId>
       <version>21</version>
     </dependency>
-    <dependency>
-      <groupId>org.controlsfx</groupId>
-      <artifactId>controlsfx</artifactId>
-      <version>11.1.2</version>
-    </dependency>
+
 
 <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -63,7 +59,8 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-    </dependency>  </dependencies>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>

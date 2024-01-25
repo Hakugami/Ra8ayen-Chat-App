@@ -13,10 +13,12 @@ public class RegisterRequest implements Serializable {
     private Gender gender;
     private String country;
     private Date dateOfBirth;
+    private String bio;
 
-    public enum Gender{
-        Male,Female
+    public enum Gender {
+        Male, Female
     }
+
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -82,6 +84,14 @@ public class RegisterRequest implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     @Override
     public String toString() {
         return "RegisterRequest{" +
@@ -92,7 +102,8 @@ public class RegisterRequest implements Serializable {
                 ", passwordHash='" + passwordHash + '\'' +
                 ", gender=" + gender +
                 ", country='" + country + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", bio='" + bio + '\'' +
                 '}';
     }
 }

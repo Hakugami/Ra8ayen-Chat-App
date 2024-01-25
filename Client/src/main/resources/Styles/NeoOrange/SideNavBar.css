@@ -1,0 +1,72 @@
+.main_menu_container {
+    -fx-background-color: #ffffff;
+    -fx-alignment: center;
+
+}
+
+.left_container{
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 5, 0, 0, 4);
+}
+
+.title_container{
+    -fx-background-color: #000000;
+
+    -fx-border-color: #000000;
+    -fx-alignment: top-center;
+    -fx-padding: 10;
+}
+
+.title_container FontAwesomeIconView{
+    -fx-fill: #ECF39E;
+}
+
+.title_container Text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 1.5em;
+}
+
+/* Navigation Menu */
+
+.menu_container {
+    -fx-padding: 10 10 10 20;
+    -fx-spacing: 20;
+}
+
+.menu_container Button{
+    -fx-background-color: #000000;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 5, 0, 0, 6);
+}
+
+.menu_container Button:hover{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 5, 0, 0, 6);
+    -fx-cursor: hand;
+}
+
+.menu_container Button FontAwesomeIconView{
+    -fx-fill: #ffffff;
+}
+
+.menu_container Button:hover FontAwesomeIconView{
+    -fx-fill: #000000;
+}
+

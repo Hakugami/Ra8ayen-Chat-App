@@ -1,0 +1,34 @@
+.container_profile {
+    -fx-text-fill: #ffffff;
+}
+
+.container_profile Button {
+    -fx-background-color: #000000;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 5, 0, 0, 6);
+}
+
+.container_profile Button:hover {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 5, 0, 0, 6);
+}
+
+.container_profile Label {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}

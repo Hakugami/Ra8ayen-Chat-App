@@ -55,8 +55,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean save(User user) {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
-                "PasswordHash,Gender,Country,DateOfBirth,LastLogin) " +
-                "VALUES (?, ?, ?, ?,?,?,?,?)";
+                "ProfilePicture,PasswordHash,Gender,Country,DateOfBirth,Bio,LastLogin) " +
+                "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -174,12 +174,15 @@ public class UserDaoImpl implements UserDao {
         statement.setString(1, user.getPhoneNumber());
         statement.setString(2, user.getUserName());
         statement.setString(3, user.getEmailAddress());
-        statement.setString(4, user.getPasswordHash());
-        statement.setString(5, user.getGender().name());
-        statement.setString(6, user.getCountry());
-        statement.setDate(7, new java.sql.Date(user.getDateOfBirth().getTime()));
+        ByteArrayInputStream input = new ByteArrayInputStream(user.getProfilePicture());
+        statement.setBinaryStream(4, input);
+        statement.setString(5, user.getPasswordHash());
+        statement.setString(6, user.getGender().name());
+        statement.setString(7, user.getCountry());
+        statement.setDate(8, new java.sql.Date(user.getDateOfBirth().getTime()));
+        statement.setString(9, user.getBio());
         //get the latest Time stamp
-        statement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+        statement.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
     }
 
     private void update(PreparedStatement statement, User user) throws SQLException {
