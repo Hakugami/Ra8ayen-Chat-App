@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class DashboardController {
+    @FXML
     private VBox vbRoot;
     @FXML
     private PieChart genderPieChart;
