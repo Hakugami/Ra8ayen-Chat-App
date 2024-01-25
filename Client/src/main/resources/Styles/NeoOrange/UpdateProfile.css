@@ -1,0 +1,74 @@
+.update_container {
+    -fx-background-color: #2f2f2f;
+    -fx-background-radius: 10;
+    -fx-border-color: #000000;
+    -fx-border-radius: 10;
+}
+
+.update_container Label {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.update_container Button {
+    -fx-background-color: #000000;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-pref-width: 350;
+    -fx-pref-height: 30;
+}
+
+.update_container Button:hover {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 350;
+    -fx-pref-height: 30;
+}
+
+.update_form_container {
+    -fx-spacing: 15;
+    -fx-alignment: top-left;
+}
+
+.update_form_container Label {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+}
+
+.input_field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+}
+
+.update_form_container Button {
+    -fx-background-color: #000000;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-pref-width: 350;
+    -fx-pref-height: 30;
+}
+
+.update_form_container Button:hover {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 350;
+    -fx-pref-height: 30;
+}

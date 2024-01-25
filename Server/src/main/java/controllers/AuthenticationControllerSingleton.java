@@ -40,10 +40,6 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
 public static AuthenticationControllerSingleton getInstance() throws RemoteException, MalformedURLException {
     if (instance == null) {
         instance = new AuthenticationControllerSingleton();
-        // Get the port number from the NetworkManagerSingleton class
-        Registry registry = NetworkManagerSingleton.getInstance().getRegistry();
-        // Bind the AuthenticationControllerSingleton to the RMI registry
-        registry.rebind("AuthenticationController", instance);
          logger.info("AuthenticationControllerSingleton object bound to name 'AuthenticationController'.");
         System.out.println("AuthenticationControllerSingleton object bound to name 'AuthenticationController'.");
     }
@@ -52,6 +48,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) throws RemoteException {
+        logger.info("Login request received from client.");
         String hashedPassword = hashService.hashPassword(loginRequest.getPassword());
         loginRequest.setPassword(hashedPassword);
         boolean isSuccessful = userService.loginUser(loginRequest);
@@ -71,6 +68,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) throws RemoteException {
+        logger.info("Register request received from client.");
         String hashedPassword = hashService.hashPassword(registerRequest.getPasswordHash());
         registerRequest.setPasswordHash(hashedPassword);
         userService.registerUser(registerRequest);

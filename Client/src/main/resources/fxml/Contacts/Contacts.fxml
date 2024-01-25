@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
 
-<AnchorPane stylesheets="@../../CssStyles/Contacts.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
+<AnchorPane stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
    <children>
       <HBox alignment="CENTER">
          <children>

@@ -1,0 +1,22 @@
+.root {
+    -fx-base: #CA3503; /* This is a sample color (dark orange) */
+}
+.send-message {
+    -fx-background-radius: 15; /* Adjust the value based on your preference */
+    -fx-padding: 5 10 5 10; /* Adjust the padding as needed */
+    -fx-background-color:#FFFFFF;
+}
+.header{
+   -fx-background-color: #CA3503;
+
+}
+
+.list_View{
+     -fx-background-image: url('file:///C:/Users/Rashida/Desktop/Labs/Project/demoGUI/src/main/resources/Images/defuatback.jpg');
+
+}
+.Button_style{
+-fx-background-color: #CA3503;
+
+}
+

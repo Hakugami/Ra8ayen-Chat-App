@@ -1,5 +1,8 @@
 package lookupnames;
 
 public enum LookUpNames {
-    ONLINECONTROLLER
+    ONLINECONTROLLER,
+    AUTHENTICATIONCONTROLLER;
+
+
 }

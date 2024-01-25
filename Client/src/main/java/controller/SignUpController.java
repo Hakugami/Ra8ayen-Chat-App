@@ -3,58 +3,197 @@ package controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.requests.RegisterRequest;
+import dto.responses.RegisterResponse;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.Duration;
 import model.Country;
-import org.example.client.HelloApplication;
+import model.Model;
+import network.NetworkFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SignUpController implements Initializable {
+class CustomDatePickerCellFactory implements Callback<DatePicker, DateCell> {
+    @Override
+    public DateCell call(final DatePicker datePicker) {
+        return new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
 
-     @FXML
-     TextField nameField;
+                if (item == null || empty) {
+                    setGraphic(null);
+                } else {
+                    setStyle("-fx-background-color: rgb(246, 241, 238); " + // Background color
+                            "-fx-text-fill: rgb(79, 74, 69); " + // Text color
+                            "-fx-border-color: rgb(108, 95, 91); " + // Border color
+                            "-fx-border-radius: 5; " +
+                            "-fx-font-size: 1.1em; " +
+                            "-fx-padding: 10px; " );
+                    setOnMouseEntered(event -> setStyle("-fx-background-color: rgb(237, 125, 49);"
+                            + "-fx-text-fill: rgb(255, 255, 255);"
+                            + "-fx-border-color: rgb(108, 95, 91);"
+                            + "-fx-border-radius: 5;"
+                            + "-fx-font-size: 1.1em;"
+                            + "-fx-padding: 10px;")); // Hover color
+                    setOnMouseExited(event -> setStyle("-fx-background-color: rgb(246, 241, 238);"
+                            + "-fx-text-fill: rgb(79, 74, 69);"
+                            + "-fx-border-color: rgb(108, 95, 91);"
+                            + "-fx-border-radius: 5;"
+                            + "-fx-font-size: 1.1em;"
+                            + "-fx-padding: 10px;"
+                    )); // Normal color
+                }
+            }
+        };
+    }
+}
+
+class CustomGenderComboBoxCellFactory implements Callback<ListView<String>, ListCell<String>> {
+    @Override
+    public ListCell<String> call(ListView<String> param) {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    setStyle("-fx-background-color: rgb(246, 241, 238); " + // Background color
+                            "-fx-text-fill: rgb(79, 74, 69); " + // Text color
+                            "-fx-border-color: rgb(108, 95, 91); " + // Border color
+                            "-fx-border-radius: 5; " +
+                            "-fx-font-size: 1.1em; " +
+                            "-fx-padding: 10px; " +
+                            "-fx-border-width: 2px;");
+                    setOnMouseEntered(event -> setStyle("-fx-background-color: rgb(237, 125, 49);"
+                            + "-fx-text-fill: rgb(255, 255, 255);"
+                            + "-fx-border-color: rgb(108, 95, 91);"
+                            + "-fx-border-radius: 5;"
+                            + "-fx-font-size: 1.1em;"
+                            + "-fx-padding: 10px;"
+                            + "-fx-border-width: 2px;")); // Hover color
+                    setOnMouseExited(event -> setStyle("-fx-background-color: rgb(246, 241, 238);"
+                            + "-fx-text-fill: rgb(79, 74, 69);"
+                            + "-fx-border-color: rgb(108, 95, 91);"
+                            + "-fx-border-radius: 5;"
+                            + "-fx-font-size: 1.1em;"
+                            + "-fx-padding: 10px;"
+                            + "-fx-border-width: 2px;"
+                    )); // Normal color
+                }
+            }
+        };
+    }
+}
+class CustomCountryComboBoxCellFactory implements Callback<ListView<Country>, ListCell<Country>> {
+    @Override
+    public ListCell<Country> call(ListView<Country> param) {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(Country item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setGraphic(null);
+                } else {
+                    setText(item.getName());
+                    setStyle("-fx-background-color: rgb(246, 241, 238); " + // Background color
+                            "-fx-text-fill: rgb(79, 74, 69); " + // Text color
+                            "-fx-border-color: rgb(108, 95, 91); " + // Border color
+                            "-fx-border-radius: 5; " +
+                            "-fx-font-size: 1.1em; " +
+                            "-fx-padding: 10px; " +
+                            "-fx-border-width: 2px;");
+                    setOnMouseEntered(event -> setStyle("-fx-background-color: rgb(237, 125, 49);"
+                            + "-fx-text-fill: rgb(255, 255, 255);"
+                            + "-fx-border-color: rgb(108, 95, 91);"
+                            + "-fx-border-radius: 5;"
+                            + "-fx-font-size: 1.1em;"
+                            + "-fx-padding: 10px;"
+                            + "-fx-border-width: 2px;")); // Hover color
+                    setOnMouseExited(event -> setStyle("-fx-background-color: rgb(246, 241, 238);"
+                            + "-fx-text-fill: rgb(79, 74, 69);"
+                            + "-fx-border-color: rgb(108, 95, 91);"
+                            + "-fx-border-radius: 5;"
+                            + "-fx-font-size: 1.1em;"
+                            + "-fx-padding: 10px;"
+                            + "-fx-border-width: 2px;"
+                    )); // Normal color
+                }
+            }
+        };
+    }
+}
+
+public class SignUpController implements Initializable {
     @FXML
-     TextField emailField;
+    public ImageView profilePic;
+    public TextArea bioArea;
     @FXML
-     TextField phoneNumberField;
+    TextField nameField;
     @FXML
-     PasswordField passwordField;
+    TextField emailField;
     @FXML
-     DatePicker datePicker;
+    TextField phoneNumberField;
+    @FXML
+    PasswordField passwordField;
+    @FXML
+    PasswordField confirmPasswordField;
+    @FXML
+    DatePicker datePicker;
     @FXML
     AnchorPane signUpXml;
     @FXML
-    ComboBox<Country> comboBox;
+    ComboBox<Country> countryComboBox;
     @FXML
     ComboBox<String> gender;
-    String jsonFilePath = "D:\\jaavaa\\sdk\\xml_1\\ChatApp\\src\\main\\resources\\Countries\\CountryCodes.json";
+    @FXML
+    Button signUpButton;
+    @FXML
+    Button backToLoginButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //comboBox.setItems(FXCollections.observableArrayList("Hajar","Elen","Nour"));
-        gender.setItems(FXCollections.observableArrayList("Female","Male"));
+        gender.setItems(FXCollections.observableArrayList("Female", "Male"));
         ObservableList<Country> countries = loadCountriesFromJSON("/Countries/CountryCodes.json");
-        comboBox.setItems(countries);
+        countryComboBox.setItems(countries);
+        signUpButton.setOnAction(this::handleSignUpButton);
+        backToLoginButton.setOnAction(this::handleBackToLoginButton);
+        profilePic.setOnMouseClicked(event -> handleProfilePicSelection());
+        countryComboBox.setCellFactory(new CustomCountryComboBoxCellFactory());
+        gender.setCellFactory(new CustomGenderComboBoxCellFactory());
+        datePicker.setDayCellFactory(new CustomDatePickerCellFactory());
+
 
     }
-    public void go_to_login_xml() throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(HelloApplication.class.getResource("/Fxml/Login.fxml"));
-        signUpXml.getChildren().setAll(anchorPane);
+
+    private void handleBackToLoginButton(ActionEvent event) {
+        backToLoginScreen(backToLoginButton);
     }
 
     private ObservableList<Country> loadCountriesFromJSON(String jsonFilePath) {
@@ -82,16 +221,71 @@ public class SignUpController implements Initializable {
 
     }
 
+    private void handleProfilePicSelection() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        // Show open file dialog
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
+            profilePic.setImage(image);
+        }
+    }
+
     @FXML
     private void handleSignUpButton(ActionEvent event) {
         if (validateFields()) {
-            System.out.println("Sign-up successful!");
-            System.out.println(nameField.getText()+"\n"+emailField.getText()+"\n"+phoneNumberField.getText()+"\n"+
-                    passwordField.getText()+"\n"+comboBox.getValue()+"\n"+
-                    gender.getValue()+"\n"+datePicker.getValue()+"\n");
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.setPhoneNumber(phoneNumberField.getText());
+            registerRequest.setUserName(nameField.getText());
+            registerRequest.setEmailAddress(emailField.getText());
+            registerRequest.setPasswordHash(passwordField.getText());
+            registerRequest.setGender(RegisterRequest.Gender.valueOf(gender.getValue()));
+            registerRequest.setCountry(countryComboBox.getValue().getName());
+            registerRequest.setDateOfBirth(java.sql.Date.valueOf(datePicker.getValue()));
+            registerRequest.setBio(bioArea.getText());
+            // If profile picture is selected
+            if (profilePic.getImage() != null) {
+                BufferedImage bImage = SwingFXUtils.fromFXImage(profilePic.getImage(), null);
+                ByteArrayOutputStream s = new ByteArrayOutputStream();
+                try {
+                    ImageIO.write(bImage, "png", s);
+                    byte[] res = s.toByteArray();
+                    registerRequest.setProfilePicture(res);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                RegisterResponse registerResponse = NetworkFactory.getInstance().register(registerRequest);
+                if (registerResponse.isSuccess()) {
+                    System.out.println("User registered successfully");
+                    backToLoginScreen(signUpButton);
+                } else {
+                    System.err.println("User registration failed");
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         } else {
-            System.out.println("Validation failed. Please check your input.");
+            System.err.println("Invalid fields");
         }
+    }
+
+    private void backToLoginScreen(Button signUpButton) {
+        Stage currentStage = (Stage) signUpButton.getScene().getWindow();
+        AnchorPane loginPane = (AnchorPane) Model.getInstance().getViewFactory().getLogin();
+        currentStage.getScene().setRoot(loginPane);
+        loginPane.setTranslateX(-currentStage.getWidth());
+
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), loginPane);
+        tt.setToX(0);
+        tt.play();
     }
 
     private boolean validateFields() {
@@ -99,7 +293,7 @@ public class SignUpController implements Initializable {
                 !isValidEmail(emailField.getText()) ||
                 !isValidPhoneNumber(phoneNumberField.getText()) ||
                 !isValidPassword(passwordField.getText()) ||
-                comboBox.getSelectionModel().isEmpty() ||
+                countryComboBox.getSelectionModel().isEmpty() ||
                 gender.getSelectionModel().isEmpty() ||
                 datePicker.getValue() == null) {
             return false;
@@ -107,8 +301,9 @@ public class SignUpController implements Initializable {
 
         return true;
     }
+
     private boolean isValidEmail(String email) {
-        if( email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$"))
+        if (email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$"))
             return true;
         else {
             System.out.println("Please enter a valid e-mail.");
@@ -118,7 +313,7 @@ public class SignUpController implements Initializable {
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-        if( phoneNumber.matches("\\d{11}"))
+        if (phoneNumber.matches("\\d{11}"))
             return true;
         else {
             System.out.println("Please enter a valid number , 11 digits.");
@@ -127,7 +322,7 @@ public class SignUpController implements Initializable {
     }
 
     private boolean isValidPassword(String password) {
-        if(password.length() >= 8)
+        if (password.length() >= 8)
             return true;
         else {
             System.out.println("Password must be 8 or more.");
