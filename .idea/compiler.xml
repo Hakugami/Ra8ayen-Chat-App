@@ -15,9 +15,9 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.0.Beta1/mapstruct-processor-1.6.0.Beta1.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.0.Beta1/mapstruct-1.6.0.Beta1.jar" />
         </processorPath>
-        <module name="Shared" />
         <module name="Client" />
         <module name="Server" />
+        <module name="Shared" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

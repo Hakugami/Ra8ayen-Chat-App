@@ -2,7 +2,6 @@ package dao.impl;
 
 import dao.NotificationDao;
 import persistence.connection.DataSourceSingleton;
-
 import java.sql.*;
 import java.util.*;
 import model.entities.*;
@@ -20,7 +19,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -36,13 +35,13 @@ public class NotificationDaoImpl implements NotificationDao {
                 notifications.add(createNotification(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return notifications;
     }
 
     @Override
-    public void save(Notification notification) {
+    public boolean save(Notification notification) {
         String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage, NotificationSentDate) VALUES (?, ?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -50,35 +49,47 @@ public class NotificationDaoImpl implements NotificationDao {
             statement.setInt(2, notification.getSenderId());
             statement.setString(3, notification.getNotificationMessage());
             statement.setString(4, notification.getNotificationSendDate());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(Notification notification) {
+    public boolean delete(Notification notification) {
         String query = "DELETE FROM usernotifications WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getNotificationId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void update(Notification notification) {
+    public boolean update(Notification notification) {
         String query = "UPDATE usernotifications SET NotificationMessage = ? WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, notification.getNotificationMessage());
             statement.setInt(2, notification.getNotificationId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     private Notification createNotification(ResultSet resultSet) throws SQLException {

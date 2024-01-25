@@ -19,7 +19,7 @@ public class DataSourceSingleton {
             dataSource.setUser(properties.getProperty("user"));
             dataSource.setPassword(properties.getProperty("password"));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error loading properties file");
         }
 
     }
