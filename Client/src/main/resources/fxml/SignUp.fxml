@@ -80,7 +80,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                         </Label>
-                                        <Hyperlink onAction="#go_to_login_xml" text="Log in" textFill="#3a0d82">
+                                        <Hyperlink  text="Log in" textFill="#3a0d82">
                                             <font>
                                                 <Font name="System Bold" size="12.0" />
                                             </font>

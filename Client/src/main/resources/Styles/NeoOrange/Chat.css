@@ -12,11 +12,27 @@
 }
 
 .list_View{
-     -fx-background-image: url('file:///C:/Users/Rashida/Desktop/Labs/Project/demoGUI/src/main/resources/Images/defuatback.jpg');
-
+     -fx-background-image: url('/Images/defuatback.jpg');
 }
+
+.list_View .list-cell{
+    -fx-background-color: transparent;
+}
+
 .Button_style{
 -fx-background-color: #CA3503;
 
 }
 
+.chat_message_bubble {
+    -fx-background-color: #d8d8d8;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #000000;
+}
+
+.chat_message_bubble:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}

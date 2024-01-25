@@ -1,5 +1,7 @@
 package network;// Java
 import dto.Controller.AuthenticationController;
+import dto.Controller.CallBackController;
+import dto.Controller.OnlineController;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
 import dto.responses.LoginResponse;
@@ -8,6 +10,8 @@ import lookupnames.LookUpNames;
 import network.manager.NetworkManager;
 
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public class NetworkFactory {
@@ -39,5 +43,15 @@ public class NetworkFactory {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void connect (String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
+        OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+        controller.connect(phoneNumber, callBackController);
+    }
+
+    public void disconnect (String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
+        OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+        controller.disconnect(phoneNumber, callBackController);
     }
 }
