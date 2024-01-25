@@ -15,10 +15,8 @@ module org.example.client {
 
     exports model;
     opens model to javafx.fxml;
-    opens org.example.client to javafx.fxml;
-    exports org.example.client;
-    exports controller to javafx.fxml;
     opens controller to javafx.fxml;
     exports application;
     opens application to javafx.fxml;
+    exports controller;
 }

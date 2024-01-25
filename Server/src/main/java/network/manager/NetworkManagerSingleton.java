@@ -43,7 +43,7 @@ public class NetworkManagerSingleton {
 //
 //                System.out.println(bind.name());
 //            }
-            registry.rebind(LookUpNames.ONLINECONTROLLER.name(), new OnlineControllerImpl());
+            registry.rebind(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());
             registry.rebind(LookUpNames.AUTHENTICATIONCONTROLLER.name(), AuthenticationControllerSingleton.getInstance());
             setServerRunning(true);
         } catch (RemoteException e) {

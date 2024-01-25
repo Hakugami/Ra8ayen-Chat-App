@@ -28,7 +28,7 @@ public class ViewFactory {
     public BorderPane getMainArea() {
         if (mainArea == null) {
             try {
-                mainArea = new FXMLLoader(getClass().getResource("/FXML/MainWindow.fxml")).load();
+                mainArea = new FXMLLoader(getClass().getResource("/fxml/Home/MainWindow.fxml")).load();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -37,11 +37,11 @@ public class ViewFactory {
     }
 
     public void showProfile() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Profile.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Profile.fxml"));
         createStage(loader);
     }
     public void showProfileContextMenu() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ProfileContextMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProfileContextMenu.fxml"));
         createStage(loader);
     }
 
@@ -66,14 +66,14 @@ public class ViewFactory {
     }
 
     public void showContacts() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Contacts.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml"));
         ContactsController contactsController = new ContactsController();
         loader.setController(contactsController);
         createStage(loader);
     }
 
     public void showChatWindow() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChatWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
         createStage(loader);
     }
 
@@ -125,7 +125,7 @@ public class ViewFactory {
 
     public Node getContacts() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Contacts.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

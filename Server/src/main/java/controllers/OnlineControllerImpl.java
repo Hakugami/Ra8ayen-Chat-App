@@ -7,9 +7,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineController {
-    public static Map<String, CallBackController> clients;
-    public OnlineControllerImpl() throws RemoteException {
-        clients = new ConcurrentHashMap<>();
+
+    private static OnlineControllerImpl onlineController;
+    public static Map<String, CallBackController> clients =new ConcurrentHashMap<>();
+    private OnlineControllerImpl() throws RemoteException {
+        super();
+    }
+    public static OnlineControllerImpl getInstance() throws RemoteException {
+        if (onlineController == null) {
+            onlineController = new OnlineControllerImpl();
+        }
+        return onlineController;
     }
 
     @Override
