@@ -8,6 +8,7 @@ module org.example.client {
     requires de.jensd.fx.glyphs.commons;
     requires com.jfoenix;
     requires com.fasterxml.jackson.databind;
+    requires org.controlsfx.controls;
 
     opens org.example.client to javafx.fxml;
     exports org.example.client;
