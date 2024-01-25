@@ -5,7 +5,7 @@
 #imgBox {
     //css instructions here
     -fx-background-color :  #5a14a0;
-    -fx-background-radius: 10 0 0 10;
+    -fx-background-radius: 16 0 0 10;
 
 }
 
@@ -13,4 +13,15 @@
     -fx-background-color :  #f9dbdb;
     -fx-background-radius : 0 10 10 0;
 
+}
+
+#txtField{
+    -fx-background-radius : 15;
+    -fx-pref-height: 42px;
+    -fx-pref-width: 250px;
+}
+
+#loginBtn{
+    -fx-background-color :  #5a14a0;
+    -fx-background-radius :  15;
 }
