@@ -43,4 +43,5 @@ public class UserContactMapper {
         UserContacts userContacts = new UserContacts(deleteUserContactRequest.getId(),deleteUserContactRequest.getFriendId(),"random");
         return userContacts;
     }
+
 }
