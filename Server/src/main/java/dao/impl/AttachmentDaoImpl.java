@@ -19,7 +19,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
             ByteArrayInputStream input = new ByteArrayInputStream(attachment.getAttachment());
             statement.setBinaryStream(2, input);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
             statement.setBinaryStream(1, input);
             statement.setInt(2, attachment.getAttachmentId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -86,7 +86,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, attachment.getAttachmentId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

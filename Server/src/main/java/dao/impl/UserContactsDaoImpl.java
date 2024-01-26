@@ -20,7 +20,7 @@ public class UserContactsDaoImpl implements UserContactsDao {
             statement.setInt(2, userContacts.getUserID());
             statement.setString(3, userContacts.getCreationDate());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class UserContactsDaoImpl implements UserContactsDao {
             statement.setInt(1, userContacts.getFriendID());
             statement.setInt(2, userContacts.getUserID());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class UserContactsDaoImpl implements UserContactsDao {
             statement.setInt(1, userContacts.getUserID());
             statement.setInt(2, userContacts.getFriendID());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

@@ -84,7 +84,7 @@ public class ChatDaoImpl implements ChatDao {
             statement.setInt(2, chat.getAdminId());
             statement.setBytes(3, chat.getChatImage());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -103,7 +103,7 @@ public class ChatDaoImpl implements ChatDao {
             statement.setBytes(3, chat.getChatImage());
             statement.setInt(4, chat.getChatId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -119,7 +119,7 @@ public class ChatDaoImpl implements ChatDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chat.getChatId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

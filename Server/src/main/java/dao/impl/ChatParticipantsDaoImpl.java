@@ -87,7 +87,7 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
             statement.setInt(2, chatParticipant.getParticipantUserId());
             statement.setTimestamp(3, Timestamp.valueOf(chatParticipant.getParticipantStartDate()));
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -105,7 +105,7 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
             statement.setInt(2, chatParticipant.getChatId());
             statement.setInt(3, chatParticipant.getParticipantUserId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

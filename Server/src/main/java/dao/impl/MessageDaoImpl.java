@@ -100,7 +100,7 @@ public class MessageDaoImpl implements MessageDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForUpdate(statement,message);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -116,7 +116,7 @@ public class MessageDaoImpl implements MessageDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForDelete(statement,message);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

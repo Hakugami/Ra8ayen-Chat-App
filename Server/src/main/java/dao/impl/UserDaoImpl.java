@@ -63,7 +63,7 @@ public class UserDaoImpl implements UserDao {
 
             add(statement, user);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             update(statement, user);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -101,7 +101,7 @@ public class UserDaoImpl implements UserDao {
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, user.getUserID());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -118,7 +118,7 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

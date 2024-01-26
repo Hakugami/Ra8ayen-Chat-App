@@ -96,7 +96,6 @@ public class NotificationDaoImpl implements NotificationDao {
     int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
     int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
     int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
-//    LocalDateTime notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONSENTDATE.name()).toLocalDateTime();
     String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
 
     return new Notification(notificationId, receiverId, senderId, notificationMessageContent);
