@@ -10,6 +10,8 @@ import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
 import model.entities.User;
 
+import java.util.List;
+
 public class UserService {
 
     public RegisterMapper registerMapper;
@@ -39,7 +41,12 @@ public class UserService {
 
         return storedPassword.equals(enteredPassword);
     }
-
+    public void deleteUser(User user) {
+        userDaoImpl.delete(user);
+    }
+    public List<User> getAllUsers() {
+        return userDaoImpl.getAll();
+    }
     public User getUserByPhoneNumber(String phoneNumber) {
         return userDaoImpl.getUserByPhoneNumber(phoneNumber);
     }
