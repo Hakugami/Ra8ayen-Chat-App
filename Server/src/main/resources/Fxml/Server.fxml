@@ -26,14 +26,14 @@
                 <FontIcon iconColor="WHITE" iconLiteral="dashicons-admin-users" iconSize="60" tabSize="0"/>
             </StackPane>
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308"
-                   text="Admin" textFill="#e7e5e5">
+                   text="Admin" textFill="#ffffff">
                 <padding>
                     <Insets bottom="20.0"/>
                 </padding>
             </Label>
-            <Button id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
+            <Button fx:id="dashboardButton" id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
                     maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="55.0"
-                    text="Dashboard" textFill="#e7e5e5" onAction="#handleBtnOnActionDashboardStart">
+                    text="Dashboard">
                 <padding>
                     <Insets left="60.0"/>
                 </padding>
@@ -41,9 +41,9 @@
                     <FontIcon iconColor="#fcf9f9" iconLiteral="dashicons-chart-bar" iconSize="25"/>
                 </graphic>
             </Button>
-            <Button id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
+            <Button fx:id="announcementButton" id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
                     maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="55.0"
-                    text="Announcement" textFill="#e7e5e5" onAction="#handleBtnOnActionAnnouncement">
+                    text="Announcement">
                 <padding>
                     <Insets left="60.0"/>
                 </padding>
@@ -51,9 +51,9 @@
                     <FontIcon iconColor="WHITE" iconLiteral="dashicons-megaphone" iconSize="25"/>
                 </graphic>
             </Button>
-            <Button id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="10.0"
+            <Button fx:id="usersButton" id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0" layoutX="10.0"
                     layoutY="223.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="55.0"
-                    text="Users" textFill="#e7e5e5">
+                    text="Users">
                 <padding>
                     <Insets left="60.0"/>
                 </padding>
@@ -63,7 +63,7 @@
             </Button>
             <Button fx:id="settingsButton" id="sidebarButtons" alignment="BASELINE_LEFT" graphicTextGap="22.0"
                     maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="55.0"
-                    text="Settings" textFill="#e7e5e5" onAction="#handleBtnOnActionServiceStart">
+                    text="Settings">
                 <padding>
                     <Insets left="60.0"/>
                 </padding>

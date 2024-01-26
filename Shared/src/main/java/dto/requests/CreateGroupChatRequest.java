@@ -1,22 +1,25 @@
 package dto.requests;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class CreateGroupChatRequest implements Serializable {
-    private String userPhoneNumber;
+    private int adminID;
     private String groupName;
-
-    public CreateGroupChatRequest(String userPhoneNumber, String groupName) {
-        this.userPhoneNumber = userPhoneNumber;
+    private byte[] groupImage;
+    public CreateGroupChatRequest(int adminID, String groupName, byte[] groupImage, List<Integer> participants) {
+        this.adminID = adminID;
         this.groupName = groupName;
+        this.groupImage = groupImage;
     }
 
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
+    public int getAdminID() {
+        return adminID;
     }
 
-    public void setUserPhoneNumber(String userPhoneNumber) {
-        this.userPhoneNumber = userPhoneNumber;
+    public void setAdminID(int adminID) {
+        this.adminID = adminID;
     }
 
     public String getGroupName() {
@@ -27,11 +30,19 @@ public class CreateGroupChatRequest implements Serializable {
         this.groupName = groupName;
     }
 
+    public byte[] getGroupImage() {
+        return groupImage;
+    }
+
+    public void setGroupImage(byte[] groupImage) {
+        this.groupImage = groupImage;
+    }
     @Override
     public String toString() {
         return "CreateGroupChatRequest{" +
-                "userPhoneNumber='" + userPhoneNumber + '\'' +
+                "adminID=" + adminID +
                 ", groupName='" + groupName + '\'' +
+                ", groupImage=" + Arrays.toString(groupImage) +
                 '}';
     }
 }

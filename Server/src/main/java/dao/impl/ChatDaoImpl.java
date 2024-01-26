@@ -59,7 +59,22 @@ public class ChatDaoImpl implements ChatDao {
         }
         return chatGroups;
     }
-
+    public List<Chat> getGroupChats(int userId) {
+        List<Chat> chatGroups = new ArrayList<>();
+        String query = "SELECT c.* FROM Chat c " +
+                "INNER JOIN ChatParticipants cp ON c.ChatID = cp.ChatID " +
+                "WHERE cp.ParticipantUserID = ? AND c.AdminID IS NOT NULL";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                chatGroups.add(createChatFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return chatGroups;
+    }
     @Override
     public boolean save(Chat chat) {
         String query = "INSERT INTO Chat (ChatName, AdminID, ChatImage) VALUES (?, ?, ?)";

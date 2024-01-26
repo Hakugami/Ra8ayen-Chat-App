@@ -16,6 +16,10 @@ public class AddUserToGroupResponse implements Serializable {
         this.isAdded = isAdded;
     }
 
+    public AddUserToGroupResponse() {
+
+    }
+
     public String getUserPhoneNumber() {
         return userPhoneNumber;
     }
@@ -30,6 +34,10 @@ public class AddUserToGroupResponse implements Serializable {
 
     public boolean isAdded() {
         return isAdded;
+    }
+
+    public void setAdded(boolean added) { 
+        isAdded = added;
     }
 
     public String getErrorMessage() {

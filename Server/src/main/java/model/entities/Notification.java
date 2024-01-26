@@ -15,6 +15,9 @@ public class Notification {
         this.notificationMessage = notificationMessage;
     }
 
+    public Notification() {
+    }
+
     public int getNotificationId() {
         return notificationId;
     }

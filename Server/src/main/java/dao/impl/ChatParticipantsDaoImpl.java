@@ -80,7 +80,7 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
 
     @Override
     public boolean save(ChatParticipant chatParticipant) {
-        String query = "INSERT INTO ChatParticipants (ChatID, ParticipantUserID, ParticipantStartDate) VALUES (?, ?, ?)";
+        String query = "INSERT INTO ChatParticipants (ChatID, ParticipantUserID) VALUES (?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatParticipant.getChatId());

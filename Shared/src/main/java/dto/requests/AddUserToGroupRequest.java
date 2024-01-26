@@ -3,34 +3,33 @@ package dto.requests;
 import java.io.Serializable;
 
 public class AddUserToGroupRequest implements Serializable {
-    private String userPhoneNumber;
-    private String groupName;
-    private String userToAddPhoneNumber;
-
-    public AddUserToGroupRequest(String userPhoneNumber, String groupName, String userToAddPhoneNumber) {
-        this.userPhoneNumber = userPhoneNumber;
-        this.groupName = groupName;
-        this.userToAddPhoneNumber = userToAddPhoneNumber;
+    private int chatID;
+    private int userID;
+    public AddUserToGroupRequest(int chatID, int userID) {
+        this.chatID = chatID;
+        this.userID = userID;
     }
 
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
+    public int getChatID() {
+        return chatID;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public void setChatID(int chatID) {
+        this.chatID = chatID;
     }
 
-    public String getUserToAddPhoneNumber() {
-        return userToAddPhoneNumber;
+    public int getUserID() {
+        return userID;
     }
 
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
     @Override
     public String toString() {
         return "AddUserToGroupRequest{" +
-                "userPhoneNumber='" + userPhoneNumber + '\'' +
-                ", groupName='" + groupName + '\'' +
-                ", userToAddPhoneNumber='" + userToAddPhoneNumber + '\'' +
+                "chatID=" + chatID +
+                ", userID=" + userID +
                 '}';
     }
 }

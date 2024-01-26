@@ -42,7 +42,7 @@ public class NotificationDaoImpl implements NotificationDao {
 
     @Override
     public boolean save(Notification notification) {
-        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage, NotificationSentDate) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage) VALUES (?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getReceiverId());

@@ -1,39 +1,21 @@
 package dto.responses;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class GetGroupResponse implements Serializable {
     private int groupId;
     private String groupName;
-    private String groupPicture;
-    private boolean isReturned;
-    private String errorMessage;
+    private byte[] groupPicture;
+    private int groupAdminId;
     public GetGroupResponse() {
-
     }
-    public GetGroupResponse(int groupId, String groupName, String groupPicture, boolean isReturned, String errorMessage) {
+    public GetGroupResponse(int groupId, String groupName, byte[] groupPicture, int groupAdminId) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.groupPicture = groupPicture;
-        this.isReturned = isReturned;
-        this.errorMessage = errorMessage;
+        this.groupAdminId = groupAdminId;
     }
-    public boolean isReturned() {
-        return isReturned;
-    }
-
-    public void setReturned(boolean returned) {
-        isReturned = returned;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
     public int getGroupId() {
         return groupId;
     }
@@ -50,12 +32,20 @@ public class GetGroupResponse implements Serializable {
         this.groupName = groupName;
     }
 
-    public String getGroupPicture() {
+    public byte[] getGroupPicture() {
         return groupPicture;
     }
 
-    public void setGroupPicture(String groupPicture) {
+    public void setGroupPicture(byte[] groupPicture) {
         this.groupPicture = groupPicture;
+    }
+
+    public int getGroupAdminId() {
+        return groupAdminId;
+    }
+
+    public void setGroupAdminId(int groupAdminId) {
+        this.groupAdminId = groupAdminId;
     }
 
     @Override
@@ -63,9 +53,8 @@ public class GetGroupResponse implements Serializable {
         return "GetGroupResponse{" +
                 "groupId=" + groupId +
                 ", groupName='" + groupName + '\'' +
-                ", groupPicture='" + groupPicture + '\'' +
-                ", isReturned=" + isReturned +
-                ", errorMessage='" + errorMessage + '\'' +
+                ", groupPicture='" + Arrays.toString(groupPicture) + '\'' +
+                ", groupAdminID='" + groupAdminId + '\'' +
                 '}';
     }
 }
