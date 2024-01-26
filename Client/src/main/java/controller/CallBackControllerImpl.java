@@ -2,6 +2,7 @@ package controller;
 
 import dto.Controller.CallBackController;
 import dto.Model.MessageModel;
+import dto.requests.FriendRequest;
 import javafx.application.Platform;
 import org.controlsfx.control.Notifications;
 
@@ -31,6 +32,16 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
+
+    }
+
+    @Override
+    public void receiveAddContactRequest(FriendRequest friendRequest) throws RemoteException {
+
+    }
+
+    @Override
+    public void createNewChat(String senderPhoneNumber) throws RemoteException {
 
     }
 
