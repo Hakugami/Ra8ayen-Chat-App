@@ -14,6 +14,7 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Model.getInstance().getViewFactory().showLoginWindow();
+        Model.getInstance().getViewFactory().showHomeWindow();
+    //    Model.getInstance().getViewFactory().getContacts();
     }
 }

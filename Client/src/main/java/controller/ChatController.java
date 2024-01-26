@@ -109,6 +109,13 @@ public class ChatController implements Initializable {
             this.setStyle("-fx-background-color: transparent;");
         }
     }
+    public void setName(String name){
+        NameContact.setText(name);
+    }
+
+    public String getName(){
+        return NameContact.getText();
+    }
 
 
 }
