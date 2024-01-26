@@ -125,7 +125,7 @@ public class ViewFactory {
     }
     public Node getAddContact() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/AddContact.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

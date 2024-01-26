@@ -33,7 +33,7 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
         userService = new UserService();
         hashService = new HashService("hashing.properties");
         encryptionService = new EncryptionService("keystore.jceks", "Buh123!","Buh1234!", "encryption.properties");
-        sessionManager = new SessionManager();
+        sessionManager = SessionManager.getInstance();
     }
 
 
@@ -41,7 +41,6 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
     if (instance == null) {
         instance = new AuthenticationControllerSingleton();
          logger.info("AuthenticationControllerSingleton object bound to name 'AuthenticationController'.");
-        System.out.println("AuthenticationControllerSingleton object bound to name 'AuthenticationController'.");
     }
     return instance;
 }
@@ -59,7 +58,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
             loginResponse.setToken(token);
             User user = userService.getUserByPhoneNumber(loginRequest.getPhoneNumber());
             Session session = new Session(token, user); // Create a new Session object
-            sessionManager.addSession(session); // Add the Session object to the SessionManager
+            sessionManager.addSession(session); // Add the Session object to the SessionManage
         } else {
             loginResponse.setError("Login failed. Invalid phone number or password.");
         }

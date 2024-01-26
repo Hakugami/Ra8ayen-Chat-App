@@ -3,6 +3,7 @@ package dao.impl;
 import dao.NotificationDao;
 import persistence.connection.DataSourceSingleton;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 import model.entities.*;
 
@@ -48,9 +49,8 @@ public class NotificationDaoImpl implements NotificationDao {
             statement.setInt(1, notification.getReceiverId());
             statement.setInt(2, notification.getSenderId());
             statement.setString(3, notification.getNotificationMessage());
-            statement.setString(4, notification.getNotificationSendDate());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -66,7 +66,7 @@ public class NotificationDaoImpl implements NotificationDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getNotificationId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -83,7 +83,7 @@ public class NotificationDaoImpl implements NotificationDao {
             statement.setString(1, notification.getNotificationMessage());
             statement.setInt(2, notification.getNotificationId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -92,13 +92,13 @@ public class NotificationDaoImpl implements NotificationDao {
         return false;
     }
 
-    private Notification createNotification(ResultSet resultSet) throws SQLException {
-        int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
-        int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
-        int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
-        String notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONSENTDATE.name()).toString();
-        String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
+  private Notification createNotification(ResultSet resultSet) throws SQLException {
+    int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
+    int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
+    int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
+//    LocalDateTime notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONSENTDATE.name()).toLocalDateTime();
+    String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
 
-        return new Notification(notificationId, receiverId, senderId, notificationSendDate, notificationMessageContent);
-    }
+    return new Notification(notificationId, receiverId, senderId, notificationMessageContent);
+}
 }

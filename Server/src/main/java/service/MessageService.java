@@ -20,11 +20,20 @@ public class MessageService {
 
     public void sendMessage(SendMessageRequest request) {
         Message message = messageMapper.sendRequestToEntity(request);
-        messageDao.save(message);
+        System.out.println(message.getMessageContent());
+        if(messageDao.save(message)) {
+            System.out.println("Message saved successfully");
+        } else {
+            System.out.println("Failed to save message");
+        }
 
     }
     public List<Message> getMessages(GetMessageRequest request) {
         Message message = messageMapper.getMessageRequestToEntity(request);
         return messageDao.get(message.getSenderId(), message.getReceiverId());
+    }
+
+    public MessageMapper getMessageMapper() {
+        return messageMapper;
     }
 }

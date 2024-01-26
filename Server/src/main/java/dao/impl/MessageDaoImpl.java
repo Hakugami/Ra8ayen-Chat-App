@@ -4,10 +4,8 @@ import dao.MessageDao;
 import model.entities.Message;
 import persistence.connection.DataSourceSingleton;
 import model.entities.MessageTable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ public class MessageDaoImpl implements MessageDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             createStatementForInsert(statement,message);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -133,21 +131,22 @@ public class MessageDaoImpl implements MessageDao {
     private void createStatementForDelete(PreparedStatement statement, Message message) throws SQLException{
         statement.setInt(1,message.getMessageId());
     }
-    private void createStatementForInsert( PreparedStatement statement, Message message) throws SQLException {
-        statement.setInt(1,message.getSenderId());
-        statement.setInt(2,message.getReceiverId());
-        statement.setString(3,message.getMessageContent());
-        statement.setString(4,message.getTime().toString());
-    }
-    private Message getMessageFromResultSet(ResultSet resultSet) throws SQLException {
-        Message message = new Message();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        message.setMessageId(resultSet.getInt(MessageTable.MessageID.name));
-        message.setSenderId(resultSet.getInt(MessageTable.SenderID.name));
-        message.setReceiverId(resultSet.getInt(MessageTable.ReceiverID.name));
-        message.setMessageContent(resultSet.getString(MessageTable.MessageContent.name));
-        message.setTime(LocalDateTime.parse(resultSet.getString(MessageTable.MessageTimestamp.name),formatter));
-        message.setAttachment(resultSet.getBoolean(resultSet.getInt(MessageTable.IsAttachment.name)));
-        return  message;
-    }
+private void createStatementForInsert( PreparedStatement statement, Message message) throws SQLException {
+    statement.setInt(1,message.getSenderId());
+    statement.setInt(2,message.getReceiverId());
+    statement.setString(3,message.getMessageContent());
+    statement.setTimestamp(4, Timestamp.valueOf(message.getTime()));
+    statement.setBoolean(5, message.isAttachment());
+}
+
+private Message getMessageFromResultSet(ResultSet resultSet) throws SQLException {
+    Message message = new Message();
+    message.setMessageId(resultSet.getInt(MessageTable.MessageID.name));
+    message.setSenderId(resultSet.getInt(MessageTable.SenderID.name));
+    message.setReceiverId(resultSet.getInt(MessageTable.ReceiverID.name));
+    message.setMessageContent(resultSet.getString(MessageTable.MessageContent.name));
+    message.setTime(resultSet.getTimestamp(MessageTable.MessageTimestamp.name).toLocalDateTime());
+    message.setAttachment(resultSet.getBoolean(MessageTable.IsAttachment.name));
+    return  message;
+}
 }

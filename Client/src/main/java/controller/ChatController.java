@@ -2,18 +2,28 @@ package controller;
 
 
 import dto.Model.MessageModel;
+import dto.requests.SendMessageRequest;
+import dto.responses.SendMessageResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.shape.Circle;
+import model.CurrentUser;
+import network.NetworkFactory;
 
+import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -41,8 +51,20 @@ public class ChatController implements Initializable {
         chatMessages = FXCollections.observableArrayList();
         chatListView.setItems(chatMessages);
         chatListView.setCellFactory(param -> new CustomListCell());
-        sendMessage.setOnAction(event -> sendMessage());
-        messageBox.setOnAction(event -> sendMessage());
+        sendMessage.setOnAction(event -> {
+            try {
+                sendMessage();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        messageBox.setOnAction(event -> {
+            try {
+                sendMessage();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         ImagContact.setFitWidth(imageClip.getRadius() * 2);
         ImagContact.setFitHeight(imageClip.getRadius() * 2);
@@ -62,15 +84,31 @@ public class ChatController implements Initializable {
 
     }
 
-    private void sendMessage() {
+    private void sendMessage() throws RemoteException {
         String message = messageBox.getText();
         if (message.isEmpty()) {
             return;
         }
         MessageModel messageModel = new MessageModel();
         messageModel.setMessageContent(message);
+        messageModel.setSender(CurrentUser.getInstance());
         chatListView.getItems().add(messageModel);
         messageBox.clear();
+
+        // Send the message to the server
+        SendMessageRequest request = new SendMessageRequest();
+        request.setMessageContent(message);
+        request.setSenderId(CurrentUser.getInstance().getUserID());
+//        request.setReceiverId(1);
+        request.setAttachment(false);
+        request.setTime(LocalDateTime.now());
+        try {
+            System.out.println(request);
+            SendMessageResponse response= NetworkFactory.getInstance().sendMessage(request);
+            System.out.println(response);
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
     }
 
     class CustomListCell extends ListCell<MessageModel> {
@@ -100,8 +138,16 @@ public class ChatController implements Initializable {
         protected void updateItem(MessageModel item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
-                label.setText(item.getMessageContent());
-                setGraphic(label);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/MessageBubble.fxml"));
+                MessageBubbleController controller = new MessageBubbleController();
+                controller.setMessage(item);
+                loader.setController(controller);
+                try {
+                    Node node = loader.load();
+                    setGraphic(node);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 setGraphic(null);
             }
@@ -109,11 +155,12 @@ public class ChatController implements Initializable {
             this.setStyle("-fx-background-color: transparent;");
         }
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         NameContact.setText(name);
     }
 
-    public String getName(){
+    public String getName() {
         return NameContact.getText();
     }
 

@@ -18,6 +18,13 @@ public class Notification {
     public Notification() {
     }
 
+    public Notification(int notificationId, int receiverId, int senderId, String notificationMessageContent) {
+        this.notificationId = notificationId;
+        this.receiverId = receiverId;
+        this.senderId = senderId;
+        this.notificationMessage = notificationMessageContent;
+    }
+
     public int getNotificationId() {
         return notificationId;
     }

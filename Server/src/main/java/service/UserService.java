@@ -3,6 +3,8 @@ package service;
 import Mapper.RegisterMapper;
 //import Mapper.RegisterMapperImpl;
 import Mapper.RegisterMapperImpl;
+import Mapper.UserMapper;
+import Mapper.UserMapperImpl;
 import dao.impl.UserDaoImpl;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
@@ -11,11 +13,13 @@ import model.entities.User;
 public class UserService {
 
     public RegisterMapper registerMapper;
+    public UserMapper userMapper;
 
     public UserDaoImpl userDaoImpl;
 
     public UserService() {
         registerMapper = new RegisterMapperImpl();
+        userMapper = new UserMapperImpl();
         userDaoImpl = new UserDaoImpl();
     }
 

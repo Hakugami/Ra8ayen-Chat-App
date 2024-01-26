@@ -93,7 +93,7 @@ public class MainWindowController implements Initializable {
         addContact_btn.setOnAction(event -> {
             try {
                 Popup popup = new Popup();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/AddContact.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
                 Parent root = loader.load();
                 popup.getContent().add(root);
 

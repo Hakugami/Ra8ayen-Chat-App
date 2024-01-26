@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -16,29 +17,39 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
+import model.CurrentUser;
 import model.Model;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.Currency;
+import java.util.ResourceBundle;
 
 
-public class ContactsController {
+public class ContactsController implements Initializable {
+    public Label displayName;
+    public TextField searchField;
     @FXML
     TreeView<Node> treeView;
 
 
     @FXML
-    private ImageView ImagProfile;
+    public ImageView ImagProfile;
 
     @FXML
     Circle imageClip;
 
-
-    @FXML
-    public void initialize() {
-        setImageProfileData();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            setImageProfileData();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         setTreeViewData();
     }
+
     void setTreeViewData() {
 
         TreeItem<Node> rootParent = new TreeItem<>();
@@ -73,16 +84,13 @@ public class ContactsController {
 
         treeView.setRoot(rootParent);
     }
-    void setImageProfileData(){
+    void setImageProfileData() throws RemoteException {
         ImagProfile.setFitWidth(imageClip.getRadius() * 2);
         ImagProfile.setFitHeight(imageClip.getRadius() * 2);
-        String imagePath = "/images/personProfile.png";
-
-        // Get the URL of the image
-        URL imageUrl = ContactElementController.class.getResource(imagePath);
-        if(imageUrl!=null) {
-            System.out.println(imageUrl);
-            Image newImage = new Image(imageUrl.toString());
+        displayName.setText(CurrentUser.getInstance().getUserName());
+        if(CurrentUser.getInstance().getProfilePictureImage()!=null) {
+            System.out.println("Not Null data found");
+            Image newImage = CurrentUser.getInstance().getProfilePictureImage();
             ImagProfile.setImage(newImage);
         }else{
             System.out.println("Null data found");
@@ -169,7 +177,6 @@ public class ContactsController {
 
 
     }
-
 
 
 }

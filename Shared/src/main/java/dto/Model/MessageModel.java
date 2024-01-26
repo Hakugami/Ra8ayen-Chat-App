@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 public class MessageModel implements Serializable {
     private int MessageId;
-    private int senderId;
-    private int receiverId;
+    private  UserModel sender;
+    private UserModel receiver;
     private String messageContent;
     private LocalDateTime time;
     private boolean isAttachment;
@@ -15,9 +15,9 @@ public class MessageModel implements Serializable {
 
     }
 
-    public MessageModel(int senderId, int receiverId, String messageContent, LocalDateTime time, boolean isAttachment) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+    public MessageModel(UserModel senderId, UserModel receiverId, String messageContent, LocalDateTime time, boolean isAttachment) {
+        this.sender= senderId;
+        this.receiver= receiverId;
         this.messageContent = messageContent;
         this.time = time;
         this.isAttachment = isAttachment;
@@ -31,21 +31,6 @@ public class MessageModel implements Serializable {
         this.MessageId = MessageId;
     }
 
-    public int getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
-    }
-
-    public int getReceiverId() {
-        return receiverId;
-    }
-
-    public void setReceiverId(int receiverId) {
-        this.receiverId = receiverId;
-    }
 
     public String getMessageContent() {
         return messageContent;
@@ -71,12 +56,28 @@ public class MessageModel implements Serializable {
         isAttachment = attachment;
     }
 
+    public UserModel getSender() {
+        return sender;
+    }
+
+    public void setSender(UserModel sender) {
+        this.sender = sender;
+    }
+
+    public UserModel getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(UserModel receiver) {
+        this.receiver = receiver;
+    }
+
     @Override
     public String toString() {
-        return "Message{" +
+        return "MessageModel{" +
                 "MessageId=" + MessageId +
-                ", senderId=" + senderId +
-                ", receiverId=" + receiverId +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
                 ", isAttachment=" + isAttachment +

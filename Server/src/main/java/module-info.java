@@ -17,4 +17,6 @@ module server {
     exports server;
     exports controllers to javafx.fxml;
     opens controllers to javafx.fxml;
+    exports Mapper;
+    opens Mapper to org.mapstruct;
 }
