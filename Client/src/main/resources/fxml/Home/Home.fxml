@@ -6,21 +6,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
-   <children>
-      <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-          <children>
-              <AnchorPane prefHeight="600" prefWidth="300">
-                 <children>
-                     <fx:include fx:id="ContactsView" source="../Contacts/Contacts.fxml" />
-                 </children>
-              </AnchorPane>
-              <VBox prefHeight="600" prefWidth="900">
-                 <children>
-                     <fx:include fx:id="ChatView" source="../Chat/Chat.fxml" />
-                 </children>
-              </VBox>
-          </children>
-      </HBox>
-   </children>
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.HomeController">
+    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <AnchorPane prefHeight="600" prefWidth="300">
+            <fx:include fx:id="ContactsView" source="../Contacts/Contacts.fxml"/>
+        </AnchorPane>
+        <VBox prefHeight="600" prefWidth="900">
+            <fx:include fx:id="ChatView" source="../Chat/Chat.fxml"/>
+        </VBox>
+    </HBox>
 </AnchorPane>

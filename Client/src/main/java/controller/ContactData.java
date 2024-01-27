@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class ContactData {
@@ -7,6 +8,8 @@ public class ContactData {
   private Color color;
 
   private String url;
+
+  private ImageView image;
 
     public ContactData(String name, Color color, String url) {
         Name = name;
@@ -39,5 +42,13 @@ public class ContactData {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
+    }
+
+    public ImageView getImage() {
+        return image;
     }
 }

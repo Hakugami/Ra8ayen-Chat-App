@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane stylesheets="@../../Styles/NeoOrange/Chat.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
-   <BorderPane prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <BorderPane prefHeight="750.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
          <HBox prefHeight="61.0" prefWidth="900.0" styleClass="header" BorderPane.alignment="CENTER">
             <Pane prefHeight="37.0" prefWidth="57.0">
@@ -43,7 +43,7 @@
          </HBox>
       </top>
       <center>
-         <VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@../../Styles/NeoOrange/Chat.css" BorderPane.alignment="CENTER">
+         <VBox prefHeight="600.0" prefWidth="900.0" BorderPane.alignment="CENTER">
             <ListView fx:id="chatListView" prefHeight="502.0" prefWidth="900.0" styleClass="list_View" VBox.vgrow="ALWAYS" />
          </VBox>
       </center>
@@ -52,7 +52,7 @@
             <padding>
                <Insets left="10.0" />
             </padding>
-            <Button fx:id="sendMessage1" layoutX="844.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="53.0" prefWidth="71.0" styleClass="Button_style" text="Emoji" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+            <Button fx:id="emojiButton" layoutX="844.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="53.0" prefWidth="71.0" styleClass="Button_style" text="Emoji" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

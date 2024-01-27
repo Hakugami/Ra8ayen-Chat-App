@@ -1,20 +1,23 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Model;
 
-
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,6 +27,11 @@ public class MainWindowController implements Initializable {
     public BorderPane mainBorderPane;
     public AnchorPane swappableMenu;
     public Button addContact_btn;
+    @FXML
+    public AnchorPane swappableWindow;
+    @FXML
+    public AnchorPane help;
+    public HBox HboxHELPME;
     @FXML
     private Button minimizeButton;
     @FXML
@@ -52,8 +60,20 @@ public class MainWindowController implements Initializable {
             }
         });
 
-
-        minimizeButton.setOnAction(event -> ((Stage) ((Button) event.getSource()).getScene().getWindow()).setIconified(true));
+        Model.getInstance().getViewFactory().getSelectedContact().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue != null) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
+                    Parent root = loader.load();
+                    ChatController chatController = loader.getController();
+                    chatController.setName(newValue.getName());
+                    chatController.setImage(newValue.getImage().getImage());
+                    setSwappableWindow(root);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         maximizeButton.setOnAction(event -> {
             Stage stage = ((Stage) ((Button) event.getSource()).getScene().getWindow());
             if (stage.isMaximized()) {
@@ -119,7 +139,39 @@ public class MainWindowController implements Initializable {
                 e.printStackTrace();
             }
         });
-
-
     }
+
+public void setSwappableWindow(Node node) {
+    Platform.runLater(() -> {
+        // Clear the swappableWindow and add the new node
+        swappableWindow.getChildren().setAll(node);
+
+        // Check if the new node is a Region
+        if (node instanceof Region) {
+            Region region = (Region) node;
+
+            // Bind the minWidth, minHeight, maxWidth, and maxHeight properties of the new content to the width and height properties of the swappableWindow
+            region.minWidthProperty().bind(swappableWindow.widthProperty());
+            region.minHeightProperty().bind(swappableWindow.heightProperty());
+            region.maxWidthProperty().bind(swappableWindow.widthProperty());
+            region.maxHeightProperty().bind(swappableWindow.heightProperty());
+
+            // Add listeners to the width and height properties of the swappableWindow to update the minWidth, minHeight, maxWidth, and maxHeight properties of the new content
+            swappableWindow.widthProperty().addListener((observable, oldValue, newValue) -> {
+                region.minWidthProperty().unbind();
+                region.maxWidthProperty().unbind();
+                region.setMinWidth(newValue.doubleValue());
+                region.setMaxWidth(newValue.doubleValue());
+            });
+            swappableWindow.heightProperty().addListener((observable, oldValue, newValue) -> {
+                region.minHeightProperty().unbind();
+                region.maxHeightProperty().unbind();
+                region.setMinHeight(newValue.doubleValue());
+                region.setMaxHeight(newValue.doubleValue());
+            });
+        }
+    });
+    swappableWindow.layout();
+}
+
 }

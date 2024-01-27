@@ -1,32 +1,40 @@
 package view;
 
-import controller.ChatController;
-import controller.ContactElementController;
-import controller.ContactsController;
-import controller.StatusElementController;
+import controller.*;
+import controller.token.TokenManager;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
+import model.Model;
+import network.NetworkFactory;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class ViewFactory {
     private final StringProperty selectedMenuItem;
+    private final ObjectProperty<ContactData> selectedContact;
     private BorderPane mainArea;
+
 
     public ViewFactory() {
         this.selectedMenuItem = new SimpleStringProperty("");
+        this.selectedContact = new SimpleObjectProperty<>();
     }
 
     public StringProperty getSelectedMenuItem() {
         return selectedMenuItem;
+    }
+    public ObjectProperty<ContactData> getSelectedContact() {
+        return selectedContact;
     }
 
     public BorderPane getMainArea() {
@@ -40,10 +48,16 @@ public class ViewFactory {
         return mainArea;
     }
 
+    public BorderPane autoLogin() throws NotBoundException, RemoteException {
+        NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken());
+        return getMainArea();
+    }
+
     public void showProfile() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Profile.fxml"));
         createStage(loader);
     }
+
     public void showProfileContextMenu() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProfileContextMenu.fxml"));
         createStage(loader);
@@ -68,14 +82,15 @@ public class ViewFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml"));
         createStage(loader);
     }
-    public void showHomeWindow(){
+
+    public void showHomeWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Home/Home.fxml"));
         createStage(loader);
     }
 
-    public void showContacts() {
+    public void showContacts() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml"));
-        ContactsController contactsController = new ContactsController();
+        ContactsController contactsController = Model.getInstance().getControllerFactory().getContactsController();
         loader.setController(contactsController);
         createStage(loader);
     }
@@ -89,13 +104,15 @@ public class ViewFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Themes.fxml"));
         createStage(loader);
     }
-    public Node getThemes(){
+
+    public Node getThemes() {
         try {
             return new FXMLLoader(getClass().getResource("/FXML/Themes.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
     public void showRegisterWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml"));
         createStage(loader);
@@ -123,6 +140,7 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
+
     public Node getAddContact() {
         try {
             return new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml")).load();
@@ -146,50 +164,34 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
-    public Node getRegister(){
-        try{
+
+    public Node getRegister() {
+        try {
             return new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml")).load();
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public Node getLogin(){
-        try{
+
+    public Node getLogin() {
+        try {
             return new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml")).load();
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public Node getChat(){
+
+    public Node getChat() {
         try {
             return new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public ChatController getChatController() throws IOException{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml"));
-            Parent parent = fxmlLoader.load();
-            ChatController controller = fxmlLoader.getController();
-            return controller;
 
-    }
-    public Node getStatusElement() throws IOException{
-        return new FXMLLoader(getClass().getResource("/Fxml/Contacts/StatusElement.fxml")).load();
-    }
-    public StatusElementController getStatusElementController() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader((getClass().getResource("/Fxml/Contacts/StatusElement.fxml")));
-        Parent parent = fxmlLoader.load();
-        StatusElementController statusElementController = fxmlLoader.getController();
-        return statusElementController;
-    }
-    public ContactElementController getContactController() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader((getClass().getResource("/Fxml/Contacts/ContactElement.fxml")));
-        Parent parent = fxmlLoader.load();
-        ContactElementController contactsController = fxmlLoader.getController();
-        return contactsController;
-    }
-    public Node getContact() throws IOException{
+
+
+    public Node getContactElement() throws IOException {
         return new FXMLLoader(getClass().getResource("/Fxml/Contacts/ContactElement.fxml")).load();
     }
 }

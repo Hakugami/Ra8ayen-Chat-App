@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
+<?import javafx.scene.layout.StackPane?>
 <BorderPane fx:id="mainBorderPane" stylesheets="@../../Styles/NeoOrange/MainWindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
      <top>
        <HBox fx:id="customTitleBar" styleClass="custom_title_bar">
@@ -16,7 +17,8 @@
    </top>
    <center>
       <AnchorPane prefHeight="750.0" prefWidth="1115.0">
-         <HBox layoutX="278.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <StackPane fx:id="stackPaneHELPME" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <HBox fx:id="HboxHELPME" layoutX="278.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <AnchorPane prefHeight="750.0" prefWidth="43.0">
                <fx:include source="../NavigationBar/NeoSideNavBar.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </AnchorPane>
@@ -28,10 +30,11 @@
                   </graphic>
                </Button>
             </AnchorPane>
-            <AnchorPane prefHeight="750.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                  <fx:include source="../Chat/Chat.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="swappableWindow" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <fx:include fx:id="help" source="../Chat/Chat.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
               </AnchorPane>
          </HBox>
+            </StackPane>
       </AnchorPane>
    </center>
 </BorderPane>

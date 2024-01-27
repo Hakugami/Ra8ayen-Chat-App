@@ -1,9 +1,11 @@
 package controller;
 
-
 import dto.Model.MessageModel;
 import dto.requests.SendMessageRequest;
 import dto.responses.SendMessageResponse;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-
 public class ChatController implements Initializable {
     @FXML
     public ListView<MessageModel> chatListView;
@@ -35,18 +36,22 @@ public class ChatController implements Initializable {
     public TextField messageBox;
     public Button sendMessage;
     @FXML
-    ImageView ImagContact;
+    public ImageView ImagContact;
+    @FXML
+    public Circle imageClip;
 
     @FXML
-    Circle imageClip;
-
-    @FXML
-    Label NameContact;
+    public Label NameContact;
+    public Button emojiButton;
     @FXML
     private ObservableList<MessageModel> chatMessages;
+    private final StringProperty nameProperty = new SimpleStringProperty();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("ChatController: Initializing");
+        NameContact.textProperty().bind(nameProperty);
+
         chatListView.setStyle("-fx-background-image: url('/images/defuatback.jpg')");
         chatMessages = FXCollections.observableArrayList();
         chatListView.setItems(chatMessages);
@@ -66,23 +71,23 @@ public class ChatController implements Initializable {
             }
         });
 
-        ImagContact.setFitWidth(imageClip.getRadius() * 2);
-        ImagContact.setFitHeight(imageClip.getRadius() * 2);
-        String imagePath = "/images/persontwo.jpg";
+         ImagContact.setFitWidth(imageClip.getRadius() * 2);
+         ImagContact.setFitHeight(imageClip.getRadius() * 2);
+         ImagContact.setClip(imageClip);
 
-        // Get the URL of the image
-        URL imageUrl = ContactElementController.class.getResource(imagePath);
-        if (imageUrl != null) {
-            System.out.println(imageUrl);
-            Image newImage = new Image(imageUrl.toString());
-            ImagContact.setImage(newImage);
-        } else {
-            System.out.println("Null data found");
-        }
-        NameContact.setText("Reem Osama");
+         nameProperty.set("Contact Name");
 
 
     }
+
+ public void updateChatContent(String name, Image image) {
+    Platform.runLater(() -> {
+        nameProperty.set(name);
+        if (image != null) {
+            ImagContact.setImage(image);
+        }
+    });
+}
 
     private void sendMessage() throws RemoteException {
         String message = messageBox.getText();
@@ -99,12 +104,11 @@ public class ChatController implements Initializable {
         SendMessageRequest request = new SendMessageRequest();
         request.setMessageContent(message);
         request.setSenderId(CurrentUser.getInstance().getUserID());
-//        request.setReceiverId(1);
         request.setAttachment(false);
         request.setTime(LocalDateTime.now());
         try {
             System.out.println(request);
-            SendMessageResponse response= NetworkFactory.getInstance().sendMessage(request);
+            SendMessageResponse response = NetworkFactory.getInstance().sendMessage(request);
             System.out.println(response);
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
@@ -157,14 +161,13 @@ public class ChatController implements Initializable {
     }
 
     public void setName(String name) {
-        NameContact.setText(name);
+        nameProperty.set(name);
+        System.out.println("ChatController: Name set to " + name);
     }
 
-    public String getName() {
-        return NameContact.getText();
+    public void setImage( Image image){
+        System.out.println("ChatController: Image set to " + image);
+        ImagContact.setImage(image);
     }
-
 
 }
-
-

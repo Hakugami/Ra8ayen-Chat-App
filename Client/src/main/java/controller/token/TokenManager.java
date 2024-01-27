@@ -1,4 +1,4 @@
-package controller.token;// Java
+package controller.token;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
