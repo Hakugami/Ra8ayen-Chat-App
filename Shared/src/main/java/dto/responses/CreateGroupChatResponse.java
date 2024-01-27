@@ -1,31 +1,66 @@
 package dto.responses;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class CreateGroupChatResponse implements Serializable {
-    private String userPhoneNumber;
+    private int groupId;
     private String groupName;
+    private byte[] groupPicture;
+    private int groupAdminId;
     private boolean isCreated;
     private String errorMessage;
 
-
-    public CreateGroupChatResponse(String userPhoneNumber, String groupName, boolean isCreated) {
-        this.userPhoneNumber = userPhoneNumber;
+    public CreateGroupChatResponse(int groupId, String groupName, byte[] groupPicture, int groupAdminId, boolean isCreated, String errorMessage) {
+        this.groupId = groupId;
         this.groupName = groupName;
+        this.groupPicture = groupPicture;
+        this.groupAdminId = groupAdminId;
         this.isCreated = isCreated;
-        this.errorMessage = "";
+        this.errorMessage = errorMessage;
     }
 
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
+    public CreateGroupChatResponse() {
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public String getGroupName() {
         return groupName;
     }
 
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public byte[] getGroupPicture() {
+        return groupPicture;
+    }
+
+    public void setGroupPicture(byte[] groupPicture) {
+        this.groupPicture = groupPicture;
+    }
+
+    public int getGroupAdminId() {
+        return groupAdminId;
+    }
+
+    public void setGroupAdminId(int groupAdminId) {
+        this.groupAdminId = groupAdminId;
+    }
+
     public boolean isCreated() {
         return isCreated;
+    }
+
+    public void setCreated(boolean created) {
+        isCreated = created;
     }
 
     public String getErrorMessage() {
@@ -38,9 +73,12 @@ public class CreateGroupChatResponse implements Serializable {
     @Override
     public String toString() {
         return "CreateGroupChatResponse{" +
-                "userPhoneNumber='" + userPhoneNumber + '\'' +
+                "groupId=" + groupId +
                 ", groupName='" + groupName + '\'' +
+                ", groupPicture=" + Arrays.toString(groupPicture) +
+                ", groupAdminId=" + groupAdminId +
                 ", isCreated=" + isCreated +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }

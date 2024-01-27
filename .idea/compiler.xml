@@ -20,5 +20,8 @@
         <module name="Shared" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="java final 2" target="19" />
+    </bytecodeTargetLevel>
   </component>
 </project>

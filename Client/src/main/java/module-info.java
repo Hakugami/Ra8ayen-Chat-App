@@ -7,10 +7,16 @@ module org.example.client {
     requires de.jensd.fx.glyphs.fontawesome;
     requires de.jensd.fx.glyphs.commons;
     requires com.jfoenix;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    requires java.desktop;
+    requires javafx.swing;
+    requires org.controlsfx.controls;
 
-
-    opens org.example.client to javafx.fxml;
-    exports org.example.client;
-    exports controller to javafx.fxml;
+    exports model;
+    opens model to javafx.fxml;
     opens controller to javafx.fxml;
+    exports application;
+    opens application to javafx.fxml;
+    exports controller;
 }

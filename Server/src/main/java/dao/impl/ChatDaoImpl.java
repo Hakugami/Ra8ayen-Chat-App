@@ -4,8 +4,6 @@ import dao.ChatDao;
 import model.entities.Chat;
 import model.entities.ChatTable;
 import persistence.connection.DataSourceSingleton;
-
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ public class ChatDaoImpl implements ChatDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -41,7 +39,7 @@ public class ChatDaoImpl implements ChatDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -57,27 +55,46 @@ public class ChatDaoImpl implements ChatDao {
                 chatGroups.add(createChatFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return chatGroups;
     }
-
+    public List<Chat> getGroupChats(int userId) {
+        List<Chat> chatGroups = new ArrayList<>();
+        String query = "SELECT c.* FROM Chat c " +
+                "INNER JOIN ChatParticipants cp ON c.ChatID = cp.ChatID " +
+                "WHERE cp.ParticipantUserID = ? AND c.AdminID IS NOT NULL";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                chatGroups.add(createChatFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return chatGroups;
+    }
     @Override
-    public void save(Chat chat) {
+    public boolean save(Chat chat) {
         String query = "INSERT INTO Chat (ChatName, AdminID, ChatImage) VALUES (?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, chat.getName());
             statement.setInt(2, chat.getAdminId());
             statement.setBytes(3, chat.getChatImage());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void update(Chat chat) {
+    public boolean update(Chat chat) {
         String query = "UPDATE Chat SET ChatName = ?, AdminID = ?, ChatImage = ? WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -85,22 +102,30 @@ public class ChatDaoImpl implements ChatDao {
             statement.setInt(2, chat.getAdminId());
             statement.setBytes(3, chat.getChatImage());
             statement.setInt(4, chat.getChatId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(Chat chat) {
+    public boolean delete(Chat chat) {
         String query = "DELETE FROM Chat WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chat.getChatId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     private Chat createChatFromResultSet(ResultSet resultSet) throws SQLException {

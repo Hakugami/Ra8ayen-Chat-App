@@ -1,0 +1,104 @@
+.chat_window_container{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-color: #000000;
+    -fx-border-radius: 10;
+}
+
+.chat_box{
+    -fx-background-color: #ffffff; /* Change this to match your color scheme */
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px; /* Add padding */
+}
+
+.chat_box .list-cell{
+    -fx-padding: 10;
+    -fx-border-color: #000000;
+    -fx-border-width: 0; /* Set border width to 0 */
+    -fx-margin: 10px; /* Add margin */
+    -fx-font-size: 1.2em; /* Change font size */
+    -fx-text-fill: #000000; /* Change font color */
+}
+
+.chat_box .list-cell:empty{
+    -fx-border-width: 0;
+}
+
+.chat_box .list-cell:selected{
+    -fx-background-color: transparent; /* Make the background transparent */
+    -fx-text-fill: #000000; /* Change font color to match normal state */
+}
+
+.input_field{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-pref-width: 300;
+    -fx-pref-height: 30;
+}
+
+.input_field:focused{
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.chat_window_button{
+    -fx-background-color: #000000;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-pref-width: 60;
+    -fx-pref-height: 30;
+}
+
+.chat_window_button:hover{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+    -fx-pref-width: 60;
+    -fx-pref-height: 30;
+    -fx-cursor: hand;
+}
+
+.chat_message_bubble {
+    -fx-background-color: #d8d8d8;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #000000;
+}
+
+.chat_message_bubble:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.context_menu {
+    -fx-background-color: #ffffff; /* Change this to match your color scheme */
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+}
+
+.context_menu .menu-item {
+    -fx-background-color: #ffffff; /* Change this to match your color scheme */
+    -fx-border-color: #000000;
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000; /* Change font color */
+}
+
+.context_menu .menu-item:hover {
+    -fx-background-color: #000000; /* Change this to match your color scheme */
+    -fx-text-fill: #ffffff; /* Change font color */
+}

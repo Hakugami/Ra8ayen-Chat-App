@@ -1,0 +1,38 @@
+.root {
+    -fx-base: #CA3503; /* This is a sample color (dark orange) */
+}
+.send-message {
+    -fx-background-radius: 15; /* Adjust the value based on your preference */
+    -fx-padding: 5 10 5 10; /* Adjust the padding as needed */
+    -fx-background-color:#FFFFFF;
+}
+.header{
+   -fx-background-color: #CA3503;
+
+}
+
+.list_View{
+     -fx-background-image: url('/Images/defuatback.jpg');
+}
+
+.list_View .list-cell{
+    -fx-background-color: transparent;
+}
+
+.Button_style{
+-fx-background-color: #CA3503;
+
+}
+
+.chat_message_bubble {
+    -fx-background-color: #d8d8d8;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #000000;
+}
+
+.chat_message_bubble:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}

@@ -12,17 +12,21 @@ import java.util.List;
 public class UserContactsDaoImpl implements UserContactsDao {
 
     @Override
-    public void save(UserContacts userContacts) {
+    public boolean save(UserContacts userContacts) {
         String query = "INSERT INTO UserContacts (FriendID, UserID, CreationDate) VALUES (?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userContacts.getFriendID());
             statement.setInt(2, userContacts.getUserID());
             statement.setString(3, userContacts.getCreationDate());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class UserContactsDaoImpl implements UserContactsDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -53,35 +57,43 @@ public class UserContactsDaoImpl implements UserContactsDao {
                 userContactsList.add(createUserContactsFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return userContactsList;
     }
 
     @Override
-    public void update(UserContacts userContacts) {
+    public boolean update(UserContacts userContacts) {
         String query = "UPDATE UserContacts SET FriendID = ? WHERE UserID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userContacts.getFriendID());
             statement.setInt(2, userContacts.getUserID());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(UserContacts userContacts) {
+    public boolean delete(UserContacts userContacts) {
         String query = "DELETE FROM UserContacts WHERE UserID = ? AND FriendID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userContacts.getUserID());
             statement.setInt(2, userContacts.getFriendID());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
 
@@ -96,7 +108,7 @@ public class UserContactsDaoImpl implements UserContactsDao {
                 userContactsList.add(createUserContactsFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return userContactsList;
     }

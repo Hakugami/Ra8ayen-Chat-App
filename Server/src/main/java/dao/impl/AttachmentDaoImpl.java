@@ -3,7 +3,6 @@ package dao.impl;
 import dao.AttachmentDao;
 import model.entities.Attachment;
 import persistence.connection.DataSourceSingleton;
-
 import java.io.ByteArrayInputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,17 +11,21 @@ import java.util.List;
 public class AttachmentDaoImpl implements AttachmentDao {
 
     @Override
-    public void save(Attachment attachment) {
+    public boolean save(Attachment attachment) {
         String query = "INSERT INTO Attachment (MessageID, Attachment) VALUES (?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, attachment.getMessageId());
             ByteArrayInputStream input = new ByteArrayInputStream(attachment.getAttachment());
             statement.setBinaryStream(2, input);
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -53,35 +56,43 @@ public class AttachmentDaoImpl implements AttachmentDao {
                 attachments.add(createAttachmentFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return attachments;
     }
 
     @Override
-    public void update(Attachment attachment) {
+    public boolean update(Attachment attachment) {
         String query = "UPDATE Attachment SET Attachment = ? WHERE AttachmentID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             ByteArrayInputStream input = new ByteArrayInputStream(attachment.getAttachment());
             statement.setBinaryStream(1, input);
             statement.setInt(2, attachment.getAttachmentId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(Attachment attachment) {
+    public boolean delete(Attachment attachment) {
         String query = "DELETE FROM Attachment WHERE AttachmentID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, attachment.getAttachmentId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     private Attachment createAttachmentFromResultSet(ResultSet resultSet) throws SQLException {

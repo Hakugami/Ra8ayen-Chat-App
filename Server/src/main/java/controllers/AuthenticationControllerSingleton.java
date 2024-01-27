@@ -33,25 +33,21 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
         userService = new UserService();
         hashService = new HashService("hashing.properties");
         encryptionService = new EncryptionService("keystore.jceks", "Buh123!","Buh1234!", "encryption.properties");
-        sessionManager = new SessionManager();
+        sessionManager = SessionManager.getInstance();
     }
 
 
 public static AuthenticationControllerSingleton getInstance() throws RemoteException, MalformedURLException {
     if (instance == null) {
         instance = new AuthenticationControllerSingleton();
-        // Get the port number from the NetworkManagerSingleton class
-        Registry registry = NetworkManagerSingleton.getInstance().getRegistry();
-        // Bind the AuthenticationControllerSingleton to the RMI registry
-        registry.rebind("AuthenticationController", instance);
          logger.info("AuthenticationControllerSingleton object bound to name 'AuthenticationController'.");
-        System.out.println("AuthenticationControllerSingleton object bound to name 'AuthenticationController'.");
     }
     return instance;
 }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) throws RemoteException {
+        logger.info("Login request received from client.");
         String hashedPassword = hashService.hashPassword(loginRequest.getPassword());
         loginRequest.setPassword(hashedPassword);
         boolean isSuccessful = userService.loginUser(loginRequest);
@@ -62,7 +58,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
             loginResponse.setToken(token);
             User user = userService.getUserByPhoneNumber(loginRequest.getPhoneNumber());
             Session session = new Session(token, user); // Create a new Session object
-            sessionManager.addSession(session); // Add the Session object to the SessionManager
+            sessionManager.addSession(session); // Add the Session object to the SessionManage
         } else {
             loginResponse.setError("Login failed. Invalid phone number or password.");
         }
@@ -71,6 +67,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) throws RemoteException {
+        logger.info("Register request received from client.");
         String hashedPassword = hashService.hashPassword(registerRequest.getPasswordHash());
         registerRequest.setPasswordHash(hashedPassword);
         userService.registerUser(registerRequest);

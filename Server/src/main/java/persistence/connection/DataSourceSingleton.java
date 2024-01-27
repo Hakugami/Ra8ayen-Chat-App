@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
-
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 public class DataSourceSingleton {
     private static DataSourceSingleton instance;
@@ -19,7 +18,7 @@ public class DataSourceSingleton {
             dataSource.setUser(properties.getProperty("user"));
             dataSource.setPassword(properties.getProperty("password"));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error loading properties file");
         }
 
     }

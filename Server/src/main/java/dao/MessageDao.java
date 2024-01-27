@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface MessageDao extends Dao<Message> {
     //CRUD
-    void save(Message message); //Create
+    boolean save(Message message); //Create
     List<Message> get(int sender, int receiver); //Read
     List<Message> getAll();
     Message get(int senderId);
 
-    void update(Message message); //update
+    boolean update(Message message); //update
 
-    void delete(Message message); //delete
+    boolean delete(Message message); //delete
 
 
 

@@ -82,13 +82,11 @@
             </Label>
         </VBox>
     </HBox>
-   <HBox>
-      <children>
-         <PieChart id="pieChart" fx:id="genderPieChart" />
-         <PieChart id="pieChart" fx:id="countryPieChart" />
-      </children>
-      <VBox.margin>
-         <Insets bottom="150.0" />
-      </VBox.margin>
-   </HBox>
+    <HBox>
+        <VBox.margin>
+            <Insets bottom="150.0"/>
+        </VBox.margin>
+        <PieChart id="pieChart" fx:id="genderPieChart"/>
+        <PieChart id="pieChart" fx:id="countryPieChart"/>
+    </HBox>
 </VBox>

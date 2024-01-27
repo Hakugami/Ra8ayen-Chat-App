@@ -3,9 +3,7 @@ package dao.impl;
 import dao.ChatParticipantsDao;
 import model.entities.ChatParticipant;
 import model.entities.ChatParticipantTable;
-import model.entities.ChatTable;
 import persistence.connection.DataSourceSingleton;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -41,8 +39,8 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
                         return createChatParticipantFromResultSet(resultSet);
                     }
                 }
-            }catch(SQLException e){
-                e.printStackTrace();
+            } catch(SQLException e){
+                System.out.println(e.getMessage());
             }
             return null;
     }
@@ -59,7 +57,7 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return chatParticipants;
     }
@@ -75,50 +73,62 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
                 chatParticipants.add(createChatParticipantFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return chatParticipants;
     }
 
     @Override
-    public void save(ChatParticipant chatParticipant) {
-        String query = "INSERT INTO ChatParticipants (ChatID, ParticipantUserID, ParticipantStartDate) VALUES (?, ?, ?)";
+    public boolean save(ChatParticipant chatParticipant) {
+        String query = "INSERT INTO ChatParticipants (ChatID, ParticipantUserID) VALUES (?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatParticipant.getChatId());
             statement.setInt(2, chatParticipant.getParticipantUserId());
             statement.setTimestamp(3, Timestamp.valueOf(chatParticipant.getParticipantStartDate()));
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void update(ChatParticipant chatParticipant) {
+    public boolean update(ChatParticipant chatParticipant) {
         String query = "UPDATE ChatParticipants SET ParticipantStartDate = ? WHERE ChatID = ? AND ParticipantUserID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setTimestamp(1, Timestamp.valueOf(chatParticipant.getParticipantStartDate()));
             statement.setInt(2, chatParticipant.getChatId());
             statement.setInt(3, chatParticipant.getParticipantUserId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(ChatParticipant chatParticipant) {
+    public boolean delete(ChatParticipant chatParticipant) {
         String query = "DELETE FROM ChatParticipants WHERE ChatID = ? AND ParticipantUserID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatParticipant.getChatId());
             statement.setInt(2, chatParticipant.getParticipantUserId());
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     private ChatParticipant createChatParticipantFromResultSet(ResultSet resultSet) throws SQLException {

@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@../../CssStyles/Chat.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
-   <children>
-      <HBox prefHeight="61.0" prefWidth="900.0" styleClass="header">
-         <children>
+<AnchorPane stylesheets="@../../Styles/NeoOrange/Chat.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+   <BorderPane prefHeight="750.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <top>
+         <HBox prefHeight="61.0" prefWidth="900.0" styleClass="header" BorderPane.alignment="CENTER">
             <Pane prefHeight="37.0" prefWidth="57.0">
-               <children>
-                  <ImageView fx:id="ImagContact">
-                     <clip>
-                        <Circle fx:id="imageClip" centerX="20" centerY="20" radius="20" />
-                     </clip>
-
-                  </ImageView>
-               </children>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <HBox.margin>
                   <Insets bottom="5.0" left="20.0" top="5.0" />
                </HBox.margin>
+               <ImageView fx:id="ImagContact">
+                  <clip>
+                     <Circle fx:id="imageClip" centerX="20" centerY="20" radius="20" />
+                  </clip>
+   
+               </ImageView>
             </Pane>
             <Label fx:id="NameContact" text="Label" textFill="WHITE">
                <HBox.margin>
@@ -41,26 +40,37 @@
                   <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-         </children>
-      </HBox>
-      <ListView prefHeight="502.0" prefWidth="900.0" styleClass="list_View" />
-      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="40.0">
-         <children>
-            <TextField prefHeight="53.0" prefWidth="824.0" styleClass="send-message">
+         </HBox>
+      </top>
+      <center>
+         <VBox prefHeight="600.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+            <ListView fx:id="chatListView" prefHeight="502.0" prefWidth="900.0" styleClass="list_View" VBox.vgrow="ALWAYS" />
+         </VBox>
+      </center>
+      <bottom>
+         <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+            <padding>
+               <Insets left="10.0" />
+            </padding>
+            <Button fx:id="emojiButton" layoutX="844.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="53.0" prefWidth="71.0" styleClass="Button_style" text="Emoji" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
+            <TextField fx:id="messageBox" prefHeight="53.0" prefWidth="741.0" styleClass="send-message" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
                <padding>
                   <Insets right="10.0" />
-               </padding></TextField>
-            <Button mnemonicParsing="false" prefHeight="53.0" prefWidth="77.0" styleClass="Button_style" text="Button" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+               </padding>
+            </TextField>
+            <Button fx:id="sendMessage" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="53.0" prefWidth="77.0" styleClass="Button_style" text="Send" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="15.0" />
-               </font></Button>
-         </children>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </HBox>
-   </children>
-</VBox>
+               </font>
+            </Button>
+         </HBox>
+      </bottom>
+   </BorderPane>
+</AnchorPane>

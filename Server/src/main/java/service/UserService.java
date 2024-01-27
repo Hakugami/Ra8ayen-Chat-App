@@ -1,20 +1,27 @@
 package service;
 
 import Mapper.RegisterMapper;
+//import Mapper.RegisterMapperImpl;
 import Mapper.RegisterMapperImpl;
+import Mapper.UserMapper;
+import Mapper.UserMapperImpl;
 import dao.impl.UserDaoImpl;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
 import model.entities.User;
 
+import java.util.List;
+
 public class UserService {
 
     public RegisterMapper registerMapper;
+    public UserMapper userMapper;
 
     public UserDaoImpl userDaoImpl;
 
     public UserService() {
         registerMapper = new RegisterMapperImpl();
+        userMapper = new UserMapperImpl();
         userDaoImpl = new UserDaoImpl();
     }
 
@@ -34,7 +41,12 @@ public class UserService {
 
         return storedPassword.equals(enteredPassword);
     }
-
+    public void deleteUser(User user) {
+        userDaoImpl.delete(user);
+    }
+    public List<User> getAllUsers() {
+        return userDaoImpl.getAll();
+    }
     public User getUserByPhoneNumber(String phoneNumber) {
         return userDaoImpl.getUserByPhoneNumber(phoneNumber);
     }

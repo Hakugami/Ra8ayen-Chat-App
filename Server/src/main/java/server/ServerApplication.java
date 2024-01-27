@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import network.manager.NetworkManagerSingleton;
-
 import java.io.IOException;
 
 public class ServerApplication extends Application {
@@ -35,7 +34,6 @@ public class ServerApplication extends Application {
     }
 
     public static void main(String[] args) {
-//        launch();
-
+        launch();
     }
 }

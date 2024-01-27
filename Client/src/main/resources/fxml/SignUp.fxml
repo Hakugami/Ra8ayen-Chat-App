@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="signUpXml" prefHeight="550.0" prefWidth="750.0" stylesheets="@../CssStyles/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+    <children>
+        <SplitPane dividerPositions="0.36" layoutX="10.399999618530273" layoutY="10.399999618530273" style="-fx-background-radius: 15;" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
+            <items>
+                <AnchorPane id="imgBox" minHeight="-Infinity">
+                    <children>
+                        <VBox id="imgBox" alignment="TOP_CENTER" prefHeight="518.0" prefWidth="220.0" style="-fx-background-color: #5a14a0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <ImageView fitHeight="282.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../Images/duo5.png" />
+                                    </image>
+                                </ImageView>
+                                <Text fill="#fcf6f6" strokeType="OUTSIDE" strokeWidth="0.0" text="Chatty" textAlignment="CENTER" wrappingWidth="148.6655821800232">
+                                    <font>
+                                        <Font name="Bauhaus 93" size="48.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+                <AnchorPane id="loginBox" minHeight="-Infinity">
+                    <children>
+                        <VBox id="loginBox" alignment="TOP_CENTER" style="-fx-background-color: #f9dbdb;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label text="Sign Up" textFill="#22064e">
+                                    <font>
+                                        <Font name="Times New Roman Bold" size="28.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets top="32.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <AnchorPane prefHeight="408.0" prefWidth="462.0">
+                                    <children>
+                                        <VBox alignment="CENTER" layoutX="112.8" prefHeight="409.0" prefWidth="255.0" spacing="8.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <TextField id="txtField" fx:id="nameField" prefHeight="46.0" prefWidth="226.0" promptText="Name" />
+                                                <TextField id="txtField" fx:id="emailField" promptText="Email" />
+                                                <TextField id="txtField" fx:id="phoneNumberField" promptText="Phone Number" />
+                                                <PasswordField id="txtField" fx:id="passwordField" promptText="Password" />
+                                                <ComboBox id="txtField" fx:id="comboBox" prefHeight="26.0" prefWidth="253.0" promptText="Choose Country" />
+                                                <ComboBox id="txtField" fx:id="gender" prefHeight="26.0" prefWidth="248.0" promptText="Gender" />
+                                                <DatePicker fx:id="datePicker" prefHeight="39.0" prefWidth="238.0" promptText="Date of birth" />
+                                                <Button id="loginBtn" mnemonicParsing="false" onAction="#handleSignUpButton" prefHeight="40.0" prefWidth="90.0" text="Button" textAlignment="CENTER" textFill="#f2ecec">
+                                                    <font>
+                                                        <Font name="Times New Roman Bold" size="18.0" />
+                                                    </font>
+                                                </Button>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                                <HBox alignment="CENTER" prefHeight="35.0" prefWidth="462.0">
+                                    <children>
+                                        <Label text="Do have an account? ">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Hyperlink  text="Log in" textFill="#3a0d82">
+                                            <font>
+                                                <Font name="System Bold" size="12.0" />
+                                            </font>
+                                        </Hyperlink>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </items>
+            <effect>
+                <DropShadow />
+            </effect>
+        </SplitPane>
+    </children>
+    <effect>
+        <DropShadow>
+            <color>
+                <Color red="0.3263157904148102" green="0.30456140637397766" blue="0.30456140637397766" />
+            </color>
+        </DropShadow>
+    </effect>
+</AnchorPane>

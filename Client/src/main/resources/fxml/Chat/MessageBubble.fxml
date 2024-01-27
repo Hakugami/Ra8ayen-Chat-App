@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<HBox fx:id="completeMessageHBox" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../../Styles/NeoOrange/MessageBubble.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fx:id="senderImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+        <VBox fx:id="messageVBox" minWidth="200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="10.0" styleClass="message-bubble">
+            <children>
+                <HBox fx:id="senderInfoHBox" alignment="CENTER">
+                    <children>
+                        <VBox minWidth="50.0" prefWidth="50.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="senderNameLabel" style="colo: grey;" styleClass="sender-info" textFill="#464646" />
+                            </children>
+                        </VBox>
+                        <Label fx:id="senderPhoneLabel" style="colo: grey;" styleClass="sender-info" textFill="#464646">
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="3.0" left="5.0" right="5.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox fx:id="messageAttachmentHBox">
+                    <children>
+                        <ImageView fx:id="fileIconImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="fileNameLabel">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="fileSizeLabel" textFill="#464646" />
+                            </children>
+                            <padding>
+                                <Insets left="15.0" top="3.0" />
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+                <TextFlow fx:id="messageContentTextFlow">
+                    <children>
+                        <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="messageContent">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Text>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </TextFlow>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label fx:id="messageTimeLabel" styleClass="timestamp">
+                            <HBox.margin>
+                                <Insets right="5.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="5.0" right="2.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+            <padding>
+                <Insets left="5.0" right="5.0" top="3.0" />
+            </padding>
+        </VBox>
+    </children>
+</HBox>

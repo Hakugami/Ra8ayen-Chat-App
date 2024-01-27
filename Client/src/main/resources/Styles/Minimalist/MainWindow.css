@@ -1,0 +1,44 @@
+.custom_title_bar {
+    -fx-background-color: #000000;
+    -fx-alignment: center-right;
+    -fx-spacing: 10;
+    -fx-border-radius: 50;
+}
+
+.window_button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-radius: 20;
+    -fx-font-size: 1.1em;
+}
+
+.window_button:hover {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+}
+
+.window_button:pressed {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+}
+
+.window_button:armed {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.window_button:disabled {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.window_button:default {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.window_button:focused {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+

@@ -1,8 +1,7 @@
 package network.manager;
 
-import controllers.AuthenticationControllerSingleton;
+import controllers.*;
 import lookupnames.LookUpNames;
-
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -20,7 +19,7 @@ public class NetworkManagerSingleton {
             registry = LocateRegistry.createRegistry(PORT);
             isServerRunning = false;
         } catch (RemoteException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -30,52 +29,44 @@ public class NetworkManagerSingleton {
         }
         return instance;
     }
-    public synchronized boolean isServerRunning() {
+    public boolean isServerRunning() {
         return isServerRunning;
     }
-    public synchronized void setServerRunning(boolean isServerRunning) {
+    public void setServerRunning(boolean isServerRunning) {
         this.isServerRunning = isServerRunning;
     }
     public void start() {
         try {
-
-            AuthenticationControllerSingleton.getInstance();
 //            for(LookUpNames bind : LookUpNames.values()) {
-//                //Naming.rebind(bind.name());
+//                Naming.rebind(bind.name(), new OnlineControllerImpl());
+//
 //                System.out.println(bind.name());
 //            }
+            registry.rebind(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());
+            registry.rebind(LookUpNames.AUTHENTICATIONCONTROLLER.name(), AuthenticationControllerSingleton.getInstance());
+            registry.rebind(LookUpNames.GROUPCHATCONTROLLER.name(), GroupChatControllerSingleton.getInstance());
+            registry.rebind(LookUpNames.INVITATIONCONTROLLER.name(), InvitationControllerSingleton.getInstance());
+            registry.rebind(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
+            registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
             setServerRunning(true);
         } catch (RemoteException e) {
-            e.getCause();
+            System.out.println(e.getMessage());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
-//
-//public void start() {
-//    try {
-//        if (!isServerRunning()) {
-//            registry = LocateRegistry.createRegistry(PORT);
-//            AuthenticationControllerSingleton.getInstance();
-//            setServerRunning(true);
-//            while (isServerRunning()) {
-//                // Wait for client connections
-//                Thread.sleep(1000);
-//            }
-//        }
-//    } catch (RemoteException | MalformedURLException | InterruptedException e) {
-//        throw new RuntimeException(e);
-//    }
-//}
+
     public void stop() {
         try {
+            setServerRunning(false);
             for(String bind : registry.list()) {
                 Remote stub = registry.lookup(bind);
-                UnicastRemoteObject.unexportObject(stub, true);
+                if(stub != null) {
+                    UnicastRemoteObject.unexportObject(stub, true);
+                }
                 Naming.unbind(bind);
             }
             UnicastRemoteObject.unexportObject(registry, true);
-            setServerRunning(false);
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
             System.out.println(e.getMessage());
         }
@@ -85,3 +76,4 @@ public class NetworkManagerSingleton {
         return registry;
     }
 }
+

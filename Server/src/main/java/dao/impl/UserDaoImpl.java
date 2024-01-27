@@ -1,13 +1,10 @@
 package dao.impl;
 
 import java.io.ByteArrayInputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
-
 import dao.UserDao;
 import model.entities.User;
 import model.entities.User.Gender;
@@ -33,7 +30,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return user;
     }
@@ -50,30 +47,33 @@ public class UserDaoImpl implements UserDao {
                 Users.add(convertResultSetToUser(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return Users;
     }
 
     @Override
-    public void save(User user) {
+    public boolean save(User user) {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
-                "PasswordHash,Gender,Country,DateOfBirth,LastLogin) " +
-                "VALUES (?, ?, ?, ?,?,?,?,?)";
+                "ProfilePicture,PasswordHash,Gender,Country,DateOfBirth,Bio,LastLogin) " +
+                "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             add(statement, user);
-            statement.executeUpdate();
-
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void update(User user) {
+    public boolean update(User user) {
         String query = "UPDATE UserAccounts SET " +
                 "DisplayName = ?, EmailAddress = ?, " +
                 "ProfilePicture = ?, PasswordHash = ?, " +
@@ -83,39 +83,48 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             update(statement, user);
-            statement.executeUpdate();
-
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(User user) {
+    public boolean delete(User user) {
         String query = "DELETE FROM UserAccounts WHERE UserID = ?";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, user.getUserID());
-            statement.executeUpdate();
-
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public void delete(int userId) {
+    public boolean delete(int userId) {
         String query = "DELETE FROM UserAccounts WHERE UserID = ?";
 
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
-            statement.executeUpdate();
-
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 
 
@@ -133,7 +142,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return user;
     }
@@ -165,12 +174,15 @@ public class UserDaoImpl implements UserDao {
         statement.setString(1, user.getPhoneNumber());
         statement.setString(2, user.getUserName());
         statement.setString(3, user.getEmailAddress());
-        statement.setString(4, user.getPasswordHash());
-        statement.setString(5, user.getGender().name());
-        statement.setString(6, user.getCountry());
-        statement.setDate(7, new java.sql.Date(user.getDateOfBirth().getTime()));
+        ByteArrayInputStream input = new ByteArrayInputStream(user.getProfilePicture());
+        statement.setBinaryStream(4, input);
+        statement.setString(5, user.getPasswordHash());
+        statement.setString(6, user.getGender().name());
+        statement.setString(7, user.getCountry());
+        statement.setDate(8, new java.sql.Date(user.getDateOfBirth().getTime()));
+        statement.setString(9, user.getBio());
         //get the latest Time stamp
-        statement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+        statement.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
     }
 
     private void update(PreparedStatement statement, User user) throws SQLException {
@@ -181,8 +193,8 @@ public class UserDaoImpl implements UserDao {
         statement.setBinaryStream(3, input);
         statement.setString(4, user.getPasswordHash());
         statement.setString(5, user.getBio());
-        statement.setString(6, user.getUserStatus().name().toString());
-        statement.setString(7, user.getUsermode().name().toString());
+        statement.setString(6, user.getUserStatus().name());
+        statement.setString(7, user.getUsermode().name());
 
     }
 

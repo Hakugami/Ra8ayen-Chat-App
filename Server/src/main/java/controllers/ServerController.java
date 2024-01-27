@@ -1,27 +1,31 @@
 package controllers;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 
-public class ServerController {
-
+public class ServerController implements Initializable {
     @FXML
     private StackPane spSubScene;
     @FXML
     private Button settingsButton;
-
+    @FXML
+    private Button announcementButton;
+    @FXML
+    private Button usersButton;
+    @FXML
+    private Button dashboardButton;
     public void setSubSceneInitialNode()
     {
         settingsButton.fire();
     }
-    public void handleBtnOnActionAnnouncement()
+    private void handleBtnOnActionAnnouncement()
     {
         try
         {
@@ -38,15 +42,13 @@ public class ServerController {
         }
     }
 
-    public void handleBtnOnActionServiceStart()
+    private void handleBtnOnActionServiceStart()
     {
         try
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/ServiceStart.fxml"));
             loader.load();
             ServiceStartController serviceStartController = loader.getController();
-            serviceStartController.init();
-
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(serviceStartController.getVBoxRoot());
         }
@@ -56,7 +58,7 @@ public class ServerController {
         }
     }
 
-    public void handleBtnOnActionDashboardStart()
+    private void handleBtnOnActionDashboardStart()
     {
         try
         {
@@ -72,5 +74,27 @@ public class ServerController {
             System.out.println();
         }
     }
+    private void handleBtnOnActionUsersTableStart()
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/UserListView.fxml"));
+            loader.load();
+            UserListController userListController = loader.getController();
+            spSubScene.getChildren().clear();
+            spSubScene.getChildren().add(userListController.getVBoxRoot());
+        }
+        catch (IOException ex)
+        {
+            System.out.println();
+        }
+    }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        settingsButton.setOnAction(actionEvent -> handleBtnOnActionServiceStart());
+        announcementButton.setOnAction(actionEvent -> handleBtnOnActionAnnouncement());
+        dashboardButton.setOnAction(actionEvent -> handleBtnOnActionDashboardStart());
+        usersButton.setOnAction(actionEvent -> handleBtnOnActionUsersTableStart());
+    }
 }

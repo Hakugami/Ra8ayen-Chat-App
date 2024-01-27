@@ -5,10 +5,18 @@ import session.Session;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionManager {
+    private static SessionManager sessionManager;
     private ConcurrentHashMap<String, Session> sessions;
 
-    public SessionManager() {
+    private SessionManager() {
         sessions = new ConcurrentHashMap<>();
+    }
+
+    public static SessionManager getInstance() {
+        if (sessionManager == null) {
+            sessionManager = new SessionManager();
+        }
+        return sessionManager;
     }
 
     public void addSession(Session session) {
@@ -21,5 +29,12 @@ public class SessionManager {
 
     public void removeSession(String token) {
         sessions.remove(token);
+    }
+
+    @Override
+    public String toString() {
+        return "SessionManager{" +
+                "sessions=" + sessions +
+                '}';
     }
 }
