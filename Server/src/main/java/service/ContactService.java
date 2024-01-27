@@ -1,15 +1,21 @@
 package service;
 
+import Mapper.ChatMapper;
 import Mapper.UserContactMapper;
+import dao.ChatDao;
 import dao.UserContactsDao;
 import dao.UserDao;
+import dao.impl.ChatDaoImpl;
 import dao.impl.UserContactsDaoImpl;
 import dao.impl.UserDaoImpl;
 import dto.Controller.ContactsController;
 import dto.requests.DeleteUserContactRequest;
+import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
 import dto.responses.DeleteUserContactResponse;
+import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
+import model.entities.Chat;
 import model.entities.User;
 import model.entities.UserContacts;
 
@@ -19,6 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactService implements ContactsController {
+    @Override
+    public GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) throws RemoteException, SQLException, ClassNotFoundException {
+        Chat privateChat = new Chat();
+        ChatDao chatDao = new ChatDaoImpl();
+        ChatMapper chatMapper = new ChatMapper();
+        privateChat = chatDao.getPrivateChat(getContactChatRequest.getUserID(),getContactChatRequest.getFriendID());
+        return chatMapper.chatToGetContactChatResponse(privateChat);
+    }
+
     @Override
     public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException, SQLException, ClassNotFoundException {
 

@@ -65,15 +65,42 @@ public class ChatDaoImpl implements ChatDao {
                 "INNER JOIN ChatParticipants cp ON c.ChatID = cp.ChatID " +
                 "WHERE cp.ParticipantUserID = ? AND c.AdminID IS NOT NULL";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
-            while (resultSet.next()) {
-                chatGroups.add(createChatFromResultSet(resultSet));
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    chatGroups.add(createChatFromResultSet(resultSet));
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return chatGroups;
+    }
+
+    public Chat getPrivateChat(int userId, int friendId) {
+        Chat privateChat = null;
+        String query =
+                "SELECT c.* " +
+                        "FROM ChatParticipants cp " +
+                        "INNER JOIN Chat c ON cp.ChatID = c.ChatID " +
+                        "WHERE cp.ParticipantUserID IN (?, ?) " +
+                        "AND c.AdminID IS NULL " +
+                        "GROUP BY cp.ChatID " +
+                        "HAVING COUNT(cp.ParticipantUserID) = 2 ";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, friendId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    privateChat = createChatFromResultSet(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return privateChat;
     }
     @Override
     public boolean save(Chat chat) {

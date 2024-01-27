@@ -2,10 +2,11 @@ package Mapper;
 
 import dto.requests.CreateGroupChatRequest;
 import dto.responses.CreateGroupChatResponse;
+import dto.responses.GetContactChatResponse;
 import dto.responses.GetGroupResponse;
 import model.entities.Chat;
 
-public class ChatGroupMapper {
+public class ChatMapper {
     public GetGroupResponse chatToGroupResponse(Chat chat){
         GetGroupResponse getGroupResponse = new GetGroupResponse();
         getGroupResponse.setGroupId(chat.getChatId());
@@ -13,6 +14,14 @@ public class ChatGroupMapper {
         getGroupResponse.setGroupAdminId(chat.getAdminId());
         getGroupResponse.setGroupPicture(chat.getChatImage());
         return getGroupResponse;
+    }
+
+    public GetContactChatResponse chatToGetContactChatResponse(Chat chat) {
+        GetContactChatResponse getContactChatResponse = new GetContactChatResponse();
+        getContactChatResponse.setChatID(chat.getChatId());
+        getContactChatResponse.setChatImage(null);
+        getContactChatResponse.setChatName(null);
+        return getContactChatResponse;
     }
 
     public Chat createGroupChatRequestToChat(CreateGroupChatRequest createGroupChatRequest) {

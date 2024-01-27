@@ -1,6 +1,6 @@
 package controllers;
 
-import Mapper.ChatGroupMapper;
+import Mapper.ChatMapper;
 import Mapper.ChatParticipantMapper;
 import dto.Controller.GroupChatController;
 import dto.requests.AddUserToGroupRequest;
@@ -19,12 +19,12 @@ import java.util.List;
 
 public class GroupChatControllerSingleton extends UnicastRemoteObject implements GroupChatController {
     private static GroupChatControllerSingleton instance;
-    private final ChatGroupMapper chatGroupMapper;
+    private final ChatMapper chatMapper;
     private final ChatParticipantMapper chatParticipantMapper;
     private final GroupService groupService;
     private GroupChatControllerSingleton() throws RemoteException {
         super();
-        chatGroupMapper = new ChatGroupMapper();
+        chatMapper = new ChatMapper();
         chatParticipantMapper = new ChatParticipantMapper();
         groupService = new GroupService();
     }
@@ -41,15 +41,15 @@ public class GroupChatControllerSingleton extends UnicastRemoteObject implements
         List<Chat> groupsEntities = groupService.getUserGroups(request.getUserId());
         List<GetGroupResponse> groups = new ArrayList<>();
         for (Chat groupEntity : groupsEntities) {
-            groups.add(chatGroupMapper.chatToGroupResponse(groupEntity));
+            groups.add(chatMapper.chatToGroupResponse(groupEntity));
         }
         return groups;
     }
 
     @Override
     public CreateGroupChatResponse createGroupChat(CreateGroupChatRequest request) throws RemoteException {
-        Chat chat = chatGroupMapper.createGroupChatRequestToChat(request);
-        CreateGroupChatResponse createGroupChatResponse = chatGroupMapper.chatToCreateGroupChatResponse(chat);
+        Chat chat = chatMapper.createGroupChatRequestToChat(request);
+        CreateGroupChatResponse createGroupChatResponse = chatMapper.chatToCreateGroupChatResponse(chat);
         boolean isCreated = groupService.createGroup(chat);
         createGroupChatResponse.setCreated(isCreated);
         createGroupChatResponse.setErrorMessage("");
