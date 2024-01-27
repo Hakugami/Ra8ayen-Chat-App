@@ -73,7 +73,7 @@ public class ViewFactory {
     }
 
     public void showSettingsContextMenu() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/SettingsContextMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/SettingsContextMenu.fxml"));
         createStage(loader);
     }
 

@@ -141,37 +141,37 @@ public class MainWindowController implements Initializable {
         });
     }
 
-public void setSwappableWindow(Node node) {
-    Platform.runLater(() -> {
-        // Clear the swappableWindow and add the new node
-        swappableWindow.getChildren().setAll(node);
+    public void setSwappableWindow(Node node) {
+        Platform.runLater(() -> {
+            // Clear the swappableWindow and add the new node
+            swappableWindow.getChildren().setAll(node);
 
-        // Check if the new node is a Region
-        if (node instanceof Region) {
-            Region region = (Region) node;
+            // Check if the new node is a Region
+            if (node instanceof Region) {
+                Region region = (Region) node;
 
-            // Bind the minWidth, minHeight, maxWidth, and maxHeight properties of the new content to the width and height properties of the swappableWindow
-            region.minWidthProperty().bind(swappableWindow.widthProperty());
-            region.minHeightProperty().bind(swappableWindow.heightProperty());
-            region.maxWidthProperty().bind(swappableWindow.widthProperty());
-            region.maxHeightProperty().bind(swappableWindow.heightProperty());
+                // Bind the minWidth, minHeight, maxWidth, and maxHeight properties of the new content to the width and height properties of the swappableWindow
+                region.minWidthProperty().bind(swappableWindow.widthProperty());
+                region.minHeightProperty().bind(swappableWindow.heightProperty());
+                region.maxWidthProperty().bind(swappableWindow.widthProperty());
+                region.maxHeightProperty().bind(swappableWindow.heightProperty());
 
-            // Add listeners to the width and height properties of the swappableWindow to update the minWidth, minHeight, maxWidth, and maxHeight properties of the new content
-            swappableWindow.widthProperty().addListener((observable, oldValue, newValue) -> {
-                region.minWidthProperty().unbind();
-                region.maxWidthProperty().unbind();
-                region.setMinWidth(newValue.doubleValue());
-                region.setMaxWidth(newValue.doubleValue());
-            });
-            swappableWindow.heightProperty().addListener((observable, oldValue, newValue) -> {
-                region.minHeightProperty().unbind();
-                region.maxHeightProperty().unbind();
-                region.setMinHeight(newValue.doubleValue());
-                region.setMaxHeight(newValue.doubleValue());
-            });
-        }
-    });
-    swappableWindow.layout();
-}
+                // Add listeners to the width and height properties of the swappableWindow to update the minWidth, minHeight, maxWidth, and maxHeight properties of the new content
+                swappableWindow.widthProperty().addListener((observable, oldValue, newValue) -> {
+                    region.minWidthProperty().unbind();
+                    region.maxWidthProperty().unbind();
+                    region.setMinWidth(newValue.doubleValue());
+                    region.setMaxWidth(newValue.doubleValue());
+                });
+                swappableWindow.heightProperty().addListener((observable, oldValue, newValue) -> {
+                    region.minHeightProperty().unbind();
+                    region.maxHeightProperty().unbind();
+                    region.setMinHeight(newValue.doubleValue());
+                    region.setMaxHeight(newValue.doubleValue());
+                });
+            }
+        });
+        swappableWindow.layout();
+    }
 
 }

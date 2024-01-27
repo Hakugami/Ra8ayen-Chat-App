@@ -87,8 +87,6 @@ public class LoginController {
                     System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
                         NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
-                        System.out.println("---------------------------------------------------------");
-                        System.out.println(NetworkFactory.getInstance().getUserModel(token));
                         CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(token));
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();

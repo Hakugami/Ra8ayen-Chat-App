@@ -35,7 +35,7 @@ public class ContactService implements ContactsController {
     }
 
     @Override
-    public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException, SQLException, ClassNotFoundException {
+    public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException {
 
         UserContactMapper userContactMapper = new UserContactMapper();
         User userContacts = userContactMapper.UserContactFromRequestGet(getContactsRequest);

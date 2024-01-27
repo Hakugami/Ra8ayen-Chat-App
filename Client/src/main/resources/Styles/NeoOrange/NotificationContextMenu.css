@@ -1,0 +1,20 @@
+/* NotificationContextMenuElement.css */
+
+/* Style for the notification menu */
+.AnchorPane {
+    -fx-background-color: #f0f0f0; /* Background color */
+    -fx-border-color: #333; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+    -fx-border-radius: 5px; /* Border radius */
+    -fx-padding: 10px; /* Padding */
+}
+/* NotificationContextMenuElement.css */
+
+/* Style for the ListView */
+.ListView {
+    -fx-background-color: #f0f0f0; /* Background color */
+    -fx-border-color: #333; /* Border color */
+    -fx-border-width: 2px; /* Border width */
+    -fx-border-radius: 5px; /* Border radius */
+    -fx-padding: 10px; /* Padding */
+}

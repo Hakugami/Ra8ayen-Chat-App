@@ -1,6 +1,7 @@
 package model;
 
 import controller.CallBackControllerImpl;
+import controller.ContactData;
 import dto.Model.UserModel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -9,13 +10,18 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CurrentUser extends UserModel {
     private static CurrentUser currentUser;
     private Image profilePictureImage;
     private CallBackControllerImpl callBackController = CallBackControllerImpl.getInstance();
 
+    private List<ContactData> contactDataList;
+
     private CurrentUser() throws RemoteException {
+        contactDataList = new CopyOnWriteArrayList<>();
     }
 
     public static CurrentUser getInstance() throws RemoteException {
