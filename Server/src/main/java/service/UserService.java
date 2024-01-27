@@ -50,4 +50,7 @@ public class UserService {
     public User getUserByPhoneNumber(String phoneNumber) {
         return userDaoImpl.getUserByPhoneNumber(phoneNumber);
     }
+    public User getUserById(int id) {
+        return userDaoImpl.get(id);
+    }
 }

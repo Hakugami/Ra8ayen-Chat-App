@@ -1,7 +1,7 @@
 package view;
 
 import controller.*;
-import controller.token.TokenManager;
+import token.TokenManager;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

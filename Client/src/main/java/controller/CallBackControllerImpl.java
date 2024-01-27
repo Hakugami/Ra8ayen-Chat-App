@@ -2,10 +2,14 @@ package controller;
 
 import dto.Controller.CallBackController;
 import dto.Model.MessageModel;
+import dto.Model.NotificationModel;
 import dto.requests.FriendRequest;
 import javafx.application.Platform;
+import model.Model;
+import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -28,6 +32,17 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     public void respond() throws RemoteException {
         System.out.println("You are still connected");
         isClientConnected = true;
+    }
+
+    @Override
+    public void receiveNotification(NotificationModel notification) throws RemoteException {
+        NotificationManager.getInstance().addNotification(notification);
+        try {
+            Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

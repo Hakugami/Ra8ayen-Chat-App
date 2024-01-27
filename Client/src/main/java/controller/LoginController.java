@@ -1,6 +1,6 @@
 package controller;
 
-import controller.token.TokenManager;
+import token.TokenManager;
 import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
 import javafx.animation.TranslateTransition;

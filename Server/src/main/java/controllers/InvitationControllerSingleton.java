@@ -1,8 +1,11 @@
 package controllers;
 
 import Mapper.InvitationMapper;
+import Mapper.UserMapper;
+import Mapper.UserMapperImpl;
 import dto.Controller.InvitationController;
 import dto.requests.AddContactRequest;
+import dto.requests.FriendRequest;
 import dto.responses.AddContactResponse;
 import model.entities.Notification;
 import model.entities.User;
@@ -18,12 +21,14 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     private static InvitationControllerSingleton instance;
     private final InvitationService invitationService;
     private final InvitationMapper invitationMapper;
+    private final UserMapper userMapper;
     private final UserService userService;
     protected InvitationControllerSingleton() throws RemoteException {
         super();
         invitationService = new InvitationService();
         userService = new UserService();
         invitationMapper = new InvitationMapper();
+        userMapper = new UserMapperImpl();
     }
     public static InvitationControllerSingleton getInstance() throws RemoteException {
         if (instance == null) {
@@ -42,6 +47,12 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                 Notification notification = invitationMapper.addContactRequestToNotification(addContactRequest.getUserId(), user.getUserID());
                 isDone = invitationService.inviteContact(notification);
                 responses.add("Invitation has been sent to " + phoneNumber);
+                FriendRequest friendRequest = new FriendRequest();
+                friendRequest.setReceiverPhoneNumber(phoneNumber);
+                friendRequest.setSenderPhoneNumber(userService.getUserById(addContactRequest.getUserId()).getPhoneNumber());
+                friendRequest.setUserModel(userMapper.entityToModel(userService.getUserById(addContactRequest.getUserId())));
+                OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+
             }
             else {
                 responses.add(phoneNumber + "not found");

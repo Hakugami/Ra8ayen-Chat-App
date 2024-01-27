@@ -13,6 +13,7 @@ public class ControllerFactory {
     private StatusElementController statusElementController;
     private ContactElementController contactElementController;
     private MainWindowController mainWindowController;
+    private NotificationContextMenuController notificationContextMenuController;
 
     public ChatController getChatController() {
         if (chatController == null) {
@@ -68,6 +69,15 @@ public class ControllerFactory {
             mainWindowController = fxmlLoader.getController();
         }
         return mainWindowController;
+    }
+
+    public NotificationContextMenuController getNotificationContextMenuController() throws IOException {
+        if(notificationContextMenuController == null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationContextMenu.fxml"));
+            Parent parent = fxmlLoader.load();
+            notificationContextMenuController = fxmlLoader.getController();
+        }
+        return notificationContextMenuController;
     }
 
 }
