@@ -32,13 +32,12 @@ public class ServerController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Announcement.fxml"));
             loader.load();
             AnnouncementController announcementController = loader.getController();
-
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(announcementController.getVBoxRoot());
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -52,9 +51,9 @@ public class ServerController implements Initializable {
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(serviceStartController.getVBoxRoot());
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -65,13 +64,12 @@ public class ServerController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Dashboard.fxml"));
             loader.load();
             DashboardController dashboardController = loader.getController();
-            dashboardController.init();
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(dashboardController.getVBoxRoot());
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
     private void handleBtnOnActionUsersTableStart()
@@ -84,9 +82,9 @@ public class ServerController implements Initializable {
             spSubScene.getChildren().clear();
             spSubScene.getChildren().add(userListController.getVBoxRoot());
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 

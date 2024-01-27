@@ -1,10 +1,8 @@
 package dto.responses;
 
-import dto.requests.UpdateUserRequest;
-
 import java.util.Arrays;
 
-public class UpdateUserRespnse {
+public class UpdateUserResponse {
 
     private String userName;
     private String emailAddress;
@@ -23,7 +21,7 @@ public class UpdateUserRespnse {
         Busy, Away,Available
     }
 
-    public UpdateUserRespnse(String userName, String emailAddress, byte[] profilePicture, String passwordHash, String bio, UserStatus userStatus,UserMode userMode, boolean isUpdated, String errorMessage) {
+    public UpdateUserResponse(String userName, String emailAddress, byte[] profilePicture, String passwordHash, String bio, UserStatus userStatus, UserMode userMode, boolean isUpdated, String errorMessage) {
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.profilePicture = profilePicture;

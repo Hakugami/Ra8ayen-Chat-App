@@ -138,3 +138,11 @@
     -fx-background-radius: 50%;
     -fx-progress-color: red;
 }
+
+.male-pie {
+    -fx-pie-color: #4169E1;
+}
+
+.female-pie {
+    -fx-pie-color: #FF69B4;
+}
