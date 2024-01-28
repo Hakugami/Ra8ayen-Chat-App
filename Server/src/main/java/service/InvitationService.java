@@ -18,4 +18,8 @@ public class InvitationService {
     public boolean inviteContact(Notification notification) {
         return notificationDao.save(notification);
     }
+    public boolean ReceiverMakeInviteBefore(Notification notification){
+        return notificationDao.checkInvite(notification);
+    }
+
 }

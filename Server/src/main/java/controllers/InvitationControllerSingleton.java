@@ -45,14 +45,18 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
             User user = userService.getUserByPhoneNumber(phoneNumber);
             if(user != null) {
                 Notification notification = invitationMapper.addContactRequestToNotification(addContactRequest.getUserId(), user.getUserID());
-                isDone = invitationService.inviteContact(notification);
-                responses.add("Invitation has been sent to " + phoneNumber);
-                FriendRequest friendRequest = new FriendRequest();
-                friendRequest.setReceiverPhoneNumber(phoneNumber);
-                friendRequest.setSenderPhoneNumber(userService.getUserById(addContactRequest.getUserId()).getPhoneNumber());
-                friendRequest.setUserModel(userMapper.entityToModel(userService.getUserById(addContactRequest.getUserId())));
-                OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
-
+              if(invitationService.ReceiverMakeInviteBefore(notification)){
+                  responses.add("Invitation has accepted " + phoneNumber);
+              }
+              else {
+                  isDone = invitationService.inviteContact(notification);
+                  responses.add("Invitation has been sent to " + phoneNumber);
+                  FriendRequest friendRequest = new FriendRequest();
+                  friendRequest.setReceiverPhoneNumber(phoneNumber);
+                  friendRequest.setSenderPhoneNumber(userService.getUserById(addContactRequest.getUserId()).getPhoneNumber());
+                  friendRequest.setUserModel(userMapper.entityToModel(userService.getUserById(addContactRequest.getUserId())));
+                  OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+              }
             }
             else {
                 responses.add(phoneNumber + "not found");
