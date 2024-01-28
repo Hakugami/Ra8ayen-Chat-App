@@ -1,21 +1,22 @@
 package controllers;
 
+import Mapper.UpdateUser;
+import Mapper.UpdateUserImpl;
 import dto.Controller.AuthenticationController;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
+import dto.requests.UpdateUserRequest;
 import dto.responses.LoginResponse;
 import dto.responses.RegisterResponse;
+import dto.responses.UpdateUserResponse;
 import model.entities.User;
-import network.manager.NetworkManagerSingleton;
 import service.EncryptionService;
 import service.HashService;
 import service.UserService;
 import session.Session;
 import session.manager.SessionManager;
-
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -23,10 +24,11 @@ import java.util.logging.Logger;
 public class AuthenticationControllerSingleton extends UnicastRemoteObject implements AuthenticationController {
     private static final Logger logger = Logger.getLogger(AuthenticationController.class.getName());
     private static AuthenticationControllerSingleton instance;
-    private UserService userService;
-    private HashService hashService;
+    private final UserService userService;
+    private final HashService hashService;
     private EncryptionService encryptionService;
-    private SessionManager sessionManager;
+    private final SessionManager sessionManager;
+    private final UpdateUser updateUserMapper;
 
     private AuthenticationControllerSingleton() throws RemoteException {
         super();
@@ -34,6 +36,7 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
         hashService = new HashService("hashing.properties");
         encryptionService = new EncryptionService("keystore.jceks", "Buh123!","Buh1234!", "encryption.properties");
         sessionManager = SessionManager.getInstance();
+        updateUserMapper = new UpdateUserImpl();
     }
 
 
@@ -72,16 +75,28 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
         registerRequest.setPasswordHash(hashedPassword);
         userService.registerUser(registerRequest);
         User user = userService.getUserByPhoneNumber(registerRequest.getPhoneNumber());
+        RegisterResponse registerResponse = new RegisterResponse();
         if (user != null) {
-            RegisterResponse registerResponse = new RegisterResponse();
             registerResponse.setSuccess(true);
-            return registerResponse;
         } else {
-            RegisterResponse registerResponse = new RegisterResponse();
             registerResponse.setSuccess(false);
             registerResponse.setError("Registration failed. Please try again.");
-            return registerResponse;
         }
+        return registerResponse;
+    }
+
+    @Override
+    public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
+        User user = updateUserMapper.updateUserRequestToEntity(updateUserRequest);
+        userService.updateUser(user);
+        UpdateUserResponse updateUserResponse = new UpdateUserResponse();
+        updateUserResponse.setBio(user.getBio());
+        updateUserResponse.setEmailAddress(user.getEmailAddress());
+        updateUserResponse.setEmailAddress(user.getEmailAddress());
+        //updateUserResponse.setUserMode(user.getUserMode());
+        updateUserResponse.setUserName(user.getUserName());
+        updateUserResponse.setUpdated(true);
+        return updateUserResponse;
     }
 
     private String generateToken() {

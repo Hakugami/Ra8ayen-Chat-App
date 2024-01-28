@@ -41,6 +41,9 @@ public class UserService {
 
         return storedPassword.equals(enteredPassword);
     }
+    public boolean updateUser(User user) {
+        return userDaoImpl.update(user);
+    }
     public void deleteUser(User user) {
         userDaoImpl.delete(user);
     }

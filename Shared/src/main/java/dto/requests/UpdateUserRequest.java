@@ -11,13 +11,11 @@ public class UpdateUserRequest {
     private String bio;
     private UserStatus userStatus;
     private UserMode userMode;
-
-
     public enum UserStatus {
         Online, Offline
     }
     public enum UserMode{
-        Busy, Away,Available
+        Busy, Away, Available
     }
 
     public UpdateUserRequest(String userName, String emailAddress, byte[] profilePicture,
@@ -30,6 +28,9 @@ public class UpdateUserRequest {
         this.bio = bio;
         this.userStatus = userStatus;
         this.userMode = userMode;
+    }
+
+    public UpdateUserRequest() {
     }
 
     //setters

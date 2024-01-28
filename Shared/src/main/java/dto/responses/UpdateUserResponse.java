@@ -18,7 +18,7 @@ public class UpdateUserResponse {
         Online, Offline
     }
     public enum UserMode{
-        Busy, Away,Available
+        Busy, Away, Available
     }
 
     public UpdateUserResponse(String userName, String emailAddress, byte[] profilePicture, String passwordHash, String bio, UserStatus userStatus, UserMode userMode, boolean isUpdated, String errorMessage) {
@@ -33,6 +33,8 @@ public class UpdateUserResponse {
         this.errorMessage = errorMessage;
     }
 
+    public UpdateUserResponse() {
+    }
     //setter
 
 
@@ -113,7 +115,7 @@ public class UpdateUserResponse {
 
     @Override
     public String toString() {
-        return "UpdateUserRespnse{" +
+        return "UpdateUserResponse{" +
                 "userName='" + userName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", profilePicture=" + Arrays.toString(profilePicture) +
