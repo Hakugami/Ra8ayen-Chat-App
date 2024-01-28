@@ -18,6 +18,13 @@ public class AcceptFriendRequest extends NotificationModel implements Serializab
         this.userModel = userModel;
     }
 
+    //this constructor used only when user send invitation and found receiver sent before
+    public AcceptFriendRequest(int userID, String friendPhoneNumber){
+        super();
+        this.userID = userID;
+        this.friendPhoneNumber = friendPhoneNumber;
+    }
+
     public int getUserID() {
         return userID;
     }
