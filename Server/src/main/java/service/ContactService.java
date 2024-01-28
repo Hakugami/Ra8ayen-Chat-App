@@ -3,34 +3,77 @@ package service;
 import Mapper.ChatMapper;
 import Mapper.UserContactMapper;
 import dao.ChatDao;
+import dao.ChatParticipantsDao;
 import dao.UserContactsDao;
 import dao.UserDao;
 import dao.impl.ChatDaoImpl;
+import dao.impl.ChatParticipantsDaoImpl;
 import dao.impl.UserContactsDaoImpl;
 import dao.impl.UserDaoImpl;
 import dto.Controller.ContactsController;
+import dto.requests.AcceptFriendRequest;
 import dto.requests.DeleteUserContactRequest;
 import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
+import dto.responses.AcceptFriendResponse;
 import dto.responses.DeleteUserContactResponse;
 import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import model.entities.Chat;
+import model.entities.ChatParticipant;
 import model.entities.User;
 import model.entities.UserContacts;
-
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactService implements ContactsController {
+
     @Override
-    public GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) throws RemoteException, SQLException, ClassNotFoundException {
-        Chat privateChat = new Chat();
+    public AcceptFriendResponse addContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException {
+        int friendID = getFriendID(acceptFriendRequest);
+        int chatID = createChat(acceptFriendRequest);
+        addChatParticipants(acceptFriendRequest, friendID, chatID);
+        addUserContacts(acceptFriendRequest, friendID);
+        return new AcceptFriendResponse(true, "");
+    }
+
+    private int getFriendID(AcceptFriendRequest acceptFriendRequest) {
+        UserDao userDao = new UserDaoImpl();
+        return userDao.getUserByPhoneNumber(acceptFriendRequest.getFriendPhoneNumber()).getUserID();
+    }
+
+    private int createChat(AcceptFriendRequest acceptFriendRequest) {
+        ChatMapper chatMapper = new ChatMapper();
+        Chat chat = chatMapper.chatFromAcceptFriendRequest(acceptFriendRequest);
+        ChatDao chatDao = new ChatDaoImpl();
+        return chatDao.savePrivateChat(chat);
+    }
+
+    private void addChatParticipants(AcceptFriendRequest acceptFriendRequest, int friendID, int chatID) {
+        ChatParticipant chatParticipant = new ChatParticipant();
+        ChatParticipantsDao chatParticipantsDao = new ChatParticipantsDaoImpl();
+        chatParticipant.setChatId(chatID);
+        chatParticipant.setParticipantUserId(acceptFriendRequest.getUserID());
+        chatParticipantsDao.save(chatParticipant);
+        chatParticipant.setParticipantUserId(friendID);
+        chatParticipantsDao.save(chatParticipant);
+    }
+
+    private void addUserContacts(AcceptFriendRequest acceptFriendRequest, int friendID) {
+        UserContactMapper userContactMapper = new UserContactMapper();
+        UserContacts mineUserContacts = userContactMapper.UserContactFromAcceptFriendRequest(acceptFriendRequest.getUserID(),friendID);
+        UserContacts friendUserContacts = userContactMapper.UserContactFromAcceptFriendRequest(friendID,acceptFriendRequest.getUserID());
+        UserContactsDao userContactsDao = new UserContactsDaoImpl();
+        userContactsDao.save(mineUserContacts);
+        userContactsDao.save(friendUserContacts);
+    }
+
+    @Override
+    public GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) throws RemoteException {
         ChatDao chatDao = new ChatDaoImpl();
         ChatMapper chatMapper = new ChatMapper();
-        privateChat = chatDao.getPrivateChat(getContactChatRequest.getUserID(),getContactChatRequest.getFriendID());
+        Chat privateChat = chatDao.getPrivateChat(getContactChatRequest.getUserID(),getContactChatRequest.getFriendID());
         return chatMapper.chatToGetContactChatResponse(privateChat);
     }
 
@@ -56,7 +99,7 @@ public class ContactService implements ContactsController {
     }
 
     @Override
-    public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException, SQLException, ClassNotFoundException {
+    public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException {
         UserContactMapper userContactMapper = new UserContactMapper();
 
         UserContacts userContacts = userContactMapper.UserContactFromRequestDelete(deleteUserContactRequest);

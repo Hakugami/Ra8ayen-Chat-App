@@ -1,5 +1,6 @@
 package Mapper;
 
+import dto.requests.AcceptFriendRequest;
 import dto.requests.AddUserToGroupRequest;
 import model.entities.ChatParticipant;
 

@@ -121,6 +121,34 @@ public class ChatDaoImpl implements ChatDao {
     }
 
     @Override
+    public int savePrivateChat(Chat chat) {
+        String query = "INSERT INTO Chat (ChatName) VALUES (?)";
+        ResultSet generatedKeys = null;
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, chat.getName());
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (generatedKeys != null) {
+                try {
+                    generatedKeys.close();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Override
     public boolean update(Chat chat) {
         String query = "UPDATE Chat SET ChatName = ?, AdminID = ?, ChatImage = ? WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();

@@ -7,23 +7,23 @@ import java.io.Serializable;
 
 public class AcceptFriendRequest extends NotificationModel implements Serializable {
 
-    private String userPhoneNumber;
+    private int userID;
     private String friendPhoneNumber;
     private UserModel userModel;
 
-    public AcceptFriendRequest(String userPhoneNumber, String friendPhoneNumber, UserModel userModel) {
+    public AcceptFriendRequest(int userID, String friendPhoneNumber, UserModel userModel) {
         super();
-        this.userPhoneNumber = userPhoneNumber;
+        this.userID = userID;
         this.friendPhoneNumber = friendPhoneNumber;
         this.userModel = userModel;
     }
 
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUserPhoneNumber(String userPhoneNumber) {
-        this.userPhoneNumber = userPhoneNumber;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getFriendPhoneNumber() {
@@ -45,7 +45,7 @@ public class AcceptFriendRequest extends NotificationModel implements Serializab
     @Override
     public String toString() {
         return "AcceptFriendRequest{" +
-                "userPhoneNumber='" + userPhoneNumber + '\'' +
+                "userID='" + userID + '\'' +
                 ", friendPhoneNumber='" + friendPhoneNumber + '\'' +
                 '}';
     }

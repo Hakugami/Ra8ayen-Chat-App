@@ -44,4 +44,9 @@ public class UserContactMapper {
         return userContacts;
     }
 
+    public UserContacts UserContactFromAcceptFriendRequest(int userID, int friendID) {
+        UserContacts userContacts = new UserContacts(userID,friendID);
+        return userContacts;
+    }
+
 }

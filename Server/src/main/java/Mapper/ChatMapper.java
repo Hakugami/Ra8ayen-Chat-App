@@ -1,5 +1,6 @@
 package Mapper;
 
+import dto.requests.AcceptFriendRequest;
 import dto.requests.CreateGroupChatRequest;
 import dto.responses.CreateGroupChatResponse;
 import dto.responses.GetContactChatResponse;
@@ -39,5 +40,11 @@ public class ChatMapper {
         createGroupChatResponse.setGroupAdminId(chat.getAdminId());
         createGroupChatResponse.setGroupPicture(chat.getChatImage());
         return createGroupChatResponse;
+    }
+
+    public Chat chatFromAcceptFriendRequest(AcceptFriendRequest acceptFriendRequest){
+        Chat chat = new Chat();
+        chat.setName(acceptFriendRequest.getUserModel().getUserName());
+        return chat;
     }
 }

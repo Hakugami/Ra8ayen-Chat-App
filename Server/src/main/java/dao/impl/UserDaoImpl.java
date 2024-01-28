@@ -126,8 +126,7 @@ public class UserDaoImpl implements UserDao {
         }
         return false;
     }
-
-
+    @Override
     public User getUserByPhoneNumber(String phoneNumber) {
         User user = null;
         String query = "SELECT * FROM UserAccounts WHERE PhoneNumber = ?";

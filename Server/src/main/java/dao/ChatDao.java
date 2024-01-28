@@ -11,6 +11,7 @@ public interface ChatDao extends Dao<Chat>{
     List<Chat> getGroupChats(int userId);
     Chat getPrivateChat(int userId, int friendId);
     boolean save(Chat chatGroup);
+    int savePrivateChat(Chat chatPrivate);
     boolean update(Chat chatGroup);
     boolean delete(Chat chatGroup);
 
