@@ -58,7 +58,12 @@ public class UserModel  implements Serializable {
         contacts = new CopyOnWriteArrayList<>();
     }
 
-
+    public UserModel(int userID, String userName, String phoneNumber, byte[] profilePicture) {
+        this.userID = userID;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+    }
 
 
     public void setUserID(int userID) {

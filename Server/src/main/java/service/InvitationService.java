@@ -21,5 +21,7 @@ public class InvitationService {
     public boolean ReceiverMakeInviteBefore(Notification notification){
         return notificationDao.checkInvite(notification);
     }
-
+    public List<Notification> getNotifications(){
+        return notificationDao.getAll();
+    }
 }

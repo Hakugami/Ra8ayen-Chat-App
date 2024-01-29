@@ -4,10 +4,14 @@ import Mapper.InvitationMapper;
 import Mapper.UserMapper;
 import Mapper.UserMapperImpl;
 import dto.Controller.InvitationController;
+import dto.Model.NotificationModel;
+import dto.Model.UserModel;
 import dto.requests.AcceptFriendRequest;
 import dto.requests.AddContactRequest;
 import dto.requests.FriendRequest;
+import dto.requests.GetNotificationsRequest;
 import dto.responses.AddContactResponse;
+import dto.responses.GetNotificationsResponse;
 import model.entities.Notification;
 import model.entities.User;
 import service.ContactService;
@@ -18,6 +22,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InvitationControllerSingleton extends UnicastRemoteObject implements InvitationController {
     private static InvitationControllerSingleton instance;
@@ -74,6 +79,35 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         addContactResponse.setFriendsPhoneNumbers(addContactRequest.getFriendsPhoneNumbers());
         return addContactResponse;
     }
+
+    @Override
+    public GetNotificationsResponse getNotifications(GetNotificationsRequest getNotificationsRequest) throws RemoteException {
+        GetNotificationsResponse getNotificationsResponse = new GetNotificationsResponse();
+        List<Notification> notifications = invitationService.getNotifications();
+        notifications = notifications.stream()
+                .filter(notification -> notification.getReceiverId() != getNotificationsRequest.getUserID())
+                .toList();
+        List<Integer> senderIds = notifications.stream()
+                .map(Notification::getSenderId)
+                .toList();
+        List<User> senders = userService.getAllUsers();
+        senders = senders.stream()
+                .filter(user -> senderIds.contains(user.getUserID()))
+                .toList();
+
+        List<NotificationModel> notificationModels = notifications.stream()
+                .map(notification -> new NotificationModel(notification.getNotificationId(), notification.getNotificationMessage()))
+                .collect(Collectors.toList());
+
+        List<UserModel> userModels = senders.stream()
+                .map(user -> new UserModel(user.getUserID(), user.getUserName(), user.getPhoneNumber(), user.getProfilePicture()))
+                .collect(Collectors.toList());
+
+        getNotificationsResponse.setNotifications(notificationModels);
+        getNotificationsResponse.setUsers(userModels);
+        return getNotificationsResponse;
+    }
+
     private void AcceptUserAsFriend(int UserID, String PhoneNumber){
         AcceptFriendRequest acceptFriendRequest= new AcceptFriendRequest(UserID,PhoneNumber);
         try {
