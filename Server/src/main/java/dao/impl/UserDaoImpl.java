@@ -146,6 +146,26 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
+    @Override
+    public List<User> getContactsByUserID(int userId) {
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT ua.UserID, ua.PhoneNumber, ua.DisplayName, ua.ProfilePicture, ua.UserMode, ua.UserStatus, ua.Gender FROM UserContacts uc " +
+                "INNER JOIN  UserAccounts ua ON uc.FriendID = ua.UserID " +
+                "WHERE uc.UserID = ?;";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    userList.add(convertResultSetToUser(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return userList;
+    }
+
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {
         int userID = resultSet.getInt(UserTable.UserID.name());
         String phoneNumber = resultSet.getString(UserTable.PhoneNumber.name());

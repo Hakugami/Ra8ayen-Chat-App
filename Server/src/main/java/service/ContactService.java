@@ -77,8 +77,28 @@ public class ContactService{
         return chatMapper.chatToGetContactChatResponse(privateChat);
     }
 
-
     public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException {
+        UserDao userDao = new UserDaoImpl();
+        List<User> listOfUser = userDao.getContactsByUserID(getContactsRequest.getIdUser());
+
+        List<GetContactsResponse> listOfGetContactsResponse = new ArrayList<>();
+        for (User user : listOfUser) {
+            GetContactsResponse getContactsResponse = new GetContactsResponse();
+            getContactsResponse.setIdOfFriend(user.getUserID());
+            getContactsResponse.setName(user.getUserName());
+            getContactsResponse.setProfilePicture(user.getProfilePicture());
+            getContactsResponse.setPhoneNumber(user.getPhoneNumber());
+            getContactsResponse.setStatus(user.getUserStatus() == User.UserStatus.Online);
+            getContactsResponse.setUserStatus(GetContactsResponse.UserStatus.valueOf(user.getUserStatus().name()));
+            getContactsResponse.setUserMode(GetContactsResponse.UserMode.valueOf(user.getUsermode().name()));
+            getContactsResponse.setLastLogin(user.getLastLogin());
+            listOfGetContactsResponse.add(getContactsResponse);
+        }
+
+        return listOfGetContactsResponse;
+    }
+
+    /*public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException {
 
         UserContactMapper userContactMapper = new UserContactMapper();
         User userContacts = userContactMapper.UserContactFromRequestGet(getContactsRequest);
@@ -96,7 +116,7 @@ public class ContactService{
             }
         }
         return listOfUserContactResponse;
-    }
+    }*/
 
 
     public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException {

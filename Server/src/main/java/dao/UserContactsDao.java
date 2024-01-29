@@ -11,5 +11,4 @@ public interface UserContactsDao extends Dao<UserContacts>{
     List<UserContacts> getAll();
     boolean update(UserContacts notification);
     boolean delete(UserContacts notification);
-    List<UserContacts> getContactById(User user);
 }
