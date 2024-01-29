@@ -4,20 +4,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class ContactData {
-  private String Name;
-  private String phoneNumber;
-  private Color color;
+    private int id;
+    private String Name;
+    private String phoneNumber;
+    private Color color;
 
-  private String url;
+    private String url;
 
-  private ImageView image;
+    private ImageView image;
 
     public ContactData(String name, Color color, String url) {
         Name = name;
         this.color = color;
-        this.url=url;
+        this.url = url;
     }
-    public ContactData(){
+
+    public ContactData() {
 
     }
 
@@ -59,5 +61,13 @@ public class ContactData {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

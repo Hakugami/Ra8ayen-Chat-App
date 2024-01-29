@@ -57,6 +57,7 @@ public class CurrentUser extends UserModel {
             ContactData contactData = new ContactData();
             contactData.setName(userModel.getName());
             contactData.setPhoneNumber(userModel.getPhoneNumber());
+            contactData.setId(userModel.getIdOfFriend());
             Color color = userModel.getUserStatus().name().equals("Online") ? Color.GREEN : Color.RED;
             contactData.setColor(color);
             BufferedImage bufferedImage = ImageUtls.convertByteToImage(userModel.getProfilePicture());

@@ -79,7 +79,6 @@ void setTreeViewData() throws RemoteException {
 
     for (ContactData contact : observableContactDataList) {
         Color color = contact.getColor();
-        String url = contact.getUrl();
         TreeItem<Node> contactNode = new TreeItem<>(loadFXML(contact));
         if (color.equals(Color.GREEN)) {
             rootOnline.getChildren().add(contactNode);
