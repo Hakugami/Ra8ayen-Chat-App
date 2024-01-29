@@ -2,6 +2,8 @@ package controller;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,52 +39,63 @@ public class ContactsController implements Initializable {
     @FXML
     public Circle imageClip;
 
+    public ObservableList<ContactData> observableContactDataList;
+
     public final ObjectProperty<ContactData> selectedContact = new SimpleObjectProperty<>( new ContactData());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        observableContactDataList = FXCollections.observableArrayList();
         try {
             setImageProfileData();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        setTreeViewData();
+        try {
+            setTreeViewData();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         addListenerToTreeView();
     }
 
-    void setTreeViewData() {
-        TreeItem<Node> rootParent = new TreeItem<>();
 
-        Label label = new Label("Contacts");
-        label.setStyle("-fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #CA3503;");
-        label.setFont(Font.font("Arial", 40));
-        label.setPrefWidth(300);
-        label.setPrefHeight(25);
-        rootParent = new TreeItem<>(label);
+private void setTreeViewData() throws RemoteException {
+    observableContactDataList.setAll(CurrentUser.getInstance().getContactDataList());
+    TreeItem<Node> rootParent = new TreeItem<>();
 
-        TreeItem<Node> rootOnline = new TreeItem<>(loadFXML("Online", Color.GREEN, "Contacts/StatusElement.fxml"));
-        rootOnline.setExpanded(true);
-        rootOnline.getChildren().addAll(
-                new TreeItem<>(loadFXML(new ContactData("Reem", Color.CYAN, "/images/personone.jpg"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Shrouk", Color.BURLYWOOD, "/images/persontwo.jpg"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Rawda", Color.YELLOW, "/images/personfour.jpg"), "ContactElement.fxml"))
-        );
+    Label label = new Label("Contacts");
+    label.setStyle("-fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #CA3503;");
+    label.setFont(Font.font("Arial", 40));
+    label.setPrefWidth(300);
+    label.setPrefHeight(25);
+    rootParent = new TreeItem<>(label);
 
-        TreeItem<Node> rootOffline = new TreeItem<>(loadFXML("Offline", Color.RED, "StatusElement.fxml"));
-        rootOffline.setExpanded(true);
-        rootOffline.getChildren().addAll(
-                new TreeItem<>(loadFXML(new ContactData("Reem", Color.CYAN, "/images/personseven.png"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Shrouk", Color.BURLYWOOD, "/images/personthree.jpg"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Rawda", Color.YELLOW, "/images/personten.png"), "ContactElement.fxml"))
-        );
+    TreeItem<Node> rootOnline = new TreeItem<>(loadFXML("Online", Color.GREEN));
+    rootOnline.setExpanded(true);
 
-        rootParent.setExpanded(true);
-        rootParent.getChildren().addAll(rootOnline, rootOffline);
+    TreeItem<Node> rootOffline = new TreeItem<>(loadFXML("Offline", Color.RED));
+    rootOffline.setExpanded(true);
 
-        treeView.setRoot(rootParent);
+    for (ContactData contact : observableContactDataList) {
+        Color color = contact.getColor();
+        String url = contact.getUrl();
+        TreeItem<Node> contactNode = new TreeItem<>(loadFXML(contact));
+        if (color.equals(Color.GREEN)) {
+            rootOnline.getChildren().add(contactNode);
+        } else {
+            rootOffline.getChildren().add(contactNode);
+        }
     }
 
-    void setImageProfileData() throws RemoteException {
+    rootParent.setExpanded(true);
+    rootParent.getChildren().addAll(rootOnline, rootOffline);
+
+    treeView.setRoot(rootParent);
+
+}
+
+    private void setImageProfileData() throws RemoteException {
         ImagProfile.setFitWidth(imageClip.getRadius() * 2);
         ImagProfile.setFitHeight(imageClip.getRadius() * 2);
         displayName.setText(CurrentUser.getInstance().getUserName());
@@ -95,7 +108,7 @@ public class ContactsController implements Initializable {
         }
     }
 
-Node loadFXML(String status, Color color, String fxmlFile) {
+private Node loadFXML(String status, Color color) {
     try {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/StatusElement.fxml"));
         Node node = loader.load();
@@ -108,7 +121,7 @@ Node loadFXML(String status, Color color, String fxmlFile) {
     }
 }
 
-Node loadFXML(ContactData contactData, String fxmlFile) {
+private Node loadFXML(ContactData contactData) {
     try {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
         Node node = loader.load();
@@ -122,7 +135,7 @@ Node loadFXML(ContactData contactData, String fxmlFile) {
     }
 }
 
-void addListenerToTreeView() {
+private void addListenerToTreeView() {
     System.out.println("TreeView initialized with " + treeView.getExpandedItemCount() + " items");
 
     treeView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {

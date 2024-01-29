@@ -24,4 +24,5 @@ public interface CallBackController extends Remote {
     public void receiveAddContactRequest(FriendRequest friendRequest) throws RemoteException;
     public void createNewChat(String senderPhoneNumber) throws RemoteException;
     public void receiveAnnouncement(String announcement, String announcementTitle) throws RemoteException;
+    public void updateOnlineList() throws RemoteException;
 }

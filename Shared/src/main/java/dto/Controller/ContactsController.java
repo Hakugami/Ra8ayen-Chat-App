@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ContactsController extends Remote {
-    AcceptFriendResponse addContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException;
+    AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException;
     GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) throws RemoteException, SQLException, ClassNotFoundException;
 
     List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException, SQLException, ClassNotFoundException;

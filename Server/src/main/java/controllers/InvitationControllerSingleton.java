@@ -111,7 +111,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     private void AcceptUserAsFriend(int UserID, String PhoneNumber){
         AcceptFriendRequest acceptFriendRequest= new AcceptFriendRequest(UserID,PhoneNumber);
         try {
-            contactService.addContact(acceptFriendRequest);
+            contactService.acceptContact(acceptFriendRequest);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -37,12 +37,14 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     @Override
     public void receiveNotification(NotificationModel notification) throws RemoteException {
         NotificationManager.getInstance().addNotification(notification);
-        try {
-            Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
+            Platform.runLater(()-> {
+                try {
+                    Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
     }
 
     @Override
@@ -63,5 +65,10 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     @Override
     public void receiveAnnouncement(String announcement, String announcementTitle) {
         Platform.runLater(()->Notifications.create().title(announcementTitle).text(announcement).showInformation());
+    }
+
+    @Override
+    public void updateOnlineList() throws RemoteException {
+
     }
 }

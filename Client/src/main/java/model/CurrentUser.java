@@ -3,8 +3,11 @@ package model;
 import controller.CallBackControllerImpl;
 import controller.ContactData;
 import dto.Model.UserModel;
+import dto.responses.GetContactsResponse;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import utils.ImageUtls;
 
 import java.awt.image.BufferedImage;
@@ -40,6 +43,28 @@ public class CurrentUser extends UserModel {
         return profilePictureImage;
     }
 
+    public List<ContactData> getContactDataList() {
+        return contactDataList;
+    }
+
+    public void setContactDataList(List<ContactData> contactDataList) {
+        this.contactDataList = contactDataList;
+    }
+
+    public void loadContactsList(List<GetContactsResponse> contactDataList) {
+        this.contactDataList.clear();
+        for (GetContactsResponse userModel : contactDataList) {
+            ContactData contactData = new ContactData();
+            contactData.setName(userModel.getName());
+            contactData.setPhoneNumber(userModel.getPhoneNumber());
+            Color color = userModel.getUserStatus().name().equals("Online") ? Color.GREEN : Color.RED;
+            contactData.setColor(color);
+            BufferedImage bufferedImage = ImageUtls.convertByteToImage(userModel.getProfilePicture());
+            Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+            contactData.setImage(new ImageView(fxImage));
+            this.contactDataList.add(contactData);
+        }
+    }
     public void loadUser(UserModel user) {
         this.setUserID(user.getUserID());
         this.setUserName(user.getUserName());

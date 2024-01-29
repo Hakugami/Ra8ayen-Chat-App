@@ -85,7 +85,6 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatParticipant.getChatId());
             statement.setInt(2, chatParticipant.getParticipantUserId());
-            statement.setTimestamp(3, Timestamp.valueOf(chatParticipant.getParticipantStartDate()));
             int rowsAffected = statement.executeUpdate();
             if(rowsAffected >= 1) {
                 return true;

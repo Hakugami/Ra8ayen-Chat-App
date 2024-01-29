@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 
 public class ContactData {
   private String Name;
+  private String phoneNumber;
   private Color color;
 
   private String url;
@@ -50,5 +51,13 @@ public class ContactData {
 
     public ImageView getImage() {
         return image;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

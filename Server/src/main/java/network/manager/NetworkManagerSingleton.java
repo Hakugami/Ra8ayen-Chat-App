@@ -2,6 +2,8 @@ package network.manager;
 
 import controllers.*;
 import lookupnames.LookUpNames;
+import service.ContactService;
+
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -48,6 +50,7 @@ public class NetworkManagerSingleton {
             registry.rebind(LookUpNames.INVITATIONCONTROLLER.name(), InvitationControllerSingleton.getInstance());
             registry.rebind(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
             registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
+            registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
             setServerRunning(true);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());

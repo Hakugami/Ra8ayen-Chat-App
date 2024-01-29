@@ -3,16 +3,19 @@ package dto.requests;
 import java.io.Serializable;
 
 public class GetContactsRequest implements Serializable {
-    private String IdUser;
+    private int IdUser;
 
-    public String getIdUser() {
+    public int getIdUser() {
         return IdUser;
     }
 
-    public void setIdUser(String idUser) {
+    public void setIdUser(int idUser) {
         IdUser = idUser;
     }
-    GetContactsRequest(){
+    public GetContactsRequest(){
 
+    }
+    public GetContactsRequest(int idUser){
+        this.IdUser = idUser;
     }
 }

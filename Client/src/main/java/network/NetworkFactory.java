@@ -2,20 +2,15 @@ package network;// Java
 
 import dto.Controller.*;
 import dto.Model.UserModel;
-import dto.requests.AddContactRequest;
-import dto.requests.LoginRequest;
-import dto.requests.RegisterRequest;
-import dto.requests.SendMessageRequest;
-import dto.responses.AddContactResponse;
-import dto.responses.LoginResponse;
-import dto.responses.RegisterResponse;
-import dto.responses.SendMessageResponse;
+import dto.requests.*;
+import dto.responses.*;
 import lookupnames.LookUpNames;
 import network.manager.NetworkManager;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class NetworkFactory {
     private static NetworkFactory instance;
@@ -73,6 +68,16 @@ public class NetworkFactory {
     public AddContactResponse addContact(AddContactRequest request) throws RemoteException, NotBoundException {
         InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
         return controller.addContact(request);
+    }
+
+    public AcceptFriendResponse acceptFriendRequest(AcceptFriendRequest request) throws RemoteException, NotBoundException {
+        ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
+        return controller.acceptContact(request);
+    }
+
+    public List<GetContactsResponse> getContacts(GetContactsRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
+        return controller.getContacts(request);
     }
 
 }

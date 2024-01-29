@@ -27,10 +27,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactService implements ContactsController {
+public class ContactService{
 
-    @Override
-    public AcceptFriendResponse addContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException {
+
+    public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException {
         int friendID = getFriendID(acceptFriendRequest);
         int chatID = createChat(acceptFriendRequest);
         addChatParticipants(acceptFriendRequest, friendID, chatID);
@@ -69,7 +69,7 @@ public class ContactService implements ContactsController {
         userContactsDao.save(friendUserContacts);
     }
 
-    @Override
+
     public GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) throws RemoteException {
         ChatDao chatDao = new ChatDaoImpl();
         ChatMapper chatMapper = new ChatMapper();
@@ -77,7 +77,7 @@ public class ContactService implements ContactsController {
         return chatMapper.chatToGetContactChatResponse(privateChat);
     }
 
-    @Override
+
     public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException {
 
         UserContactMapper userContactMapper = new UserContactMapper();
@@ -98,7 +98,7 @@ public class ContactService implements ContactsController {
         return listOfUserContactResponse;
     }
 
-    @Override
+
     public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException {
         UserContactMapper userContactMapper = new UserContactMapper();
 

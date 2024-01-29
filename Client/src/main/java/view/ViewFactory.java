@@ -65,7 +65,7 @@ public class ViewFactory {
 
     public Node getProfile() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Profile.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/Profile.fxml")).load();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,13 +101,13 @@ public class ViewFactory {
     }
 
     public void showThemes() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Themes.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/Themes.fxml"));
         createStage(loader);
     }
 
     public Node getThemes() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Themes.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/Themes.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

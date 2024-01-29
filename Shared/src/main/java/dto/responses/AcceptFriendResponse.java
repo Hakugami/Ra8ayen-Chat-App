@@ -1,6 +1,8 @@
 package dto.responses;
 
-public class AcceptFriendResponse {
+import java.io.Serializable;
+
+public class AcceptFriendResponse implements Serializable {
     boolean isDone;
     String errorMessage;
 

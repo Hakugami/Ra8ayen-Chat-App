@@ -45,12 +45,13 @@ public class NotificationContextMenuController implements Initializable {
         });
     }
 
-    public void populateNotificationListItems() {
-        notificationListItems = (ObservableList<UserModel>) NotificationManager.getInstance().getNotifactionsList().stream()
-                .filter(notificationModel -> notificationModel instanceof FriendRequest)
-                .map(notificationModel -> ((FriendRequest) notificationModel).getUserModel())
-                .distinct() // This will remove duplicates
-                .collect(Collectors.toList()
-        );
-    }
+public void populateNotificationListItems() {
+    notificationListItems = FXCollections.observableArrayList(
+        NotificationManager.getInstance().getNotifactionsList().stream()
+            .filter(notificationModel -> notificationModel instanceof FriendRequest)
+            .map(notificationModel -> ((FriendRequest) notificationModel).getUserModel())
+            .distinct() // This will remove duplicates
+            .collect(Collectors.toList())
+    );
+}
 }
