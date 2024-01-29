@@ -4,15 +4,20 @@ import dto.Controller.CallBackController;
 import dto.Model.MessageModel;
 import dto.Model.NotificationModel;
 import dto.requests.FriendRequest;
+import dto.requests.GetContactsRequest;
 import javafx.application.Platform;
+import model.CurrentUser;
 import model.Model;
+import network.NetworkFactory;
 import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 
 public class CallBackControllerImpl extends UnicastRemoteObject implements CallBackController, Serializable {
     private static CallBackControllerImpl callBackController;
@@ -68,7 +73,14 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     }
 
     @Override
-    public void updateOnlineList() throws RemoteException {
-
+    public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+        CurrentUser.getInstance().loadContactsList(NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID())));
+        Platform.runLater(()-> {
+            try {
+                Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

@@ -12,7 +12,7 @@ public enum UserTable {
     Country,
     DateOfBirth,
     Bio,
-    UserStatus,
     UserMode,
+    UserStatus,
     LastLogin;
 }

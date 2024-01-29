@@ -1,5 +1,7 @@
 package controller;
 
+import dto.requests.GetContactsRequest;
+import dto.responses.GetContactsResponse;
 import token.TokenManager;
 import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
@@ -22,6 +24,7 @@ import network.NetworkFactory;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class LoginController {
 
@@ -88,6 +91,9 @@ public class LoginController {
                     if (loginResponse.getSuccess()) {
                         NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
                         CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(token));
+                        List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
+                        CurrentUser.getInstance().loadContactsList(responses);
+                        System.out.println(CurrentUser.getInstance().getContactDataList().size());
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));

@@ -11,8 +11,10 @@ import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import service.ContactService;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,7 +37,7 @@ public class ContactsControllerSingleton extends UnicastRemoteObject  implements
     }
 
     @Override
-    public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException {
+    public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
             return contactService.acceptContact(acceptFriendRequest);
     }
 

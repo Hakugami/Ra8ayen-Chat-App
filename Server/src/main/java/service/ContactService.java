@@ -2,6 +2,7 @@ package service;
 
 import Mapper.ChatMapper;
 import Mapper.UserContactMapper;
+import controllers.OnlineControllerImpl;
 import dao.ChatDao;
 import dao.ChatParticipantsDao;
 import dao.UserContactsDao;
@@ -11,6 +12,7 @@ import dao.impl.ChatParticipantsDaoImpl;
 import dao.impl.UserContactsDaoImpl;
 import dao.impl.UserDaoImpl;
 import dto.Controller.ContactsController;
+import dto.Controller.OnlineController;
 import dto.requests.AcceptFriendRequest;
 import dto.requests.DeleteUserContactRequest;
 import dto.requests.GetContactChatRequest;
@@ -23,18 +25,22 @@ import model.entities.Chat;
 import model.entities.ChatParticipant;
 import model.entities.User;
 import model.entities.UserContacts;
+
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactService{
 
 
-    public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException {
+    public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
         int friendID = getFriendID(acceptFriendRequest);
         int chatID = createChat(acceptFriendRequest);
         addChatParticipants(acceptFriendRequest, friendID, chatID);
         addUserContacts(acceptFriendRequest, friendID);
+        OnlineControllerImpl.clients.get(acceptFriendRequest.getFriendPhoneNumber()).updateOnlineList();
         return new AcceptFriendResponse(true, "");
     }
 

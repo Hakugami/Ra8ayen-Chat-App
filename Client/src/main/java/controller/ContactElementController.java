@@ -31,17 +31,7 @@ public class ContactElementController {
     public void setStatus(Color color) {
         status.setFill(color);
     }
-    public void setUrl(String url){
-        String imagePath = url;
-
-        // Get the URL of the image
-        URL imageUrl = ContactElementController.class.getResource(imagePath);
-        if(imageUrl!=null) {
-            System.out.println(imageUrl);
-            Image newImage = new Image(imageUrl.toString());
-            ImagId.setImage(newImage);
-        }else{
-            System.out.println("Null data found");
-        }
+    public void setImagId(Image image) {
+        ImagId.setImage(image);
     }
 }

@@ -32,7 +32,6 @@ public class ContactsController implements Initializable {
     public TextField searchField;
     @FXML
     TreeView<Node> treeView;
-
     @FXML
     public ImageView ImagProfile;
 
@@ -60,8 +59,9 @@ public class ContactsController implements Initializable {
     }
 
 
-private void setTreeViewData() throws RemoteException {
+void setTreeViewData() throws RemoteException {
     observableContactDataList.setAll(CurrentUser.getInstance().getContactDataList());
+
     TreeItem<Node> rootParent = new TreeItem<>();
 
     Label label = new Label("Contacts");
@@ -128,7 +128,7 @@ private Node loadFXML(ContactData contactData) {
         ContactElementController controller = loader.getController();
         controller.setName(contactData.getName());
         controller.setStatus(contactData.getColor());
-        controller.setUrl(contactData.getUrl());
+        controller.setImagId(contactData.getImage().getImage());
         return new HBox(node); // Wrap the Node in an HBox
     } catch (IOException e) {
         throw new RuntimeException(e);

@@ -17,6 +17,7 @@ import utils.ImageUtls;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class NotificationElementController implements Initializable {
@@ -34,6 +35,8 @@ public class NotificationElementController implements Initializable {
                 acceptButtonAction();
             } catch (RemoteException | NotBoundException e) {
                 e.printStackTrace();
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         });
     }
@@ -45,10 +48,10 @@ public class NotificationElementController implements Initializable {
         this.friendModel = userModel;
     }
 
-    public void acceptButtonAction() throws RemoteException, NotBoundException {
+    public void acceptButtonAction() throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
         UserModel model = loadCurrentUserToModel();
 
-        AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest(CurrentUser.getInstance().getUserID(),friendModel.getPhoneNumber(),model);
+        AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest(CurrentUser.getInstance().getUserID(),CurrentUser.getInstance().getPhoneNumber(),friendModel.getPhoneNumber(),model);
         AcceptFriendResponse acceptFriendResponse= NetworkFactory.getInstance().acceptFriendRequest(acceptFriendRequest);
         if(acceptFriendResponse.isDone()){
             acceptButton.setDisable(true);

@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class User {
@@ -168,12 +169,22 @@ public class User {
         return lastLogin;
     }
 
-    
-
-
-
-  
-   
-  
-    
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userName='" + userName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", profilePicture=" + Arrays.toString(profilePicture) +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", gender=" + gender +
+                ", country='" + country + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", bio='" + bio + '\'' +
+                ", userStatus=" + userStatus +
+                ", lastLogin='" + lastLogin + '\'' +
+                ", userMode=" + userMode +
+                '}';
+    }
 }

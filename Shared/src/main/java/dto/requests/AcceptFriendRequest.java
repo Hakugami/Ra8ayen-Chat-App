@@ -8,14 +8,16 @@ import java.io.Serializable;
 public class AcceptFriendRequest extends NotificationModel implements Serializable {
 
     private int userID;
+    private String myPhoneNumber;
     private String friendPhoneNumber;
     private UserModel userModel;
 
-    public AcceptFriendRequest(int userID, String friendPhoneNumber, UserModel userModel) {
+    public AcceptFriendRequest(int userID,String myPhoneNumber, String friendPhoneNumber, UserModel userModel) {
         super();
         this.userID = userID;
         this.friendPhoneNumber = friendPhoneNumber;
         this.userModel = userModel;
+        this.myPhoneNumber = myPhoneNumber;
     }
 
     //this constructor used only when user send invitation and found receiver sent before
@@ -47,6 +49,14 @@ public class AcceptFriendRequest extends NotificationModel implements Serializab
 
     public void setUserModel(UserModel userModel) {
         this.userModel = userModel;
+    }
+
+    public String getMyPhoneNumber() {
+        return myPhoneNumber;
+    }
+
+    public void setMyPhoneNumber(String myPhoneNumber) {
+        this.myPhoneNumber = myPhoneNumber;
     }
 
     @Override

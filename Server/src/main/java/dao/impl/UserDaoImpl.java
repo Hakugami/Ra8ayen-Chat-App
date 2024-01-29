@@ -148,6 +148,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getContactsByUserID(int userId) {
+
         List<User> userList = new ArrayList<>();
         String query = "SELECT ua.UserID, ua.PhoneNumber, ua.DisplayName, ua.ProfilePicture, ua.UserMode, ua.UserStatus, ua.Gender FROM UserContacts uc " +
                 "INNER JOIN  UserAccounts ua ON uc.FriendID = ua.UserID " +
@@ -163,6 +164,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
         return userList;
     }
 

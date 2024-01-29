@@ -18,8 +18,10 @@ import service.ContactService;
 import service.InvitationService;
 import service.UserService;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -112,7 +114,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         AcceptFriendRequest acceptFriendRequest= new AcceptFriendRequest(UserID,PhoneNumber);
         try {
             contactService.acceptContact(acceptFriendRequest);
-        } catch (RemoteException e) {
+        } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
