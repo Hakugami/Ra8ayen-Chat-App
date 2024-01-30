@@ -13,6 +13,5 @@ import java.sql.SQLException;
 
 public interface AuthenticationController extends Remote {
         LoginResponse login (LoginRequest loginRequest) throws RemoteException, SQLException, ClassNotFoundException;
-        UpdateUserResponse update (UpdateUserRequest updateUserRequest) throws RemoteException, SQLException, ClassNotFoundException;
         RegisterResponse register (RegisterRequest registerRequest) throws RemoteException, SQLException, ClassNotFoundException;
 }

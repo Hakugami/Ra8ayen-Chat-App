@@ -1,7 +1,10 @@
 package controllers;
 
+import Mapper.UpdateUserImpl;
 import dto.Controller.UserProfileController;
 import dto.Model.UserModel;
+import dto.requests.UpdateUserRequest;
+import dto.responses.UpdateUserResponse;
 import model.entities.User;
 import service.UserService;
 import session.Session;
@@ -16,10 +19,12 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     private static UserProfileControllerSingleton userProfileControllerSingleton;
     UserService userService;
     SessionManager sessionManager;
+    UpdateUserImpl updateUserMapper;
     private UserProfileControllerSingleton() throws RemoteException {
         super();
         userService = new UserService();
         sessionManager = SessionManager.getInstance();
+        updateUserMapper = new UpdateUserImpl();
     }
     public static UserProfileControllerSingleton getInstance() throws RemoteException {
         if (userProfileControllerSingleton == null) {
@@ -29,8 +34,16 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         return userProfileControllerSingleton;
     }
     @Override
-    public UserModel update(UserModel userModel) throws RemoteException {
-        return null;
+    public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
+        User user = updateUserMapper.updateUserRequestToEntity(updateUserRequest);
+        userService.updateUser(user);
+        UpdateUserResponse updateUserResponse = new UpdateUserResponse();
+        updateUserResponse.setBio(user.getBio());
+        updateUserResponse.setEmailAddress(user.getEmailAddress());
+        updateUserResponse.setEmailAddress(user.getEmailAddress());
+        updateUserResponse.setUserName(user.getUserName());
+        updateUserResponse.setUpdated(true);
+        return updateUserResponse;
     }
 
     @Override
@@ -47,4 +60,6 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         logger.info("Couldn't find session.");
         return null;
     }
+
+
 }

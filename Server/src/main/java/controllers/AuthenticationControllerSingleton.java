@@ -1,14 +1,10 @@
 package controllers;
 
-import Mapper.UpdateUser;
-import Mapper.UpdateUserImpl;
 import dto.Controller.AuthenticationController;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
-import dto.requests.UpdateUserRequest;
 import dto.responses.LoginResponse;
 import dto.responses.RegisterResponse;
-import dto.responses.UpdateUserResponse;
 import model.entities.User;
 import service.EncryptionService;
 import service.HashService;
@@ -28,15 +24,12 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
     private final HashService hashService;
     private EncryptionService encryptionService;
     private final SessionManager sessionManager;
-    private final UpdateUser updateUserMapper;
-
     private AuthenticationControllerSingleton() throws RemoteException {
         super();
         userService = new UserService();
         hashService = new HashService("hashing.properties");
         encryptionService = new EncryptionService("keystore.jceks", "Buh123!","Buh1234!", "encryption.properties");
         sessionManager = SessionManager.getInstance();
-        updateUserMapper = new UpdateUserImpl();
     }
 
 
@@ -83,20 +76,6 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
             registerResponse.setError("Registration failed. Please try again.");
         }
         return registerResponse;
-    }
-
-    @Override
-    public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
-        User user = updateUserMapper.updateUserRequestToEntity(updateUserRequest);
-        userService.updateUser(user);
-        UpdateUserResponse updateUserResponse = new UpdateUserResponse();
-        updateUserResponse.setBio(user.getBio());
-        updateUserResponse.setEmailAddress(user.getEmailAddress());
-        updateUserResponse.setEmailAddress(user.getEmailAddress());
-        //updateUserResponse.setUserMode(user.getUserMode());
-        updateUserResponse.setUserName(user.getUserName());
-        updateUserResponse.setUpdated(true);
-        return updateUserResponse;
     }
 
     private String generateToken() {
