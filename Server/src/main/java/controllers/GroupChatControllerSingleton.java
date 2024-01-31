@@ -11,6 +11,7 @@ import dto.responses.CreateGroupChatResponse;
 import dto.responses.GetGroupResponse;
 import model.entities.Chat;
 import model.entities.ChatParticipant;
+import service.ContactService;
 import service.GroupService;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -22,11 +23,13 @@ public class GroupChatControllerSingleton extends UnicastRemoteObject implements
     private final ChatMapper chatMapper;
     private final ChatParticipantMapper chatParticipantMapper;
     private final GroupService groupService;
+    private final ContactService contactService;
     private GroupChatControllerSingleton() throws RemoteException {
         super();
         chatMapper = new ChatMapper();
         chatParticipantMapper = new ChatParticipantMapper();
         groupService = new GroupService();
+        contactService = new ContactService();
     }
 
     public static GroupChatControllerSingleton getInstance() throws RemoteException {
@@ -49,10 +52,20 @@ public class GroupChatControllerSingleton extends UnicastRemoteObject implements
     @Override
     public CreateGroupChatResponse createGroupChat(CreateGroupChatRequest request) throws RemoteException {
         Chat chat = chatMapper.createGroupChatRequestToChat(request);
-        CreateGroupChatResponse createGroupChatResponse = chatMapper.chatToCreateGroupChatResponse(chat);
-        boolean isCreated = groupService.createGroup(chat);
+        List<Integer> friends = contactService.getFriends(request.getFriendsPhoneNumbers(), request.getAdminID());
+        CreateGroupChatResponse createGroupChatResponse = new CreateGroupChatResponse();
+        int chatId = groupService.createGroup(chat);
+        boolean isCreated = chatId != -1;
+        if (chatId != -1) {
+            for (Integer friend : friends) {
+                ChatParticipant chatParticipant = new ChatParticipant();
+                chatParticipant.setChatId(chatId);
+                chatParticipant.setParticipantUserId(friend);
+                groupService.addUserToGroup(chatParticipant);
+            }
+        }
         createGroupChatResponse.setCreated(isCreated);
-        createGroupChatResponse.setErrorMessage("");
+        createGroupChatResponse.setResponses(request.getFriendsPhoneNumbers());
         return createGroupChatResponse;
     }
 

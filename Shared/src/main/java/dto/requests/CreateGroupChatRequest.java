@@ -8,10 +8,20 @@ public class CreateGroupChatRequest implements Serializable {
     private int adminID;
     private String groupName;
     private byte[] groupImage;
-    public CreateGroupChatRequest(int adminID, String groupName, byte[] groupImage, List<Integer> participants) {
+    private List<String> friendsPhoneNumbers;
+    public CreateGroupChatRequest(int adminID, String groupName, byte[] groupImage, List<String> friendsPhoneNumbers) {
         this.adminID = adminID;
         this.groupName = groupName;
         this.groupImage = groupImage;
+        this.friendsPhoneNumbers = friendsPhoneNumbers;
+    }
+
+    public List<String> getFriendsPhoneNumbers() {
+        return friendsPhoneNumbers;
+    }
+
+    public void setFriendsPhoneNumbers(List<String> friendsPhoneNumbers) {
+        this.friendsPhoneNumbers = friendsPhoneNumbers;
     }
 
     public int getAdminID() {
@@ -37,12 +47,14 @@ public class CreateGroupChatRequest implements Serializable {
     public void setGroupImage(byte[] groupImage) {
         this.groupImage = groupImage;
     }
+
     @Override
     public String toString() {
         return "CreateGroupChatRequest{" +
                 "adminID=" + adminID +
                 ", groupName='" + groupName + '\'' +
                 ", groupImage=" + Arrays.toString(groupImage) +
+                ", friendsPhoneNumbers=" + friendsPhoneNumbers +
                 '}';
     }
 }

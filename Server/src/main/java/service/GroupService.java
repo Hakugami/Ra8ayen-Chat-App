@@ -15,16 +15,11 @@ public class GroupService {
     }
 
     public List<Chat> getUserGroups(int userId) {
-        /*List<ChatParticipant> userChats = chatParticipantsDaoImpl.getChats(userId);
-        List<Chat> chats = chatDaoImpl.getAll();
-        chats = chats.stream()
-                .filter(chat -> chat.getAdminId() != 0 && userChats.stream().anyMatch(chatParticipant -> chatParticipant.getChatId() == chat.getChatId()))
-                .collect(Collectors.toList());*/
         return chatDaoImpl.getGroupChats(userId);
     }
 
-    public boolean createGroup(Chat chat) {
-        return chatDaoImpl.save(chat);
+    public int createGroup(Chat chat) {
+        return chatDaoImpl.saveGroupChat(chat);
     }
 
     public boolean addUserToGroup(ChatParticipant chatParticipant) {

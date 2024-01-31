@@ -3,6 +3,7 @@ package dao.impl;
 import dao.UserContactsDao;
 import model.entities.User;
 import model.entities.UserContacts;
+import model.entities.UserContactsTable;
 import persistence.connection.DataSourceSingleton;
 
 import java.sql.*;
@@ -60,6 +61,24 @@ public class UserContactsDaoImpl implements UserContactsDao {
             System.out.println(e.getMessage());
         }
         return userContactsList;
+    }
+
+    @Override
+    public List<Integer> getFriendsIDs(int userId) {
+        List<Integer> friendIds = new ArrayList<>();
+        String query = "SELECT FriendID FROM UserContacts WHERE UserID = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    friendIds.add(resultSet.getInt(UserContactsTable.FRIENDID.name()));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return friendIds;
     }
 
     @Override

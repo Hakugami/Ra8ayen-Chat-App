@@ -11,8 +11,6 @@ import dao.impl.ChatDaoImpl;
 import dao.impl.ChatParticipantsDaoImpl;
 import dao.impl.UserContactsDaoImpl;
 import dao.impl.UserDaoImpl;
-import dto.Controller.ContactsController;
-import dto.Controller.OnlineController;
 import dto.requests.AcceptFriendRequest;
 import dto.requests.DeleteUserContactRequest;
 import dto.requests.GetContactChatRequest;
@@ -25,7 +23,6 @@ import model.entities.Chat;
 import model.entities.ChatParticipant;
 import model.entities.User;
 import model.entities.UserContacts;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -33,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactService{
-
 
     public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
         int friendID = getFriendID(acceptFriendRequest);
@@ -76,14 +72,14 @@ public class ContactService{
     }
 
 
-    public GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) throws RemoteException {
+    public GetContactChatResponse getContactChat(GetContactChatRequest getContactChatRequest) {
         ChatDao chatDao = new ChatDaoImpl();
         ChatMapper chatMapper = new ChatMapper();
         Chat privateChat = chatDao.getPrivateChat(getContactChatRequest.getUserID(),getContactChatRequest.getFriendID());
         return chatMapper.chatToGetContactChatResponse(privateChat);
     }
 
-    public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException {
+    public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) {
         UserDao userDao = new UserDaoImpl();
         List<User> listOfUser = userDao.getContactsByUserID(getContactsRequest.getIdUser());
 
@@ -104,28 +100,7 @@ public class ContactService{
         return listOfGetContactsResponse;
     }
 
-    /*public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) throws RemoteException {
-
-        UserContactMapper userContactMapper = new UserContactMapper();
-        User userContacts = userContactMapper.UserContactFromRequestGet(getContactsRequest);
-
-        UserContactsDao userContactsDao = new UserContactsDaoImpl();
-        UserDao userDao = new UserDaoImpl();
-
-        List<UserContacts> listOfUserContact=userContactsDao.getContactById(userContacts);
-
-        List<GetContactsResponse> listOfUserContactResponse = new ArrayList<>();
-        for(UserContacts userContacts1:listOfUserContact){
-            User testUser = userDao.get(userContacts1.getFriendID());
-            if(testUser!=null){
-                listOfUserContactResponse.add(userContactMapper.ContactsResponseFromUserContact(userContacts1,testUser));
-            }
-        }
-        return listOfUserContactResponse;
-    }*/
-
-
-    public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException {
+    public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) {
         UserContactMapper userContactMapper = new UserContactMapper();
 
         UserContacts userContacts = userContactMapper.UserContactFromRequestDelete(deleteUserContactRequest);
@@ -135,6 +110,24 @@ public class ContactService{
         userContactsDao.delete(userContacts);
 
         return new DeleteUserContactResponse();
+    }
 
+    public List<Integer> getFriends(List<String> friendsPhoneNumbers, int userId) {
+        List<Integer> users = new ArrayList<>();
+        UserContactsDaoImpl userContactsDao = new UserContactsDaoImpl();
+        List<Integer> friends = userContactsDao.getFriendsIDs(userId);
+        UserDaoImpl userDao = new UserDaoImpl();
+        int index = 0;
+        for(String friendPhoneNumber : friendsPhoneNumbers) {
+            User user = userDao.getUserByPhoneNumber(friendPhoneNumber);
+            if(user != null && friends.contains(user.getUserID())) {
+                friendsPhoneNumbers.set(index++, friendPhoneNumber + "added to group");
+                users.add(user.getUserID());
+            }
+            else {
+                friendsPhoneNumbers.set(index++, friendPhoneNumber + "not added to group");
+            }
+        }
+        return users;
     }
 }
