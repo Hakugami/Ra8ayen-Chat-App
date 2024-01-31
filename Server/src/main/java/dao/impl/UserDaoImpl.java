@@ -97,10 +97,10 @@ public class UserDaoImpl implements UserDao {
             parameters.add(user.getProfilePicture());
         }
 
-        if (!user.getPasswordHash().equals(originalUser.getPasswordHash())) {
-            query.append("PasswordHash = ?, ");
-            parameters.add(user.getPasswordHash());
-        }
+//        if (!user.getPasswordHash().equals(originalUser.getPasswordHash())) {
+//            query.append("PasswordHash = ?, ");
+//            parameters.add(user.getPasswordHash());
+//        }
 
         if (!user.getBio().equals(originalUser.getBio())) {
             query.append("Bio = ?, ");

@@ -1,6 +1,8 @@
 package dto.requests;
 
-public class RejectContactRequest {
+import java.io.Serializable;
+
+public class RejectContactRequest implements Serializable {
     int notificationId;
 
     public RejectContactRequest(int notificationId) {

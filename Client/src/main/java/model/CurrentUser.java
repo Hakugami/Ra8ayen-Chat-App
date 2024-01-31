@@ -58,7 +58,19 @@ public class CurrentUser extends UserModel {
             contactData.setName(userModel.getName());
             contactData.setPhoneNumber(userModel.getPhoneNumber());
             contactData.setId(userModel.getIdOfFriend());
-            Color color = userModel.getUserStatus().name().equals("Online") ? Color.GREEN : Color.RED;
+            Color color = null;
+            if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Available)){
+                color = Color.GREEN;
+            }
+            else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Busy)){
+                color = Color.RED;
+            }
+            else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Away)){
+                color = Color.YELLOW;
+            }
+            else if(userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)){
+                color = Color.GRAY;
+            }
             contactData.setColor(color);
             BufferedImage bufferedImage = ImageUtls.convertByteToImage(userModel.getProfilePicture());
             Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
@@ -73,6 +85,7 @@ public class CurrentUser extends UserModel {
         this.setProfilePicture(user.getProfilePicture());
         this.setUserStatus(user.getUserStatus());
         this.setCountry(user.getCountry());
+        this.setEmailAddress(user.getEmailAddress());
         this.setBio(user.getBio());
         this.setDateOfBirth(user.getDateOfBirth());
         this.setGender(user.getGender());

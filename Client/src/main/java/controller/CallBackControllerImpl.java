@@ -74,7 +74,11 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+        System.out.println("updateOnlineList");
         CurrentUser.getInstance().loadContactsList(NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID())));
+        CurrentUser.getInstance().getContactDataList().forEach(contactData ->{
+            System.out.println(contactData.getColor());
+        });
         Platform.runLater(()-> {
             try {
                 Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();

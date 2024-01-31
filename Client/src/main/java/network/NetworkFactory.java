@@ -79,5 +79,9 @@ public class NetworkFactory {
         ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
         return controller.getContacts(request);
     }
+    public UpdateUserResponse updateUser(UpdateUserRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+        return controller.update(request);
+    }
 
 }

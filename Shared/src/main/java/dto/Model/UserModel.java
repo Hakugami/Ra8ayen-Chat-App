@@ -177,6 +177,14 @@ public class UserModel  implements Serializable {
         return contacts;
     }
 
+    public UserMode getUserMode() {
+        return userMode;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
+    }
+
     @Override
     public String toString() {
         return "UserModel{" +

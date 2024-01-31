@@ -41,6 +41,9 @@ public class ControllerFactory {
         return statusElementController;
     }
 
+    public void setContactsController(ContactsController contactsController) {
+        this.contactsController = contactsController;
+    }
     public ContactsController getContactsController() {
         if (contactsController == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml"));
