@@ -25,6 +25,10 @@ public class Notification {
         this.notificationMessage = notificationMessageContent;
     }
 
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
+    }
+
     public int getNotificationId() {
         return notificationId;
     }

@@ -24,4 +24,8 @@ public class InvitationService {
     public List<Notification> getNotifications(){
         return notificationDao.getAll();
     }
+
+    public boolean deleteNotification(Notification notification){
+        return notificationDao.delete(notification);
+    }
 }

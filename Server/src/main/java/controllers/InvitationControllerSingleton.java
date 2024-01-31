@@ -6,10 +6,7 @@ import Mapper.UserMapperImpl;
 import dto.Controller.InvitationController;
 import dto.Model.NotificationModel;
 import dto.Model.UserModel;
-import dto.requests.AcceptFriendRequest;
-import dto.requests.AddContactRequest;
-import dto.requests.FriendRequest;
-import dto.requests.GetNotificationsRequest;
+import dto.requests.*;
 import dto.responses.AddContactResponse;
 import dto.responses.GetNotificationsResponse;
 import model.entities.Notification;
@@ -47,6 +44,13 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
             instance = new InvitationControllerSingleton();
         }
         return instance;
+    }
+
+    @Override
+    public boolean rejectFriendRequest(RejectContactRequest rejectContactRequest) throws RemoteException {
+        Notification notification = new Notification();
+        notification.setNotificationId(rejectContactRequest.getNotificationId());
+        return invitationService.deleteNotification(notification);
     }
     @Override
     public AddContactResponse addContact(AddContactRequest addContactRequest) throws RemoteException {

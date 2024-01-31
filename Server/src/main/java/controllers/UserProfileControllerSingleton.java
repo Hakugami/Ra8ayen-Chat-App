@@ -36,13 +36,12 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     @Override
     public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
         User user = updateUserMapper.updateUserRequestToEntity(updateUserRequest);
-        userService.updateUser(user);
         UpdateUserResponse updateUserResponse = new UpdateUserResponse();
         updateUserResponse.setBio(user.getBio());
         updateUserResponse.setEmailAddress(user.getEmailAddress());
         updateUserResponse.setEmailAddress(user.getEmailAddress());
         updateUserResponse.setUserName(user.getUserName());
-        updateUserResponse.setUpdated(true);
+        updateUserResponse.setUpdated(userService.updateUser(user));
         return updateUserResponse;
     }
 

@@ -54,7 +54,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -70,7 +70,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -87,7 +87,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -114,8 +114,7 @@ public class NotificationDaoImpl implements NotificationDao {
                return false;
            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
-        return false;
     }
 }
