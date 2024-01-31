@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,6 +9,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -43,6 +45,14 @@ public class MainWindowController implements Initializable {
     private double initialY;
     private double previousX, previousY, previousWidth, previousHeight;
 
+    private static void minimizeWindow(ActionEvent event) {
+        ((Stage) ((Button) event.getSource()).getScene().getWindow()).setIconified(true);
+    }
+
+    private static void closeWindow(ActionEvent event) {
+        ((Stage) ((Button) event.getSource()).getScene().getWindow()).close();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getViewFactory().getSelectedMenuItem().addListener((observableValue, oldValue, newValue) -> {
@@ -74,71 +84,17 @@ public class MainWindowController implements Initializable {
                 }
             }
         });
-        maximizeButton.setOnAction(event -> {
-            Stage stage = ((Stage) ((Button) event.getSource()).getScene().getWindow());
-            if (stage.isMaximized()) {
-                stage.setX(previousX);
-                stage.setY(previousY);
-                stage.setWidth(previousWidth);
-                stage.setHeight(previousHeight);
-                stage.setMaximized(false);
-            } else {
-                previousX = stage.getX();
-                previousY = stage.getY();
-                previousWidth = stage.getWidth();
-                previousHeight = stage.getHeight();
 
-                Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-                stage.setX(visualBounds.getMinX());
-                stage.setY(visualBounds.getMinY());
-                stage.setWidth(visualBounds.getWidth());
-                stage.setHeight(visualBounds.getHeight());
-                stage.setMaximized(true);
-            }
-        });
-        closeButton.setOnAction(event -> ((Stage) ((Button) event.getSource()).getScene().getWindow()).close());
+        minimizeButton.setOnAction(MainWindowController::minimizeWindow);
+        maximizeButton.setOnAction(this::maximizeWindow);
+        closeButton.setOnAction(MainWindowController::closeWindow);
 
-        customTitleBar.setOnMousePressed(event -> {
-            initialX = event.getSceneX();
-            initialY = event.getSceneY();
-        });
+        customTitleBar.setOnMousePressed(this::captureWindowPosition);
 
-        customTitleBar.setOnMouseDragged(event -> {
-            Stage stage = (Stage) customTitleBar.getScene().getWindow();
-            stage.setX(event.getScreenX() - initialX);
-            stage.setY(event.getScreenY() - initialY);
-        });
+        customTitleBar.setOnMouseDragged(this::dragWindow);
 
 
-        addContact_btn.setOnAction(event -> {
-            try {
-                Popup popup = new Popup();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
-                Parent root = loader.load();
-                popup.getContent().add(root);
-
-                AddContactController addContactController = loader.getController();
-                addContactController.setPopup(popup);
-
-                popup.setAutoHide(true);
-
-                // Show the popup first to calculate its height
-                popup.show(addContact_btn.getScene().getWindow());
-
-                // Calculate the x and y coordinates
-                double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
-                double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
-
-                // Hide the popup
-                popup.hide();
-
-                // Show the popup again at the correct position
-                popup.show(addContact_btn.getScene().getWindow(), x, y);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        addContact_btn.setOnAction(this::showAddContactWindow);
     }
 
     public void setSwappableWindow(Node node) {
@@ -174,4 +130,67 @@ public class MainWindowController implements Initializable {
         swappableWindow.layout();
     }
 
+    private void maximizeWindow(ActionEvent event) {
+        Stage stage = ((Stage) ((Button) event.getSource()).getScene().getWindow());
+        if (stage.isMaximized()) {
+            stage.setX(previousX);
+            stage.setY(previousY);
+            stage.setWidth(previousWidth);
+            stage.setHeight(previousHeight);
+            stage.setMaximized(false);
+        } else {
+            previousX = stage.getX();
+            previousY = stage.getY();
+            previousWidth = stage.getWidth();
+            previousHeight = stage.getHeight();
+
+            Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX(visualBounds.getMinX());
+            stage.setY(visualBounds.getMinY());
+            stage.setWidth(visualBounds.getWidth());
+            stage.setHeight(visualBounds.getHeight());
+            stage.setMaximized(true);
+        }
+    }
+
+    private void captureWindowPosition(MouseEvent event) {
+        initialX = event.getSceneX();
+        initialY = event.getSceneY();
+    }
+
+    private void dragWindow(MouseEvent event) {
+        Stage stage = (Stage) customTitleBar.getScene().getWindow();
+        stage.setX(event.getScreenX() - initialX);
+        stage.setY(event.getScreenY() - initialY);
+    }
+
+    private void showAddContactWindow(ActionEvent event) {
+        try {
+            Popup popup = new Popup();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
+            Parent root = loader.load();
+            popup.getContent().add(root);
+
+            AddContactController addContactController = loader.getController();
+            addContactController.setPopup(popup);
+
+            popup.setAutoHide(true);
+
+            // Show the popup first to calculate its height
+            popup.show(addContact_btn.getScene().getWindow());
+
+            // Calculate the x and y coordinates
+            double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
+            double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
+
+            // Hide the popup
+            popup.hide();
+
+            // Show the popup again at the correct position
+            popup.show(addContact_btn.getScene().getWindow(), x, y);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

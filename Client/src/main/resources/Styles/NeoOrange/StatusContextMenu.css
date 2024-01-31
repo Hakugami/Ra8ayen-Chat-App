@@ -1,0 +1,20 @@
+/* Use the first color (rgb(108, 95, 91)) for the background of the status context menu */
+.status-context-menu {
+    -fx-background-color: rgb(108, 95, 91);
+}
+
+/* Use the second color (rgb(237, 125, 49)) for the text color of the status context menu items */
+.status-context-menu .label {
+    -fx-text-fill: rgb(237, 125, 49);
+    -fx-alignment: center; /* Center the text */
+}
+
+/* Use the third color (rgb(79, 74, 69)) for the border of the status context menu */
+.status-context-menu {
+    -fx-border-color: rgb(79, 74, 69);
+}
+
+/* Use the fourth color (rgb(246, 241, 238)) for the hover background of the status context menu items */
+.status-context-menu .label:hover {
+    -fx-background-color: rgb(91, 45, 5);
+}

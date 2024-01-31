@@ -1,9 +1,10 @@
+/* General styles */
 .anchor-pane {
     -fx-pref-height: 600.0;
     -fx-pref-width: 300.0;
 }
 
-/* Apply styles to the HBox inside the AnchorPane */
+/* HBox styles */
 .anchor-pane .h-box {
     -fx-pref-height: 71.0;
     -fx-pref-width: 300.0;
@@ -13,8 +14,25 @@
     -fx-anchor-pane-top: 0.0;
 }
 
-/* Apply styles to the TextField inside the AnchorPane */
+/* TextField styles */
 .search-field {
-    -fx-background-radius: 15; /* Adjust the value based on your preference */
-    -fx-padding: 5 10 5 10; /* Adjust the padding as needed */
+    -fx-background-radius: 15;
+    -fx-padding: 5 10 5 10;
+    -fx-background-color: rgb(246, 241, 238);
+}
+
+/* ImageView styles */
+.ImagProfile {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 20, 0, 0, 0);
+}
+
+/* Status Circle styles */
+.statusCircle {
+    -fx-stroke-width: 2;
+    -fx-stroke: rgb(108, 95, 91);
+}
+
+.statusCircle:hover {
+    -fx-cursor: hand; /* Changes the cursor to a hand cursor when hovering over the statusCircle */
+    -fx-stroke: rgb(150, 150, 150);
 }
