@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
 
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddContactController">
-    <TextField fx:id="phoneField" promptText="Enter Phone Number" />
-   <HBox alignment="TOP_RIGHT">
-      <children>
-         <Label fx:id="serverReply" prefHeight="18.0" prefWidth="97.0" />
-         <Button mnemonicParsing="false" text="Button" />
-      </children>
-   </HBox>
-</VBox>
+
+<AnchorPane stylesheets="@../../Styles/NeoOrange/AddContact.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddContactController">
+   <VBox alignment="CENTER" prefHeight="71.0" prefWidth="198.0" stylesheets="@../../Styles/NeoOrange/AddContact.css"
+         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+         AnchorPane.topAnchor="0.0">
+      <TextField fx:id="phoneField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                 minWidth="-Infinity" prefHeight="30.0" prefWidth="197.0" promptText="Enter Phone Number"
+                 VBox.vgrow="ALWAYS"/>
+      <HBox alignment="CENTER" prefHeight="46.0" prefWidth="152.0">
+         <TextFlow prefHeight="200.0" prefWidth="200.0">
+            <Label fx:id="serverReply" alignment="CENTER" contentDisplay="CENTER" prefHeight="45.0" prefWidth="139.0"
+                   wrapText="true"/>
+         </TextFlow>
+         <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0"
+                 prefWidth="68.0" text="add" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets right="5.0"/>
+            </HBox.margin>
+         </Button>
+      </HBox>
+   </VBox>
+</AnchorPane>
