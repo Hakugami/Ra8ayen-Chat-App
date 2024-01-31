@@ -1,6 +1,6 @@
 package controllers;
 
-import Mapper.UpdateUserImpl;
+import Mapper.UserMapperImpl;
 import dto.Controller.UserProfileController;
 import dto.Model.UserModel;
 import dto.requests.UpdateUserRequest;
@@ -9,7 +9,6 @@ import model.entities.User;
 import service.UserService;
 import session.Session;
 import session.manager.SessionManager;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Logger;
@@ -19,12 +18,12 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     private static UserProfileControllerSingleton userProfileControllerSingleton;
     UserService userService;
     SessionManager sessionManager;
-    UpdateUserImpl updateUserMapper;
+    UserMapperImpl userMapper;
     private UserProfileControllerSingleton() throws RemoteException {
         super();
         userService = new UserService();
         sessionManager = SessionManager.getInstance();
-        updateUserMapper = new UpdateUserImpl();
+        userMapper = new UserMapperImpl();
     }
     public static UserProfileControllerSingleton getInstance() throws RemoteException {
         if (userProfileControllerSingleton == null) {
@@ -35,12 +34,9 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     }
     @Override
     public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
-        User user = updateUserMapper.updateUserRequestToEntity(updateUserRequest);
+        User user = userMapper.modelToEntity(updateUserRequest.getUserModel());
         UpdateUserResponse updateUserResponse = new UpdateUserResponse();
-        updateUserResponse.setBio(user.getBio());
-        updateUserResponse.setEmailAddress(user.getEmailAddress());
-        updateUserResponse.setEmailAddress(user.getEmailAddress());
-        updateUserResponse.setUserName(user.getUserName());
+        updateUserResponse.setUserModel(userMapper.entityToModel(user));
         updateUserResponse.setUpdated(userService.updateUser(user));
         return updateUserResponse;
     }

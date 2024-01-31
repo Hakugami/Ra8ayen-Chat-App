@@ -1,130 +1,40 @@
 package dto.responses;
 
+import dto.Model.UserModel;
+
 import java.util.Arrays;
 
 public class UpdateUserResponse {
+    private UserModel userModel;
+    private boolean updated;
 
-    private String userName;
-    private String emailAddress;
-    private byte[] profilePicture;
-    private String passwordHash;
-    private String bio;
-    private UserStatus userStatus;
-    private UserMode userMode;
-    private boolean isUpdated;
-    private String errorMessage;
-
-    public enum UserStatus {
-        Online, Offline
+    public UpdateUserResponse(UserModel userModel, boolean updated) {
+        this.userModel = userModel;
+        this.updated = updated;
     }
-    public enum UserMode{
-        Busy, Away, Available
-    }
-
-    public UpdateUserResponse(String userName, String emailAddress, byte[] profilePicture, String passwordHash, String bio, UserStatus userStatus, UserMode userMode, boolean isUpdated, String errorMessage) {
-        this.userName = userName;
-        this.emailAddress = emailAddress;
-        this.profilePicture = profilePicture;
-        this.passwordHash = passwordHash;
-        this.bio = bio;
-        this.userStatus = userStatus;
-        this.userMode = userMode;
-        this.isUpdated = isUpdated;
-        this.errorMessage = errorMessage;
-    }
-
     public UpdateUserResponse() {
     }
-    //setter
-
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public UserModel getUserModel() {
+        return userModel;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-
-    public void setProfilePicture(byte[] profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
-    }
-
-    public void setUserMode(UserMode userMode) {
-        this.userMode = userMode;
-    }
-
-    public void setUpdated(boolean updated) {
-        isUpdated = updated;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    //getter
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-
-    public byte[] getProfilePicture() {
-        return profilePicture;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public UserStatus getUserStatus() {
-        return userStatus;
-    }
-
-    public UserMode getUserMode() {
-        return userMode;
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     public boolean isUpdated() {
-        return isUpdated;
+        return updated;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
     }
 
     @Override
     public String toString() {
         return "UpdateUserResponse{" +
-                "userName='" + userName + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", profilePicture=" + Arrays.toString(profilePicture) +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", bio='" + bio + '\'' +
-                ", userStatus=" + userStatus +
-                ", userMode=" + userMode +
-                ", isUpdated=" + isUpdated +
-                ", errorMessage='" + errorMessage + '\'' +
+                "userModel=" + userModel +
+                ", updated=" + updated +
                 '}';
     }
 }
