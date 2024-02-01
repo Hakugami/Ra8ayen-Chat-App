@@ -44,6 +44,8 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageService.sendMessage(request);
             response.setSuccess(true);
             response.setError("Message sent successfully");
+
+           // OnlineControllerImpl.clients.get()
         } catch (Exception e) {
             response.setSuccess(false);
             response.setError("Failed to send message: " + e.getMessage());

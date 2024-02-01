@@ -84,6 +84,8 @@ public class ContactService{
         List<User> listOfUser = userDao.getContactsByUserID(getContactsRequest.getIdUser());
 
         List<GetContactsResponse> listOfGetContactsResponse = new ArrayList<>();
+        ChatDaoImpl chatDao = new ChatDaoImpl();
+
         for (User user : listOfUser) {
             GetContactsResponse getContactsResponse = new GetContactsResponse();
             getContactsResponse.setIdOfFriend(user.getUserID());
@@ -94,10 +96,19 @@ public class ContactService{
             getContactsResponse.setUserStatus(GetContactsResponse.UserStatus.valueOf(user.getUserStatus().name()));
             getContactsResponse.setUserMode(GetContactsResponse.UserMode.valueOf(user.getUsermode().name()));
             getContactsResponse.setLastLogin(user.getLastLogin());
+            Chat chat = chatDao.getPrivateChat(getContactsRequest.getIdUser(), user.getUserID());
+            getContactsResponse.setChatId(chat.getChatId());
             listOfGetContactsResponse.add(getContactsResponse);
         }
 
         return listOfGetContactsResponse;
+    }
+    public List<GetContactChatResponse> getContactPrivateChat(List<GetContactChatRequest> getContactChatRequests) throws RemoteException{
+        List<GetContactChatResponse> getContactChatResponses = new ArrayList<>();
+        for(GetContactChatRequest request: getContactChatRequests){
+            getContactChatResponses.add(getContactChat(request));
+        }
+        return getContactChatResponses;
     }
 
     public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) {

@@ -2,20 +2,30 @@ package service;
 
 import Mapper.MessageMapper;
 import Mapper.MessageMapperImpl;
+import dao.UserDao;
+import dao.impl.ChatParticipantsDaoImpl;
 import dao.impl.MessageDaoImpl;
+import dao.impl.UserDaoImpl;
 import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
+import model.entities.ChatParticipant;
 import model.entities.Message;
+import model.entities.User;
 
 import java.util.List;
 
 public class MessageService {
     private MessageMapper messageMapper;
     private MessageDaoImpl messageDao;
+    private ChatParticipantsDaoImpl chatParticipantsDao;
+
+    private UserDaoImpl userDao;
 
     public MessageService() {
         this.messageMapper = new MessageMapperImpl();
         this.messageDao = new MessageDaoImpl();
+        this.chatParticipantsDao = new ChatParticipantsDaoImpl();
+        this.userDao = new UserDaoImpl();
     }
 
     public void sendMessage(SendMessageRequest request) {
@@ -35,5 +45,16 @@ public class MessageService {
 
     public MessageMapper getMessageMapper() {
         return messageMapper;
+    }
+
+    public String getParticipant(int senderID, int chatID){
+        ChatParticipant chatParticipant =chatParticipantsDao.get(chatID,senderID);
+        User user=userDao.get(chatParticipant.getParticipantUserId());
+
+        if(user.getUserStatus().equals(User.UserStatus.Offline)){
+            return null;
+        }else{
+            return user.getPhoneNumber();
+        }
     }
 }

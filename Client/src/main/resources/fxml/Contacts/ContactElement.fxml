@@ -41,5 +41,6 @@
             <Insets left="10.0" right="5.0" top="30.0" />
          </HBox.margin>
       </Circle>
+      <Label fx:id="chatID" text="Label" visible="false" />
    </children>
 </HBox>

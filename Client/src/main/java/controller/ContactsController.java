@@ -190,6 +190,7 @@ public class ContactsController implements Initializable {
             controller.setName(contactData.getName());
             controller.setStatus(contactData.getColor());
             controller.setImagId(contactData.getImage().getImage());
+            controller.setChatID(contactData.getChatId());
             return new HBox(node); // Wrap the Node in an HBox
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -221,13 +222,20 @@ public class ContactsController implements Initializable {
                             if (rootHBox.getChildren().get(1) instanceof Label) {
                                 System.out.println("Second child is a Label");
                                 Label label = (Label) rootHBox.getChildren().get(1);
+                                Label label2 = (Label)rootHBox.getChildren().get(3);
 
                                 String name = label.getText();
+                                int ID = Integer.parseInt(label2.getText());
+
                                 ContactData contactData = new ContactData();
                                 contactData.setName(name);
                                 contactData.setImage(imageView);
+                             //   contactData.setId(ID);
+                                contactData.setChatId(ID);
                                 setSelectedContact(contactData);
+                                System.out.println("Id of contact "+contactData.getId());
                                 contactListener(contactData);
+
                             } else {
                                 System.out.println("Second child is not a Label");
                             }
@@ -241,6 +249,7 @@ public class ContactsController implements Initializable {
     public void contactListener(ContactData contactData) {
         System.out.println("contactListener called with contact: " + contactData.getName());
         Model.getInstance().getViewFactory().getSelectedContact().setValue(contactData);
+       // System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getName());
     }
 
     public ContactData getSelectedContact() {

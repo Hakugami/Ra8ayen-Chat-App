@@ -217,9 +217,13 @@ public class ChatDaoImpl implements ChatDao {
         String name = resultSet.getString(ChatTable.CHATNAME.name());
         int adminId = resultSet.getInt(ChatTable.ADMINID.name());
         Blob imageBlob = resultSet.getBlob(ChatTable.CHATIMAGE.name());
-        byte[] image = imageBlob.getBytes(1, (int) imageBlob.length());
+      // byte[] image = imageBlob.getBytes(1, (int) imageBlob.length());
+        byte[] profilePicture =  null;
+        if (imageBlob != null) {
+            profilePicture = imageBlob.getBytes(1, (int) imageBlob.length());
+        }
         String creationDate = resultSet.getTimestamp(ChatTable.CREATIONDATE.name()).toString();
         String lastModified = resultSet.getTimestamp(ChatTable.LASTMODIFIED.name()).toString();
-        return new Chat(id, name, adminId, image, creationDate, lastModified);
+        return new Chat(id, name, adminId, profilePicture, creationDate, lastModified);
     }
 }

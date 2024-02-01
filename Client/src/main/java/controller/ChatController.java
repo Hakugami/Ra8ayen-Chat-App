@@ -19,6 +19,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.shape.Circle;
 import model.CurrentUser;
+import model.Model;
 import network.NetworkFactory;
 
 import java.io.IOException;
@@ -90,6 +91,8 @@ public class ChatController implements Initializable {
 }
 
     private void sendMessage() throws RemoteException {
+    //    System.out.println(Model.getInstance().getViewFactory().getSelectedContact().getName().);
+        //System.out.println();
         String message = messageBox.getText();
         if (message.isEmpty()) {
             return;
@@ -104,15 +107,25 @@ public class ChatController implements Initializable {
         SendMessageRequest request = new SendMessageRequest();
         request.setMessageContent(message);
         request.setSenderId(CurrentUser.getInstance().getUserID());
+      //send message to receiver Id of selected contact
+
+   //     System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
+
+      //  request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
+
+        request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
+
         request.setAttachment(false);
         request.setTime(LocalDateTime.now());
         try {
+          //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
             System.out.println(request);
             SendMessageResponse response = NetworkFactory.getInstance().sendMessage(request);
             System.out.println(response);
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
+
     }
 
     class CustomListCell extends ListCell<MessageModel> {

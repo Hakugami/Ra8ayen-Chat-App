@@ -83,5 +83,11 @@ public class NetworkFactory {
         UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
         return controller.update(request);
     }
+    public List<GetContactChatResponse> getPrivateChats(List<GetContactChatRequest> getContactChatRequests) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
+        return controller.getPrivateChats(getContactChatRequests);
+
+    }
+
 
 }

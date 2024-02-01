@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class SendMessageRequest implements Serializable {
     private int MessageId;
     private int senderId;
-    private int receiverId;
+    private int receiverId; //chat ID
     private String messageContent;
     private LocalDateTime time;
     private boolean isAttachment;

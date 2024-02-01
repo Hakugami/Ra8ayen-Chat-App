@@ -13,6 +13,16 @@ public class ContactData {
 
     private ImageView image;
 
+    public int getChatId() {
+        return ChatId;
+    }
+
+    public void setChatId(int chatId) {
+        ChatId = chatId;
+    }
+
+    private int ChatId;
+
     public ContactData(String name, Color color, String url) {
         Name = name;
         this.color = color;

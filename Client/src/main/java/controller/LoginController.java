@@ -1,6 +1,8 @@
 package controller;
 
+import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
+import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import token.TokenManager;
 import dto.requests.LoginRequest;
@@ -24,6 +26,7 @@ import network.NetworkFactory;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginController {
@@ -94,6 +97,7 @@ public class LoginController {
                         List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
                         CurrentUser.getInstance().loadContactsList(responses);
                         System.out.println(CurrentUser.getInstance().getContactDataList().size());
+                        System.out.println(responses);
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
@@ -108,6 +112,19 @@ public class LoginController {
             }
         });
 
+    }
+    private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+      //  List<ChatData> listOfChats = new ArrayList<>();
+        List<GetContactChatRequest> listOfContactId = new ArrayList<>();
+        for(ContactData getContactsResponse: CurrentUser.getInstance().getContactDataList()){
+            listOfContactId.add(new GetContactChatRequest(CurrentUser.getInstance().getUserID(), getContactsResponse.getId()));
+        }
+     List<GetContactChatResponse> getContactChatResponses = NetworkFactory.getInstance().getPrivateChats(listOfContactId);
+        for(GetContactChatResponse getContactsResponse: getContactChatResponses){
+           for(int i = 0 ; i<CurrentUser.getInstance().getContactDataList().size();i++){
+
+           }
+        }
     }
 
     private boolean validateFields() throws SQLException, ClassNotFoundException {

@@ -1,6 +1,7 @@
 package model;
 
 import controller.CallBackControllerImpl;
+import controller.ChatData;
 import controller.ContactData;
 import dto.Model.UserModel;
 import dto.responses.GetContactsResponse;
@@ -13,7 +14,10 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CurrentUser extends UserModel {
@@ -23,8 +27,18 @@ public class CurrentUser extends UserModel {
 
     private List<ContactData> contactDataList;
 
+    private Map<ContactData, ChatData> chatList;
+
+    public void setChatList(Map<ContactData, ChatData> chatList) {
+        this.chatList = chatList;
+    }
+    public void addInChatList(ContactData contactData, ChatData chatData){
+        chatList.put(contactData,chatData);
+    }
+
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
+        chatList = new ConcurrentHashMap<ContactData, ChatData>();
     }
 
     public static CurrentUser getInstance() throws RemoteException {
@@ -72,6 +86,7 @@ public class CurrentUser extends UserModel {
                 color = Color.GRAY;
             }
             contactData.setColor(color);
+            contactData.setChatId(userModel.getChatId());
             BufferedImage bufferedImage = ImageUtls.convertByteToImage(userModel.getProfilePicture());
             Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
             contactData.setImage(new ImageView(fxImage));
