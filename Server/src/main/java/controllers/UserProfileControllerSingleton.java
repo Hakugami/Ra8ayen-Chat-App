@@ -65,8 +65,6 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     public UserModel getUserModel(String Token) throws RemoteException {
         System.out.println("User profile request received from client.");
         Session session = sessionManager.getSession(Token) ;
-        System.out.println(session);
-        System.out.println(sessionManager);
         if(session != null){
             logger.info("User profile request received from client.");
             return userService.userMapper.phoneToModel(session.getUser().getPhoneNumber());

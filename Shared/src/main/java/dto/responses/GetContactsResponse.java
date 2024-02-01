@@ -16,6 +16,9 @@ public class GetContactsResponse implements Serializable {
     private UserStatus userStatus;
     private String lastLogin;
     private UserMode userMode;
+    private int chatID;
+    private String Bio;
+
 
     private int ChatId;
 
@@ -124,6 +127,22 @@ public class GetContactsResponse implements Serializable {
 
     public void setUserMode(UserMode userMode) {
         this.userMode = userMode;
+    }
+
+    public int getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(int chatID) {
+        this.chatID = chatID;
+    }
+
+    public String getBio() {
+        return Bio;
+    }
+
+    public void setBio(String bio) {
+        Bio = bio;
     }
 
     @Override

@@ -51,10 +51,10 @@
 }
 
 /* Style the Circle */
-.Circle {
-    -fx-fill: rgb(237, 125, 49);
-    -fx-stroke: rgb(108, 95, 91);
-    -fx-stroke-width: 2px;
+/* Contacts.css */
+
+.Circle:hover {
+    -fx-stroke: rgb(237, 125, 49); /* Change the stroke color on hover */
 }
 
 /*!* Style the TreeView *!*/

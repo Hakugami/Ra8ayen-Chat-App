@@ -90,6 +90,9 @@ public class ContactService{
 
         for (User user : listOfUser) {
             GetContactsResponse getContactsResponse = new GetContactsResponse();
+            ChatDaoImpl chatDao = new ChatDaoImpl();
+            Chat chat = chatDao.getPrivateChat(getContactsRequest.getIdUser(), user.getUserID());
+            getContactsResponse.setChatID(chat.getChatId());
             getContactsResponse.setIdOfFriend(user.getUserID());
             getContactsResponse.setName(user.getUserName());
             getContactsResponse.setProfilePicture(user.getProfilePicture());
