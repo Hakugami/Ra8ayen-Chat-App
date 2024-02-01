@@ -28,6 +28,26 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
         return null;
     }
 
+    public List<Integer> getParticipantUserIds(int chatId, String phoneNumber) {
+        List<Integer> participantUserIds = new ArrayList<>();
+        String query = "SELECT ParticipantUserID FROM ChatParticipants cp " +
+                "INNER JOIN UserAccounts ua ON cp.ParticipantUserID = ua.UserID " +
+                "WHERE ChatID = ? AND ua.UserStatus = 'Online' AND ua.PhoneNumber != ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, chatId);
+            statement.setString(2, phoneNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    participantUserIds.add(resultSet.getInt(ChatParticipantTable.ParticipantUserID.name()));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return participantUserIds;
+    }
+
     @Override
     public ChatParticipant get(int id){
         String query = "SELECT * FROM ChatParticipants WHERE ChatID = ?";

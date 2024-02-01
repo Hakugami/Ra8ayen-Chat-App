@@ -17,7 +17,9 @@ public class GroupService {
     public List<Chat> getUserGroups(int userId) {
         return chatDaoImpl.getGroupChats(userId);
     }
-
+    public List<Integer> getGroupChatParticipants(int chatId, String phoneNumber) {
+        return chatParticipantsDaoImpl.getParticipantUserIds(chatId, phoneNumber);
+    }
     public int createGroup(Chat chat) {
         return chatDaoImpl.saveGroupChat(chat);
     }
