@@ -90,8 +90,8 @@ public class ContactService{
 
         for (User user : listOfUser) {
             GetContactsResponse getContactsResponse = new GetContactsResponse();
-            ChatDaoImpl chatDao = new ChatDaoImpl();
             Chat chat = chatDao.getPrivateChat(getContactsRequest.getIdUser(), user.getUserID());
+
             getContactsResponse.setChatID(chat.getChatId());
             getContactsResponse.setIdOfFriend(user.getUserID());
             getContactsResponse.setName(user.getUserName());
@@ -101,7 +101,6 @@ public class ContactService{
             getContactsResponse.setUserStatus(GetContactsResponse.UserStatus.valueOf(user.getUserStatus().name()));
             getContactsResponse.setUserMode(GetContactsResponse.UserMode.valueOf(user.getUsermode().name()));
             getContactsResponse.setLastLogin(user.getLastLogin());
-            Chat chat = chatDao.getPrivateChat(getContactsRequest.getIdUser(), user.getUserID());
             getContactsResponse.setChatId(chat.getChatId());
             listOfGetContactsResponse.add(getContactsResponse);
         }
