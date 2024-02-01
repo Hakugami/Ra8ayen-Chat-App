@@ -63,7 +63,13 @@ public class GroupChatControllerSingleton extends UnicastRemoteObject implements
                 chatParticipant.setParticipantUserId(friend);
                 groupService.addUserToGroup(chatParticipant);
             }
+
+            ChatParticipant chatParticipant = new ChatParticipant();
+            chatParticipant.setChatId(chatId);
+            chatParticipant.setParticipantUserId(request.getAdminID());
+            groupService.addUserToGroup(chatParticipant);
         }
+
         createGroupChatResponse.setCreated(isCreated);
         createGroupChatResponse.setResponses(request.getFriendsPhoneNumbers());
         return createGroupChatResponse;
