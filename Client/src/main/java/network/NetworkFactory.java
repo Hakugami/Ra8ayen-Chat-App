@@ -6,6 +6,7 @@ import dto.requests.*;
 import dto.responses.*;
 import lookupnames.LookUpNames;
 import network.manager.NetworkManager;
+import org.controlsfx.control.Notifications;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -30,7 +31,7 @@ public class NetworkFactory {
             AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
             return controller.login(loginRequest);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -40,7 +41,7 @@ public class NetworkFactory {
             AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
             return controller.register(registerRequest);
         } catch (Exception e) {
-            e.printStackTrace();
+            Notifications.create().title("Server Down").text("Server is currently down").showError();
             return null;
         }
     }

@@ -8,8 +8,10 @@ import Mapper.UserMapperImpl;
 import dao.impl.UserDaoImpl;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
+import exceptions.DuplicateEntryException;
 import model.entities.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -25,9 +27,15 @@ public class UserService {
         userDaoImpl = new UserDaoImpl();
     }
 
-    public void registerUser(RegisterRequest registerRequest) {
+    public void registerUser(RegisterRequest registerRequest) throws DuplicateEntryException {
         User user = registerMapper.requestToEntity(registerRequest);
-        userDaoImpl.save(user);
+        try {
+            userDaoImpl.save(user);
+        } catch (SQLException e) {
+            if(e.getErrorCode() == 1062) {
+                throw new DuplicateEntryException(e.getMessage(), e);
+            }
+        }
     }
 
     public boolean loginUser(LoginRequest loginRequest) {

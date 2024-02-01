@@ -113,7 +113,7 @@ public class LoginController {
                     System.err.println("Invalid fields");
                 }
             } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         });
 

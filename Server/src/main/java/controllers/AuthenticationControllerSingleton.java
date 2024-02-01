@@ -5,6 +5,7 @@ import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
 import dto.responses.LoginResponse;
 import dto.responses.RegisterResponse;
+import exceptions.DuplicateEntryException;
 import model.entities.User;
 import service.EncryptionService;
 import service.HashService;
@@ -66,9 +67,15 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
         logger.info("Register request received from client.");
         String hashedPassword = hashService.hashPassword(registerRequest.getPasswordHash());
         registerRequest.setPasswordHash(hashedPassword);
-        userService.registerUser(registerRequest);
-        User user = userService.getUserByPhoneNumber(registerRequest.getPhoneNumber());
         RegisterResponse registerResponse = new RegisterResponse();
+        try {
+            userService.registerUser(registerRequest);
+        } catch (DuplicateEntryException e) {
+            registerResponse.setSuccess(false);
+            registerResponse.setError("Registration failed due to " + e.getDuplicateColumn() + ": " + e.getDuplicateValue() + " already being used.");
+            return registerResponse;
+        }
+        User user = userService.getUserByPhoneNumber(registerRequest.getPhoneNumber());
         if (user != null) {
             registerResponse.setSuccess(true);
         } else {

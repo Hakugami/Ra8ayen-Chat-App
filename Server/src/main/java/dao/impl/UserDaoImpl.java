@@ -54,7 +54,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean save(User user) {
+    public boolean save(User user) throws SQLException {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
                 "ProfilePicture,PasswordHash,Gender,Country,DateOfBirth,Bio,LastLogin) " +
                 "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
@@ -64,13 +64,8 @@ public class UserDaoImpl implements UserDao {
 
             add(statement, user);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected >= 1) {
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return rowsAffected >= 1;
         }
-        return false;
     }
 
     @Override
