@@ -54,6 +54,11 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
+       // Model.getInstance().getControllerFactory().getChatController();
+        System.out.println("Selected "+Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
+        System.out.println("Message "+message.getMessageContent());
+        Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+        //get ChatID of message and display on
 
     }
 

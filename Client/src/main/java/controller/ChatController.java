@@ -48,8 +48,10 @@ public class ChatController implements Initializable {
     private ObservableList<MessageModel> chatMessages;
     private final StringProperty nameProperty = new SimpleStringProperty();
 
+   // private int ChatID;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Model.getInstance().getControllerFactory().setChatController(this);
         System.out.println("ChatController: Initializing");
         NameContact.textProperty().bind(nameProperty);
 
@@ -181,6 +183,16 @@ public class ChatController implements Initializable {
     public void setImage( Image image){
         System.out.println("ChatController: Image set to " + image);
         ImagContact.setImage(image);
+    }
+    public void setNewMessage(MessageModel messageModel){
+        System.out.println("New Message Arrive to chatList");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                chatListView.getItems().add(messageModel);
+            }
+        });
+
     }
 
 }

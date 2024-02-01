@@ -15,6 +15,10 @@ public class ControllerFactory {
     private MainWindowController mainWindowController;
     private NotificationContextMenuController notificationContextMenuController;
 
+    public void setChatController(ChatController chatController) {
+        this.chatController = chatController;
+    }
+
     public ChatController getChatController() {
         if (chatController == null) {
             try {

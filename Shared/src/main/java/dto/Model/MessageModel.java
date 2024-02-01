@@ -11,6 +11,35 @@ public class MessageModel implements Serializable {
     private LocalDateTime time;
     private boolean isAttachment;
 
+    private int chatId;
+
+    public int getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
+    }
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+    public int getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    private int senderId;
+
+    private int receiverId;
     public MessageModel() {
 
     }

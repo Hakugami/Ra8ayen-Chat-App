@@ -13,11 +13,11 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
 
     public List<ChatParticipant> get(int chatId, int participantUserId) {
         List<ChatParticipant> chatParticipants = new ArrayList<>();
-        String query = "SELECT * FROM ChatParticipants WHERE ChatID = ? AND ParticipantUserID = ?";
+        String query = "SELECT * FROM ChatParticipants WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatId);
-            statement.setInt(2, participantUserId);
+           // statement.setInt(2, participantUserId);
             try (ResultSet resultSet = statement.executeQuery()) {
                while (resultSet.next()) {
                    chatParticipants.add(createChatParticipantFromResultSet(resultSet));
