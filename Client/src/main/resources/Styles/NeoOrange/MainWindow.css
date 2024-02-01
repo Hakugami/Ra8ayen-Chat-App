@@ -1,33 +1,25 @@
 .custom_title_bar {
-    -fx-background-color: #696969; /* Darker shade of gray */
+    -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
     -fx-alignment: center-right;
     -fx-spacing: 10;
     -fx-border-radius: 50;
 }
 
 .window_button {
-    -fx-background-color: #696969; /* Darker shade of gray */
-    -fx-text-fill: #FFA500;
+    -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
     -fx-border-radius: 20;
     -fx-font-size: 1.1em;
 }
 
 .window_button:hover {
-    -fx-background-color: #beb9b9; /* Darker shade of gray */
-    -fx-text-fill: #FFA500;
+    -fx-background-color: rgb(79, 74, 69); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
 }
 
-
-
-
-
-
-
-
-
 .add_button {
-    -fx-background-color: #696969; /* Darker shade of gray */
-    -fx-text-fill: #FFA500;
+    -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
     -fx-shape: "M 50 0 A 50 50, 0, 1, 1, 50 -1 Z"; /* SVG path for a circle */
     -fx-min-width: 50px; /* Ensure the button is large enough to be circular */
     -fx-min-height: 50px; /* Ensure the button is large enough to be circular */
@@ -38,13 +30,13 @@
 }
 
 .add_button:hover {
-    -fx-background-color: #beb9b9; /* Darker shade of gray */
-    -fx-text-fill: #FFA500;
+    -fx-background-color: rgb(79, 74, 69); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1); /* Add shadow for depth */
 }
 
 .add_button FontAwesomeIconView {
     -fx-font-size: 1.5em;
-    -fx-fill: #FFA500;
+    -fx-fill: rgb(237, 125, 49);
     -fx-alignment: center;
 }

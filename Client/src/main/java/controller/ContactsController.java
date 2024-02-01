@@ -82,10 +82,7 @@ public class ContactsController implements Initializable {
         TreeItem<Node> rootParent = new TreeItem<>();
 
         Label label = new Label("Contacts");
-        label.setStyle("-fx-text-fill: white; -fx-background-color: #CA3503;");
-        label.setFont(Font.font("Arial"));
-        label.setPrefWidth(300);
-        label.setPrefHeight(25);
+        label.setId("myLabel");
         rootParent = new TreeItem<>(label);
 
         TreeItem<Node> rootOnline = new TreeItem<>(loadFXML("Online", Color.GREEN));
