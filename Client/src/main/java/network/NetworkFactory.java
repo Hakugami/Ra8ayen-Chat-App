@@ -89,5 +89,15 @@ public class NetworkFactory {
 
     }
 
+    public CreateGroupChatResponse createGroupChat(CreateGroupChatRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
+        return controller.createGroupChat(request);
+    }
+
+    public List<GetGroupResponse> getGroups(GetGroupRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
+        return controller.getGroups(request);
+    }
+
 
 }

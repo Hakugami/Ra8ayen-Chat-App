@@ -15,6 +15,8 @@ public class CreateGroupChatRequest implements Serializable {
         this.groupImage = groupImage;
         this.friendsPhoneNumbers = friendsPhoneNumbers;
     }
+    public CreateGroupChatRequest() {
+    }
 
     public List<String> getFriendsPhoneNumbers() {
         return friendsPhoneNumbers;

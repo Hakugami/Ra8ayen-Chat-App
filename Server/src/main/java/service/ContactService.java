@@ -136,11 +136,11 @@ public class ContactService{
         for(String friendPhoneNumber : friendsPhoneNumbers) {
             User user = userDao.getUserByPhoneNumber(friendPhoneNumber);
             if(user != null && friends.contains(user.getUserID())) {
-                friendsPhoneNumbers.set(index++, friendPhoneNumber + "added to group");
+//                friendsPhoneNumbers.set(index++, friendPhoneNumber + "added to group");
                 users.add(user.getUserID());
             }
             else {
-                friendsPhoneNumbers.set(index++, friendPhoneNumber + "not added to group");
+//                friendsPhoneNumbers.set(index++, friendPhoneNumber + "not added to group");
             }
         }
         return users;

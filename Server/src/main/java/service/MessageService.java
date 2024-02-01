@@ -2,7 +2,6 @@ package service;
 
 import Mapper.MessageMapper;
 import Mapper.MessageMapperImpl;
-import dao.UserDao;
 import dao.impl.ChatParticipantsDaoImpl;
 import dao.impl.MessageDaoImpl;
 import dao.impl.UserDaoImpl;
@@ -47,9 +46,9 @@ public class MessageService {
         return messageMapper;
     }
 
-    public String getParticipant(int senderID, int chatID){
-        ChatParticipant chatParticipant =chatParticipantsDao.get(chatID,senderID);
-        User user=userDao.get(chatParticipant.getParticipantUserId());
+    public String getParticipantPhoneNumber(int senderID, int chatID){
+        List<ChatParticipant> chatParticipant =chatParticipantsDao.get(chatID,senderID);
+        User user=userDao.get(chatParticipant.get(1).getParticipantUserId());
 
         if(user.getUserStatus().equals(User.UserStatus.Offline)){
             return null;

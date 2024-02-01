@@ -90,6 +90,8 @@ public class ContactsController implements Initializable {
 
         TreeItem<Node> rootOffline = new TreeItem<>(loadFXML("Offline", Color.GRAY));
         rootOffline.setExpanded(true);
+        TreeItem<Node> group = new TreeItem<>(loadFXML("Groups", Color.PURPLE));
+        group.setExpanded(true);
 
         for (ContactData contact : observableContactDataList) {
             Color color = contact.getColor();
