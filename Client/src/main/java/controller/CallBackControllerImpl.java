@@ -5,6 +5,7 @@ import dto.Model.MessageModel;
 import dto.Model.NotificationModel;
 import dto.requests.FriendRequest;
 import dto.requests.GetContactsRequest;
+import dto.requests.GetGroupRequest;
 import javafx.application.Platform;
 import model.CurrentUser;
 import model.Model;
@@ -55,7 +56,7 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
        // Model.getInstance().getControllerFactory().getChatController();
-        System.out.println("Selected "+Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
+        System.out.println("Selected "+((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
         System.out.println("Message "+message.getMessageContent());
         Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         //get ChatID of message and display on
@@ -83,6 +84,10 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         CurrentUser.getInstance().loadContactsList(NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID())));
         CurrentUser.getInstance().getContactDataList().forEach(contactData ->{
             System.out.println(contactData.getColor());
+        });
+        CurrentUser.getInstance().loadGroups(NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID())));
+        CurrentUser.getInstance().getGroupList().forEach(groupData ->{
+            System.out.println(groupData.getGroupName());
         });
         Platform.runLater(()-> {
             try {

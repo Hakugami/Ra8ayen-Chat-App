@@ -5,6 +5,7 @@ import controller.ChatData;
 import controller.ContactData;
 import dto.Model.UserModel;
 import dto.responses.GetContactsResponse;
+import dto.responses.GetGroupResponse;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +27,7 @@ public class CurrentUser extends UserModel {
     private CallBackControllerImpl callBackController = CallBackControllerImpl.getInstance();
 
     private List<ContactData> contactDataList;
-
+    private List<Group> groupList;
     private Map<ContactData, ChatData> chatList;
 
     public void setChatList(Map<ContactData, ChatData> chatList) {
@@ -39,6 +40,7 @@ public class CurrentUser extends UserModel {
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
         chatList = new ConcurrentHashMap<ContactData, ChatData>();
+        groupList = new CopyOnWriteArrayList<>();
     }
 
     public static CurrentUser getInstance() throws RemoteException {
@@ -65,7 +67,17 @@ public class CurrentUser extends UserModel {
         this.contactDataList = contactDataList;
     }
 
+    public static CurrentUser getCurrentUser() {
+        return currentUser;
+    }
 
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    public Map<ContactData, ChatData> getChatList() {
+        return chatList;
+    }
 
     public void loadContactsList(List<GetContactsResponse> contactDataList) {
         this.contactDataList.clear();
@@ -111,6 +123,19 @@ public class CurrentUser extends UserModel {
         BufferedImage bufferedImage = ImageUtls.convertByteToImage(user.getProfilePicture());
         Image fxImage= SwingFXUtils.toFXImage(bufferedImage, null);
         this.profilePictureImage = fxImage;
+    }
+
+    public void loadGroups(List<GetGroupResponse> getGroupResponses){
+        this.groupList.clear();
+        for (GetGroupResponse groupResponse : getGroupResponses) {
+            Group group = new Group();
+            group.setGroupId(groupResponse.getGroupId());
+            group.setGroupName(groupResponse.getGroupName());
+            BufferedImage bufferedImage = ImageUtls.convertByteToImage(groupResponse.getGroupPicture());
+            Image fxImage= SwingFXUtils.toFXImage(bufferedImage, null);
+            group.setGroupImage(new ImageView(fxImage));
+            this.groupList.add(group);
+        }
     }
 
 

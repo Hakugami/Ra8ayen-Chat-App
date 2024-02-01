@@ -13,8 +13,11 @@ import model.entities.Chat;
 import model.entities.ChatParticipant;
 import service.ContactService;
 import service.GroupService;
+
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +73,21 @@ public class GroupChatControllerSingleton extends UnicastRemoteObject implements
             groupService.addUserToGroup(chatParticipant);
         }
 
+        List<String> friendsPhoneNumbers = request.getFriendsPhoneNumbers();
+        try {
+            OnlineControllerImpl.clients.get(request.getAdminPhoneNumber()).updateOnlineList();
+        } catch (SQLException | NotBoundException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        for(String friendPhoneNumber : friendsPhoneNumbers){
+            try {
+                if(OnlineControllerImpl.clients.containsKey(friendPhoneNumber)){
+                    OnlineControllerImpl.clients.get(friendPhoneNumber).updateOnlineList();
+                }
+            } catch (SQLException | NotBoundException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
         createGroupChatResponse.setCreated(isCreated);
         createGroupChatResponse.setResponses(request.getFriendsPhoneNumbers());
         return createGroupChatResponse;

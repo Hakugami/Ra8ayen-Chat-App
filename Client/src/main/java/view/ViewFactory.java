@@ -1,6 +1,7 @@
 package view;
 
 import controller.*;
+import model.Chat;
 import token.TokenManager;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -21,7 +22,7 @@ import java.rmi.RemoteException;
 
 public class ViewFactory {
     private final StringProperty selectedMenuItem;
-    private final ObjectProperty<ContactData> selectedContact;
+    private final ObjectProperty<Chat> selectedContact;
     private BorderPane mainArea;
 
 
@@ -33,7 +34,7 @@ public class ViewFactory {
     public StringProperty getSelectedMenuItem() {
         return selectedMenuItem;
     }
-    public ObjectProperty<ContactData> getSelectedContact() {
+    public ObjectProperty<Chat> getSelectedContact() {
         return selectedContact;
     }
 

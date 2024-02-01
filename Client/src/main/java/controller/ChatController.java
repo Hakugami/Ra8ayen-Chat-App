@@ -19,6 +19,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.shape.Circle;
 import model.CurrentUser;
+import model.Group;
 import model.Model;
 import network.NetworkFactory;
 
@@ -115,7 +116,12 @@ public class ChatController implements Initializable {
 
       //  request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
 
-        request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
+//        request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
+        if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
+            request.setReceiverId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+        } else {
+            request.setReceiverId(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+        }
 
         request.setAttachment(false);
         request.setTime(LocalDateTime.now());

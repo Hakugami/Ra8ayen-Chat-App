@@ -2,8 +2,9 @@ package controller;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import model.Chat;
 
-public class ContactData {
+public class ContactData extends Chat {
     private int id;
     private String Name;
     private String phoneNumber;

@@ -37,6 +37,7 @@ public class ContactService{
         addChatParticipants(acceptFriendRequest, friendID, chatID);
         addUserContacts(acceptFriendRequest, friendID);
         OnlineControllerImpl.clients.get(acceptFriendRequest.getFriendPhoneNumber()).updateOnlineList();
+        OnlineControllerImpl.clients.get(acceptFriendRequest.getMyPhoneNumber()).updateOnlineList();
         return new AcceptFriendResponse(true, "");
     }
 

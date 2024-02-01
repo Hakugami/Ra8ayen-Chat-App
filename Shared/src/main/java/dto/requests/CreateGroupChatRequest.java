@@ -6,6 +6,7 @@ import java.util.List;
 
 public class CreateGroupChatRequest implements Serializable {
     private int adminID;
+    private String adminPhoneNumber;
     private String groupName;
     private byte[] groupImage;
     private List<String> friendsPhoneNumbers;
@@ -48,6 +49,14 @@ public class CreateGroupChatRequest implements Serializable {
 
     public void setGroupImage(byte[] groupImage) {
         this.groupImage = groupImage;
+    }
+
+    public String getAdminPhoneNumber() {
+        return adminPhoneNumber;
+    }
+
+    public void setAdminPhoneNumber(String adminPhoneNumber) {
+        this.adminPhoneNumber = adminPhoneNumber;
     }
 
     @Override

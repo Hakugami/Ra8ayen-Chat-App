@@ -2,8 +2,10 @@ package controller;
 
 import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
+import dto.requests.GetGroupRequest;
 import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
+import dto.responses.GetGroupResponse;
 import token.TokenManager;
 import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
@@ -98,6 +100,9 @@ public class LoginController {
                         CurrentUser.getInstance().loadContactsList(responses);
                         System.out.println(CurrentUser.getInstance().getContactDataList().size());
                         System.out.println(responses);
+                        List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
+                        CurrentUser.getInstance().loadGroups( groupResponses);
+                        System.out.println("Groups size "+ CurrentUser.getInstance().getGroupList().size());
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));

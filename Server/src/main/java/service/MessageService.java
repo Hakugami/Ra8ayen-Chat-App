@@ -46,22 +46,22 @@ public class MessageService {
         return messageMapper;
     }
 
-    public String getParticipantPhoneNumber(int senderID, int chatID){
-        List<ChatParticipant> chatParticipant =chatParticipantsDao.get(chatID,senderID);
-        System.out.println("chat "+chatParticipant.size());
-        User user = null;
-        for(ChatParticipant chatParticipant1: chatParticipant){
-            if(chatParticipant1.getParticipantUserId()!=senderID){
-                user = userDao.get(chatParticipant1.getParticipantUserId());
-            }
+  public String getParticipantPhoneNumber(int senderID, int chatID){
+    List<ChatParticipant> chatParticipant =chatParticipantsDao.get(chatID,senderID);
+    System.out.println("chat "+chatParticipant.size());
+    User user = null;
+    for(ChatParticipant chatParticipant1: chatParticipant){
+        if(chatParticipant1.getParticipantUserId()!=senderID){
+            user = userDao.get(chatParticipant1.getParticipantUserId());
+            break;
         }
-        return user.getPhoneNumber();
-        //User user=userDao.get(chatParticipant.get(1).getParticipantUserId());
-
-        /*if(user.getUserStatus().equals(User.UserStatus.Offline)){
-            return null;
-        }else{
-            return user.getPhoneNumber();
-        }*/
     }
+      System.out.println("user "+user);
+
+    if(user == null || user.getUserStatus().equals(User.UserStatus.Offline)){
+        return null;
+    }else{
+        return user.getPhoneNumber();
+    }
+}
 }

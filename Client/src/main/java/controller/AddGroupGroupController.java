@@ -50,6 +50,7 @@ public class AddGroupGroupController implements Initializable {
         CreateGroupChatRequest createGroupChatRequest = new CreateGroupChatRequest();
         try {
             createGroupChatRequest.setAdminID(CurrentUser.getInstance().getUserID());
+            createGroupChatRequest.setAdminPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
             createGroupChatRequest.setGroupName(groupName.getText());
         } catch (RemoteException e) {
             throw new RuntimeException(e);

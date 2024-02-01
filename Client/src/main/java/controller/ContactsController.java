@@ -24,7 +24,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Popup;
+import model.Chat;
 import model.CurrentUser;
+import model.Group;
 import model.Model;
 import network.NetworkFactory;
 
@@ -103,10 +105,14 @@ public class ContactsController implements Initializable {
                 rootOnline.getChildren().add(contactNode);
             }
         }
+        for(int i = 0 ; i < CurrentUser.getInstance().getGroupList().size(); i++){
+            TreeItem<Node> groupNode = new TreeItem<>(loadFXML(CurrentUser.getInstance().getGroupList().get(i)));
+            group.getChildren().add(groupNode);
+        }
 
 
         rootParent.setExpanded(true);
-        rootParent.getChildren().addAll(rootOnline, rootOffline);
+        rootParent.getChildren().addAll(rootOnline, rootOffline, group);
         treeView.setRoot(rootParent);
         treeView.refresh();
 
@@ -115,6 +121,7 @@ public class ContactsController implements Initializable {
     public void changeStatusColor(Color color) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
         Platform.runLater(() -> statusCircle.setFill(color));
         if(color.equals(Color.GREEN)){
+            CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Online);
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Available);
         }
         else if(color.equals(Color.RED)){
@@ -198,58 +205,104 @@ public class ContactsController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+    private Node loadFXML(Group group) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
+            Node node = loader.load();
+            ContactElementController controller = loader.getController();
+            controller.setName(group.getGroupName());
+            controller.setStatus(Color.PURPLE);
+            controller.setImagId(group.getGroupImage().getImage());
+            controller.setChatID(group.getGroupId());
+            return new HBox(node); // Wrap the Node in an HBox
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void addListenerToTreeView() {
-        System.out.println("TreeView initialized with " + treeView.getExpandedItemCount() + " items");
+    System.out.println("TreeView initialized with " + treeView.getExpandedItemCount() + " items");
 
-        treeView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            System.out.println("New item selected in TreeView");
-            if (newValue != null) {
-                System.out.println("New value is not null");
-                Node selectedNode = newValue.getValue();
+    treeView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+        System.out.println("New item selected in TreeView");
+        if (newValue != null) {
+            System.out.println("New value is not null");
+            Node selectedNode = newValue.getValue();
 
-                if (selectedNode instanceof HBox selectedHBox) {
-                    Node root = selectedHBox.getChildren().get(0); // Get the root of the loaded FXML file
-                    System.out.println("Root of selected node is " + root.getClass().getName());
-                    if (root instanceof HBox rootHBox) {
-                        System.out.println("Root is an HBox");
-                        for (Node child : rootHBox.getChildren()) {
-                            System.out.println("Child class: " + child.getClass().getName());
-                        }
-                        if (rootHBox.getChildren().get(0) instanceof Pane) {
-                            System.out.println("First child is a Pane");
-                            // It's a contact node
-                            Pane pane = (Pane) rootHBox.getChildren().get(0);
-                            ImageView imageView = (ImageView) pane.getChildren().getFirst();
-                            if (rootHBox.getChildren().get(1) instanceof Label) {
-                                System.out.println("Second child is a Label");
-                                Label label = (Label) rootHBox.getChildren().get(1);
-                                Label label2 = (Label)rootHBox.getChildren().get(3);
+            if (selectedNode instanceof HBox selectedHBox) {
+                Node root = selectedHBox.getChildren().get(0); // Get the root of the loaded FXML file
+                System.out.println("Root of selected node is " + root.getClass().getName());
+                if (root instanceof HBox rootHBox) {
+                    System.out.println("Root is an HBox");
+                    for (Node child : rootHBox.getChildren()) {
+                        System.out.println("Child class: " + child.getClass().getName());
+                    }
+                    if (rootHBox.getChildren().get(0) instanceof Pane) {
+                        System.out.println("First child is a Pane");
+                        // It's a contact node
+                        Pane pane = (Pane) rootHBox.getChildren().get(0);
+                        ImageView imageView = (ImageView) pane.getChildren().getFirst();
+                        if (rootHBox.getChildren().get(1) instanceof Label) {
+                            System.out.println("Second child is a Label");
+                            Label label = (Label) rootHBox.getChildren().get(1);
+                            Label label2 = (Label)rootHBox.getChildren().get(3);
 
-                                String name = label.getText();
-                                int ID = Integer.parseInt(label2.getText());
+                            String name = label.getText();
+                            int ID = Integer.parseInt(label2.getText());
 
-                                ContactData contactData = new ContactData();
-                                contactData.setName(name);
-                                contactData.setImage(imageView);
-                             //   contactData.setId(ID);
-                                contactData.setChatId(ID);
-                                setSelectedContact(contactData);
-                                System.out.println("Id of contact "+contactData.getId());
-                                contactListener(contactData);
-
-                            } else {
-                                System.out.println("Second child is not a Label");
+                            // Check if the selected item is a group or a contact
+                            try {
+                                if (isGroup(name)) {
+                                    // Handle group
+                                    try {
+                                        Group group = getGroup(name);
+                                        contactListener(group);
+                                    } catch (RemoteException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    // Do something with the group...
+                                } else {
+                                    // Handle contact
+                                    ContactData contactData = new ContactData();
+                                    contactData.setName(name);
+                                    contactData.setImage(imageView);
+                                    contactData.setChatId(ID);
+                                    setSelectedContact(contactData);
+                                    System.out.println("Id of contact "+contactData.getId());
+                                    contactListener(contactData);
+                                }
+                            } catch (RemoteException e) {
+                                throw new RuntimeException(e);
                             }
+                        } else {
+                            System.out.println("Second child is not a Label");
                         }
                     }
                 }
             }
-        });
+        }
+    });
+}
+
+    private boolean isGroup(String name) throws RemoteException {
+        for(int i = 0 ; i < CurrentUser.getInstance().getGroupList().size(); i++){
+            if(CurrentUser.getInstance().getGroupList().get(i).getGroupName().equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void contactListener(ContactData contactData) {
-        System.out.println("contactListener called with contact: " + contactData.getName());
+    private Group getGroup(String name) throws RemoteException {
+        for(int i = 0 ; i < CurrentUser.getInstance().getGroupList().size(); i++){
+            if(CurrentUser.getInstance().getGroupList().get(i).getGroupName().equals(name)){
+                return CurrentUser.getInstance().getGroupList().get(i);
+            }
+        }
+        return null;
+    }
+
+    public void contactListener(Chat contactData) {
         Model.getInstance().getViewFactory().getSelectedContact().setValue(contactData);
        // System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getName());
     }

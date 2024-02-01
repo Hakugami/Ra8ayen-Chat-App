@@ -17,6 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Group;
 import model.Model;
 
 import java.io.IOException;
@@ -76,8 +77,13 @@ public class MainWindowController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
                     Parent root = loader.load();
                     ChatController chatController = loader.getController();
-                    chatController.setName(newValue.getName());
-                    chatController.setImage(newValue.getImage().getImage());
+                    if(newValue instanceof Group){
+                        chatController.setName(((Group) newValue).getGroupName());
+                        chatController.setImage(((Group) newValue).getGroupImage().getImage());
+                    } else{
+                        chatController.setName(((ContactData) newValue).getName());
+                        chatController.setImage(((ContactData)newValue).getImage().getImage());
+                    }
                     setSwappableWindow(root);
                 } catch (IOException e) {
                     e.printStackTrace();
