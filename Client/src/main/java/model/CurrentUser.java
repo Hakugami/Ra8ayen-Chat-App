@@ -65,6 +65,8 @@ public class CurrentUser extends UserModel {
         this.contactDataList = contactDataList;
     }
 
+
+
     public void loadContactsList(List<GetContactsResponse> contactDataList) {
         this.contactDataList.clear();
         for (GetContactsResponse userModel : contactDataList) {

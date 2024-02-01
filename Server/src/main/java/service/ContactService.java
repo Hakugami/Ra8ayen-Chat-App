@@ -76,7 +76,9 @@ public class ContactService{
         ChatDao chatDao = new ChatDaoImpl();
         ChatMapper chatMapper = new ChatMapper();
         Chat privateChat = chatDao.getPrivateChat(getContactChatRequest.getUserID(),getContactChatRequest.getFriendID());
-        return chatMapper.chatToGetContactChatResponse(privateChat);
+        GetContactChatResponse response = chatMapper.chatToGetContactChatResponse(privateChat);
+        response.setFriendID(getContactChatRequest.getFriendID());
+        return response;
     }
 
     public List<GetContactsResponse> getContacts(GetContactsRequest getContactsRequest) {

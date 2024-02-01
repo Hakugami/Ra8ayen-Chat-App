@@ -1,11 +1,13 @@
 package dto.responses;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class GetContactChatResponse {
-    int chatID;
-    String chatName;
-    byte[] chatImage;
+public class GetContactChatResponse implements Serializable {
+    private int chatID;
+    private int friendID;
+    private String chatName;
+    private byte[] chatImage;
 
     public GetContactChatResponse(int chatID, String chatName, byte[] chatImage) {
         this.chatID = chatID;
@@ -35,6 +37,10 @@ public class GetContactChatResponse {
 
     public byte[] getChatImage() {
         return chatImage;
+    }
+
+    public void setFriendID(int friendID){
+        this.friendID = friendID;
     }
 
     public void setChatImage(byte[] chatImage) {

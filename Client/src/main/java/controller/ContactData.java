@@ -33,6 +33,7 @@ public class ContactData {
 
     }
 
+
     public String getName() {
         return Name;
     }
