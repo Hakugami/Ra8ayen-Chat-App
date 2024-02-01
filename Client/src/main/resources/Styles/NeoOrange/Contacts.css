@@ -4,6 +4,10 @@
 .tree-view .tree-cell {
     -fx-background-color:rgb(246, 241, 238); /* light gray */
 }
+.tree-view .tree-cell:filled:hover {
+    -fx-background-color: rgb(243, 215, 189); /* light gray */
+    -fx-text-fill: white;
+}
 .tree-view .scroll-bar {
     -fx-opacity: 0;
 }

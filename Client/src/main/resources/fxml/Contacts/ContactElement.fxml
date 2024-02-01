@@ -8,9 +8,9 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="200.0" spacing="30.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="270.0" spacing="30.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
    <children>
-      <Pane prefHeight="77.0" prefWidth="80.0">
+      <Pane prefHeight="77.0" prefWidth="101.0" HBox.hgrow="ALWAYS">
          <children>
    
    
@@ -22,18 +22,15 @@
             </ImageView>
          </children>
          <HBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </HBox.margin>
       </Pane>
-      <Label fx:id="Name" layoutX="10.0" prefHeight="61.0" prefWidth="74.0" text="Rawda">
-         <padding>
-            <Insets top="40.0" />
-         </padding>
+      <Label fx:id="Name" layoutX="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="92.0" text="Rawda" HBox.hgrow="ALWAYS">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
          <HBox.margin>
-            <Insets top="-13.0" />
+            <Insets />
          </HBox.margin>
       </Label>
       <Circle fx:id="status" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
