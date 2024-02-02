@@ -1,6 +1,9 @@
 package lookupnames;
 
+//import dto.Controller.TrackOnlineUsers;
+
 public enum LookUpNames {
+    TRACKONLINEUSERS,
     ONLINECONTROLLER,
     AUTHENTICATIONCONTROLLER,
     MESSAGECONTROLLER,
@@ -8,4 +11,6 @@ public enum LookUpNames {
     GROUPCHATCONTROLLER,
     INVITATIONCONTROLLER,
     CONTACTCONTROLLER;
+
+
 }

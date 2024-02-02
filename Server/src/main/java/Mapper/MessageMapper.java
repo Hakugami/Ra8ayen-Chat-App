@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface MessageMapper {
     Message sendRequestToEntity(SendMessageRequest request);
     SendMessageRequest entityToSendRequest(Message message);
+    @Mapping(source = "chatId", target = "receiverId")
     Message getMessageRequestToEntity(GetMessageRequest request);
     GetMessageRequest entityToGetMessageRequest(Message message);
     Message modelToEntity(MessageModel message);

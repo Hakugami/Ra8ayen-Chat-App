@@ -1,20 +1,38 @@
-/* NotificationContextMenuElement.css */
+/* NotificationContextMenu.css */
 
-/* Style for the notification menu */
 .AnchorPane {
-    -fx-background-color: #f0f0f0; /* Background color */
-    -fx-border-color: #333; /* Border color */
-    -fx-border-width: 2px; /* Border width */
-    -fx-border-radius: 5px; /* Border radius */
-    -fx-padding: 10px; /* Padding */
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-border-color: rgb(79, 74, 69);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
 }
-/* NotificationContextMenuElement.css */
 
-/* Style for the ListView */
 .ListView {
-    -fx-background-color: #f0f0f0; /* Background color */
-    -fx-border-color: #333; /* Border color */
-    -fx-border-width: 2px; /* Border width */
-    -fx-border-radius: 5px; /* Border radius */
-    -fx-padding: 10px; /* Padding */
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-border-color: rgb(79, 74, 69);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+.ListView .list-cell {
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-text-fill: rgb(246, 241, 238);
+    -fx-padding: 10px;
+    -fx-border-color: rgb(79, 74, 69);
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.ListView .list-cell:filled:selected {
+    -fx-background-color: rgb(237, 125, 49);
+}
+
+.ListView .list-cell:filled:selected:hover {
+    -fx-background-color: rgb(79, 74, 69);
+}
+
+.ListView .list-cell:filled:hover {
+    -fx-background-color: rgb(79, 74, 69);
 }

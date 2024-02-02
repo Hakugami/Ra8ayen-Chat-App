@@ -2,8 +2,9 @@ package controller;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import model.Chat;
 
-public class ContactData {
+public class ContactData extends Chat {
     private int id;
     private String Name;
     private String phoneNumber;
@@ -12,6 +13,16 @@ public class ContactData {
     private String url;
 
     private ImageView image;
+
+    public int getChatId() {
+        return ChatId;
+    }
+
+    public void setChatId(int chatId) {
+        ChatId = chatId;
+    }
+
+    private int ChatId;
 
     public ContactData(String name, Color color, String url) {
         Name = name;
@@ -22,6 +33,7 @@ public class ContactData {
     public ContactData() {
 
     }
+
 
     public String getName() {
         return Name;

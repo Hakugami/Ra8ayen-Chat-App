@@ -17,6 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Group;
 import model.Model;
 
 import java.io.IOException;
@@ -65,6 +66,8 @@ public class MainWindowController implements Initializable {
                     swappableMenu.getChildren().clear();
                     swappableMenu.getChildren().add(Model.getInstance().getViewFactory().getContacts());
                     break;
+                case "UpdateProfile":
+                    setSwappableWindow(Model.getInstance().getViewFactory().getUpdateProfile());
                 default:
                     break;
             }
@@ -76,8 +79,13 @@ public class MainWindowController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
                     Parent root = loader.load();
                     ChatController chatController = loader.getController();
-                    chatController.setName(newValue.getName());
-                    chatController.setImage(newValue.getImage().getImage());
+                    if(newValue instanceof Group){
+                        chatController.setName(((Group) newValue).getGroupName());
+                        chatController.setImage(((Group) newValue).getGroupImage().getImage());
+                    } else{
+                        chatController.setName(((ContactData) newValue).getName());
+                        chatController.setImage(((ContactData)newValue).getImage().getImage());
+                    }
                     setSwappableWindow(root);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -94,7 +102,7 @@ public class MainWindowController implements Initializable {
         customTitleBar.setOnMouseDragged(this::dragWindow);
 
 
-        addContact_btn.setOnAction(this::showAddContactWindow);
+        addContact_btn.setOnAction(this::openAddWindow);
     }
 
     public void setSwappableWindow(Node node) {
@@ -163,6 +171,42 @@ public class MainWindowController implements Initializable {
         stage.setX(event.getScreenX() - initialX);
         stage.setY(event.getScreenY() - initialY);
     }
+
+
+public void openAddWindow(ActionEvent event) {
+    try {
+        Popup popup = new Popup();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddWindow.fxml"));
+        Parent root = loader.load();
+        popup.getContent().add(root);
+
+        AddWindowController addWindowController = loader.getController();
+        addWindowController.setPopup(popup); // Pass the Popup reference to AddWindowController
+
+        // Get the AddGroupGroupController from the AddWindowController
+        AddGroupGroupController addGroupGroupController = addWindowController.getAddGroupGroupController();
+        addGroupGroupController.setPopup(popup); // Pass the Popup reference to AddGroupGroupController
+
+        popup.setAutoHide(true);
+
+        // Show the popup first to calculate its height
+        popup.show(addContact_btn.getScene().getWindow());
+
+        // Calculate the x and y coordinates
+        double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
+        double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
+
+        // Hide the popup
+//        popup.hide();
+
+        // Show the popup again at the correct position
+        popup.show(addContact_btn.getScene().getWindow(), x, y);
+
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
     private void showAddContactWindow(ActionEvent event) {
         try {

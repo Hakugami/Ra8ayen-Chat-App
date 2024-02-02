@@ -1,0 +1,57 @@
+.root {
+    -fx-background-color: linear-gradient(to bottom, rgb(237, 125, 49), rgb(108, 95, 91));
+}
+
+.button {
+    -fx-background-color: rgba(108, 95, 91, 1); /* No transparency */
+    -fx-text-fill: rgb(246, 241, 238);
+    -fx-font-size: 16px;
+    -fx-font-family: Arial, sans-serif;
+    -fx-background-radius: 50px;
+}
+.button:hover {
+    -fx-background-color: rgba(79, 74, 69, 1); /* No transparency */
+}
+
+.label {
+    -fx-text-fill: rgb(79, 74, 69);
+    -fx-font-size: 14px;
+    -fx-font-family: Arial, sans-serif;
+    -fx-wrap-text: true;
+}
+
+.textField {
+    -fx-background-color: rgb(0, 0, 0);
+    -fx-text-fill: rgb(108, 95, 91);
+    -fx-border-color: rgb(79, 74, 69);
+    -fx-border-width: 2px;
+    -fx-padding: 10px;
+}
+
+.ImageView:hover{
+    -fx-cursor: hand;
+}
+
+.tab-pane {
+    /* TabPane background color */
+    -fx-background-color: rgb(79, 74, 69);
+}
+
+.tab {
+    /* Tab background color */
+    -fx-background-color: rgb(108, 95, 91);
+    /* Tab text color */
+    -fx-text-fill: rgb(246, 241, 238);
+    /* Tab border color */
+    -fx-border-color: rgb(79, 74, 69);
+    /* Tab border width */
+    -fx-border-width: 2px;
+}
+
+.tab:hover {
+    /* Tab background color */
+    -fx-background-color: rgb(79, 74, 69);
+}
+
+
+

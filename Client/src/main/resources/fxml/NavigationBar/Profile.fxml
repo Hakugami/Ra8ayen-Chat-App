@@ -7,14 +7,20 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="container_profile" stylesheets="@../../Styles/NeoOrange/ContextProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
-   <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-      <Label fx:id="usernameLabel" text="Username" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="user1" />
-      <Label fx:id="phoneNumber" text="phone number" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1010101" />
-      <Label fx:id="gender" text="gender" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="M" />
+   <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="121.0" prefWidth="271.0" VBox.vgrow="ALWAYS">
+         <Label fx:id="usernameLabel" text="Username" textAlignment="CENTER"/>
+         <Text fx:id="userText" strokeType="OUTSIDE" strokeWidth="0.0" text="user1" textAlignment="CENTER"
+               wrappingWidth="99.28776168823242"/>
+         <Label fx:id="phoneNumber" text="Phone number"/>
+         <Text fx:id="phoneNumberText" strokeType="OUTSIDE" strokeWidth="0.0" text="01013308606" textAlignment="CENTER"
+               wrappingWidth="95.40885543823242"/>
+         <Label fx:id="gender" prefHeight="19.0" text="Gender"/>
+         <Text fx:id="genderText" strokeType="OUTSIDE" strokeWidth="0.0" text="M" textAlignment="CENTER"
+               wrappingWidth="59.640625"/>
+      </VBox>
       <!-- Add more labels or other components here to display more user details -->
-      <Button fx:id="UpdateProfile" text="update details" VBox.vgrow="ALWAYS" />
+      <Button fx:id="UpdateProfile" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="80.0" text="Update" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
    </VBox>
 </AnchorPane>

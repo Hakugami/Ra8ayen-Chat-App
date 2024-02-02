@@ -5,8 +5,10 @@ import dto.Model.MessageModel;
 import dto.Model.NotificationModel;
 import dto.requests.FriendRequest;
 import dto.requests.GetContactsRequest;
+import dto.requests.GetGroupRequest;
 import javafx.application.Platform;
 import model.CurrentUser;
+import model.Group;
 import model.Model;
 import network.NetworkFactory;
 import notification.NotificationManager;
@@ -54,6 +56,25 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
+       // Model.getInstance().getControllerFactory().getChatController();
+        System.out.println("Message Received----------------------------------------------------------------------------------------");
+        if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
+                System.out.println("Selected "+((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+                System.out.println("Message "+message.getMessageContent());
+        }
+        else if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
+            System.out.println("Selected "+((Group)Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+            System.out.println("Message "+message.getMessageContent());
+        }
+        Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+        if(message.getSender()!=null){
+
+            System.out.println(message.getSender().getUserID());
+            System.out.println(message.getSender().getProfilePicture());
+        }else{
+            System.out.println("Sender Object is null");
+        }
+        //get ChatID of message and display on
 
     }
 
@@ -74,7 +95,15 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+        System.out.println("updateOnlineList");
         CurrentUser.getInstance().loadContactsList(NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID())));
+        CurrentUser.getInstance().getContactDataList().forEach(contactData ->{
+            System.out.println(contactData.getColor());
+        });
+        CurrentUser.getInstance().loadGroups(NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID())));
+        CurrentUser.getInstance().getGroupList().forEach(groupData ->{
+            System.out.println(groupData.getGroupName());
+        });
         Platform.runLater(()-> {
             try {
                 Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();

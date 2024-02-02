@@ -3,7 +3,6 @@ package dao.impl;
 import dao.NotificationDao;
 import persistence.connection.DataSourceSingleton;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.*;
 import model.entities.*;
 

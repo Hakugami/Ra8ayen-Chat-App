@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 public class GetMessageRequest implements Serializable{
     private String phoneNumber;
-    private String chatId;
+    private int chatId;
 
     public GetMessageRequest(){}
 
-    public GetMessageRequest(String phoneNumber, String chatId){
+
+    public GetMessageRequest(String phoneNumber, int chatId) {
         this.phoneNumber = phoneNumber;
         this.chatId = chatId;
     }
@@ -17,14 +18,15 @@ public class GetMessageRequest implements Serializable{
         return phoneNumber;
     }
 
-    public String getChatId() {
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getChatId() {
         return chatId;
     }
 
-    @Override
-    public String toString() {
-        return "GetMessageRequest{" +
-                "chatId='" + chatId + '\'' +
-                '}';
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
     }
 }

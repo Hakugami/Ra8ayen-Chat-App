@@ -6,8 +6,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
+import model.CurrentUser;
 
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StatusContextMenuController implements Initializable {
@@ -31,15 +35,27 @@ public class StatusContextMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         available.setOnMouseClicked(mouseEvent -> {
-            contactsController.changeStatusColor(Color.GREEN);
+            try {
+                contactsController.changeStatusColor(Color.GREEN);
+            } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             popup.hide();
         });
         busy.setOnMouseClicked(mouseEvent -> {
-            contactsController.changeStatusColor(Color.RED);
+            try {
+                contactsController.changeStatusColor(Color.RED);
+            } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             popup.hide();
         });
         away.setOnMouseClicked(mouseEvent -> {
-            contactsController.changeStatusColor(Color.YELLOW);
+            try {
+                contactsController.changeStatusColor(Color.YELLOW);
+            } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             popup.hide();
         });
     }

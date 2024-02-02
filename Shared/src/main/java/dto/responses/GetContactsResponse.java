@@ -16,7 +16,29 @@ public class GetContactsResponse implements Serializable {
     private UserStatus userStatus;
     private String lastLogin;
     private UserMode userMode;
+    private int chatID;
+    private String Bio;
 
+
+    private int ChatId;
+
+    public int getChatId() {
+        return ChatId;
+    }
+
+    public void setChatId(int chatId) {
+        ChatId = chatId;
+    }
+
+    public String getBIO() {
+        return BIO;
+    }
+
+    public void setBIO(String BIO) {
+        this.BIO = BIO;
+    }
+
+    private String BIO;
     // enum classes
     public enum Gender {
         Male, Female
@@ -107,6 +129,22 @@ public class GetContactsResponse implements Serializable {
         this.userMode = userMode;
     }
 
+    public int getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(int chatID) {
+        this.chatID = chatID;
+    }
+
+    public String getBio() {
+        return Bio;
+    }
+
+    public void setBio(String bio) {
+        Bio = bio;
+    }
+
     @Override
     public String toString() {
         return "GetContactsResponse{" +
@@ -118,6 +156,8 @@ public class GetContactsResponse implements Serializable {
                 ", userStatus=" + userStatus +
                 ", lastLogin='" + lastLogin + '\'' +
                 ", userMode=" + userMode +
+                ", ChatId=" + ChatId +
+                ", BIO='" + BIO + '\'' +
                 '}';
     }
 }

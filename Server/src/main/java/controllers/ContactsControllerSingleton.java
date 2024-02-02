@@ -55,5 +55,10 @@ public class ContactsControllerSingleton extends UnicastRemoteObject  implements
     public DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException {
         return contactService.deleteContact(deleteUserContactRequest);
     }
+
+    @Override
+    public List<GetContactChatResponse> getPrivateChats(List<GetContactChatRequest> getContactChatRequests) throws RemoteException, SQLException, ClassNotFoundException {
+        return contactService.getContactPrivateChat(getContactChatRequests);
+    }
 }
 

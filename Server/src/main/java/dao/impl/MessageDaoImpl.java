@@ -29,14 +29,13 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> get(int sender, int receiver) {
-        String query = "SELECT * FROM Messages where SenderID = ? and ReceiverID = ? ";
+    public List<Message> getChatMessages(int chatID) {
+        String query = "SELECT * FROM Messages where  ReceiverID = ? ";
         List<Message> result= new ArrayList<>();
         try(Connection connection = DataSourceSingleton.getInstance().getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
         ){
-            statement.setInt(1,sender);
-            statement.setInt(2,receiver);
+            statement.setInt(1,chatID);
             try (ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){
                     Message message ;

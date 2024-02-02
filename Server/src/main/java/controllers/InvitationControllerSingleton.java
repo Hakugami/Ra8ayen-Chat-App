@@ -54,6 +54,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     }
     @Override
     public AddContactResponse addContact(AddContactRequest addContactRequest) throws RemoteException {
+        System.out.println("addContact");
         AddContactResponse addContactResponse = new AddContactResponse();
         boolean isDone = false;
         List<String> responses = new ArrayList<>();
@@ -73,7 +74,9 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                   friendRequest.setReceiverPhoneNumber(phoneNumber);
                   friendRequest.setSenderPhoneNumber(userService.getUserById(addContactRequest.getUserId()).getPhoneNumber());
                   friendRequest.setUserModel(userMapper.entityToModel(userService.getUserById(addContactRequest.getUserId())));
-                  OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+                  if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
+                      OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+                  }
               }
             }
             else {

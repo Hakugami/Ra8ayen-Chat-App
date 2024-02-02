@@ -23,6 +23,7 @@ import javafx.util.Duration;
 import model.Country;
 import model.Model;
 import network.NetworkFactory;
+import org.controlsfx.control.Notifications;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -267,7 +268,7 @@ public class SignUpController implements Initializable {
                     System.out.println("User registered successfully");
                     backToLoginScreen(signUpButton);
                 } else {
-                    System.err.println("User registration failed");
+                    Notifications.create().title("Duplicate Entry").text(registerResponse.getError()).showError();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -289,13 +290,39 @@ public class SignUpController implements Initializable {
     }
 
     private boolean validateFields() {
-        if (nameField.getText().isEmpty() ||
-                !isValidEmail(emailField.getText()) ||
-                !isValidPhoneNumber(phoneNumberField.getText()) ||
-                !isValidPassword(passwordField.getText()) ||
-                countryComboBox.getSelectionModel().isEmpty() ||
-                gender.getSelectionModel().isEmpty() ||
-                datePicker.getValue() == null) {
+        List<String> invalidFields = new ArrayList<>();
+
+        if (nameField.getText().isEmpty()) {
+            invalidFields.add("Name can't be empty");
+        }
+
+        if (!isValidEmail(emailField.getText())) {
+            invalidFields.add("Email must be valid email address");
+        }
+
+        if (!isValidPhoneNumber(phoneNumberField.getText())) {
+            invalidFields.add("Phone Number must be valid phone number");
+        }
+
+        if (!isValidPassword(passwordField.getText(), confirmPasswordField.getText())) {
+            invalidFields.add("Password must be 8 or more and match Confirm Password");
+        }
+
+        if (countryComboBox.getSelectionModel().isEmpty()) {
+            invalidFields.add("Country can't be empty");
+        }
+
+        if (gender.getSelectionModel().isEmpty()) {
+            invalidFields.add("Gender can't be empty");
+        }
+
+        if (datePicker.getValue() == null || datePicker.getValue().isAfter(LocalDate.now())) {
+            invalidFields.add("Date of Birth can't be empty or in the future");
+        }
+
+        if (!invalidFields.isEmpty()) {
+            String invalidFieldsString = String.join("\n", invalidFields);
+            Notifications.create().title("Validation Error").text("Invalid fields: \n" + invalidFieldsString).showError();
             return false;
         }
 
@@ -321,8 +348,8 @@ public class SignUpController implements Initializable {
         }
     }
 
-    private boolean isValidPassword(String password) {
-        if (password.length() >= 8)
+    private boolean isValidPassword(String password, String confirmPassword) {
+        if (password.length() >= 8 && password.equals(confirmPassword))
             return true;
         else {
             System.out.println("Password must be 8 or more.");

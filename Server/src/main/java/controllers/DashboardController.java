@@ -2,21 +2,41 @@ package controllers;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+//import service.TrackOnlineUsersService;
+
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class DashboardController implements Initializable {
+    @FXML
+    public Label onlineUsersLabel;
     @FXML
     private VBox vbRoot;
     @FXML
     private PieChart genderPieChart;
     @FXML
     private PieChart countryPieChart;
+    //private int count = 0;
+    // Get an instance of TrackOnlineUsersService
+    //TrackOnlineUsersService trackOnlineUsersService  = TrackOnlineUsersService.getInstance();
+    private ScheduledExecutorService executorService;
+    String onlineUsersCountString ;
+
+    public DashboardController() throws RemoteException {
+    }
+
 
     VBox getVBoxRoot()
     {
@@ -39,6 +59,7 @@ public class DashboardController implements Initializable {
         int maleCount = 20;
         int femaleCount = 25;
 
+
         PieChart.Data maleData = new PieChart.Data("Male Users", maleCount);
         PieChart.Data femaleData = new PieChart.Data("Female Users", femaleCount);
 
@@ -52,5 +73,37 @@ public class DashboardController implements Initializable {
             maleData.getNode().getStyleClass().add("male-pie");
             femaleData.getNode().getStyleClass().add("female-pie");
         });
+        //-----------------------------------------------------------------------------------------------------
+
+        /*onlineUsersLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("updated label text: " + newValue);
+        });
+        onlineUsersLabel.setText(" " + count);
+
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(() -> {
+            count++;
+            Platform.runLater(() -> onlineUsersLabel.setText(" " + count));
+        }, 0, 5, TimeUnit.SECONDS);*/
+        //-----------------------------------------------------------------------------------------------------
+
+  /*      TrackOnlineUsersService trackOnlineUsersService = null;
+        try {
+            trackOnlineUsersService = TrackOnlineUsersService.getInstance();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        System.out.println("proberty ---> "+trackOnlineUsersService.onlineUsersCountStringProberty().get());
+        System.out.println("label ---> "+onlineUsersLabel.getText());
+        // binding label with stringProperty
+        onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
+        //-----------------------------------------------------------------------------------------------------
+
+*/
+
     }
+
+
 }

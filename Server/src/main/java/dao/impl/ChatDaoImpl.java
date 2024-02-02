@@ -119,6 +119,35 @@ public class ChatDaoImpl implements ChatDao {
         }
         return false;
     }
+    @Override
+    public int saveGroupChat(Chat chatGroup) {
+        String query = "INSERT INTO Chat (ChatName, AdminID, ChatImage) VALUES (?, ?, ?)";
+        ResultSet generatedKeys = null;
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, chatGroup.getName());
+            statement.setInt(2, chatGroup.getAdminId());
+            statement.setBytes(3, chatGroup.getChatImage());
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected >= 1) {
+                generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (generatedKeys != null) {
+                try {
+                    generatedKeys.close();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        return -1;
+    }
 
     @Override
     public int savePrivateChat(Chat chat) {
@@ -188,9 +217,13 @@ public class ChatDaoImpl implements ChatDao {
         String name = resultSet.getString(ChatTable.CHATNAME.name());
         int adminId = resultSet.getInt(ChatTable.ADMINID.name());
         Blob imageBlob = resultSet.getBlob(ChatTable.CHATIMAGE.name());
-        byte[] image = imageBlob.getBytes(1, (int) imageBlob.length());
+      // byte[] image = imageBlob.getBytes(1, (int) imageBlob.length());
+        byte[] profilePicture =  null;
+        if (imageBlob != null) {
+            profilePicture = imageBlob.getBytes(1, (int) imageBlob.length());
+        }
         String creationDate = resultSet.getTimestamp(ChatTable.CREATIONDATE.name()).toString();
         String lastModified = resultSet.getTimestamp(ChatTable.LASTMODIFIED.name()).toString();
-        return new Chat(id, name, adminId, image, creationDate, lastModified);
+        return new Chat(id, name, adminId, profilePicture, creationDate, lastModified);
     }
 }

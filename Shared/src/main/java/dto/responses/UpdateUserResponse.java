@@ -2,9 +2,10 @@ package dto.responses;
 
 import dto.Model.UserModel;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class UpdateUserResponse {
+public class UpdateUserResponse implements Serializable {
     private UserModel userModel;
     private boolean updated;
 

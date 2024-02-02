@@ -23,4 +23,5 @@ public interface ContactsController extends Remote {
 
     DeleteUserContactResponse deleteContact(DeleteUserContactRequest deleteUserContactRequest) throws RemoteException, SQLException, ClassNotFoundException;
 
+    List<GetContactChatResponse> getPrivateChats(List<GetContactChatRequest> getContactChatRequests) throws RemoteException, SQLException,ClassNotFoundException;
 }

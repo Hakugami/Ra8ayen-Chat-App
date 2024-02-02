@@ -12,10 +12,10 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="750.0" stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
+<AnchorPane prefHeight="750.0" styleClass="tree-view" stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
    <HBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="102.0" prefWidth="300.0" styleClass="h-box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="93.0" prefWidth="87.0" HBox.hgrow="ALWAYS">
-         <ImageView fx:id="ImagProfile" fitHeight="65.0" fitWidth="65.0" layoutX="11.0" layoutY="9.0" preserveRatio="true" styleClass="ImagProfile">
+         <ImageView fx:id="ImagProfile" fitHeight="65.0" fitWidth="65.0" layoutX="11.0" layoutY="9.0" preserveRatio="true" styleClass="ImageView">
             <clip>
                <Circle fx:id="imageClip" centerX="40" centerY="40" radius="40" />
             </clip>
@@ -24,14 +24,14 @@
             </viewport>
 
          </ImageView>
-         <Circle fx:id="statusCircle" fill="DODGERBLUE" layoutX="55.0" layoutY="74.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" styleClass="statusCircle" AnchorPane.rightAnchor="10.0" />
+         <Circle fx:id="statusCircle" fill="DODGERBLUE" layoutX="55.0" layoutY="74.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" styleClass="Circle" AnchorPane.rightAnchor="10.0" />
       </AnchorPane>
       <AnchorPane>
          <HBox.margin>
             <Insets top="-5.0" />
          </HBox.margin>
          <children>
-            <Label fx:id="displayName" prefHeight="56.0" prefWidth="217.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="displayName" prefHeight="56.0" prefWidth="217.0" styleClass="Label" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <padding>
                   <Insets top="35.0" />
                </padding>
@@ -43,7 +43,7 @@
       </AnchorPane>
    </HBox>
    <VBox alignment="CENTER" layoutX="-1.0" layoutY="105.0" prefHeight="643.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="107.0">
-      <TextField fx:id="searchField" maxWidth="-Infinity" prefHeight="31.0" prefWidth="290.0" promptText="Search" styleClass="search-field" />
+      <TextField fx:id="searchField" maxWidth="-Infinity" prefHeight="31.0" prefWidth="290.0" promptText="Search" styleClass="TextField" />
       <TreeView fx:id="treeView" prefHeight="488.0" prefWidth="300.0" VBox.vgrow="ALWAYS" />
    </VBox>
 </AnchorPane>
