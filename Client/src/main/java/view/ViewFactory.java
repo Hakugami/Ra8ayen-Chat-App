@@ -199,4 +199,12 @@ public class ViewFactory {
     public Node getContactElement() throws IOException {
         return new FXMLLoader(getClass().getResource("/Fxml/Contacts/ContactElement.fxml")).load();
     }
+
+    public Node getUpdateProfile() {
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/UpdateProfile.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
