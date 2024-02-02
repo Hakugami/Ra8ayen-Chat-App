@@ -2,7 +2,9 @@ package controller;
 
 import dto.Model.MessageModel;
 import dto.Model.UserModel;
+import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
+import dto.responses.GetMessageResponse;
 import dto.responses.SendMessageResponse;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -217,6 +219,21 @@ public class ChatController implements Initializable {
                 chatListView.getItems().add(messageModel);
             }
         });
+
+    }
+    public void getMessageOfContact() throws RemoteException, NotBoundException {
+        GetMessageRequest getMessageRequest = new GetMessageRequest();
+        //System.out.println(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+
+        //getMessageRequest.setChatId();
+        getMessageRequest.setChatId(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+        getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+       GetMessageResponse getMessageResponse =NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+       if(getMessageResponse==null){
+           System.out.println("No Message to this Contact Found");
+       }else{
+           System.out.println("Message Size "+getMessageResponse.getMessageList().size());
+       }
 
     }
 

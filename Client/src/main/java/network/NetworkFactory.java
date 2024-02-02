@@ -109,6 +109,10 @@ public class NetworkFactory {
         GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
         return controller.getGroups(request);
     }
+    public GetMessageResponse getMessageOfChatID(GetMessageRequest request) throws RemoteException, NotBoundException {
+        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+        return controller.getAllMessages(request);
+    }
 
 
 }

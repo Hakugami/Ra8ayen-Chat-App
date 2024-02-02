@@ -38,6 +38,9 @@ public class MessageService {
     }
     public List<Message> getMessages(GetMessageRequest request) {
         Message message = messageMapper.getMessageRequestToEntity(request);
+
+        System.out.println("Data From Server : Message Sender "+message.getSenderId());
+        System.out.println("Data From Server : Message Content "+message.getMessageContent());
         return messageDao.get(message.getSenderId(), message.getReceiverId());
     }
 
