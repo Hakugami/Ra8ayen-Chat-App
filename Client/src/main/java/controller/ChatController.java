@@ -1,6 +1,7 @@
 package controller;
 
 import dto.Model.MessageModel;
+import dto.Model.UserModel;
 import dto.requests.SendMessageRequest;
 import dto.responses.SendMessageResponse;
 import javafx.application.Platform;
@@ -107,9 +108,25 @@ public class ChatController implements Initializable {
         messageBox.clear();
 
         // Send the message to the server
+
         SendMessageRequest request = new SendMessageRequest();
         request.setMessageContent(message);
-        request.setSenderId(CurrentUser.getInstance().getUserID());
+
+        UserModel userModel = new UserModel();
+        userModel.setProfilePicture(CurrentUser.getInstance().getProfilePicture());
+        userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
+        userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
+        userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
+        userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
+        userModel.setBio(CurrentUser.getCurrentUser().getBio());
+        userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
+        userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
+
+        request.setSender(userModel);
+
+     //   request.setSender(CurrentUser.getInstance());  // CurrentUser is child of UserModel
+
+      //  request.setSenderId(CurrentUser.getInstance().getUserID());
       //send message to receiver Id of selected contact
 
    //     System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
@@ -195,6 +212,8 @@ public class ChatController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
+                System.out.println("Message Added to List in Run Platform");
                 chatListView.getItems().add(messageModel);
             }
         });

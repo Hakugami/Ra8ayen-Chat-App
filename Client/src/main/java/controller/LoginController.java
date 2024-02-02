@@ -1,6 +1,6 @@
 package controller;
 
-import dto.Controller.TrackOnlineUsers;
+//import dto.Controller.TrackOnlineUsers;
 import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
 import dto.requests.GetGroupRequest;
@@ -53,7 +53,7 @@ public class LoginController {
     @FXML
     AnchorPane loginXml;
 
-    private TrackOnlineUsers server;
+  //  private TrackOnlineUsers server;
     private int onlineUsersInDashboard;
     private int onlineUsersCount;
 
@@ -131,7 +131,7 @@ public class LoginController {
                          *
                          * */
                         onlineUsersCount++;
-                        startTrackingOnlineUsers();
+                     //   startTrackingOnlineUsers();
                     } else {
                         System.err.println("Invalid fields1");
                     }
@@ -148,7 +148,7 @@ public class LoginController {
     }
 
 
-    private void startTrackingOnlineUsers() {
+   /* private void startTrackingOnlineUsers() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(() -> {
             try {
@@ -169,7 +169,7 @@ public class LoginController {
             }
         }, 0, 5, TimeUnit.SECONDS);
     }
-
+*/
 
     private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
       //  List<ChatData> listOfChats = new ArrayList<>();

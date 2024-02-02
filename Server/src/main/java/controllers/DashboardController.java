@@ -9,7 +9,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-import service.TrackOnlineUsersService;
+//import service.TrackOnlineUsersService;
 
 import java.net.URL;
 import java.rmi.NotBoundException;
@@ -30,7 +30,7 @@ public class DashboardController implements Initializable {
     private PieChart countryPieChart;
     //private int count = 0;
     // Get an instance of TrackOnlineUsersService
-    TrackOnlineUsersService trackOnlineUsersService  = TrackOnlineUsersService.getInstance();
+    //TrackOnlineUsersService trackOnlineUsersService  = TrackOnlineUsersService.getInstance();
     private ScheduledExecutorService executorService;
     String onlineUsersCountString ;
 
@@ -87,7 +87,7 @@ public class DashboardController implements Initializable {
         }, 0, 5, TimeUnit.SECONDS);*/
         //-----------------------------------------------------------------------------------------------------
 
-        TrackOnlineUsersService trackOnlineUsersService = null;
+  /*      TrackOnlineUsersService trackOnlineUsersService = null;
         try {
             trackOnlineUsersService = TrackOnlineUsersService.getInstance();
         } catch (RemoteException e) {
@@ -101,7 +101,7 @@ public class DashboardController implements Initializable {
         onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
         //-----------------------------------------------------------------------------------------------------
 
-
+*/
 
     }
 

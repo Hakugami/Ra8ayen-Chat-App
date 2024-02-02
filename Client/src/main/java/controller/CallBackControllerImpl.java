@@ -59,6 +59,13 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         System.out.println("Selected "+((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
         System.out.println("Message "+message.getMessageContent());
         Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+        if(message.getSender()!=null){
+
+            System.out.println(message.getSender().getUserID());
+            System.out.println(message.getSender().getProfilePicture());
+        }else{
+            System.out.println("Sender Object is null");
+        }
         //get ChatID of message and display on
 
     }

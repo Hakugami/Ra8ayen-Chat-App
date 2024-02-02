@@ -54,6 +54,9 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageModel.setChatId(request.getReceiverId());
             messageModel.setMessageContent(request.getMessageContent());
 
+            //add UseModel to messageModel
+            messageModel.setSender(request.getSender());
+
             OnlineControllerImpl.clients.get(phoneNumber).receiveNewMessage(messageModel);
         } catch (Exception e) {
             response.setSuccess(false);

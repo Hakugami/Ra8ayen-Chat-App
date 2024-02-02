@@ -57,14 +57,14 @@ public class NetworkFactory {
     }
 
     //update Login Users numbers in dashboard----------------------------------------------
-    public int  getOnlineUsersCount() throws RemoteException, NotBoundException {
+    /*public int  getOnlineUsersCount() throws RemoteException, NotBoundException {
         TrackOnlineUsers trackOnlineUsers = (TrackOnlineUsers) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.TRACKONLINEUSERS.name());
         return trackOnlineUsers.getOnlineUsersCount();
     }
     public void updateOnlineUsersCount(int onlineUsersCount) throws RemoteException, NotBoundException {
         TrackOnlineUsers trackOnlineUsers = (TrackOnlineUsers) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.TRACKONLINEUSERS.name());
         trackOnlineUsers.updateOnlineUsersCount(onlineUsersCount);
-    }
+    }*/
     //--------------------------------------------------------------------------------------
     public void disconnect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
