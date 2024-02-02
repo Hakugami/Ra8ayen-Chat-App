@@ -79,7 +79,11 @@ public class ViewFactory {
     }
 
 
-    public void showLoginWindow() {
+    public void showLoginWindow() throws NotBoundException, RemoteException {
+
+//        LoginController client = new LoginController();
+//        client.connectToServer();
+//        client.startTrackingOnlineUsers();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml"));
         createStage(loader);
     }

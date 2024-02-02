@@ -1,5 +1,6 @@
 package controller;
 
+import dto.Controller.TrackOnlineUsers;
 import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
 import dto.requests.GetGroupRequest;
@@ -27,9 +28,16 @@ import network.NetworkFactory;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LoginController {
 
@@ -44,6 +52,11 @@ public class LoginController {
 
     @FXML
     AnchorPane loginXml;
+
+    private TrackOnlineUsers server;
+    private int onlineUsersInDashboard;
+    private int onlineUsersCount;
+
 
     @FXML
     public void initialize() {
@@ -69,6 +82,12 @@ public class LoginController {
             }
         });
         registerButton.setOnAction(this::handleRegisterButton);
+
+
+
+        onlineUsersCount = 0;
+        onlineUsersInDashboard=0;
+
 
     }
 
@@ -101,23 +120,57 @@ public class LoginController {
                         System.out.println(CurrentUser.getInstance().getContactDataList().size());
                         System.out.println(responses);
                         List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
-                        CurrentUser.getInstance().loadGroups( groupResponses);
-                        System.out.println("Groups size "+ CurrentUser.getInstance().getGroupList().size());
+                        CurrentUser.getInstance().loadGroups(groupResponses);
+                        System.out.println("Groups size " + CurrentUser.getInstance().getGroupList().size());
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
+                        /*
+                         *
+                         * tracking number of online users
+                         *
+                         * */
+                        onlineUsersCount++;
+                        startTrackingOnlineUsers();
                     } else {
-                        System.err.println("Invalid fields");
+                        System.err.println("Invalid fields1");
                     }
                 } else {
-                    System.err.println("Invalid fields");
+                    System.err.println("Invalid fields2");
+                    //just to check result without any data : what happened when login button is clicked
+                    //onlineUsersCount++;
+                    //startTrackingOnlineUsers();
                 }
             } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
                 System.out.println(e.getMessage());
             }
         });
-
     }
+
+
+    private void startTrackingOnlineUsers() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                // online users in the dashboard
+                onlineUsersInDashboard = NetworkFactory.getInstance().getOnlineUsersCount();
+                //compare between current users numbers in dashboard and if there is a new user login
+                if(onlineUsersCount > onlineUsersInDashboard){
+                    // if yes ---> increment online users numbers in dashbpard
+                    onlineUsersInDashboard=onlineUsersCount;
+                    // update dashboard
+                    NetworkFactory.getInstance().updateOnlineUsersCount(onlineUsersInDashboard);
+                    System.out.println("onlineUsersCount : "+onlineUsersCount+" , "+"onlineUsersInDashboard : "+onlineUsersInDashboard);
+
+                }
+
+            } catch (RemoteException | NotBoundException e) {
+                e.printStackTrace();
+            }
+        }, 0, 5, TimeUnit.SECONDS);
+    }
+
+
     private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
       //  List<ChatData> listOfChats = new ArrayList<>();
         List<GetContactChatRequest> listOfContactId = new ArrayList<>();
