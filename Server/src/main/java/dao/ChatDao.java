@@ -9,7 +9,10 @@ public interface ChatDao extends Dao<Chat>{
     Chat getChatByName(String name);
     List<Chat> getAll();
     List<Chat> getGroupChats(int userId);
-    boolean save(Chat chatGroup);
+    Chat getPrivateChat(int userId, int friendId);
+    boolean save(Chat chat);
+    int saveGroupChat(Chat chatGroup);
+    int savePrivateChat(Chat chatPrivate);
     boolean update(Chat chatGroup);
     boolean delete(Chat chatGroup);
 

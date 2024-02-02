@@ -58,7 +58,8 @@ public class MessageBubbleController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
+        //displayCurrentUserMessage();
+       try {
             if (message.getSender().getUserID()== CurrentUser.getInstance().getUserID()) {
                 displayCurrentUserMessage();
             } else {
@@ -89,7 +90,7 @@ public class MessageBubbleController implements Initializable {
 
     private void loadMessage() {
         messageText.setText(message.getMessageContent());
-        messageTimeLabel.setText(String.valueOf(message.getTime()));
+   //     messageTimeLabel.setText(String.valueOf(message.getTime()));
         BufferedImage bufferedImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
         Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
         senderImage.setImage(fxImage);

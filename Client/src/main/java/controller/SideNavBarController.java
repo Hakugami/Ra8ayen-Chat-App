@@ -26,6 +26,8 @@ public class SideNavBarController implements Initializable {
     public Button settings_btn;
     public Button logout_btn;
     @FXML
+    public Button notificationButton;
+    @FXML
     private MenuItem profileMenuItem;
     @FXML
     private MenuItem themesMenuItem;
@@ -52,7 +54,7 @@ public class SideNavBarController implements Initializable {
 
         settings_btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/SettingsContextMenu.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/SettingsContextMenu.fxml"));
                 Parent root = fxmlLoader.load();
                 Popup popup = new Popup();
                 popup.getContent().add(root);
@@ -65,7 +67,23 @@ public class SideNavBarController implements Initializable {
                 e.printStackTrace();
             }
         });
+        notificationButton.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationContextMenu.fxml"));
+                Parent root = fxmlLoader.load();
+                Popup popup = new Popup();
+                popup.getContent().add(root);
+                popup.setAutoHide(true);
+                //make it appear at the top of the button
+                double x = notificationButton.getScene().getWindow().getX() + notificationButton.getScene().getX() + notificationButton.getWidth() / 2;
+                double y = notificationButton.getScene().getWindow().getY() + notificationButton.getScene().getY() + notificationButton.getHeight() / 2;
+                popup.show(notificationButton.getScene().getWindow(), x, y+500);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
 
     private void addListeners (){
         contacts_btn.setOnAction(event -> onContactsClick());

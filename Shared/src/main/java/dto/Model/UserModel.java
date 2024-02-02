@@ -3,6 +3,8 @@ package dto.Model;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UserModel  implements Serializable {
     private int userID;
@@ -17,6 +19,7 @@ public class UserModel  implements Serializable {
     private UserStatus userStatus;
     private String lastLogin;
     private UserMode userMode;
+    private List<UserModel> contacts;
 
     // enum classes
     public enum Gender {
@@ -52,9 +55,15 @@ public class UserModel  implements Serializable {
         this.userStatus = userStatus;
         this.userMode = userMode;
         this.lastLogin = lastLogin;
+        contacts = new CopyOnWriteArrayList<>();
     }
 
-
+    public UserModel(int userID, String userName, String phoneNumber, byte[] profilePicture) {
+        this.userID = userID;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+    }
 
 
     public void setUserID(int userID) {
@@ -154,6 +163,26 @@ public class UserModel  implements Serializable {
 
     public String getLastLogin() {
         return lastLogin;
+    }
+
+    public void addContact(UserModel user) {
+        contacts.add(user);
+    }
+
+    public void removeContact(UserModel user) {
+        contacts.remove(user);
+    }
+
+    public List<UserModel> getContacts() {
+        return contacts;
+    }
+
+    public UserMode getUserMode() {
+        return userMode;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
     }
 
     @Override

@@ -1,7 +1,11 @@
 package controller;
-
+import dto.Model.UserModel;
+import dto.requests.UpdateUserRequest;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,80 +16,160 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
+import model.Chat;
 import model.CurrentUser;
+import model.Group;
 import model.Model;
+import network.NetworkFactory;
+import view.ControllerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ContactsController implements Initializable {
     public Label displayName;
     public TextField searchField;
     @FXML
+    public Circle statusCircle;
+    @FXML
     TreeView<Node> treeView;
-
     @FXML
     public ImageView ImagProfile;
 
     @FXML
     public Circle imageClip;
 
-    public final ObjectProperty<ContactData> selectedContact = new SimpleObjectProperty<>( new ContactData());
+    public ObservableList<ContactData> observableContactDataList;
+
+    public final ObjectProperty<ContactData> selectedContact = new SimpleObjectProperty<>(new ContactData());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Model.getInstance().getControllerFactory().setContactsController(this);
+        observableContactDataList = FXCollections.observableArrayList();
+
+        double parentWidth = statusCircle.getParent().getBoundsInLocal().getWidth();
+        double circleWidth = statusCircle.getRadius() * 2;
+        statusCircle.setLayoutX((parentWidth - circleWidth) / 2);
+        statusCircle.setLayoutY(parentWidth - circleWidth);
         try {
             setImageProfileData();
+        } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            setTreeViewData();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        setTreeViewData();
         addListenerToTreeView();
+        statusCircle.setOnMouseClicked(this::changeStatus);
     }
 
-    void setTreeViewData() {
+
+    public void setTreeViewData() throws RemoteException {
+        observableContactDataList.setAll(CurrentUser.getInstance().getContactDataList());
+
         TreeItem<Node> rootParent = new TreeItem<>();
 
         Label label = new Label("Contacts");
-        label.setStyle("-fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #CA3503;");
-        label.setFont(Font.font("Arial", 40));
-        label.setPrefWidth(300);
-        label.setPrefHeight(25);
+        label.setId("myLabel");
         rootParent = new TreeItem<>(label);
 
-        TreeItem<Node> rootOnline = new TreeItem<>(loadFXML("Online", Color.GREEN, "Contacts/StatusElement.fxml"));
+        TreeItem<Node> rootOnline = new TreeItem<>(loadFXML("Online", Color.GREEN));
         rootOnline.setExpanded(true);
-        rootOnline.getChildren().addAll(
-                new TreeItem<>(loadFXML(new ContactData("Reem", Color.CYAN, "/images/personone.jpg"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Shrouk", Color.BURLYWOOD, "/images/persontwo.jpg"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Rawda", Color.YELLOW, "/images/personfour.jpg"), "ContactElement.fxml"))
-        );
 
-        TreeItem<Node> rootOffline = new TreeItem<>(loadFXML("Offline", Color.RED, "StatusElement.fxml"));
+        TreeItem<Node> rootOffline = new TreeItem<>(loadFXML("Offline", Color.GRAY));
         rootOffline.setExpanded(true);
-        rootOffline.getChildren().addAll(
-                new TreeItem<>(loadFXML(new ContactData("Reem", Color.CYAN, "/images/personseven.png"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Shrouk", Color.BURLYWOOD, "/images/personthree.jpg"), "ContactElement.fxml")),
-                new TreeItem<>(loadFXML(new ContactData("Rawda", Color.YELLOW, "/images/personten.png"), "ContactElement.fxml"))
-        );
+        TreeItem<Node> group = new TreeItem<>(loadFXML("Groups", Color.PURPLE));
+        group.setExpanded(true);
+
+        for (ContactData contact : observableContactDataList) {
+            Color color = contact.getColor();
+            System.out.println("Contact: " + contact.getName() + " is " + color);
+            TreeItem<Node> contactNode = new TreeItem<>(loadFXML(contact));
+            if (color.equals(Color.GRAY)) {
+                rootOffline.getChildren().add(contactNode);
+            } else {
+                rootOnline.getChildren().add(contactNode);
+            }
+        }
+        for(int i = 0 ; i < CurrentUser.getInstance().getGroupList().size(); i++){
+            TreeItem<Node> groupNode = new TreeItem<>(loadFXML(CurrentUser.getInstance().getGroupList().get(i)));
+            group.getChildren().add(groupNode);
+        }
+
 
         rootParent.setExpanded(true);
-        rootParent.getChildren().addAll(rootOnline, rootOffline);
-
+        rootParent.getChildren().addAll(rootOnline, rootOffline, group);
         treeView.setRoot(rootParent);
+        treeView.refresh();
+
     }
 
-    void setImageProfileData() throws RemoteException {
-        ImagProfile.setFitWidth(imageClip.getRadius() * 2);
-        ImagProfile.setFitHeight(imageClip.getRadius() * 2);
+    public void changeStatusColor(Color color) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+        Platform.runLater(() -> statusCircle.setFill(color));
+        if(color.equals(Color.GREEN)){
+            CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Online);
+            CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Available);
+        }
+        else if(color.equals(Color.RED)){
+            CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Busy);
+        }
+        else if(color.equals(Color.YELLOW)){
+            CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Away);
+        }
+        // Get the current user
+        CurrentUser currentUser = CurrentUser.getInstance();
+
+// Create a new UserModel instance
+        UserModel user = new UserModel();
+
+// Set only the relevant fields
+        user.setUserID(currentUser.getUserID());
+        user.setPhoneNumber(currentUser.getPhoneNumber());
+        user.setUserName(currentUser.getUserName());
+        user.setEmailAddress(currentUser.getEmailAddress());
+        user.setProfilePicture(currentUser.getProfilePicture());
+        user.setGender(currentUser.getGender());
+        user.setCountry(currentUser.getCountry());
+        user.setDateOfBirth(currentUser.getDateOfBirth());
+        user.setBio(currentUser.getBio());
+        user.setUserStatus(currentUser.getUserStatus());
+        user.setUserMode(currentUser.getUserMode());
+        user.setLastLogin(currentUser.getLastLogin());
+
+// Create the UpdateUserRequest with the new UserModel instance
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest(user);
+
+// Send the request
+        NetworkFactory.getInstance().updateUser(updateUserRequest);
+
+
+    }
+
+    private void setImageProfileData() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+        double newRadius = 28;
+        imageClip.setRadius(newRadius);
+        imageClip.setCenterX(newRadius);
+        imageClip.setCenterY(newRadius);
+        ImagProfile.setFitWidth(imageClip.getRadius() * 2 + 5);
+        ImagProfile.setFitHeight(imageClip.getRadius() * 2 + 5);
         displayName.setText(CurrentUser.getInstance().getUserName());
+        Color color = Color.GREEN;
+        changeStatusColor(color);
         if (CurrentUser.getInstance().getProfilePictureImage() != null) {
             System.out.println("Not Null data found");
             Image newImage = CurrentUser.getInstance().getProfilePictureImage();
@@ -95,34 +179,49 @@ public class ContactsController implements Initializable {
         }
     }
 
-Node loadFXML(String status, Color color, String fxmlFile) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/StatusElement.fxml"));
-        Node node = loader.load();
-        StatusElementController controller = loader.getController();
-        controller.setStatusName(status);
-        controller.setStatusColor(color);
-        return new HBox(node); // Wrap the Node in an HBox
-    } catch (IOException e) {
-        throw new RuntimeException(e);
+    private Node loadFXML(String status, Color color) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/StatusElement.fxml"));
+            Node node = loader.load();
+            StatusElementController controller = loader.getController();
+            controller.setStatusName(status);
+            controller.setStatusColor(color);
+            return new HBox(node); // Wrap the Node in an HBox
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-}
 
-Node loadFXML(ContactData contactData, String fxmlFile) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
-        Node node = loader.load();
-        ContactElementController controller = loader.getController();
-        controller.setName(contactData.getName());
-        controller.setStatus(contactData.getColor());
-        controller.setUrl(contactData.getUrl());
-        return new HBox(node); // Wrap the Node in an HBox
-    } catch (IOException e) {
-        throw new RuntimeException(e);
+    private Node loadFXML(ContactData contactData) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
+            Node node = loader.load();
+            ContactElementController controller = loader.getController();
+            controller.setName(contactData.getName());
+            controller.setStatus(contactData.getColor());
+            controller.setImagId(contactData.getImage().getImage());
+            controller.setChatID(contactData.getChatId());
+            return new HBox(node); // Wrap the Node in an HBox
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-}
+    private Node loadFXML(Group group) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
+            Node node = loader.load();
+            ContactElementController controller = loader.getController();
+            controller.setName(group.getGroupName());
+            controller.setStatus(Color.PURPLE);
+            controller.setImagId(group.getGroupImage().getImage());
+            controller.setChatID(group.getGroupId());
+            return new HBox(node); // Wrap the Node in an HBox
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-void addListenerToTreeView() {
+    private void addListenerToTreeView() {
     System.out.println("TreeView initialized with " + treeView.getExpandedItemCount() + " items");
 
     treeView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -147,13 +246,35 @@ void addListenerToTreeView() {
                         if (rootHBox.getChildren().get(1) instanceof Label) {
                             System.out.println("Second child is a Label");
                             Label label = (Label) rootHBox.getChildren().get(1);
+                            Label label2 = (Label)rootHBox.getChildren().get(3);
 
                             String name = label.getText();
-                            ContactData contactData = new ContactData();
-                            contactData.setName(name);
-                            contactData.setImage(imageView);
-                            setSelectedContact(contactData);
-                            contactListener(contactData);
+                            int ID = Integer.parseInt(label2.getText());
+
+                            // Check if the selected item is a group or a contact
+                            try {
+                                if (isGroup(name)) {
+                                    // Handle group
+                                    try {
+                                        Group group = getGroup(name);
+                                        contactListener(group);
+                                    } catch (RemoteException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    // Do something with the group...
+                                } else {
+                                    // Handle contact
+                                    ContactData contactData = new ContactData();
+                                    contactData.setName(name);
+                                    contactData.setImage(imageView);
+                                    contactData.setChatId(ID);
+                                    setSelectedContact(contactData);
+                                    System.out.println("Id of contact "+contactData.getId());
+                                    contactListener(contactData);
+                                }
+                            } catch (RemoteException e) {
+                                throw new RuntimeException(e);
+                            }
                         } else {
                             System.out.println("Second child is not a Label");
                         }
@@ -164,9 +285,36 @@ void addListenerToTreeView() {
     });
 }
 
-    public void contactListener(ContactData contactData){
-        System.out.println("contactListener called with contact: " + contactData.getName());
+    private boolean isGroup(String name) throws RemoteException {
+        for(int i = 0 ; i < CurrentUser.getInstance().getGroupList().size(); i++){
+            if(CurrentUser.getInstance().getGroupList().get(i).getGroupName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Group getGroup(String name) throws RemoteException {
+        for(int i = 0 ; i < CurrentUser.getInstance().getGroupList().size(); i++){
+            if(CurrentUser.getInstance().getGroupList().get(i).getGroupName().equals(name)){
+                return CurrentUser.getInstance().getGroupList().get(i);
+            }
+        }
+        return null;
+    }
+
+    public void contactListener(Chat contactData) {
         Model.getInstance().getViewFactory().getSelectedContact().setValue(contactData);
+
+        try {
+            Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
+
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        }
+       // System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getName());
     }
 
     public ContactData getSelectedContact() {
@@ -180,8 +328,28 @@ void addListenerToTreeView() {
         // Get the MainWindowController and add the listener
 
     }
+
     public ObjectProperty<ContactData> selectedContactProperty() {
         return selectedContact;
     }
 
+    private void changeStatus(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) { // Check if left button was clicked
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/StatusContextMenu.fxml"));
+                Pane pane = loader.load();
+
+                StatusContextMenuController statusContextMenuController = loader.getController();
+                statusContextMenuController.setContactsController(this);
+
+                Popup popup = new Popup();
+                statusContextMenuController.setPopup(popup);
+                popup.getContent().add(pane);
+                popup.setAutoHide(true);
+                popup.show(statusCircle.getScene().getWindow(), mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

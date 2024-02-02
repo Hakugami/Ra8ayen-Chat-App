@@ -19,6 +19,9 @@ public class ContactElementController {
     @FXML
     Circle imageClip;
 
+    @FXML
+    Label chatID;
+
     public void initialize() {
         // Set the initial size of the ImageView to match the circle
         ImagId.setFitWidth(imageClip.getRadius() * 2);
@@ -31,17 +34,15 @@ public class ContactElementController {
     public void setStatus(Color color) {
         status.setFill(color);
     }
-    public void setUrl(String url){
-        String imagePath = url;
+    public void setImagId(Image image) {
+        ImagId.setImage(image);
+    }
 
-        // Get the URL of the image
-        URL imageUrl = ContactElementController.class.getResource(imagePath);
-        if(imageUrl!=null) {
-            System.out.println(imageUrl);
-            Image newImage = new Image(imageUrl.toString());
-            ImagId.setImage(newImage);
-        }else{
-            System.out.println("Null data found");
-        }
+    public int getChatID() {
+        return Integer.parseInt(chatID.getText());
+    }
+
+    public void setChatID(int chatID) {
+        this.chatID.setText(String.valueOf(chatID));
     }
 }

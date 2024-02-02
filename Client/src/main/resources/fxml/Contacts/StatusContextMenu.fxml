@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../Styles/NeoOrange/StatusContextMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StatusContextMenuController">
+    <VBox fx:id="statusContextMenu" prefHeight="100.0" prefWidth="100.0" styleClass="status-context-menu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label fx:id="available" prefHeight="32.0" prefWidth="96.0" styleClass="menu-item" text="Available" />
+        <Label fx:id="busy" prefHeight="32.0" prefWidth="100.0" styleClass="menu-item" text="Busy" />
+        <Label fx:id="away" prefHeight="32.0" prefWidth="100.0" styleClass="menu-item" text="Away" />
+    </VBox>
+</AnchorPane>

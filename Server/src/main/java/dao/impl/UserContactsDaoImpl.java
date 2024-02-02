@@ -3,6 +3,7 @@ package dao.impl;
 import dao.UserContactsDao;
 import model.entities.User;
 import model.entities.UserContacts;
+import model.entities.UserContactsTable;
 import persistence.connection.DataSourceSingleton;
 
 import java.sql.*;
@@ -63,6 +64,24 @@ public class UserContactsDaoImpl implements UserContactsDao {
     }
 
     @Override
+    public List<Integer> getFriendsIDs(int userId) {
+        List<Integer> friendIds = new ArrayList<>();
+        String query = "SELECT FriendID FROM UserContacts WHERE UserID = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    friendIds.add(resultSet.getInt(UserContactsTable.FRIENDID.name()));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return friendIds;
+    }
+
+    @Override
     public boolean update(UserContacts userContacts) {
         String query = "UPDATE UserContacts SET FriendID = ? WHERE UserID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -96,27 +115,12 @@ public class UserContactsDaoImpl implements UserContactsDao {
         return false;
     }
 
-
-    @Override
-    public List<UserContacts> getContactById(User user) {
-        List<UserContacts> userContactsList = new ArrayList<>();
-        String query = "SELECT * FROM UserContacts WHERE UserID = ? AND FriendID = ?";
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery(query)) {
-            while (resultSet.next()) {
-                userContactsList.add(createUserContactsFromResultSet(resultSet));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return userContactsList;
-    }
-
     private UserContacts createUserContactsFromResultSet(ResultSet resultSet) throws SQLException {
         int friendId = resultSet.getInt("FriendID");
         int userId = resultSet.getInt("UserID");
         String creationDate = resultSet.getString("CreationDate");
         return new UserContacts(friendId, userId, creationDate);
     }
+
+
 }

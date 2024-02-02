@@ -1,7 +1,6 @@
 package model.entities;
 
 public enum UserTable {
-
     UserID,
     PhoneNumber,
     DisplayName,
@@ -12,7 +11,7 @@ public enum UserTable {
     Country,
     DateOfBirth,
     Bio,
-    UserStatus,
     UserMode,
-    LastLogin;
+    UserStatus,
+    LastLogin
 }

@@ -1,30 +1,28 @@
 .context-menu {
-    -fx-background-color: #2f2f2f;
-    -fx-text-fill: #f8f8f8;
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-text-fill: rgb(246, 241, 238);
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
 }
 
 .left_container {
-    -fx-background-color: rgba(54, 54, 54, 0.49);
-
-
+    -fx-background-color: rgb(79, 74, 69);
 }
 
 .left_container Button {
-    -fx-background-color: #2f2f2f;
+    -fx-background-color: rgb(79, 74, 69);
     -fx-background-radius: 5;
     -fx-border-radius: 5;
     -fx-font-size: 0.9em;
-    -fx-text-fill: #ffffff;
-    -fx-pref-width: 60;
-    -fx-pref-height: 40;
-    -fx-alignment: center-left;
+    -fx-text-fill: rgb(246, 241, 238);
+    -fx-pref-width: 70;
+    -fx-pref-height: 50;
+    -fx-alignment: center;
 }
 
 .left_container Button:hover {
-    -fx-background-color: #444444;
+    -fx-background-color: rgb(237, 125, 49);
     -fx-background-radius: 5;
     -fx-border-radius: 5;
     -fx-font-size: 0.9em;
@@ -32,4 +30,3 @@
     -fx-pref-height: 40;
     -fx-alignment: center-left;
 }
-

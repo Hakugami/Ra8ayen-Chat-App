@@ -1,21 +1,23 @@
 package dto.requests;
 
+import dto.Model.NotificationModel;
+import dto.Model.UserModel;
+
 import java.io.Serializable;
 
-public class FriendRequest implements Serializable {
+public class FriendRequest extends NotificationModel implements Serializable {
     private String senderPhoneNumber;
     private String receiverPhoneNumber;
-    private boolean success;
-    private String error;
+    UserModel userModel;
+
 
     public FriendRequest() {
     }
 
-    public FriendRequest(String senderPhoneNumber, String receiverPhoneNumber, boolean success, String error) {
+    public FriendRequest(String senderPhoneNumber, String receiverPhoneNumber, UserModel userModel) {
         this.senderPhoneNumber = senderPhoneNumber;
         this.receiverPhoneNumber = receiverPhoneNumber;
-        this.success = success;
-        this.error = error;
+
     }
 
     public String getSenderPhoneNumber() {
@@ -34,20 +36,12 @@ public class FriendRequest implements Serializable {
         receiverPhoneNumber = receiverPhoneNumber;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public UserModel getUserModel() {
+        return userModel;
     }
 
-    public void setSuccess(boolean success) {
-        success = success;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     @Override
@@ -55,8 +49,9 @@ public class FriendRequest implements Serializable {
         return "FriendRequest{" +
                 "senderPhoneNumber='" + senderPhoneNumber + '\'' +
                 ", receiverPhoneNumber='" + receiverPhoneNumber + '\'' +
-                ", success=" + success +
-                ", error='" + error + '\'' +
+                ", userModel=" + userModel +
+                ", id=" + id +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

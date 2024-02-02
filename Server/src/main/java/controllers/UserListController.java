@@ -44,7 +44,7 @@ public class UserListController implements Initializable {
 
         TableColumn<User, Void> iconColumn = new TableColumn<>();
         iconColumn.setCellFactory(param -> new TableCell<>() {
-            private final ImageView iconView = new ImageView(new Image("delete.png", 20, 20, true, true));
+            private final ImageView iconView = new ImageView(new Image("/Images/delete.png", 20, 20, true, true));
 
             {
                 iconView.getStyleClass().add("image-view");

@@ -3,7 +3,6 @@ package dao.impl;
 import dao.NotificationDao;
 import persistence.connection.DataSourceSingleton;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.*;
 import model.entities.*;
 
@@ -54,7 +53,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -70,7 +69,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -87,7 +86,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -100,4 +99,21 @@ public class NotificationDaoImpl implements NotificationDao {
 
     return new Notification(notificationId, receiverId, senderId, notificationMessageContent);
 }
+    public boolean checkInvite(Notification notification){
+        String query = "SELECT * FROM usernotifications WHERE SenderID = ? and ReceiverID = ?";
+        ResultSet resultSet = null;
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, notification.getReceiverId());
+            statement.setInt(2,notification.getSenderId());
+            resultSet = statement.executeQuery();
+           if(resultSet.next()){
+               return true;
+           }else{
+               return false;
+           }
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }
