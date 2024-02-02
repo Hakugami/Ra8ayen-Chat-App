@@ -216,7 +216,8 @@ public class ChatController implements Initializable {
             public void run() {
 
                 System.out.println("Message Added to List in Run Platform");
-                chatListView.getItems().add(messageModel);
+             //   chatListView.getItems().add(messageModel);
+                chatMessages.add(messageModel);
             }
         });
 
@@ -226,15 +227,41 @@ public class ChatController implements Initializable {
         //System.out.println(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
 
         //getMessageRequest.setChatId();
-        getMessageRequest.setChatId(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
-        getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
-       GetMessageResponse getMessageResponse =NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-       if(getMessageResponse==null){
-           System.out.println("No Message to this Contact Found");
-       }else{
-           System.out.println("Message Size "+getMessageResponse.getMessageList().size());
-       }
+        if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
+            getMessageRequest.setChatId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
 
+            getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+            GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+            if (getMessageResponse == null) {
+                System.out.println("No Message to this Contact Found");
+            } else {
+                System.out.println("Message Size " + getMessageResponse.getMessageList().size());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        chatMessages.clear();
+                        chatMessages.setAll(getMessageResponse.getMessageList());
+                    }
+                });
+            }
+        }else{
+            getMessageRequest.setChatId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+
+            getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+            GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+            if (getMessageResponse == null) {
+                System.out.println("No Message to this Contact Found");
+            } else {
+                System.out.println("Message Size " + getMessageResponse.getMessageList().size());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        chatMessages.clear();
+                        chatMessages.setAll(getMessageResponse.getMessageList());
+                    }
+                });
+            }
+        }
     }
 
 }
