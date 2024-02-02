@@ -11,6 +11,7 @@ import model.entities.ChatParticipant;
 import model.entities.Message;
 import model.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageService {
@@ -29,18 +30,16 @@ public class MessageService {
 
     public void sendMessage(SendMessageRequest request) {
         Message message = messageMapper.sendRequestToEntity(request);
-        if(messageDao.save(message)) {
+        if (messageDao.save(message)) {
             System.out.println("Message saved successfully");
         } else {
             System.out.println("Failed to save message");
         }
 
     }
+
     public List<Message> getMessages(GetMessageRequest request) {
         Message message = messageMapper.getMessageRequestToEntity(request);
-
-        System.out.println("Data From Server : Message Sender "+message.getSenderId());
-        System.out.println("Data From Server : Message Content "+message.getMessageContent());
         return messageDao.getChatMessages(message.getReceiverId());
     }
 
@@ -48,21 +47,17 @@ public class MessageService {
         return messageMapper;
     }
 
-  public String getParticipantPhoneNumber(int senderID, int chatID){
-    List<ChatParticipant> chatParticipant =chatParticipantsDao.get(chatID,senderID);
-    User user = null;
-    for(ChatParticipant chatParticipant1: chatParticipant){
-        if(chatParticipant1.getParticipantUserId()!=senderID){
-            user = userDao.get(chatParticipant1.getParticipantUserId());
-            break;
+    public List<String> getParticipantPhoneNumbers(int senderID, int chatID) {
+        List<ChatParticipant> chatParticipants = chatParticipantsDao.get(chatID, senderID);
+        List<String> phoneNumbers = new ArrayList<>();
+        for (ChatParticipant chatParticipant : chatParticipants) {
+            if (chatParticipant.getParticipantUserId() != senderID) {
+                User user = userDao.get(chatParticipant.getParticipantUserId());
+                if (user != null && !user.getUserStatus().equals(User.UserStatus.Offline)) {
+                    phoneNumbers.add(user.getPhoneNumber());
+                }
+            }
         }
+        return phoneNumbers;
     }
-      System.out.println("Hello from service"+ user.getUserID());
-
-    if(user == null || user.getUserStatus().equals(User.UserStatus.Offline)){
-        return null;
-    }else{
-        return user.getPhoneNumber();
-    }
-}
 }

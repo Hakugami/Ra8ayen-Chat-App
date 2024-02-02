@@ -8,6 +8,7 @@ import dto.requests.GetContactsRequest;
 import dto.requests.GetGroupRequest;
 import javafx.application.Platform;
 import model.CurrentUser;
+import model.Group;
 import model.Model;
 import network.NetworkFactory;
 import notification.NotificationManager;
@@ -56,8 +57,15 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
        // Model.getInstance().getControllerFactory().getChatController();
-        System.out.println("Selected "+((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
-        System.out.println("Message "+message.getMessageContent());
+        System.out.println("Message Received----------------------------------------------------------------------------------------");
+        if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
+                System.out.println("Selected "+((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+                System.out.println("Message "+message.getMessageContent());
+        }
+        else if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
+            System.out.println("Selected "+((Group)Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+            System.out.println("Message "+message.getMessageContent());
+        }
         Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         if(message.getSender()!=null){
 

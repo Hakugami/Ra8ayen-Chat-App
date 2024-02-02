@@ -52,7 +52,7 @@ public class ChatController implements Initializable {
     private ObservableList<MessageModel> chatMessages;
     private final StringProperty nameProperty = new SimpleStringProperty();
 
-   // private int ChatID;
+    // private int ChatID;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getControllerFactory().setChatController(this);
@@ -78,26 +78,26 @@ public class ChatController implements Initializable {
             }
         });
 
-         ImagContact.setFitWidth(imageClip.getRadius() * 2);
-         ImagContact.setFitHeight(imageClip.getRadius() * 2);
-         ImagContact.setClip(imageClip);
+        ImagContact.setFitWidth(imageClip.getRadius() * 2);
+        ImagContact.setFitHeight(imageClip.getRadius() * 2);
+        ImagContact.setClip(imageClip);
 
-         nameProperty.set("Contact Name");
+        nameProperty.set("Contact Name");
 
 
     }
 
- public void updateChatContent(String name, Image image) {
-    Platform.runLater(() -> {
-        nameProperty.set(name);
-        if (image != null) {
-            ImagContact.setImage(image);
-        }
-    });
-}
+    public void updateChatContent(String name, Image image) {
+        Platform.runLater(() -> {
+            nameProperty.set(name);
+            if (image != null) {
+                ImagContact.setImage(image);
+            }
+        });
+    }
 
     private void sendMessage() throws RemoteException {
-    //    System.out.println(Model.getInstance().getViewFactory().getSelectedContact().getName().);
+        //    System.out.println(Model.getInstance().getViewFactory().getSelectedContact().getName().);
         //System.out.println();
         String message = messageBox.getText();
         if (message.isEmpty()) {
@@ -126,26 +126,26 @@ public class ChatController implements Initializable {
         request.setSenderId(CurrentUser.getInstance().getUserID());
         request.setSender(userModel);
 
-     //   request.setSender(CurrentUser.getInstance());  // CurrentUser is child of UserModel
+        //   request.setSender(CurrentUser.getInstance());  // CurrentUser is child of UserModel
 
-      //  request.setSenderId(CurrentUser.getInstance().getUserID());
-      //send message to receiver Id of selected contact
+        //  request.setSenderId(CurrentUser.getInstance().getUserID());
+        //send message to receiver Id of selected contact
 
-   //     System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
+        //     System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
 
-      //  request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
+        //  request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
 
 //        request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
         if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
             request.setReceiverId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
         } else {
-            request.setReceiverId(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+            request.setReceiverId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
         }
 
         request.setAttachment(false);
         request.setTime(LocalDateTime.now());
         try {
-          //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
+            //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
             System.out.println(request);
             SendMessageResponse response = NetworkFactory.getInstance().sendMessage(request);
             System.out.println(response);
@@ -205,62 +205,53 @@ public class ChatController implements Initializable {
         System.out.println("ChatController: Name set to " + name);
     }
 
-    public void setImage( Image image){
+    public void setImage(Image image) {
         System.out.println("ChatController: Image set to " + image);
         ImagContact.setImage(image);
     }
-    public void setNewMessage(MessageModel messageModel){
+
+    public void setNewMessage(MessageModel messageModel) {
         System.out.println("New Message Arrive to chatList");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
                 System.out.println("Message Added to List in Run Platform");
-             //   chatListView.getItems().add(messageModel);
+                //   chatListView.getItems().add(messageModel);
                 chatMessages.add(messageModel);
             }
         });
 
     }
+
     public void getMessageOfContact() throws RemoteException, NotBoundException {
         GetMessageRequest getMessageRequest = new GetMessageRequest();
         //System.out.println(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
 
         //getMessageRequest.setChatId();
-        if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
+        if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
             getMessageRequest.setChatId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
 
-            getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
-            GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-            if (getMessageResponse == null) {
-                System.out.println("No Message to this Contact Found");
-            } else {
-                System.out.println("Message Size " + getMessageResponse.getMessageList().size());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        chatMessages.clear();
-                        chatMessages.setAll(getMessageResponse.getMessageList());
-                    }
-                });
-            }
-        }else{
+            retrieveMessages(getMessageRequest);
+        } else if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
+            System.out.println("Group Chat condition");
             getMessageRequest.setChatId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+            retrieveMessages(getMessageRequest);
+        }
+    }
 
-            getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
-            GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-            if (getMessageResponse == null) {
-                System.out.println("No Message to this Contact Found");
-            } else {
-                System.out.println("Message Size " + getMessageResponse.getMessageList().size());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        chatMessages.clear();
-                        chatMessages.setAll(getMessageResponse.getMessageList());
-                    }
-                });
-            }
+    private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException, NotBoundException {
+        System.out.println("Retrieving Messages of ChatID " + getMessageRequest.getChatId() );
+        getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+        GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+        if (getMessageResponse == null) {
+            System.out.println("No Message to this Contact Found");
+        } else {
+            System.out.println("Message Size " + getMessageResponse.getMessageList().size());
+            Platform.runLater(() -> {
+                chatMessages.clear();
+                chatMessages.setAll(getMessageResponse.getMessageList());
+            });
         }
     }
 

@@ -7,14 +7,10 @@ import dto.requests.SendMessageRequest;
 import dto.responses.GetMessageResponse;
 import dto.responses.SendMessageResponse;
 import model.entities.Message;
-import network.manager.NetworkManagerSingleton;
 import service.MessageService;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -45,7 +41,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             response.setSuccess(true);
             response.setError("Message sent successfully");
 
-            String phoneNumber=messageService.getParticipantPhoneNumber(request.getSenderId(),request.getReceiverId());
+            List<String> phoneNumber = messageService.getParticipantPhoneNumbers(request.getSenderId(), request.getReceiverId());
 
             System.out.println(phoneNumber);
             MessageModel messageModel = new MessageModel();
@@ -56,8 +52,11 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
 
             //add UseModel to messageModel
             messageModel.setSender(request.getSender());
-
-            OnlineControllerImpl.clients.get(phoneNumber).receiveNewMessage(messageModel);
+            for (String number : phoneNumber) {
+                if (OnlineControllerImpl.clients.containsKey(number)) {
+                    OnlineControllerImpl.clients.get(number).receiveNewMessage(messageModel);
+                }
+            }
         } catch (Exception e) {
             response.setSuccess(false);
             response.setError("Failed to send message: " + e.getMessage());

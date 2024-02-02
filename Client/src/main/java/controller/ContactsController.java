@@ -307,9 +307,7 @@ public class ContactsController implements Initializable {
         Model.getInstance().getViewFactory().getSelectedContact().setValue(contactData);
 
         try {
-            if(contactData instanceof ContactData){
-                Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
-            }
+            Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
 
         } catch (RemoteException e) {
             throw new RuntimeException(e);
