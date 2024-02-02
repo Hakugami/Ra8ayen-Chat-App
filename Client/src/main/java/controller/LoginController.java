@@ -131,7 +131,7 @@ public class LoginController {
                          *
                          * */
                         onlineUsersCount++;
-                     //   startTrackingOnlineUsers();
+                        startTrackingOnlineUsers();
                     } else {
                         System.err.println("Invalid fields1");
                     }
@@ -148,7 +148,7 @@ public class LoginController {
     }
 
 
-   /* private void startTrackingOnlineUsers() {
+   private void startTrackingOnlineUsers() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(() -> {
             try {
@@ -169,7 +169,7 @@ public class LoginController {
             }
         }, 0, 5, TimeUnit.SECONDS);
     }
-*/
+
 
     private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
       //  List<ChatData> listOfChats = new ArrayList<>();
