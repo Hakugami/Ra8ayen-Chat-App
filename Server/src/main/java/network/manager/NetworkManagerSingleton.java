@@ -2,6 +2,7 @@ package network.manager;
 
 import controllers.*;
 import lookupnames.LookUpNames;
+import service.TrackOnlineUsersService;
 //import service.TrackOnlineUsersService;
 
 import java.net.MalformedURLException;
@@ -46,7 +47,7 @@ public class NetworkManagerSingleton {
             registry.rebind(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
             registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
             registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
-           // registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
+            registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
             setServerRunning(true);
         } catch (RemoteException | MalformedURLException e) {
             System.out.println(e.getMessage());
