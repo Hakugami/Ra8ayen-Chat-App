@@ -12,6 +12,7 @@ import dto.responses.GetNotificationsResponse;
 import model.entities.Notification;
 import model.entities.User;
 import service.ContactService;
+import service.EmailService;
 import service.InvitationService;
 import service.UserService;
 
@@ -29,6 +30,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     private final InvitationMapper invitationMapper;
     private final UserMapper userMapper;
     private final UserService userService;
+    private final EmailService emailService;
 
     private final ContactService contactService;
     protected InvitationControllerSingleton() throws RemoteException {
@@ -38,6 +40,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         invitationMapper = new InvitationMapper();
         userMapper = new UserMapperImpl();
         contactService = new ContactService();
+        emailService = new EmailService();
     }
     public static InvitationControllerSingleton getInstance() throws RemoteException {
         if (instance == null) {
@@ -54,7 +57,6 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     }
     @Override
     public AddContactResponse addContact(AddContactRequest addContactRequest) throws RemoteException {
-        System.out.println("addContact");
         AddContactResponse addContactResponse = new AddContactResponse();
         boolean isDone = false;
         List<String> responses = new ArrayList<>();
@@ -68,6 +70,12 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                   AcceptUserAsFriend(notification.getSenderId(),phoneNumber);
               }
               else {
+                  String myEmail = userService.getUserById(addContactRequest.getUserId()).getEmailAddress();
+                  emailService.sendEmail(myEmail, user.getEmailAddress(),
+                          "Chat App (رغايين)",
+                          "You have a friend request from "
+                                  + userService.getUserById(addContactRequest.getUserId()).getUserName() +
+                                  " with phone number " + phoneNumber);
                   isDone = invitationService.inviteContact(notification);
                   responses.add("Invitation has been sent to " + phoneNumber);
                   FriendRequest friendRequest = new FriendRequest();

@@ -12,6 +12,7 @@ module server {
     requires Shared;
     requires org.mapstruct;
     requires java.desktop;
+    requires javax.mail;
 
     opens server to javafx.fxml;
     exports server;
