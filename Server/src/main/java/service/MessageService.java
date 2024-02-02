@@ -29,7 +29,6 @@ public class MessageService {
 
     public void sendMessage(SendMessageRequest request) {
         Message message = messageMapper.sendRequestToEntity(request);
-        System.out.println(message.getMessageContent());
         if(messageDao.save(message)) {
             System.out.println("Message saved successfully");
         } else {
@@ -48,7 +47,6 @@ public class MessageService {
 
   public String getParticipantPhoneNumber(int senderID, int chatID){
     List<ChatParticipant> chatParticipant =chatParticipantsDao.get(chatID,senderID);
-    System.out.println("chat "+chatParticipant.size());
     User user = null;
     for(ChatParticipant chatParticipant1: chatParticipant){
         if(chatParticipant1.getParticipantUserId()!=senderID){
@@ -56,7 +54,7 @@ public class MessageService {
             break;
         }
     }
-      System.out.println("user "+user);
+      System.out.println("Hello from service"+ user.getUserID());
 
     if(user == null || user.getUserStatus().equals(User.UserStatus.Offline)){
         return null;

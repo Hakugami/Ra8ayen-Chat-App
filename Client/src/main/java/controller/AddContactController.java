@@ -49,6 +49,7 @@ public class AddContactController implements Initializable {
             addContactResponse = NetworkFactory.getInstance().addContact(addContactRequest);
             if (addContactResponse.isDone()) {
                 serverReply.setText("Contact added successfully");
+                serverReply.setStyle("-fx-text-fill: green");
             } else {
                 serverReply.setText("Contact not added");
                 serverReply.setStyle("-fx-text-fill: red");

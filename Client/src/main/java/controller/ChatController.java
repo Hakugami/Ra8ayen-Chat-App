@@ -121,7 +121,7 @@ public class ChatController implements Initializable {
         userModel.setBio(CurrentUser.getCurrentUser().getBio());
         userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
         userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
-
+        request.setSenderId(CurrentUser.getInstance().getUserID());
         request.setSender(userModel);
 
      //   request.setSender(CurrentUser.getInstance());  // CurrentUser is child of UserModel
