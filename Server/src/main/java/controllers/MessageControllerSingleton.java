@@ -11,6 +11,7 @@ import service.MessageService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -72,6 +73,19 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
         try {
             List<Message> messages = messageService.getMessages(request);
             List<MessageModel> messageModels = messages.stream().map(message -> messageService.getMessageMapper().entityToModel(message)).collect(Collectors.toList());
+
+            //   List<MessageModel> messageModels = new ArrayList<>();
+
+        for(int i=0;i<messages.size();i++){
+            messageModels.get(i).setAttachment(messages.get(i).isAttachment());
+            messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
+            if(messageModels.get(i).isAttachment()){
+                System.out.println("Attatch Size From Server "+messageModels.get(i).getAttachmentData().length);
+            }else{
+                System.out.println("Attatch Size From Server "+0);
+            }
+        }
+
             response.setMessageList(messageModels);
             response.setSuccess(true);
             response.setError("Messages retrieved successfully");
@@ -80,5 +94,13 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             response.setError("Failed to retrieve messages: " + e.getMessage());
         }
         return response;
+    }
+    public MessageModel getAttachment(Message message){
+        MessageModel messageModel = new MessageModel();
+        messageModel.setSenderId(message.getSenderId());
+        messageModel.setReceiverId(message.getReceiverId());
+        messageModel.setAttachment(message.isAttachment());
+        messageModel.setAttachmentData(message.getAttachmentData());
+        return messageModel;
     }
 }

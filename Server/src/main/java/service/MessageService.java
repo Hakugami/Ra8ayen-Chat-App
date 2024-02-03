@@ -61,7 +61,20 @@ public class MessageService {
 
     public List<Message> getMessages(GetMessageRequest request) {
         Message message = messageMapper.getMessageRequestToEntity(request);
-        return messageDao.getChatMessages(message.getReceiverId());
+
+        //need her to get all attachment of each message before return
+        List<Message> messageListWithoutAttachment =messageDao.getChatMessages(message.getReceiverId());
+            for(Message checkMessage:messageListWithoutAttachment){
+                Attachment attachment=attachmentDao.get(checkMessage.getMessageId());
+                if(attachment!=null){
+                    checkMessage.setAttachment(true);
+                 //   System.out.println("From Message Service "+attachment.getAttachment().length);
+                    checkMessage.setAttachmentData(attachment.getAttachment());
+                }else{
+                    checkMessage.setAttachment(false);
+                }
+            }
+        return messageListWithoutAttachment;
     }
 
     public MessageMapper getMessageMapper() {

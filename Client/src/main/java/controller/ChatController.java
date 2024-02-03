@@ -266,6 +266,12 @@ public class ChatController implements Initializable {
             System.out.println("No Message to this Contact Found");
         } else {
             System.out.println("Message Size " + getMessageResponse.getMessageList().size());
+
+            for(MessageModel messageModel:getMessageResponse.getMessageList()){
+                if(messageModel.isAttachment()) {
+                    System.out.println("Message With Attachment " + messageModel.isAttachment() + "Message Attatchment Size "+messageModel.getAttachmentData().length);
+                }
+            }
             Platform.runLater(() -> {
                 chatMessages.clear();
                 chatMessages.setAll(getMessageResponse.getMessageList());
