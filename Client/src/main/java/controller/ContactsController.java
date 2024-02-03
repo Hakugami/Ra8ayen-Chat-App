@@ -80,11 +80,6 @@ public class ContactsController implements Initializable {
 
 
     public void setTreeViewData() throws RemoteException {
-        try {
-            setImageProfileData();
-        } catch (SQLException | ClassNotFoundException | NotBoundException e) {
-            throw new RuntimeException(e);
-        }
         observableContactDataList.setAll(CurrentUser.getInstance().getContactDataList());
 
         TreeItem<Node> rootParent = new TreeItem<>();

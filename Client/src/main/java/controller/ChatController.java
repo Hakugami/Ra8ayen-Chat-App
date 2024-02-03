@@ -34,7 +34,6 @@ import java.nio.file.Files;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -259,85 +258,20 @@ public class ChatController implements Initializable {
         }
     }
 
-//    private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException, NotBoundException {
-//        Runnable runnable = () -> {
-//            System.out.println("Retrieving Messages of ChatID " + getMessageRequest.getChatId() );
-//            try {
-//                getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//            GetMessageResponse getMessageResponse = null;
-//            try {
-//                getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-//            } catch (RemoteException | NotBoundException e) {
-//                throw new RuntimeException(e);
-//            }
-//            if (getMessageResponse == null) {
-//                System.out.println("No Message to this Contact Found");
-//            } else {
-//                System.out.println("Message Size " + getMessageResponse.getMessageList().size());
-//                GetMessageResponse finalGetMessageResponse = getMessageResponse;
-//                Platform.runLater(() -> {
-//                    chatMessages.clear();
-//                    chatMessages.setAll(finalGetMessageResponse.getMessageList());
-//                });
-//            }
-//        };
-//        ConcurrencyManager.getInstance().execute(runnable);
-//    }
-
-private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException, NotBoundException {
-    Runnable runnable = () -> {
+    private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException, NotBoundException {
         System.out.println("Retrieving Messages of ChatID " + getMessageRequest.getChatId() );
-        try {
-            getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        List<MessageModel> cachedMessages = null;
-        try {
-            cachedMessages = CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        if (cachedMessages != null) {
-            // If the messages are in the cache, use them
-            List<MessageModel> finalCachedMessages = cachedMessages;
+        getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+        GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+        if (getMessageResponse == null) {
+            System.out.println("No Message to this Contact Found");
+        } else {
+            System.out.println("Message Size " + getMessageResponse.getMessageList().size());
             Platform.runLater(() -> {
                 chatMessages.clear();
-                chatMessages.addAll(finalCachedMessages);
+                chatMessages.setAll(getMessageResponse.getMessageList());
             });
-        } else {
-            // If the messages are not in the cache, retrieve them from the server
-            GetMessageResponse getMessageResponse = null;
-            try {
-                getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-            } catch (RemoteException | NotBoundException e) {
-                throw new RuntimeException(e);
-            }
-            if (getMessageResponse == null) {
-                System.out.println("No Message to this Contact Found");
-            } else {
-                System.out.println("Message Size " + getMessageResponse.getMessageList().size());
-                GetMessageResponse finalGetMessageResponse = getMessageResponse;
-                Platform.runLater(() -> {
-                    chatMessages.clear();
-                    chatMessages.addAll(finalGetMessageResponse.getMessageList());
-                });
-                // Add the retrieved messages to the cache
-                for (MessageModel message : getMessageResponse.getMessageList()) {
-                    try {
-                        CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
         }
-    };
-    ConcurrencyManager.getInstance().execute(runnable);
-}
+    }
 
     @FXML
     void SendAttachment(){
@@ -370,7 +304,7 @@ private void retrieveMessages(GetMessageRequest getMessageRequest) throws Remote
                     }
                 }
             });
-            ConcurrencyManager.getInstance().execute(t1);
+            t1.start();
         }
     }
 
