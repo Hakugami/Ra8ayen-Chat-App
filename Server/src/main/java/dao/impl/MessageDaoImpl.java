@@ -148,4 +148,30 @@ private Message getMessageFromResultSet(ResultSet resultSet) throws SQLException
     message.setAttachment(resultSet.getBoolean(MessageTable.IsAttachment.name));
     return  message;
 }
+public int sendMessageWithAttachment(Message message){
+    ResultSet generatedKeys = null;
+    String query= "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment) VALUES(?,?,?,?,?)";
+    try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+         PreparedStatement statement = connection.prepareStatement(query , Statement.RETURN_GENERATED_KEYS)) {
+        createStatementForInsert(statement,message);
+        int rowsAffected = statement.executeUpdate();
+        if(rowsAffected >= 1) {
+            generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    } finally {
+        if (generatedKeys != null) {
+            try {
+                generatedKeys.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    return -1;
+}
 }

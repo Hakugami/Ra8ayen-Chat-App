@@ -49,7 +49,9 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageModel.setMessageId(request.getMessageId());
             messageModel.setChatId(request.getReceiverId());
             messageModel.setMessageContent(request.getMessageContent());
-
+            if(request.isAttachment()){
+                messageModel.setAttachmentData(request.getAttachmentData());
+            }
             //add UseModel to messageModel
             messageModel.setSender(request.getSender());
             for (String number : phoneNumber) {

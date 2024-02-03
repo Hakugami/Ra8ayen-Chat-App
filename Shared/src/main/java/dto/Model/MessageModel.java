@@ -11,6 +11,7 @@ public class MessageModel implements Serializable {
     private LocalDateTime time;
     private boolean isAttachment;
 
+    private byte[] Attachment;
     private int chatId;
 
     public int getChatId() {
@@ -111,5 +112,13 @@ public class MessageModel implements Serializable {
                 ", time=" + time +
                 ", isAttachment=" + isAttachment +
                 '}';
+    }
+
+    public byte[] getAttachmentData() {
+        return Attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        Attachment = attachment;
     }
 }

@@ -97,5 +97,8 @@ public class MessageBubbleController implements Initializable {
         senderNameLabel.setText(message.getSender().getUserName());
         senderPhoneLabel.setText(message.getSender().getPhoneNumber());
 
+        if(message.isAttachment()&&message.getAttachmentData()!=null){
+            fileSizeLabel.setText(String.valueOf(message.getAttachmentData().length));
+        }
     }
 }

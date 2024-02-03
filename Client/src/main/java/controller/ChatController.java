@@ -21,17 +21,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import model.CurrentUser;
 import model.Group;
 import model.Model;
 import network.NetworkFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class ChatController implements Initializable {
@@ -47,12 +51,16 @@ public class ChatController implements Initializable {
 
     @FXML
     public Label NameContact;
-    public Button emojiButton;
+    public Button emojiButton; //refer to attachment
     @FXML
     private ObservableList<MessageModel> chatMessages;
     private final StringProperty nameProperty = new SimpleStringProperty();
 
-    // private int ChatID;
+     private FileChooser fileChooser;
+
+    private volatile byte[]  uploadedFileBytes;
+
+    private String FileName;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getControllerFactory().setChatController(this);
@@ -106,6 +114,10 @@ public class ChatController implements Initializable {
         MessageModel messageModel = new MessageModel();
         messageModel.setMessageContent(message);
         messageModel.setSender(CurrentUser.getInstance());
+        if(uploadedFileBytes!=null){
+            messageModel.setAttachment(true);
+            messageModel.setAttachmentData(uploadedFileBytes);
+        }
         chatListView.getItems().add(messageModel);
         messageBox.clear();
 
@@ -141,8 +153,14 @@ public class ChatController implements Initializable {
         } else {
             request.setReceiverId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
         }
-
-        request.setAttachment(false);
+        if(uploadedFileBytes==null){
+            System.out.println("UploadFile NULL");
+            request.setAttachment(false);
+        }
+        else{
+            request.setAttachment(true);
+            request.setAttachmentData(uploadedFileBytes);
+        }
         request.setTime(LocalDateTime.now());
         try {
             //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
@@ -252,6 +270,41 @@ public class ChatController implements Initializable {
                 chatMessages.clear();
                 chatMessages.setAll(getMessageResponse.getMessageList());
             });
+        }
+    }
+
+    @FXML
+    void SendAttachment(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fileChooser =new FileChooser();
+                ChooseFileToSend();
+            }
+        });
+    }
+    public void ChooseFileToSend(){
+         final long MAX_FILE_SIZE = 1024 * 1024; // 1 MB
+
+        AtomicReference<File> selectedFile = new AtomicReference<>();
+        selectedFile.set(fileChooser.showOpenDialog(null));
+        if(selectedFile.get()!=null){
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(selectedFile.get().length()>MAX_FILE_SIZE){
+                        System.out.println("File Size is Big");
+                    }else{
+                        try {
+                            uploadedFileBytes = Files.readAllBytes(selectedFile.get().toPath());
+                            System.out.println("uploaded File Size is : "+uploadedFileBytes.length);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+            t1.start();
         }
     }
 

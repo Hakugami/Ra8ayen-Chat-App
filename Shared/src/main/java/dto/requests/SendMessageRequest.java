@@ -15,6 +15,8 @@ public class SendMessageRequest implements Serializable {
     private boolean isAttachment;
 
     private UserModel sender;
+
+    private byte[] attachment;
     public int getMessageId() {
         return MessageId;
     }
@@ -80,5 +82,13 @@ public class SendMessageRequest implements Serializable {
 
     public void setSender(UserModel sender) {
         this.sender = sender;
+    }
+
+    public byte[] getAttachmentData() {
+        return attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        this.attachment = attachment;
     }
 }
