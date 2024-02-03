@@ -22,7 +22,11 @@ import model.Model;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainWindowController implements Initializable {
 
@@ -92,6 +96,21 @@ public class MainWindowController implements Initializable {
                 }
             }
         });
+// Create a ScheduledExecutorService
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+// Schedule a task to run once after 5 seconds
+        executorService.schedule(() -> {
+            Platform.runLater(() -> {
+                try {
+                    Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }, 1, TimeUnit.SECONDS);
+
+        executorService.shutdown();
 
         minimizeButton.setOnAction(MainWindowController::minimizeWindow);
         maximizeButton.setOnAction(this::maximizeWindow);

@@ -113,15 +113,20 @@ public class LoginController {
                     TokenManager.getInstance().setToken(token);
                     System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
-                        NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
-                        CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(token));
-                        List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
-                        CurrentUser.getInstance().loadContactsList(responses);
-                        System.out.println(CurrentUser.getInstance().getContactDataList().size());
-                        System.out.println(responses);
-                        List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
-                        CurrentUser.getInstance().loadGroups(groupResponses);
-                        System.out.println("Groups size " + CurrentUser.getInstance().getGroupList().size());
+//                        NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
+//                        CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(token));
+//                        List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
+//                        CurrentUser.getInstance().loadContactsList(responses);
+//                        System.out.println(CurrentUser.getInstance().getContactDataList().size());
+//                        System.out.println(responses);
+//                        List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
+//                        CurrentUser.getInstance().loadGroups(groupResponses);
+//                        System.out.println("Groups size " + CurrentUser.getInstance().getGroupList().size());
+                        try {
+                            retrieveData();
+                        } catch (RemoteException | NotBoundException e) {
+                            throw new RuntimeException(e);
+                        }
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
@@ -141,10 +146,32 @@ public class LoginController {
                     //onlineUsersCount++;
                     //startTrackingOnlineUsers();
                 }
-            } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 System.out.println(e.getMessage());
             }
         });
+    }
+
+    private void retrieveData() throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+
+        Runnable runnable = () -> {
+            Platform.runLater(() -> {
+                try {
+                    NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
+                    CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken()));
+                    List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
+                    CurrentUser.getInstance().loadContactsList(responses);
+                    System.out.println(CurrentUser.getInstance().getContactDataList().size());
+                    System.out.println(responses);
+                    List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
+                    CurrentUser.getInstance().loadGroups(groupResponses);
+                    System.out.println("Groups size " + CurrentUser.getInstance().getGroupList().size());
+                } catch (RemoteException | NotBoundException | SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
+        };
+            ConcurrencyManager.getInstance().execute(runnable);
     }
 
 

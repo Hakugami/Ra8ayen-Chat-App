@@ -1,8 +1,8 @@
 package model;
 
 import controller.CallBackControllerImpl;
-import controller.ChatData;
 import controller.ContactData;
+import dto.Model.MessageModel;
 import dto.Model.UserModel;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
@@ -15,7 +15,6 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,18 +27,12 @@ public class CurrentUser extends UserModel {
 
     private List<ContactData> contactDataList;
     private List<Group> groupList;
-    private Map<ContactData, ChatData> chatList;
+    private Map<Integer, List<MessageModel>> chatMessageMap;
 
-    public void setChatList(Map<ContactData, ChatData> chatList) {
-        this.chatList = chatList;
-    }
-    public void addInChatList(ContactData contactData, ChatData chatData){
-        chatList.put(contactData,chatData);
-    }
 
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
-        chatList = new ConcurrentHashMap<ContactData, ChatData>();
+        chatMessageMap = new ConcurrentHashMap<>();
         groupList = new CopyOnWriteArrayList<>();
     }
 
@@ -48,6 +41,20 @@ public class CurrentUser extends UserModel {
             currentUser = new CurrentUser();
         }
         return currentUser;
+    }
+
+    public void setChatMessageMap(Map<Integer, List<MessageModel>> chatMessageMap) {
+        this.chatMessageMap = chatMessageMap;
+    }
+
+    public void addMessageToCache(int chatId, MessageModel message) {
+        if (chatMessageMap.containsKey(chatId)) {
+            chatMessageMap.get(chatId).add(message);
+        } else {
+            List<MessageModel> messageModelList = new CopyOnWriteArrayList<>();
+            messageModelList.add(message);
+            chatMessageMap.put(chatId, messageModelList);
+        }
     }
 
     public CallBackControllerImpl getCallBackController() {
@@ -75,8 +82,8 @@ public class CurrentUser extends UserModel {
         return groupList;
     }
 
-    public Map<ContactData, ChatData> getChatList() {
-        return chatList;
+    public Map<Integer, List<MessageModel>> getChatMessageMap() {
+        return chatMessageMap;
     }
 
     public void loadContactsList(List<GetContactsResponse> contactDataList) {
@@ -87,16 +94,13 @@ public class CurrentUser extends UserModel {
             contactData.setPhoneNumber(userModel.getPhoneNumber());
             contactData.setId(userModel.getIdOfFriend());
             Color color = null;
-            if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Available)){
+            if (userModel.getUserMode().equals(GetContactsResponse.UserMode.Available)) {
                 color = Color.GREEN;
-            }
-            else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Busy)){
+            } else if (userModel.getUserMode().equals(GetContactsResponse.UserMode.Busy)) {
                 color = Color.RED;
-            }
-            else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Away)){
+            } else if (userModel.getUserMode().equals(GetContactsResponse.UserMode.Away)) {
                 color = Color.YELLOW;
-            }
-            else if(userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)){
+            } else if (userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)) {
                 color = Color.GRAY;
             }
             contactData.setColor(color);
@@ -107,6 +111,7 @@ public class CurrentUser extends UserModel {
             this.contactDataList.add(contactData);
         }
     }
+
     public void loadUser(UserModel user) {
         this.setUserID(user.getUserID());
         this.setUserName(user.getUserName());
@@ -121,22 +126,33 @@ public class CurrentUser extends UserModel {
         //set last login to the current time
         this.setLastLogin(String.valueOf(new Date()));
         BufferedImage bufferedImage = ImageUtls.convertByteToImage(user.getProfilePicture());
-        Image fxImage= SwingFXUtils.toFXImage(bufferedImage, null);
+        Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
         this.profilePictureImage = fxImage;
     }
 
-    public void loadGroups(List<GetGroupResponse> getGroupResponses){
+    public void loadGroups(List<GetGroupResponse> getGroupResponses) {
         this.groupList.clear();
         for (GetGroupResponse groupResponse : getGroupResponses) {
             Group group = new Group();
             group.setGroupId(groupResponse.getGroupId());
             group.setGroupName(groupResponse.getGroupName());
             BufferedImage bufferedImage = ImageUtls.convertByteToImage(groupResponse.getGroupPicture());
-            Image fxImage= SwingFXUtils.toFXImage(bufferedImage, null);
+            Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
             group.setGroupImage(new ImageView(fxImage));
             this.groupList.add(group);
         }
     }
 
 
+    public boolean isMessageCached(MessageModel messageModel) {
+        if (chatMessageMap.containsKey(messageModel.getChatId())) {
+            List<MessageModel> messageModelList = chatMessageMap.get(messageModel.getChatId());
+            for (MessageModel message : messageModelList) {
+                if (message.getMessageId() == messageModel.getMessageId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
