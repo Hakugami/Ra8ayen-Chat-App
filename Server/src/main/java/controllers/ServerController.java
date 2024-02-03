@@ -2,13 +2,17 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import dao.impl.UserDaoImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import model.entities.User;
 
 public class ServerController implements Initializable {
     @FXML
@@ -21,6 +25,10 @@ public class ServerController implements Initializable {
     private Button usersButton;
     @FXML
     private Button dashboardButton;
+
+    public ServerController() throws RemoteException {
+    }
+
     public void setSubSceneInitialNode()
     {
         settingsButton.fire();
@@ -43,6 +51,7 @@ public class ServerController implements Initializable {
 
     private void handleBtnOnActionServiceStart()
     {
+
         try
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/ServiceStart.fxml"));
@@ -59,6 +68,7 @@ public class ServerController implements Initializable {
 
     private void handleBtnOnActionDashboardStart()
     {
+
         try
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Dashboard.fxml"));

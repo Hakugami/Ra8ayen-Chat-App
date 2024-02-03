@@ -3,10 +3,14 @@ package controllers;
 import dao.impl.UserDaoImpl;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -25,11 +29,11 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DashboardController implements Initializable {
     @FXML
     public Label onlineUsersLabel;
+    public Label offlineUserLabel;
     @FXML
     private VBox vbRoot;
     @FXML
@@ -42,6 +46,8 @@ public class DashboardController implements Initializable {
     UserDaoImpl userDaoImp = new UserDaoImpl();
     List<User> users = userDaoImp.getAll();
     private final StringProperty countryDataProperty = new SimpleStringProperty();
+    private ObservableList<User> userss = FXCollections.observableArrayList();
+    private TrackOnlineUsersService trackOnlineUsersService;
 
     public DashboardController() throws RemoteException {
         scheduler = Executors.newScheduledThreadPool(1);
@@ -54,6 +60,10 @@ public class DashboardController implements Initializable {
     }
 
     private javafx.collections.ObservableList<PieChart.Data> getCountryChartData() {
+        return javafx.collections.FXCollections.observableArrayList();
+    }
+
+    /*private javafx.collections.ObservableList<PieChart.Data> getCountryChartData() {
         return javafx.collections.FXCollections.observableArrayList(
                 new PieChart.Data("Egypt", 20),
                 new PieChart.Data("USA", 25),
@@ -62,7 +72,7 @@ public class DashboardController implements Initializable {
                 new PieChart.Data("ITALY", 30),
                 new PieChart.Data("FRANCE", 40)
         );
-    }
+    }*/
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -97,23 +107,74 @@ public class DashboardController implements Initializable {
         }, 0, 5, TimeUnit.SECONDS);*/
         //-----------------------------------------------------------------------------------------------------
 
-        TrackOnlineUsersService trackOnlineUsersService = null;
-        try {
-            trackOnlineUsersService = TrackOnlineUsersService.getInstance();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
+        if(ServiceStartController.isServerOn) {
+
+            //-----------------------------------------------------------------------------------------------------
+            //onlineUseLabel
+            TrackOnlineUsersService trackOnlineUsersService = null;
+            try {
+                trackOnlineUsersService = TrackOnlineUsersService.getInstance();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            System.out.println("proberty ---> " + trackOnlineUsersService.onlineUsersCountStringProberty().get());
+            System.out.println("label ---> " + onlineUsersLabel.getText());
+            // binding label with stringProperty
+            onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
+            //-----------------------------------------------------------------------------------------------------
+            //offlineUserLabel
+            TrackOnlineUsersService finalTrackOnlineUsersService = trackOnlineUsersService;
+            StringBinding offlineUserCountBinding = new StringBinding() {
+                {
+                    super.bind(finalTrackOnlineUsersService.onlineUsersCountStringProberty(), userss);
+                }
+
+                @Override
+                protected String computeValue() {
+                    int totalUserCount = users.size();
+                    System.out.println("userss.size(); --->"+users.size());
+                    int onlineUserCount = Integer.parseInt(finalTrackOnlineUsersService.onlineUsersCountStringProberty().get());
+                    int offlineUserCount = totalUserCount - onlineUserCount;
+                    return String.valueOf(offlineUserCount);
+                }
+            };
+            offlineUserLabel.textProperty().bind(offlineUserCountBinding);
+            //-----------------------------------------------------------------------------------------------------
+
+            startUpdatingPieChart();
+            startUpdatingCountryPieChart();
+            bindCountryPieChartData();
         }
+        else {
 
+            ObservableList<PieChart.Data> genderChartData = FXCollections.observableArrayList();
+            ObservableList<PieChart.Data> countryChartData = FXCollections.observableArrayList();
 
-        System.out.println("proberty ---> "+trackOnlineUsersService.onlineUsersCountStringProberty().get());
-        System.out.println("label ---> "+onlineUsersLabel.getText());
-        // binding label with stringProperty
-        onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
-        //-----------------------------------------------------------------------------------------------------
+            genderPieChart.setData(genderChartData);
+            countryPieChart.setData(countryChartData);
+            Platform.runLater(() -> {
+                for (PieChart.Data data : genderChartData) {
+                    Node node = data.getNode();
+                    node.setStyle("-fx-pie-color: lightgray;");
+                }
 
-        startUpdatingPieChart();
-        startUpdatingCountryPieChart();
-        bindCountryPieChartData();
+                for (PieChart.Data data : countryChartData) {
+                    Node node = data.getNode();
+                    node.setStyle("-fx-pie-color: lightgray;");
+                }
+            });
+
+            // Indicate No Data
+            if (genderChartData.isEmpty()) {
+                genderChartData.add(new PieChart.Data("No Data", 100));
+            }
+
+            if (countryChartData.isEmpty()) {
+                countryChartData.add(new PieChart.Data("No Data", 100));
+            }
+        }
 
     }
     //-----------------------------------------------------------------------------------------------------------

@@ -22,7 +22,7 @@
             <ImageView fitHeight="112.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                <Image url="@../Images/online_user.png" />
             </ImageView>
-            <Label fx:id="onlineUsersLabel" prefHeight="47.0" prefWidth="161.0" text="54" HBox.hgrow="ALWAYS">
+            <Label fx:id="onlineUsersLabel" prefHeight="47.0" prefWidth="161.0" text="#0" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="32.0" />
                </font>
@@ -32,7 +32,7 @@
             <ImageView fitHeight="112.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                <Image url="@../Images/offline_user.png" />
             </ImageView>
-            <Label prefHeight="50.0" prefWidth="140.0" text="1554" HBox.hgrow="ALWAYS">
+            <Label fx:id="offlineUserLabel" prefHeight="50.0" prefWidth="140.0" text="#0" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="32.0" />
                </font>
