@@ -7,6 +7,8 @@ import dto.requests.GetGroupRequest;
 import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import token.TokenManager;
 import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
@@ -113,15 +115,7 @@ public class LoginController {
                     TokenManager.getInstance().setToken(token);
                     System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
-                        NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
-                        CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(token));
-                        List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
-                        CurrentUser.getInstance().loadContactsList(responses);
-                        System.out.println(CurrentUser.getInstance().getContactDataList().size());
-                        System.out.println(responses);
-                        List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
-                        CurrentUser.getInstance().loadGroups(groupResponses);
-                        System.out.println("Groups size " + CurrentUser.getInstance().getGroupList().size());
+                        retrieveData();;
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
@@ -141,12 +135,60 @@ public class LoginController {
                     //onlineUsersCount++;
                     //startTrackingOnlineUsers();
                 }
-            } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 System.out.println(e.getMessage());
             }
         });
     }
 
+private void retrieveData() {
+    Task<Void> task = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
+            CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken()));
+            List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
+            CurrentUser.getInstance().loadContactsList(responses);
+            List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
+            CurrentUser.getInstance().loadGroups(groupResponses);
+            return null;
+        }
+    };
+
+    // Handle any exceptions that occurred in the task
+    task.exceptionProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue != null) {
+            Throwable ex = newValue;
+            System.out.println("Exception occurred in task: " + ex);
+        }
+    });
+
+    // Update the UI after the task has completed
+    task.stateProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue == Worker.State.SUCCEEDED) {
+            Platform.runLater(() -> {
+                // Update the UI here
+                try {
+                    Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                    try {
+                        Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (NotBoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    });
+
+    // Start the task on a new thread
+    new Thread(task).start();
+}
 
    private void startTrackingOnlineUsers() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

@@ -3,6 +3,7 @@ package model;
 import controller.CallBackControllerImpl;
 import controller.ChatData;
 import controller.ContactData;
+import dto.Model.MessageModel;
 import dto.Model.UserModel;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
@@ -30,16 +31,11 @@ public class CurrentUser extends UserModel {
     private List<Group> groupList;
     private Map<ContactData, ChatData> chatList;
 
-    public void setChatList(Map<ContactData, ChatData> chatList) {
-        this.chatList = chatList;
-    }
-    public void addInChatList(ContactData contactData, ChatData chatData){
-        chatList.put(contactData,chatData);
-    }
-
+    private Map<Integer, List<MessageModel>> chatMessageMap;
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
         chatList = new ConcurrentHashMap<ContactData, ChatData>();
+        chatMessageMap = new ConcurrentHashMap<>();
         groupList = new CopyOnWriteArrayList<>();
     }
 
@@ -50,6 +46,42 @@ public class CurrentUser extends UserModel {
         return currentUser;
     }
 
+    public void setChatMessageMap(Map<Integer, List<MessageModel>> chatMessageMap) {
+        this.chatMessageMap = chatMessageMap;
+    }
+
+    public void addMessageToCache(int chatId, MessageModel message) {
+        if (chatMessageMap.containsKey(chatId)) {
+            chatMessageMap.get(chatId).add(message);
+        } else {
+            List<MessageModel> messageModelList = new CopyOnWriteArrayList<>();
+            messageModelList.add(message);
+            chatMessageMap.put(chatId, messageModelList);
+        }
+    }
+
+    public boolean isMessageCached(MessageModel messageModel) {
+        if (chatMessageMap.containsKey(messageModel.getChatId())) {
+            List<MessageModel> messageModelList = chatMessageMap.get(messageModel.getChatId());
+            for (MessageModel message : messageModelList) {
+                if (message.getMessageId() == messageModel.getMessageId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Map<Integer, List<MessageModel>> getChatMessageMap() {
+        return chatMessageMap;
+    }
+
+    public void setChatList(Map<ContactData, ChatData> chatList) {
+        this.chatList = chatList;
+    }
+    public void addInChatList(ContactData contactData, ChatData chatData){
+        chatList.put(contactData,chatData);
+    }
     public CallBackControllerImpl getCallBackController() {
         return callBackController;
     }

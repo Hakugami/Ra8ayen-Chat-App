@@ -160,7 +160,7 @@ public class ContactsController implements Initializable {
 
     }
 
-    private void setImageProfileData() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+    public void setImageProfileData() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
         double newRadius = 28;
         imageClip.setRadius(newRadius);
         imageClip.setCenterX(newRadius);

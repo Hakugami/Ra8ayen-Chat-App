@@ -7,6 +7,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import model.CurrentUser;
+import model.Model;
 import utils.ImageUtls;
 
 import java.awt.image.BufferedImage;
@@ -30,6 +32,8 @@ import java.util.ResourceBundle;
 public class MessageBubbleController implements Initializable {
     @FXML
     private HBox completeMessageHBox;
+    @FXML
+    private Label messageLabel;
     @FXML
     private ImageView senderImage;
     @FXML
@@ -51,8 +55,6 @@ public class MessageBubbleController implements Initializable {
     @FXML
     private TextFlow messageContentTextFlow;
     @FXML
-    private Text messageText;
-    @FXML
     private HBox messageTimeHBox;
     @FXML
     private Label messageTimeLabel;
@@ -65,10 +67,14 @@ public class MessageBubbleController implements Initializable {
     private volatile byte[]  uploadedFileBytes;
 
     FileChooser fileSaver;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //displayCurrentUserMessage();
-       try {
+        messageLabel.maxWidthProperty().bind(
+                Model.getInstance().getControllerFactory().getChatController().chatListView.widthProperty().multiply(0.7));
+
+        try {
             if (message.getSender().getUserID()== CurrentUser.getInstance().getUserID()) {
                 displayCurrentUserMessage();
             } else {
@@ -98,7 +104,8 @@ public class MessageBubbleController implements Initializable {
     }
 
     private void loadMessage() {
-        messageText.setText(message.getMessageContent());
+//        messageText.setText(message.getMessageContent());
+        messageLabel.setText(message.getMessageContent());
    //     messageTimeLabel.setText(String.valueOf(message.getTime()));
         BufferedImage bufferedImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
         Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
