@@ -1,8 +1,6 @@
 package token;
+
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class TokenManager {
     private static TokenManager instance;
@@ -14,7 +12,7 @@ public class TokenManager {
         }
         return instance;
     }
-    private static final String TOKEN_FILE = "Client/src/main/resources/token/token.txt";
+    private static final String TOKEN_FILE = System.getProperty("user.dir") + File.separator + "token.txt";
 
     public  void setToken(String token) {
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(TOKEN_FILE)))) {
@@ -25,13 +23,10 @@ public class TokenManager {
     }
 
     public  String getToken() {
-        Path path = Paths.get(TOKEN_FILE);
-        if (Files.exists(path)) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(TOKEN_FILE))) {
-                return reader.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try (BufferedReader reader = new BufferedReader(new FileReader(TOKEN_FILE))) {
+            return reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }

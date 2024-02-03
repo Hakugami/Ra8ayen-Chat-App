@@ -25,13 +25,13 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
     private final HashService hashService;
     private EncryptionService encryptionService;
     private final SessionManager sessionManager;
-    private AuthenticationControllerSingleton() throws RemoteException {
-        super();
-        userService = new UserService();
-        hashService = new HashService("hashing.properties");
-        encryptionService = new EncryptionService("keystore.jceks", "Buh123!","Buh1234!", "encryption.properties");
-        sessionManager = SessionManager.getInstance();
-    }
+public AuthenticationControllerSingleton() throws RemoteException {
+    super();
+    userService = new UserService();
+    hashService = new HashService(getClass().getClassLoader().getResourceAsStream("hashing.properties"));
+    encryptionService = new EncryptionService(getClass().getClassLoader().getResourceAsStream("keystore.jceks"), "Buh123!","Buh1234!", getClass().getClassLoader().getResourceAsStream("encryption.properties"));
+    sessionManager = SessionManager.getInstance();
+}
 
 
 public static AuthenticationControllerSingleton getInstance() throws RemoteException, MalformedURLException {

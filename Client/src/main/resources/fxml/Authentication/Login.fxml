@@ -14,7 +14,7 @@
    <HBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox prefHeight="400.0" prefWidth="200.0" styleClass="login_logo_container">
          <FontAwesomeIconView glyphName="PHONE" size="20" />
-         <Text fill="#ffe9e9" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login_logo_container" text="Chat App" />
+         <Text fill="#ffe9e9" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login_logo_container" text="Ra8ayen" />
       </VBox>
       <AnchorPane HBox.hgrow="ALWAYS">
          <children>

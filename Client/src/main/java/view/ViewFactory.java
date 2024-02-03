@@ -84,7 +84,7 @@ public class ViewFactory {
 //        LoginController client = new LoginController();
 //        client.connectToServer();
 //        client.startTrackingOnlineUsers();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Authentication/Login.fxml"));
         createStage(loader);
     }
 

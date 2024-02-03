@@ -2,7 +2,6 @@ module server {
     requires javafx.controls;
     requires javafx.fxml;
     requires  java.naming;
-
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.dashicons;
@@ -13,6 +12,7 @@ module server {
     requires org.mapstruct;
     requires java.desktop;
     requires javax.mail;
+    requires org.controlsfx.controls;
 
     opens server to javafx.fxml;
     exports server;

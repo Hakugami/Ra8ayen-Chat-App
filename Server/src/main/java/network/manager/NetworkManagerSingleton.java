@@ -14,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class NetworkManagerSingleton {
     private static NetworkManagerSingleton instance;
     private Registry registry;
-    private static final int PORT = 1099;
+    private static final int PORT = 2000;
     private boolean isServerRunning;
 
     private NetworkManagerSingleton() {

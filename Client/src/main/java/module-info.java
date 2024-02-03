@@ -12,6 +12,7 @@ module org.example.client {
     requires java.desktop;
     requires javafx.swing;
     requires org.controlsfx.controls;
+    requires javafx.graphics;
 
     exports model;
     opens model to javafx.fxml;

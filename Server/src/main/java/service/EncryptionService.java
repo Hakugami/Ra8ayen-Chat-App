@@ -3,8 +3,8 @@ package service;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -13,15 +13,16 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Properties;
 
+// EncryptionService.java
 public class EncryptionService {
     private SecretKeySpec secretKey;
     private String encryptionMethod;
     private String transformation;
 
-    public EncryptionService(String keyStorePath, String keyStorePassword, String keyPassword, String propertiesFilePath) {
+    public EncryptionService(InputStream keystoreStream, String keystorePassword, String keyPassword, InputStream propertiesStream) {
         try {
             KeyStore keyStore = KeyStore.getInstance("JCEKS");
-            keyStore.load(new FileInputStream(keyStorePath), keyStorePassword.toCharArray());
+            keyStore.load(keystoreStream, keystorePassword.toCharArray());
 
             KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry("secretKeyAlias", new KeyStore.PasswordProtection(keyPassword.toCharArray()));
             SecretKey secretKey = secretKeyEntry.getSecretKey();
@@ -30,7 +31,7 @@ public class EncryptionService {
 
             // Load the properties file
             Properties prop = new Properties();
-            prop.load(new FileInputStream(propertiesFilePath));
+            prop.load(propertiesStream);
 
             // Retrieve the encryption method and transformation from the properties file
             this.encryptionMethod = prop.getProperty("encryptionMethod");

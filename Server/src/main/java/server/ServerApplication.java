@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import network.manager.NetworkManagerSingleton;
+import org.controlsfx.control.Notifications;
+
 import java.io.IOException;
 
 public class ServerApplication extends Application {
@@ -15,7 +17,6 @@ public class ServerApplication extends Application {
         rootLoader.load();
         ServerController serverController = rootLoader.getController();
         serverController.setSubSceneInitialNode();
-
         Scene scene = new Scene(rootLoader.getRoot());
 
         stage.setScene(scene);
