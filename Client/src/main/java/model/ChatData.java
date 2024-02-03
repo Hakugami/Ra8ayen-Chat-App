@@ -1,4 +1,6 @@
-package controller;
+package model;
+
+import model.ContactData;
 
 public class ChatData {
 

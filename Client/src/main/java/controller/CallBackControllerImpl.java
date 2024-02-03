@@ -7,6 +7,7 @@ import dto.requests.FriendRequest;
 import dto.requests.GetContactsRequest;
 import dto.requests.GetGroupRequest;
 import javafx.application.Platform;
+import model.ContactData;
 import model.CurrentUser;
 import model.Group;
 import model.Model;

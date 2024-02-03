@@ -22,14 +22,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.stage.Popup;
-import model.Chat;
-import model.CurrentUser;
-import model.Group;
-import model.Model;
+import model.*;
 import network.NetworkFactory;
-import view.ControllerFactory;
 
 import java.io.IOException;
 import java.net.URL;

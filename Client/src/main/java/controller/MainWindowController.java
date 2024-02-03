@@ -17,6 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.ContactData;
 import model.Group;
 import model.Model;
 

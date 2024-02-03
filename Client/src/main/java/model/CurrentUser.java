@@ -1,8 +1,6 @@
 package model;
 
 import controller.CallBackControllerImpl;
-import controller.ChatData;
-import controller.ContactData;
 import dto.Model.MessageModel;
 import dto.Model.UserModel;
 import dto.responses.GetContactsResponse;
@@ -16,7 +14,6 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

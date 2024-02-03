@@ -1,6 +1,5 @@
 package model;
 
-import controller.ContactData;
 import javafx.scene.image.ImageView;
 
 import java.util.List;

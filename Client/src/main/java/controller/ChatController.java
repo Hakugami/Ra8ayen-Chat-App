@@ -6,6 +6,8 @@ import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
 import dto.responses.GetMessageResponse;
 import dto.responses.SendMessageResponse;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -17,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -24,6 +27,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
+import model.ContactData;
 import model.CurrentUser;
 import model.Group;
 import model.Model;
@@ -67,12 +72,9 @@ public class ChatController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         chatListView.prefWidthProperty().bind(((Pane) chatListView.getParent()).widthProperty());
-
         Model.getInstance().getControllerFactory().setChatController(this);
         System.out.println("ChatController: Initializing");
         NameContact.textProperty().bind(nameProperty);
-
-        chatListView.setStyle("-fx-background-image: url('/images/defuatback.jpg')");
         chatMessages = FXCollections.observableArrayList();
         chatListView.setItems(chatMessages);
         chatListView.setCellFactory(param -> new CustomListCell());
@@ -96,8 +98,12 @@ public class ChatController implements Initializable {
         ImagContact.setClip(imageClip);
 
         nameProperty.set("Contact Name");
-
-
+        chatListView.getItems().addListener((javafx.collections.ListChangeListener<MessageModel>) c -> {
+            Timeline timeline = new Timeline(new KeyFrame(
+                    Duration.millis(100),
+                    ae -> chatListView.scrollTo(chatMessages.size() - 1)));
+            timeline.play();
+        });
     }
 
     public void updateChatContent(String name, Image image) {
