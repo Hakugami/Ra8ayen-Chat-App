@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
@@ -9,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<HBox fx:id="completeMessageHBox" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../../Styles/NeoOrange/MessageBubble.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="completeMessageHBox" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../../Styles/NeoOrange/MessageBubble.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <ImageView fx:id="senderImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
         <VBox fx:id="messageVBox" minWidth="200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="10.0" styleClass="message-bubble">
@@ -36,7 +42,7 @@
                         <ImageView fx:id="fileIconImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label fx:id="fileNameLabel">
+                                <Label fx:id="fileNameLabel" onMouseClicked="#openDownloadSelector">
                                     <font>
                                         <Font size="18.0" />
                                     </font>

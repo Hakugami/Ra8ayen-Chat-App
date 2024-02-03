@@ -51,7 +51,10 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageModel.setChatId(request.getReceiverId());
             messageModel.setMessageContent(request.getMessageContent());
             if(request.isAttachment()){
+                messageModel.setAttachment(true);
                 messageModel.setAttachmentData(request.getAttachmentData());
+            }else{
+                messageModel.setAttachment(false);
             }
             //add UseModel to messageModel
             messageModel.setSender(request.getSender());
@@ -95,12 +98,5 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
         }
         return response;
     }
-    public MessageModel getAttachment(Message message){
-        MessageModel messageModel = new MessageModel();
-        messageModel.setSenderId(message.getSenderId());
-        messageModel.setReceiverId(message.getReceiverId());
-        messageModel.setAttachment(message.isAttachment());
-        messageModel.setAttachmentData(message.getAttachmentData());
-        return messageModel;
-    }
+
 }

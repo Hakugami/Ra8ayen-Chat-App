@@ -112,11 +112,13 @@ public class ChatController implements Initializable {
             return;
         }
         MessageModel messageModel = new MessageModel();
-        messageModel.setMessageContent(message);
         messageModel.setSender(CurrentUser.getInstance());
         if(uploadedFileBytes!=null){
             messageModel.setAttachment(true);
             messageModel.setAttachmentData(uploadedFileBytes);
+            messageModel.setMessageContent(FileName);
+        }else{
+            messageModel.setMessageContent(message);
         }
         chatListView.getItems().add(messageModel);
         messageBox.clear();
@@ -138,16 +140,7 @@ public class ChatController implements Initializable {
         request.setSenderId(CurrentUser.getInstance().getUserID());
         request.setSender(userModel);
 
-        //   request.setSender(CurrentUser.getInstance());  // CurrentUser is child of UserModel
 
-        //  request.setSenderId(CurrentUser.getInstance().getUserID());
-        //send message to receiver Id of selected contact
-
-        //     System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
-
-        //  request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
-
-//        request.setReceiverId(Model.getInstance().getViewFactory().getSelectedContact().get().getChatId());
         if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
             request.setReceiverId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
         } else {
@@ -303,6 +296,14 @@ public class ChatController implements Initializable {
                     }else{
                         try {
                             uploadedFileBytes = Files.readAllBytes(selectedFile.get().toPath());
+                            FileName = selectedFile.get().getName();
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    messageBox.setText(FileName);
+                                    messageBox.setEditable(false);
+                                }
+                            });
                             System.out.println("uploaded File Size is : "+uploadedFileBytes.length);
                         } catch (IOException e) {
                             throw new RuntimeException(e);

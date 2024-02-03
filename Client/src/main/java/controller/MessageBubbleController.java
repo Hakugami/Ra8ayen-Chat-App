@@ -1,5 +1,7 @@
 package controller;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.MessageModel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -12,11 +14,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import model.CurrentUser;
 import utils.ImageUtls;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
@@ -55,7 +62,9 @@ public class MessageBubbleController implements Initializable {
     private Label messageStatusLabel;
     private MessageModel message;
 
+    private volatile byte[]  uploadedFileBytes;
 
+    FileChooser fileSaver;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //displayCurrentUserMessage();
@@ -98,7 +107,39 @@ public class MessageBubbleController implements Initializable {
         senderPhoneLabel.setText(message.getSender().getPhoneNumber());
 
         if(message.isAttachment()&&message.getAttachmentData()!=null){
+            FontAwesomeIcon icon = FontAwesomeIcon.DOWNLOAD;
+            FontAwesomeIconView itemIcon = new FontAwesomeIconView(icon);
+            itemIcon.setSize("16px");
+            fileNameLabel.setGraphic(itemIcon);
             fileSizeLabel.setText(String.valueOf(message.getAttachmentData().length));
         }
     }
+    @FXML
+    void openDownloadSelector() {
+        if (message.isAttachment()) {
+            if (message.getAttachmentData() != null) {
+                fileSaver = new FileChooser();
+                fileSaver.setTitle("Save File");
+                fileSaver.setInitialFileName(message.getMessageContent());
+                File fileToSave = fileSaver.showSaveDialog(null);
+                if (fileToSave != null) {
+                    saveFile(fileToSave);
+                }
+
+            }
+        }
+    }
+    void saveFile(File fileToSave){
+            Thread t2 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Files.write(fileToSave.toPath(),message.getAttachmentData(), StandardOpenOption.CREATE);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+            t2.start();
+        }
 }
