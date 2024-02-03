@@ -15,13 +15,14 @@ import service.ContactService;
 import service.EmailService;
 import service.InvitationService;
 import service.UserService;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class InvitationControllerSingleton extends UnicastRemoteObject implements InvitationController {
@@ -31,7 +32,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     private final UserMapper userMapper;
     private final UserService userService;
     private final EmailService emailService;
-
+    private final ExecutorService executorService;
     private final ContactService contactService;
     protected InvitationControllerSingleton() throws RemoteException {
         super();
@@ -41,6 +42,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         userMapper = new UserMapperImpl();
         contactService = new ContactService();
         emailService = new EmailService();
+        executorService = Executors.newFixedThreadPool(3);
     }
     public static InvitationControllerSingleton getInstance() throws RemoteException {
         if (instance == null) {
@@ -60,32 +62,39 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         AddContactResponse addContactResponse = new AddContactResponse();
         boolean isDone = false;
         List<String> responses = new ArrayList<>();
+        User currentUser = userService.getUserById(addContactRequest.getUserId());
         for(String phoneNumber : addContactRequest.getFriendsPhoneNumbers()) {
             User user = userService.getUserByPhoneNumber(phoneNumber);
             if(user != null) {
-                Notification notification = invitationMapper.addContactRequestToNotification(addContactRequest.getUserId(), user.getUserID());
-              if(invitationService.ReceiverMakeInviteBefore(notification)){
-                  responses.add("Invitation has accepted " + phoneNumber);
-                  //in this function I added Friend To Chat and Contact List of user
-                  AcceptUserAsFriend(notification.getSenderId(),phoneNumber);
-              }
-              else {
-                  String myEmail = userService.getUserById(addContactRequest.getUserId()).getEmailAddress();
-                  emailService.sendEmail(myEmail, user.getEmailAddress(),
-                          "Chat App (رغايين)",
-                          "You have a friend request from "
-                                  + userService.getUserById(addContactRequest.getUserId()).getUserName() +
-                                  " with phone number " + phoneNumber);
-                  isDone = invitationService.inviteContact(notification);
-                  responses.add("Invitation has been sent to " + phoneNumber);
-                  FriendRequest friendRequest = new FriendRequest();
-                  friendRequest.setReceiverPhoneNumber(phoneNumber);
-                  friendRequest.setSenderPhoneNumber(userService.getUserById(addContactRequest.getUserId()).getPhoneNumber());
-                  friendRequest.setUserModel(userMapper.entityToModel(userService.getUserById(addContactRequest.getUserId())));
-                  if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
-                      OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
-                  }
-              }
+                Notification notification = invitationMapper.addContactRequestToNotification(currentUser.getUserID(), user.getUserID());
+                if(invitationService.ReceiverMakeInviteBefore(notification)){
+                    responses.add("Invitation has accepted " + phoneNumber);
+                    AcceptUserAsFriend(notification.getSenderId(),phoneNumber);
+                }
+                else {
+                    String myEmail = currentUser.getEmailAddress();
+
+                    executorService.submit(() -> emailService.sendEmail(myEmail, user.getEmailAddress(),
+                            "Chat App (رغايين)",
+                            "You have a friend request from "
+                                    + currentUser.getUserName() +
+                                    " with phone number " + phoneNumber));
+                    isDone = invitationService.inviteContact(notification);
+                    responses.add("Invitation has been sent to " + phoneNumber);
+                    FriendRequest friendRequest = new FriendRequest();
+                    friendRequest.setReceiverPhoneNumber(phoneNumber);
+                    friendRequest.setSenderPhoneNumber(currentUser.getPhoneNumber());
+                    friendRequest.setUserModel(userMapper.entityToModel(currentUser));
+                    if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
+                        executorService.submit(() -> {
+                            try {
+                                OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+                            } catch (RemoteException e) {
+                                System.out.println("Error sending notification to " + phoneNumber);
+                            }
+                        });
+                    }
+                }
             }
             else {
                 responses.add(phoneNumber + "not found");
@@ -94,6 +103,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         addContactResponse.setDone(isDone);
         addContactResponse.setResponses(responses);
         addContactResponse.setFriendsPhoneNumbers(addContactRequest.getFriendsPhoneNumbers());
+
         return addContactResponse;
     }
 
