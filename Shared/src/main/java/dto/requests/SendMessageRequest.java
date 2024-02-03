@@ -1,16 +1,22 @@
 package dto.requests;
 
+import dto.Model.UserModel;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class SendMessageRequest implements Serializable {
     private int MessageId;
     private int senderId;
-    private int receiverId;
+    private int receiverId; //chat ID
     private String messageContent;
+
     private LocalDateTime time;
     private boolean isAttachment;
 
+    private UserModel sender;
+
+    private byte[] attachment;
     public int getMessageId() {
         return MessageId;
     }
@@ -69,5 +75,20 @@ public class SendMessageRequest implements Serializable {
                 ", time=" + time +
                 ", isAttachment=" + isAttachment +
                 '}';
+    }
+    public UserModel getSender() {
+        return sender;
+    }
+
+    public void setSender(UserModel sender) {
+        this.sender = sender;
+    }
+
+    public byte[] getAttachmentData() {
+        return attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        this.attachment = attachment;
     }
 }

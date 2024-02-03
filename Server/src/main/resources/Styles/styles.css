@@ -1,14 +1,14 @@
 #sidebar {
-    -fx-background-color: #f58c32; /* Orange color */
+    -fx-background-color: #f58c32;
 }
 
 #sidebarButtons{
-    -fx-background-color: #f58c32; /* Orange color */
-    -fx-text-fill: #ffffff; /* White text color */
+    -fx-background-color: #f58c32;
+    -fx-text-fill: #ffffff;
 }
 
 #sidebarButtons:hover {
-    -fx-background-color: #e47624; /* Slightly darker orange on hover */
+    -fx-background-color: #e47624;
 }
 
 #subScene {
@@ -137,4 +137,12 @@
     -fx-max-height: 100px;
     -fx-background-radius: 50%;
     -fx-progress-color: red;
+}
+
+.male-pie {
+    -fx-pie-color: #4169E1;
+}
+
+.female-pie {
+    -fx-pie-color: #FF69B4;
 }

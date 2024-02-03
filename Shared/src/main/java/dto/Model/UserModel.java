@@ -1,7 +1,10 @@
 package dto.Model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UserModel  implements Serializable {
     private int userID;
@@ -9,7 +12,6 @@ public class UserModel  implements Serializable {
     private String userName;
     private String emailAddress;
     private byte[] profilePicture;
-    private String passwordHash;
     private Gender gender;
     private String country;
     private Date dateOfBirth;
@@ -17,6 +19,7 @@ public class UserModel  implements Serializable {
     private UserStatus userStatus;
     private String lastLogin;
     private UserMode userMode;
+    private List<UserModel> contacts;
 
     // enum classes
     public enum Gender {
@@ -37,7 +40,7 @@ public class UserModel  implements Serializable {
     }
 
     public UserModel(int userID, String phoneNumber, String userName, String emailAddress, byte[] profilePicture,
-                String passwordHash, Gender gender, String country, Date dateOfBirth, String bio, UserStatus userStatus,
+               Gender gender, String country, Date dateOfBirth, String bio, UserStatus userStatus,
                 UserMode userMode,
                 String lastLogin) {
         this.userID = userID;
@@ -45,7 +48,6 @@ public class UserModel  implements Serializable {
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.profilePicture = profilePicture;
-        this.passwordHash = passwordHash;
         this.gender = gender;
         this.country = country;
         this.dateOfBirth = dateOfBirth;
@@ -53,13 +55,15 @@ public class UserModel  implements Serializable {
         this.userStatus = userStatus;
         this.userMode = userMode;
         this.lastLogin = lastLogin;
+        contacts = new CopyOnWriteArrayList<>();
     }
 
-
-    // user methods
-
-    // user setters
-
+    public UserModel(int userID, String userName, String phoneNumber, byte[] profilePicture) {
+        this.userID = userID;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.profilePicture = profilePicture;
+    }
 
 
     public void setUserID(int userID) {
@@ -82,9 +86,6 @@ public class UserModel  implements Serializable {
         this.profilePicture = profilePicture;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
 
     public void setGender(Gender gender) {
         this.gender = gender;
@@ -136,9 +137,6 @@ public class UserModel  implements Serializable {
         return profilePicture;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
 
     public Gender getGender() {
         return gender;
@@ -167,4 +165,41 @@ public class UserModel  implements Serializable {
         return lastLogin;
     }
 
+    public void addContact(UserModel user) {
+        contacts.add(user);
+    }
+
+    public void removeContact(UserModel user) {
+        contacts.remove(user);
+    }
+
+    public List<UserModel> getContacts() {
+        return contacts;
+    }
+
+    public UserMode getUserMode() {
+        return userMode;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userID=" + userID +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", userName='" + userName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", profilePicture=" + Arrays.toString(profilePicture) +
+                ", gender=" + gender +
+                ", country='" + country + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", bio='" + bio + '\'' +
+                ", userStatus=" + userStatus +
+                ", lastLogin='" + lastLogin + '\'' +
+                ", userMode=" + userMode +
+                '}';
+    }
 }

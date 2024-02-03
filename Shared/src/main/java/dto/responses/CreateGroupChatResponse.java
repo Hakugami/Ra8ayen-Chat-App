@@ -1,45 +1,40 @@
 package dto.responses;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class CreateGroupChatResponse implements Serializable {
-    private String userPhoneNumber;
-    private String groupName;
+    private List<String> responses;
     private boolean isCreated;
-    private String errorMessage;
 
-
-    public CreateGroupChatResponse(String userPhoneNumber, String groupName, boolean isCreated) {
-        this.userPhoneNumber = userPhoneNumber;
-        this.groupName = groupName;
+    public CreateGroupChatResponse(List<String> responses, boolean isCreated) {
+        this.responses = responses;
         this.isCreated = isCreated;
-        this.errorMessage = "";
     }
 
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
+    public CreateGroupChatResponse() {
     }
 
-    public String getGroupName() {
-        return groupName;
+    public List<String> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<String> responses) {
+        this.responses = responses;
     }
 
     public boolean isCreated() {
         return isCreated;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public void setCreated(boolean created) {
+        isCreated = created;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
     @Override
     public String toString() {
         return "CreateGroupChatResponse{" +
-                "userPhoneNumber='" + userPhoneNumber + '\'' +
-                ", groupName='" + groupName + '\'' +
+                "responses=" + responses +
                 ", isCreated=" + isCreated +
                 '}';
     }

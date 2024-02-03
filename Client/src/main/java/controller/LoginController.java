@@ -1,6 +1,13 @@
 package controller;
 
-import controller.token.TokenManager;
+//import dto.Controller.TrackOnlineUsers;
+import dto.requests.GetContactChatRequest;
+import dto.requests.GetContactsRequest;
+import dto.requests.GetGroupRequest;
+import dto.responses.GetContactChatResponse;
+import dto.responses.GetContactsResponse;
+import dto.responses.GetGroupResponse;
+import token.TokenManager;
 import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
 import javafx.animation.TranslateTransition;
@@ -21,7 +28,16 @@ import network.NetworkFactory;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LoginController {
 
@@ -36,6 +52,11 @@ public class LoginController {
 
     @FXML
     AnchorPane loginXml;
+
+  //  private TrackOnlineUsers server;
+    private int onlineUsersInDashboard;
+    private int onlineUsersCount;
+
 
     @FXML
     public void initialize() {
@@ -62,6 +83,12 @@ public class LoginController {
         });
         registerButton.setOnAction(this::handleRegisterButton);
 
+
+
+        onlineUsersCount = 0;
+        onlineUsersInDashboard=0;
+
+
     }
 
     private void handleRegisterButton(ActionEvent event) {
@@ -84,23 +111,78 @@ public class LoginController {
                     LoginResponse loginResponse = NetworkFactory.getInstance().login(loginRequest);
                     String token = loginResponse.getToken();
                     TokenManager.getInstance().setToken(token);
-                    System.out.println(loginResponse.toString());
+                    System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
                         NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
+                        CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(token));
+                        List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
+                        CurrentUser.getInstance().loadContactsList(responses);
+                        System.out.println(CurrentUser.getInstance().getContactDataList().size());
+                        System.out.println(responses);
+                        List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
+                        CurrentUser.getInstance().loadGroups(groupResponses);
+                        System.out.println("Groups size " + CurrentUser.getInstance().getGroupList().size());
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
+                        /*
+                         *
+                         * tracking number of online users
+                         *
+                         * */
+                        onlineUsersCount++;
+                        startTrackingOnlineUsers();
                     } else {
-                        System.err.println("Invalid fields");
+                        System.err.println("Invalid fields1");
                     }
                 } else {
-                    System.err.println("Invalid fields");
+                    System.err.println("Invalid fields2");
+                    //just to check result without any data : what happened when login button is clicked
+                    //onlineUsersCount++;
+                    //startTrackingOnlineUsers();
                 }
             } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         });
+    }
 
+
+   private void startTrackingOnlineUsers() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                // online users in the dashboard
+                onlineUsersInDashboard = NetworkFactory.getInstance().getOnlineUsersCount();
+                //compare between current users numbers in dashboard and if there is a new user login
+                if(onlineUsersCount > onlineUsersInDashboard){
+                    // if yes ---> increment online users numbers in dashbpard
+                    onlineUsersInDashboard=onlineUsersCount;
+                    // update dashboard
+                    NetworkFactory.getInstance().updateOnlineUsersCount(onlineUsersInDashboard);
+                    System.out.println("onlineUsersCount : "+onlineUsersCount+" , "+"onlineUsersInDashboard : "+onlineUsersInDashboard);
+
+                }
+
+            } catch (RemoteException | NotBoundException e) {
+                e.printStackTrace();
+            }
+        }, 0, 5, TimeUnit.SECONDS);
+    }
+
+
+    private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+      //  List<ChatData> listOfChats = new ArrayList<>();
+        List<GetContactChatRequest> listOfContactId = new ArrayList<>();
+        for(ContactData getContactsResponse: CurrentUser.getInstance().getContactDataList()){
+            listOfContactId.add(new GetContactChatRequest(CurrentUser.getInstance().getUserID(), getContactsResponse.getId()));
+        }
+     List<GetContactChatResponse> getContactChatResponses = NetworkFactory.getInstance().getPrivateChats(listOfContactId);
+        for(GetContactChatResponse getContactsResponse: getContactChatResponses){
+           for(int i = 0 ; i<CurrentUser.getInstance().getContactDataList().size();i++){
+
+           }
+        }
     }
 
     private boolean validateFields() throws SQLException, ClassNotFoundException {

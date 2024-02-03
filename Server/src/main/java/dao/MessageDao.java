@@ -8,7 +8,7 @@ import java.util.List;
 public interface MessageDao extends Dao<Message> {
     //CRUD
     boolean save(Message message); //Create
-    List<Message> get(int sender, int receiver); //Read
+    List<Message> getChatMessages(int chatID); //Read
     List<Message> getAll();
     Message get(int senderId);
 

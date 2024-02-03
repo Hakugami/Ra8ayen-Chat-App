@@ -22,6 +22,10 @@ public class Chat {
         this.adminId = adminId;
     }
 
+    public Chat() {
+
+    }
+
     public int getChatId() {
         return chatId;
     }

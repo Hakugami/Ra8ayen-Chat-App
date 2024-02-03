@@ -1,0 +1,51 @@
+.image-view {
+    -fx-border-color: red;
+    -fx-border-width: 1px;
+}
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-table-cell-border-color: transparent;
+    -fx-padding: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 1px;
+}
+
+.table-row-cell {
+    -fx-border-color: transparent;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-color: #d3d3d3;
+    -fx-background-color: #ffffff, #f3f3f3;
+    -fx-background-insets: 0, 1;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9, #f3f3f3;
+    -fx-background-insets: 0, 1;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.table-column {
+    -fx-background-color: #ffffff;
+}
+
+.table-cell {
+    -fx-text-fill: #333;
+    -fx-padding: 5px;
+    -fx-border-color: transparent;
+}
+
+.table-view .scroll-bar {
+    -fx-background-color: #ffffff;
+}
+.table-view .column-header {
+    -fx-column-menu-button-visible: false;
+}
+
+.table-view .scroll-bar .thumb {
+    -fx-background-color: #d3d3d3;
+    -fx-background-radius: 10;
+}

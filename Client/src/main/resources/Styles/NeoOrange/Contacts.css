@@ -1,20 +1,75 @@
-.anchor-pane {
-    -fx-pref-height: 600.0;
-    -fx-pref-width: 300.0;
+.tree-view  {
+    -fx-background-color: rgb(246, 241, 238); /* light gray */
+}
+.tree-view .tree-cell {
+    -fx-background-color:rgb(246, 241, 238); /* light gray */
+}
+.tree-view .tree-cell:filled:hover {
+    -fx-background-color: rgb(243, 215, 189); /* light gray */
+    -fx-text-fill: white;
+}
+.tree-view .scroll-bar {
+    -fx-opacity: 0;
 }
 
-/* Apply styles to the HBox inside the AnchorPane */
-.anchor-pane .h-box {
-    -fx-pref-height: 71.0;
-    -fx-pref-width: 300.0;
-    -fx-spacing: 45.0;
-    -fx-anchor-pane-left: 0.0;
-    -fx-anchor-pane-right: 0.0;
-    -fx-anchor-pane-top: 0.0;
+.tree-view .scroll-bar .thumb {
+    -fx-background-color: transparent;
 }
 
-/* Apply styles to the TextField inside the AnchorPane */
-.search-field {
-    -fx-background-radius: 15; /* Adjust the value based on your preference */
-    -fx-padding: 5 10 5 10; /* Adjust the padding as needed */
+.tree-view .scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.tree-view .scroll-bar .thumb:horizontal:hover,
+.tree-view .scroll-bar .thumb:horizontal:pressed {
+    -fx-background-color: transparent;
+}
+
+.tree-view .scroll-bar {
+    -fx-background-color: rgb(246, 241, 238);
+}
+
+/* Style the TextField */
+.TextField {
+    -fx-background-color: rgb(246, 241, 238);
+    -fx-border-color: rgb(108, 95, 91);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+}
+
+/* Style the Label */
+.Label {
+    -fx-text-fill: rgb(79, 74, 69);
+    -fx-font-size: 14px;
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-font-weight: bold;
+}
+
+/* Style the ImageView */
+.ImageView {
+    -fx-border-color: rgb(108, 95, 91);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+/* Style the Circle */
+/* Contacts.css */
+
+.Circle:hover {
+    -fx-stroke: rgb(237, 125, 49); /* Change the stroke color on hover */
+}
+
+/*!* Style the TreeView *!*/
+/*.TreeView {*/
+/*    -fx-background-color: rgb(246, 241, 238);*/
+/*}*/
+
+#myLabel {
+    -fx-text-fill: rgb(79, 74, 69);
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-font-weight: bold;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 25px;
 }

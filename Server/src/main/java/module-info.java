@@ -12,9 +12,14 @@ module server {
     requires Shared;
     requires org.mapstruct;
     requires java.desktop;
+    requires javax.mail;
 
     opens server to javafx.fxml;
     exports server;
     exports controllers to javafx.fxml;
     opens controllers to javafx.fxml;
+    exports Mapper;
+    opens Mapper to org.mapstruct;
+    opens model.entities to org.mapstruct;
+    exports model.entities;
 }

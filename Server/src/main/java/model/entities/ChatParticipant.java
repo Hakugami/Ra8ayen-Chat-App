@@ -16,6 +16,9 @@ public class ChatParticipant {
         this.participantUserId = participantUserId;
     }
 
+    public ChatParticipant() {
+    }
+
     public int getChatId() {
         return chatId;
     }

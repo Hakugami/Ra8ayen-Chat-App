@@ -2,11 +2,13 @@
     -fx-spacing: 15;
     -fx-padding: 0 20% 0 0; /* top right bottom left */
     -fx-background-color: rgb(246, 241, 238); /* New color */
+    -fx-font:  11px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
 }
 
 .login_logo_container{
     -fx-alignment: center;
     -fx-background-color: rgb(79, 74, 69); /* New color */
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
 }
 
 .login_logo_container Text{

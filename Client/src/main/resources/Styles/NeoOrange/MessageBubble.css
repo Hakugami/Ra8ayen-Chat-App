@@ -1,0 +1,21 @@
+.message-bubble {
+    -fx-background-color: rgb(237, 125, 49); /* Main color for the message bubble */
+    -fx-background-radius: 0 15 15 15;
+}
+
+.receiver-bubble {
+    -fx-background-color: rgb(108, 95, 91); /* Main color for the receiver's message bubble */
+    -fx-background-radius: 15 0 15 15;
+}
+
+.sender-info {
+    -fx-text-fill: rgb(108, 95, 91); /* Color for the sender's info */
+}
+
+.messageContent {
+    -fx-text-fill: rgb(79, 74, 69); /* Color for the message content */
+}
+
+.timestamp {
+    -fx-text-fill: rgb(246, 241, 238); /* Color for the timestamp */
+}

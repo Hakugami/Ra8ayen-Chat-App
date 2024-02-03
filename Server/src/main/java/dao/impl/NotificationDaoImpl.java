@@ -42,19 +42,18 @@ public class NotificationDaoImpl implements NotificationDao {
 
     @Override
     public boolean save(Notification notification) {
-        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage, NotificationSentDate) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage) VALUES (?, ?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getReceiverId());
             statement.setInt(2, notification.getSenderId());
             statement.setString(3, notification.getNotificationMessage());
-            statement.setString(4, notification.getNotificationSendDate());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -66,11 +65,11 @@ public class NotificationDaoImpl implements NotificationDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getNotificationId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
@@ -83,22 +82,38 @@ public class NotificationDaoImpl implements NotificationDao {
             statement.setString(1, notification.getNotificationMessage());
             statement.setInt(2, notification.getNotificationId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
         return false;
     }
 
-    private Notification createNotification(ResultSet resultSet) throws SQLException {
-        int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
-        int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
-        int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
-        String notificationSendDate = resultSet.getTimestamp(NotificationTable.NOTIFICATIONSENTDATE.name()).toString();
-        String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
+  private Notification createNotification(ResultSet resultSet) throws SQLException {
+    int notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
+    int receiverId = resultSet.getInt(NotificationTable.RECEIVERID.name());
+    int senderId = resultSet.getInt(NotificationTable.SENDERID.name());
+    String notificationMessageContent = resultSet.getString(NotificationTable.NOTIFICATIONMESSAGE.name());
 
-        return new Notification(notificationId, receiverId, senderId, notificationSendDate, notificationMessageContent);
+    return new Notification(notificationId, receiverId, senderId, notificationMessageContent);
+}
+    public boolean checkInvite(Notification notification){
+        String query = "SELECT * FROM usernotifications WHERE SenderID = ? and ReceiverID = ?";
+        ResultSet resultSet = null;
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, notification.getReceiverId());
+            statement.setInt(2,notification.getSenderId());
+            resultSet = statement.executeQuery();
+           if(resultSet.next()){
+               return true;
+           }else{
+               return false;
+           }
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }

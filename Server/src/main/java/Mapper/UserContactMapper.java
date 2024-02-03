@@ -29,18 +29,26 @@ public class UserContactMapper {
             return user;
     }
     //get Response from User - UserContact
-    public GetContactsResponse ContactsResponseFromUserContact(UserContacts userContacts, User user){
-        boolean status= false;
-        if(user.getUserStatus().name().equals("Female")){
-            status=true;
-        }else{
-            status=false;
-        }
-        GetContactsResponse getContactsResponse = new GetContactsResponse(userContacts.getUserID(),user.getUserName(),user.getProfilePicture(), user.getPhoneNumber(), status);
-        return getContactsResponse;
+public GetContactsResponse ContactsResponseFromUserContact(UserContacts userContacts, User user){
+    GetContactsResponse.UserStatus userStatus;
+    if(user.getUserStatus().name().equals("Online")){
+        userStatus = GetContactsResponse.UserStatus.Online;
+    }else{
+        userStatus = GetContactsResponse.UserStatus.Offline;
     }
+    GetContactsResponse getContactsResponse = new GetContactsResponse(userContacts.getUserID(), user.getUserName(), user.getProfilePicture(), user.getPhoneNumber(), userStatus == GetContactsResponse.UserStatus.Online);
+    getContactsResponse.setUserStatus(userStatus);
+    getContactsResponse.setLastLogin(user.getLastLogin());
+    getContactsResponse.setUserMode(GetContactsResponse.UserMode.Available);
+    return getContactsResponse;
+}
     public UserContacts UserContactFromRequestDelete(DeleteUserContactRequest deleteUserContactRequest){
         UserContacts userContacts = new UserContacts(deleteUserContactRequest.getId(),deleteUserContactRequest.getFriendId(),"random");
+        return userContacts;
+    }
+
+    public UserContacts UserContactFromAcceptFriendRequest(int userID, int friendID) {
+        UserContacts userContacts = new UserContacts(userID,friendID);
         return userContacts;
     }
 

@@ -8,17 +8,20 @@
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="vbRoot" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AnnouncementController">
-   <TextField fx:id="announcementTitleTextField" prefWidth="300.0" promptText="Enter your announcement title" VBox.vgrow="NEVER">
+   <TextField fx:id="announcementTitleTextField" prefWidth="300.0" promptText="Enter your announcement title..." VBox.vgrow="NEVER">
       <font>
          <Font size="14.0" />
       </font>
       <VBox.margin>
-         <Insets top="10.0" />
+         <Insets left="20.0" right="20.0" top="10.0" />
       </VBox.margin></TextField>
-    <TextArea fx:id="announcementTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Enter your announcement" VBox.vgrow="ALWAYS">
+    <TextArea fx:id="announcementTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Enter your announcement..." VBox.vgrow="ALWAYS">
       <font>
          <Font size="24.0" />
-      </font></TextArea>
+      </font>
+      <VBox.margin>
+         <Insets left="20.0" right="20.0" />
+      </VBox.margin></TextArea>
     <Button fx:id="announcementButton" prefHeight="40.0" prefWidth="174.0" text="Announce">
       <VBox.margin>
          <Insets bottom="10.0" />

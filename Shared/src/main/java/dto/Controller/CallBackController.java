@@ -1,7 +1,13 @@
 package dto.Controller;
 
+import dto.Model.MessageModel;
+import dto.Model.NotificationModel;
+import dto.requests.FriendRequest;
+
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 
 public interface CallBackController extends Remote {
    /* public void refreshOnlineList() throws RemoteException;
@@ -13,5 +19,12 @@ public interface CallBackController extends Remote {
     public void addNewContact() throws RemoteException;
     public void deleteGroupChat() throws RemoteException;
     public void deleteContact() throws RemoteException;*/
-    void receiveAnnouncement(String announcement, String announcementTitle) throws RemoteException;
+
+    public void respond() throws RemoteException;
+    public void receiveNotification(NotificationModel notification) throws RemoteException;
+    public void receiveNewMessage(MessageModel message) throws RemoteException;
+    public void receiveAddContactRequest(FriendRequest friendRequest) throws RemoteException;
+    public void createNewChat(String senderPhoneNumber) throws RemoteException;
+    public void receiveAnnouncement(String announcement, String announcementTitle) throws RemoteException;
+    public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException;
 }

@@ -6,6 +6,7 @@ import model.Model;
 
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 
 public class HelloApplication extends Application {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class HelloApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, NotBoundException {
         Model.getInstance().getViewFactory().showLoginWindow();
     }
 }

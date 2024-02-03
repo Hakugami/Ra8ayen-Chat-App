@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
-
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 public class DataSourceSingleton {
     private static DataSourceSingleton instance;

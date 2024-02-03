@@ -3,6 +3,7 @@ package dao.impl;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.sql.*;
 import dao.UserDao;
@@ -53,7 +54,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean save(User user) {
+    public boolean save(User user) throws SQLException {
         String query = "INSERT INTO UserAccounts (PhoneNumber, DisplayName, EmailAddress, " +
                 "ProfilePicture,PasswordHash,Gender,Country,DateOfBirth,Bio,LastLogin) " +
                 "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
@@ -63,33 +64,71 @@ public class UserDaoImpl implements UserDao {
 
             add(statement, user);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return rowsAffected >= 1;
         }
-        return false;
     }
 
     @Override
     public boolean update(User user) {
-        String query = "UPDATE UserAccounts SET " +
-                "DisplayName = ?, EmailAddress = ?, " +
-                "ProfilePicture = ?, PasswordHash = ?, " +
-                "Bio = ?,UserStatus = ?, UserMode = ?" +
-                "WHERE UserID = ?";
-
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            update(statement, user);
-            int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        User originalUser = get(user.getUserID());
+        if(originalUser == null) {
+            return false;
         }
+        StringBuilder query = new StringBuilder("UPDATE UserAccounts SET ");
+        List<Object> parameters = new ArrayList<>();
+
+        if (!user.getUserName().equals(originalUser.getUserName())) {
+            query.append("DisplayName = ?, ");
+            parameters.add(user.getUserName());
+        }
+
+        if (!user.getEmailAddress().equals(originalUser.getEmailAddress())) {
+            query.append("EmailAddress = ?, ");
+            parameters.add(user.getEmailAddress());
+        }
+
+        if (!Arrays.equals(user.getProfilePicture(), originalUser.getProfilePicture())) {
+            query.append("ProfilePicture = ?, ");
+            parameters.add(user.getProfilePicture());
+        }
+
+//        if (!user.getPasswordHash().equals(originalUser.getPasswordHash())) {
+//            query.append("PasswordHash = ?, ");
+//            parameters.add(user.getPasswordHash());
+//        }
+
+        if (!user.getBio().equals(originalUser.getBio())) {
+            query.append("Bio = ?, ");
+            parameters.add(user.getBio());
+        }
+
+        if (user.getUserStatus() != originalUser.getUserStatus()) {
+            query.append("UserStatus = ?, ");
+            parameters.add(user.getUserStatus().name());
+        }
+
+        if (user.getUsermode() != originalUser.getUsermode()) {
+            query.append("UserMode = ?, ");
+            parameters.add(user.getUsermode().name());
+        }
+
+        if (!parameters.isEmpty()) {
+            query.setLength(query.length() - 2);
+            query.append(" WHERE UserID = ?");
+            parameters.add(user.getUserID());
+
+            try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query.toString())) {
+
+                createUpdateStatement(statement, parameters);
+
+                int rowsAffected = statement.executeUpdate();
+                return rowsAffected > 0;
+            } catch (SQLException e) {
+                System.out.println("Failed to update user");
+            }
+        }
+
         return false;
     }
 
@@ -101,7 +140,7 @@ public class UserDaoImpl implements UserDao {
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, user.getUserID());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -118,7 +157,7 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -126,8 +165,7 @@ public class UserDaoImpl implements UserDao {
         }
         return false;
     }
-
-
+    @Override
     public User getUserByPhoneNumber(String phoneNumber) {
         User user = null;
         String query = "SELECT * FROM UserAccounts WHERE PhoneNumber = ?";
@@ -145,6 +183,28 @@ public class UserDaoImpl implements UserDao {
             System.out.println(e.getMessage());
         }
         return user;
+    }
+
+    @Override
+    public List<User> getContactsByUserID(int userId) {
+
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT ua.* FROM UserContacts uc " +
+                "INNER JOIN  UserAccounts ua ON uc.FriendID = ua.UserID " +
+                "WHERE uc.UserID = ?;";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    userList.add(convertResultSetToUser(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return userList;
     }
 
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {
@@ -185,17 +245,17 @@ public class UserDaoImpl implements UserDao {
         statement.setTimestamp(10, Timestamp.valueOf(LocalDateTime.now()));
     }
 
-    private void update(PreparedStatement statement, User user) throws SQLException {
-
-        statement.setString(1, user.getUserName());
-        statement.setString(2, user.getEmailAddress());
-        ByteArrayInputStream input = new ByteArrayInputStream(user.getProfilePicture());
-        statement.setBinaryStream(3, input);
-        statement.setString(4, user.getPasswordHash());
-        statement.setString(5, user.getBio());
-        statement.setString(6, user.getUserStatus().name());
-        statement.setString(7, user.getUsermode().name());
-
+    private void createUpdateStatement(PreparedStatement statement, List<Object> parameters) throws SQLException {
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) instanceof String) {
+                statement.setString(i + 1, (String) parameters.get(i));
+            } else if (parameters.get(i) instanceof Integer) {
+                statement.setInt(i + 1, (Integer) parameters.get(i));
+            } else if (parameters.get(i) instanceof byte[]) {
+                ByteArrayInputStream input = new ByteArrayInputStream((byte[]) parameters.get(i));
+                statement.setBinaryStream(i + 1, input);
+            }
+        }
     }
 
 }

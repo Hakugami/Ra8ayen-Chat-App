@@ -1,0 +1,27 @@
+/* NotificationContextMenuElement.css */
+
+.Label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgb(246, 241, 238);
+}
+
+.Button {
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-text-fill: rgb(246, 241, 238);
+    -fx-font-size: 12px;
+    -fx-border-radius: 5px;
+    -fx-pref-width: 80px; /* Set the preferred width */
+    -fx-pref-height: 30px; /* Set the preferred height */
+}
+
+.Button:hover {
+    -fx-background-color: rgb(237, 125, 49);
+}
+
+/* Style for the ImageView */
+.ImageView {
+    -fx-smooth: true;
+}
+
+/* Style for the Pane */

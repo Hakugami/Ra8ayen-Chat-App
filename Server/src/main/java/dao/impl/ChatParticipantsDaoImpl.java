@@ -11,21 +11,42 @@ import java.util.List;
 
 public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
 
-    public ChatParticipant get(int chatId, int participantUserId) {
-        String query = "SELECT * FROM ChatParticipants WHERE ChatID = ? AND ParticipantUserID = ?";
+    public List<ChatParticipant> get(int chatId, int participantUserId) {
+        List<ChatParticipant> chatParticipants = new ArrayList<>();
+        String query = "SELECT * FROM ChatParticipants WHERE ChatID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatId);
-            statement.setInt(2, participantUserId);
+           // statement.setInt(2, participantUserId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return createChatParticipantFromResultSet(resultSet);
+               while (resultSet.next()) {
+                   chatParticipants.add(createChatParticipantFromResultSet(resultSet));
+               }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return chatParticipants;
+    }
+
+    public List<Integer> getParticipantUserIds(int chatId, String phoneNumber) {
+        List<Integer> participantUserIds = new ArrayList<>();
+        String query = "SELECT ParticipantUserID FROM ChatParticipants cp " +
+                "INNER JOIN UserAccounts ua ON cp.ParticipantUserID = ua.UserID " +
+                "WHERE ChatID = ? AND ua.UserStatus = 'Online' AND ua.PhoneNumber != ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, chatId);
+            statement.setString(2, phoneNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    participantUserIds.add(resultSet.getInt(ChatParticipantTable.ParticipantUserID.name()));
                 }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return participantUserIds;
     }
 
     @Override
@@ -80,14 +101,13 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
 
     @Override
     public boolean save(ChatParticipant chatParticipant) {
-        String query = "INSERT INTO ChatParticipants (ChatID, ParticipantUserID, ParticipantStartDate) VALUES (?, ?, ?)";
+        String query = "INSERT INTO ChatParticipants (ChatID, ParticipantUserID) VALUES (?, ?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, chatParticipant.getChatId());
             statement.setInt(2, chatParticipant.getParticipantUserId());
-            statement.setTimestamp(3, Timestamp.valueOf(chatParticipant.getParticipantStartDate()));
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {
@@ -105,7 +125,7 @@ public class ChatParticipantsDaoImpl implements ChatParticipantsDao {
             statement.setInt(2, chatParticipant.getChatId());
             statement.setInt(3, chatParticipant.getParticipantUserId());
             int rowsAffected = statement.executeUpdate();
-            if(rowsAffected > 1) {
+            if(rowsAffected >= 1) {
                 return true;
             }
         } catch (SQLException e) {

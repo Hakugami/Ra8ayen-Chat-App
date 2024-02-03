@@ -11,12 +11,12 @@
       <VBox.margin>
          <Insets />
       </VBox.margin>
-      <Button id="greenButton" fx:id="startButton" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" text="Start Server" onAction="#handleStartButtonClick">
+      <Button id="greenButton" fx:id="startButton" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" text="Start Server">
          <HBox.margin>
             <Insets right="170.0" />
          </HBox.margin>
       </Button>
-      <Button id="redButton" fx:id="shutdownButton" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" text="Shutdown Server" onAction="#handleShutdownButtonClick"/>
+      <Button id="redButton" fx:id="shutdownButton" mnemonicParsing="false" prefHeight="58.0" prefWidth="150.0" text="Shutdown Server"/>
    </HBox>
    <ProgressIndicator id = "progressIndicator" fx:id="progressIndicator">
       <VBox.margin>

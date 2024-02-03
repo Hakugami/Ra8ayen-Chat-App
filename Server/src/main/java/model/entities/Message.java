@@ -11,6 +11,8 @@ public class Message {
     private LocalDateTime time;
     private boolean isAttachment;
 
+    private byte[] Attachment;
+
     public Message(){
 
     }
@@ -78,5 +80,13 @@ public class Message {
                 ", time=" + time +
                 ", isAttachment=" + isAttachment +
                 '}';
+    }
+
+    public byte[] getAttachmentData() {
+        return Attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        Attachment = attachment;
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<!-- NotificationContextMenu.fxml -->
+
+<AnchorPane prefHeight="200.0" prefWidth="400.0" styleClass="AnchorPane" stylesheets="@../../Styles/NeoOrange/NotificationContextMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NotificationContextMenuController">
+    <ListView fx:id="notificationList" prefHeight="400.0" prefWidth="600.0" styleClass="ListView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+</AnchorPane>

@@ -5,30 +5,21 @@ import java.time.LocalDateTime;
 
 public class MessageModel implements Serializable {
     private int MessageId;
-    private int senderId;
-    private int receiverId;
+    private  UserModel sender;
+    private UserModel receiver;
     private String messageContent;
     private LocalDateTime time;
     private boolean isAttachment;
 
-    public MessageModel() {
+    private byte[] Attachment;
+    private int chatId;
 
+    public int getChatId() {
+        return chatId;
     }
 
-    public MessageModel(int senderId, int receiverId, String messageContent, LocalDateTime time, boolean isAttachment) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.messageContent = messageContent;
-        this.time = time;
-        this.isAttachment = isAttachment;
-    }
-
-    public int getMessageId() {
-        return this.MessageId;
-    }
-
-    public void setMessageId(int MessageId) {
-        this.MessageId = MessageId;
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
     }
 
     public int getSenderId() {
@@ -46,6 +37,30 @@ public class MessageModel implements Serializable {
     public void setReceiverId(int receiverId) {
         this.receiverId = receiverId;
     }
+
+    private int senderId;
+
+    private int receiverId;
+    public MessageModel() {
+
+    }
+
+    public MessageModel(UserModel senderId, UserModel receiverId, String messageContent, LocalDateTime time, boolean isAttachment) {
+        this.sender= senderId;
+        this.receiver= receiverId;
+        this.messageContent = messageContent;
+        this.time = time;
+        this.isAttachment = isAttachment;
+    }
+
+    public int getMessageId() {
+        return this.MessageId;
+    }
+
+    public void setMessageId(int MessageId) {
+        this.MessageId = MessageId;
+    }
+
 
     public String getMessageContent() {
         return messageContent;
@@ -71,15 +86,39 @@ public class MessageModel implements Serializable {
         isAttachment = attachment;
     }
 
+    public UserModel getSender() {
+        return sender;
+    }
+
+    public void setSender(UserModel sender) {
+        this.sender = sender;
+    }
+
+    public UserModel getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(UserModel receiver) {
+        this.receiver = receiver;
+    }
+
     @Override
     public String toString() {
-        return "Message{" +
+        return "MessageModel{" +
                 "MessageId=" + MessageId +
-                ", senderId=" + senderId +
-                ", receiverId=" + receiverId +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
                 ", isAttachment=" + isAttachment +
                 '}';
+    }
+
+    public byte[] getAttachmentData() {
+        return Attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        Attachment = attachment;
     }
 }

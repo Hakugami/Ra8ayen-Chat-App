@@ -1,6 +1,10 @@
 package view;
 
-import controller.ContactsController;
+import controller.*;
+import model.Chat;
+import token.TokenManager;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
@@ -9,20 +13,29 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
+import model.Model;
+import network.NetworkFactory;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class ViewFactory {
     private final StringProperty selectedMenuItem;
+    private final ObjectProperty<Chat> selectedContact;
     private BorderPane mainArea;
+
 
     public ViewFactory() {
         this.selectedMenuItem = new SimpleStringProperty("");
+        this.selectedContact = new SimpleObjectProperty<>();
     }
 
     public StringProperty getSelectedMenuItem() {
         return selectedMenuItem;
+    }
+    public ObjectProperty<Chat> getSelectedContact() {
+        return selectedContact;
     }
 
     public BorderPane getMainArea() {
@@ -36,10 +49,16 @@ public class ViewFactory {
         return mainArea;
     }
 
+    public BorderPane autoLogin() throws NotBoundException, RemoteException {
+        NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken());
+        return getMainArea();
+    }
+
     public void showProfile() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Profile.fxml"));
         createStage(loader);
     }
+
     public void showProfileContextMenu() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProfileContextMenu.fxml"));
         createStage(loader);
@@ -47,7 +66,7 @@ public class ViewFactory {
 
     public Node getProfile() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Profile.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/Profile.fxml")).load();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,19 +74,28 @@ public class ViewFactory {
     }
 
     public void showSettingsContextMenu() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/SettingsContextMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/SettingsContextMenu.fxml"));
         createStage(loader);
     }
 
 
-    public void showLoginWindow() {
+    public void showLoginWindow() throws NotBoundException, RemoteException {
+
+//        LoginController client = new LoginController();
+//        client.connectToServer();
+//        client.startTrackingOnlineUsers();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml"));
         createStage(loader);
     }
 
-    public void showContacts() {
+    public void showHomeWindow() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Home/Home.fxml"));
+        createStage(loader);
+    }
+
+    public void showContacts() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml"));
-        ContactsController contactsController = new ContactsController();
+        ContactsController contactsController = Model.getInstance().getControllerFactory().getContactsController();
         loader.setController(contactsController);
         createStage(loader);
     }
@@ -78,16 +106,18 @@ public class ViewFactory {
     }
 
     public void showThemes() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Themes.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/Themes.fxml"));
         createStage(loader);
     }
-    public Node getThemes(){
+
+    public Node getThemes() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Themes.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/Themes.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
     public void showRegisterWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml"));
         createStage(loader);
@@ -115,9 +145,10 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
+
     public Node getAddContact() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/AddContact.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -125,7 +156,7 @@ public class ViewFactory {
 
     public Node getContacts() {
         try {
-            return new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/Fxml/Contacts/Contacts.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -138,17 +169,41 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
-    public Node getRegister(){
-        try{
+
+    public Node getRegister() {
+        try {
             return new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml")).load();
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public Node getLogin(){
-        try{
+
+    public Node getLogin() {
+        try {
             return new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml")).load();
-        }catch (IOException e){
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getChat() {
+        try {
+            return new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+    public Node getContactElement() throws IOException {
+        return new FXMLLoader(getClass().getResource("/Fxml/Contacts/ContactElement.fxml")).load();
+    }
+
+    public Node getUpdateProfile() {
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/UpdateProfile.fxml")).load();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

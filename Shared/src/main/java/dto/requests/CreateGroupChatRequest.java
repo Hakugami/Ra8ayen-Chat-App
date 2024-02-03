@@ -1,22 +1,38 @@
 package dto.requests;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class CreateGroupChatRequest implements Serializable {
-    private String userPhoneNumber;
+    private int adminID;
+    private String adminPhoneNumber;
     private String groupName;
-
-    public CreateGroupChatRequest(String userPhoneNumber, String groupName) {
-        this.userPhoneNumber = userPhoneNumber;
+    private byte[] groupImage;
+    private List<String> friendsPhoneNumbers;
+    public CreateGroupChatRequest(int adminID, String groupName, byte[] groupImage, List<String> friendsPhoneNumbers) {
+        this.adminID = adminID;
         this.groupName = groupName;
+        this.groupImage = groupImage;
+        this.friendsPhoneNumbers = friendsPhoneNumbers;
+    }
+    public CreateGroupChatRequest() {
     }
 
-    public String getUserPhoneNumber() {
-        return userPhoneNumber;
+    public List<String> getFriendsPhoneNumbers() {
+        return friendsPhoneNumbers;
     }
 
-    public void setUserPhoneNumber(String userPhoneNumber) {
-        this.userPhoneNumber = userPhoneNumber;
+    public void setFriendsPhoneNumbers(List<String> friendsPhoneNumbers) {
+        this.friendsPhoneNumbers = friendsPhoneNumbers;
+    }
+
+    public int getAdminID() {
+        return adminID;
+    }
+
+    public void setAdminID(int adminID) {
+        this.adminID = adminID;
     }
 
     public String getGroupName() {
@@ -27,11 +43,29 @@ public class CreateGroupChatRequest implements Serializable {
         this.groupName = groupName;
     }
 
+    public byte[] getGroupImage() {
+        return groupImage;
+    }
+
+    public void setGroupImage(byte[] groupImage) {
+        this.groupImage = groupImage;
+    }
+
+    public String getAdminPhoneNumber() {
+        return adminPhoneNumber;
+    }
+
+    public void setAdminPhoneNumber(String adminPhoneNumber) {
+        this.adminPhoneNumber = adminPhoneNumber;
+    }
+
     @Override
     public String toString() {
         return "CreateGroupChatRequest{" +
-                "userPhoneNumber='" + userPhoneNumber + '\'' +
+                "adminID=" + adminID +
                 ", groupName='" + groupName + '\'' +
+                ", groupImage=" + Arrays.toString(groupImage) +
+                ", friendsPhoneNumbers=" + friendsPhoneNumbers +
                 '}';
     }
 }
