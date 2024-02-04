@@ -4,8 +4,10 @@ import dto.Model.MessageModel;
 import dto.Model.UserModel;
 import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
+import dto.requests.VoiceCallRequest;
 import dto.responses.GetMessageResponse;
 import dto.responses.SendMessageResponse;
+import dto.responses.VoiceCallResponse;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -18,7 +20,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +31,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
+import javafx.stage.Screen;
 import javafx.util.Duration;
 import model.ContactData;
 import model.CurrentUser;
@@ -61,6 +67,7 @@ public class ChatController implements Initializable {
     @FXML
     public Label NameContact;
     public Button emojiButton; //refer to attachment
+    public Button voiceChat;
     @FXML
     private ObservableList<MessageModel> chatMessages;
     private final StringProperty nameProperty = new SimpleStringProperty();
@@ -112,6 +119,94 @@ public class ChatController implements Initializable {
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
+        voiceChat.setOnAction(event -> {
+            Platform.runLater(() -> {
+                try {
+                    handleVoiceChat();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        });
+    }
+
+
+    public void receiveVoiceChatRequest(String phoneNumber) throws IOException {
+        Popup popup = new Popup();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chat/VoiceChatPopUp.fxml"));
+        Parent root = loader.load();
+        popup.getContent().add(root);
+
+        VoiceChatPopUpController voiceChatPopUpController = loader.getController();
+        voiceChatPopUpController.setPopup(popup,phoneNumber);
+
+        popup.setAutoHide(true);
+
+        // Show the popup first to calculate its height
+        popup.show(voiceChat.getScene().getWindow());
+
+        // Calculate the center coordinates of the screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double centerX = screenBounds.getWidth() / 2;
+        double centerY = screenBounds.getHeight() / 2;
+
+        // Calculate the x and y coordinates
+        double x = centerX - popup.getWidth() / 2;
+        double y = centerY - popup.getHeight() / 2;
+
+        // Hide the popup
+        popup.hide();
+
+        // Show the popup again at the correct position
+        popup.show(voiceChat.getScene().getWindow(), x, y);
+    }
+
+
+    private void sendVoiceCallRequest() throws RemoteException {
+        String phoneNumber = "";
+        if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
+            phoneNumber = ((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getPhoneNumber();
+        }
+        System.out.println("Sending Voice Call Request to " + phoneNumber);
+        VoiceCallRequest request = new VoiceCallRequest(phoneNumber, CurrentUser.getInstance().getPhoneNumber());
+        try {
+            VoiceCallResponse response = NetworkFactory.getInstance().connect(request);
+            System.out.println("Voice call request sent"+response);
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void handleVoiceChat() throws IOException {
+        sendVoiceCallRequest();
+        Popup popup = new Popup();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chat/VoiceChatWait.fxml"));
+        Parent root = loader.load();
+        popup.getContent().add(root);
+
+        VoiceChatWaitController voiceChatWaitController = loader.getController();
+        voiceChatWaitController.setPopup(popup);
+
+        popup.setAutoHide(true);
+
+        // Show the popup first to calculate its height
+        popup.show(voiceChat.getScene().getWindow());
+
+        // Calculate the center coordinates of the screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double centerX = screenBounds.getWidth() / 2;
+        double centerY = screenBounds.getHeight() / 2;
+
+        // Calculate the x and y coordinates
+        double x = centerX - popup.getWidth() / 2;
+        double y = centerY - popup.getHeight() / 2;
+
+        // Hide the popup
+        popup.hide();
+
+        // Show the popup again at the correct position
+        popup.show(voiceChat.getScene().getWindow(), x, y);
     }
 
     public void updateChatContent(String name, Image image) {
@@ -122,6 +217,7 @@ public class ChatController implements Initializable {
             }
         });
     }
+
 
     private void sendMessage() throws RemoteException {
         //    System.out.println(Model.getInstance().getViewFactory().getSelectedContact().getName().);
@@ -162,14 +258,16 @@ public class ChatController implements Initializable {
 
         if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
             request.setReceiverId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+            request.setGroupMessage(true);
         } else {
             request.setReceiverId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+            request.setGroupMessage(false);
         }
         if (uploadedFileBytes == null) {
             System.out.println("UploadFile NULL");
-            request.setAttachment(false);
+            request.setIsAttachment(false);
         } else {
-            request.setAttachment(true);
+            request.setIsAttachment(true);
             request.setAttachmentData(uploadedFileBytes);
         }
         request.setTime(LocalDateTime.now());
@@ -290,8 +388,8 @@ public class ChatController implements Initializable {
 //            System.out.println("Message Size " + getMessageResponse.getMessageList().size());
 //
 //            for(MessageModel messageModel:getMessageResponse.getMessageList()){
-//                if(messageModel.isAttachment()) {
-//                    System.out.println("Message With Attachment " + messageModel.isAttachment() + "Message Attatchment Size "+messageModel.getAttachmentData().length);
+//                if(messageModel.getIsAttachment()) {
+//                    System.out.println("Message With Attachment " + messageModel.getIsAttachment() + "Message Attatchment Size "+messageModel.getAttachmentData().length);
 //                }
 //            }
 //            Platform.runLater(() -> {
@@ -306,65 +404,117 @@ public class ChatController implements Initializable {
         retrieveMessages(getMessageRequest);
     }
 
+//    private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException {
+//        System.out.println("Retrieving Messages of ChatID " + getMessageRequest.getChatId());
+//        getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+//
+//
+//        Task<Void> serverRetrievalTask = new Task<Void>() {
+//            @Override
+//            protected Void call() throws Exception {
+//                // Check if the cache is empty
+//                if (CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId()) == null || CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId()).isEmpty()) {
+//                    // If the cache is empty, retrieve the messages from the server
+//                    GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+//                    if (getMessageResponse == null) {
+//                        System.out.println("No Message to this Contact Found");
+//                    } else {
+//                        System.out.println("Message Size " + getMessageResponse.getMessageList().size());
+//                        Platform.runLater(() -> {
+//                            chatMessages.clear();
+//                            chatMessages.addAll(getMessageResponse.getMessageList());
+//                        });
+//                        // Update the cache with the retrieved messages
+//                        for (MessageModel message : getMessageResponse.getMessageList()) {
+//                            CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
+//                        }
+//                    }
+//                } else {
+//                    // If the cache is not empty, display the messages from the cache
+//                    Platform.runLater(() -> {
+//                        chatMessages.clear();
+//                        try {
+//                            chatMessages.addAll(CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId()));
+//                        } catch (RemoteException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
+//                    // Fetch the latest messages from the server
+//                    GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+//                    if (getMessageResponse != null) {
+//                        System.out.println("Message Size " + getMessageResponse.getMessageList().size());
+//                        Platform.runLater(() -> {
+//                            chatMessages.addAll(getMessageResponse.getMessageList());
+//                        });
+//                        // Update the cache with the retrieved messages
+//                        for (MessageModel message : getMessageResponse.getMessageList()) {
+//                            // Add the sender's and receiver's profile pictures to the image cache
+//                            BufferedImage senderImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
+//                            BufferedImage receiverImage = ImageUtls.convertByteToImage(message.getReceiver().getProfilePicture());
+//                            Image fxSenderImage = SwingFXUtils.toFXImage(senderImage, null);
+//                            Image fxReceiverImage = SwingFXUtils.toFXImage(receiverImage, null);
+//                            CurrentUser.getInstance().addImageToCache(message.getSender().getUserID(), fxSenderImage);
+//                            CurrentUser.getInstance().addImageToCache(message.getReceiver().getUserID(), fxReceiverImage);
+//
+//                            // Remove the profile pictures from the MessageModel
+//                            message.getSender().setProfilePicture(null);
+//                            message.getReceiver().setProfilePicture(null);
+//
+//                            if (!CurrentUser.getInstance().isMessageCached(message)) {
+//                                CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
+//                            }
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//        };
+//
+//        serverRetrievalTask.setOnFailed(event -> {
+//            Throwable exception = serverRetrievalTask.getException();
+//            // Handle exception here
+//            System.out.println("Failed to retrieve messages: " + exception.getMessage());
+//        });
+//
+//        new Thread(serverRetrievalTask).start();
+//    }
+
+    // In ChatController.java
     private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException {
         System.out.println("Retrieving Messages of ChatID " + getMessageRequest.getChatId());
         getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
 
-
         Task<Void> serverRetrievalTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                // Check if the cache is empty
-                if (CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId()) == null || CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId()).isEmpty()) {
-                    // If the cache is empty, retrieve the messages from the server
-                    GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-                    if (getMessageResponse == null) {
-                        System.out.println("No Message to this Contact Found");
-                    } else {
-                        System.out.println("Message Size " + getMessageResponse.getMessageList().size());
-                        Platform.runLater(() -> {
-                            chatMessages.clear();
-                            chatMessages.addAll(getMessageResponse.getMessageList());
-                        });
-                        // Update the cache with the retrieved messages
-                        for (MessageModel message : getMessageResponse.getMessageList()) {
-                            CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
-                        }
-                    }
+                GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
+                if (getMessageResponse == null) {
+                    System.out.println("No Message to this Contact Found");
                 } else {
-                    // If the cache is not empty, display the messages from the cache
+                    System.out.println("Message Size " + getMessageResponse.getMessageList().size());
                     Platform.runLater(() -> {
-                        chatMessages.clear();
-                        try {
-                            chatMessages.addAll(CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId()));
-                        } catch (RemoteException e) {
-                            throw new RuntimeException(e);
+                        // Only add messages that are not already in the chatMessages list
+                        for (MessageModel message : getMessageResponse.getMessageList()) {
+                            if (!chatMessages.contains(message)) {
+                                chatMessages.add(message);
+                            }
                         }
                     });
-                    // Fetch the latest messages from the server
-                    GetMessageResponse getMessageResponse = NetworkFactory.getInstance().getMessageOfChatID(getMessageRequest);
-                    if (getMessageResponse != null) {
-                        System.out.println("Message Size " + getMessageResponse.getMessageList().size());
-                        Platform.runLater(() -> {
-                            chatMessages.addAll(getMessageResponse.getMessageList());
-                        });
-                        // Update the cache with the retrieved messages
-                        for (MessageModel message : getMessageResponse.getMessageList()) {
-                            // Add the sender's and receiver's profile pictures to the image cache
-                            BufferedImage senderImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
-                            BufferedImage receiverImage = ImageUtls.convertByteToImage(message.getReceiver().getProfilePicture());
-                            Image fxSenderImage = SwingFXUtils.toFXImage(senderImage, null);
-                            Image fxReceiverImage = SwingFXUtils.toFXImage(receiverImage, null);
-                            CurrentUser.getInstance().addImageToCache(message.getSender().getUserID(), fxSenderImage);
-                            CurrentUser.getInstance().addImageToCache(message.getReceiver().getUserID(), fxReceiverImage);
+                    // Update the cache with the retrieved messages
+                    for (MessageModel message : getMessageResponse.getMessageList()) {
+                        // Add the sender's and receiver's profile pictures to the image cache
+                        BufferedImage senderImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
+                        BufferedImage receiverImage = ImageUtls.convertByteToImage(message.getReceiver().getProfilePicture());
+                        Image fxSenderImage = SwingFXUtils.toFXImage(senderImage, null);
+                        Image fxReceiverImage = SwingFXUtils.toFXImage(receiverImage, null);
+                        CurrentUser.getInstance().addImageToCache(message.getSender().getUserID(), fxSenderImage);
+                        CurrentUser.getInstance().addImageToCache(message.getReceiver().getUserID(), fxReceiverImage);
 
-                            // Remove the profile pictures from the MessageModel
-                            message.getSender().setProfilePicture(null);
-                            message.getReceiver().setProfilePicture(null);
-
-                            if (!CurrentUser.getInstance().isMessageCached(message)) {
-                                CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
-                            }
+                        // Remove the profile pictures from the MessageModel
+                        message.getSender().setProfilePicture(null);
+                        message.getReceiver().setProfilePicture(null);
+                        if (!CurrentUser.getInstance().isMessageCached(message)) {
+                            CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
                         }
                     }
                 }
@@ -380,6 +530,8 @@ public class ChatController implements Initializable {
 
         new Thread(serverRetrievalTask).start();
     }
+
+// In CurrentUser.java
 
 
     @FXML

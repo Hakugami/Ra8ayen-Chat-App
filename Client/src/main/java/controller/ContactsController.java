@@ -263,6 +263,12 @@ public class ContactsController implements Initializable {
                                     contactData.setName(name);
                                     contactData.setImage(imageView);
                                     contactData.setChatId(ID);
+                                    for(int i = 0 ; i < CurrentUser.getInstance().getContactDataList().size(); i++){
+                                        if(CurrentUser.getInstance().getContactDataList().get(i).getChatId() == ID){
+                                            contactData.setPhoneNumber(CurrentUser.getInstance().getContactDataList().get(i).getPhoneNumber());
+                                            System.out.println("Phone Number of contact ------------------"+CurrentUser.getInstance().getContactDataList().get(i).getPhoneNumber());
+                                        }
+                                    }
                                     setSelectedContact(contactData);
                                     System.out.println("Id of contact "+contactData.getId());
                                     contactListener(contactData);

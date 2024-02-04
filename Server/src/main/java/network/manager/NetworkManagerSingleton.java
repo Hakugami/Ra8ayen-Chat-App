@@ -3,6 +3,8 @@ package network.manager;
 import controllers.*;
 import lookupnames.LookUpNames;
 import service.TrackOnlineUsersService;
+//import service.TrackOnlineUsersService;
+
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -15,6 +17,7 @@ public class NetworkManagerSingleton {
     private static final int PORT = 2000;
     private boolean isServerRunning;
     private boolean isFirsTimeStart;
+
 
     private NetworkManagerSingleton() {
         try {
@@ -40,6 +43,7 @@ public class NetworkManagerSingleton {
     }
     public void start() {
         try {
+            registryBinding();
             if(!isFirsTimeStart) {
                 exportRemoteObjects();
             }
@@ -77,6 +81,7 @@ public class NetworkManagerSingleton {
         registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
         registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
         registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
+        registry.rebind(LookUpNames.VOICECHATCONTROLLER.name(), VoiceChatControllerSingleton.getInstance());
     }
 
     private void exportRemoteObjects() throws RemoteException, MalformedURLException {

@@ -81,7 +81,8 @@ public class CurrentUser extends UserModel {
         if (chatMessageMap.containsKey(messageModel.getChatId())) {
             List<MessageModel> messageModelList = chatMessageMap.get(messageModel.getChatId());
             for (MessageModel message : messageModelList) {
-                if (message.getMessageId() == messageModel.getMessageId()) {
+                // Only consider messages with a message ID greater than the last message in the cache as new
+                if (message.getMessageId() < messageModel.getMessageId()) {
                     return true;
                 }
             }
@@ -134,6 +135,7 @@ public class CurrentUser extends UserModel {
             ContactData contactData = new ContactData();
             contactData.setName(userModel.getName());
             contactData.setPhoneNumber(userModel.getPhoneNumber());
+            System.out.println(contactData.getPhoneNumber());
             contactData.setId(userModel.getIdOfFriend());
             Color color = null;
             if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Available)){

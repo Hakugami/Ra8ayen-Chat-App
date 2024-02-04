@@ -114,5 +114,25 @@ public class NetworkFactory {
         return controller.getAllMessages(request);
     }
 
+    public void sendVoicePacket(SendVoicePacketRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        controller.sendVoiceMessage(request);
+    }
+
+    public VoiceCallResponse connect(VoiceCallRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.connect(request);
+    }
+
+    public AcceptVoiceCallResponse acceptVoiceCallRequest(AcceptVoiceCallRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.AcceptVoiceCallRequest(request);
+    }
+
+    public RefuseVoiceCallResponse refuseVoiceCallRequest(RefuseVoiceCallRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.refuseVoiceCallRequest(request);
+    }
+
 
 }

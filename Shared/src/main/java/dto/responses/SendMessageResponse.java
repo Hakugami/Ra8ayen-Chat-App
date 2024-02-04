@@ -86,7 +86,7 @@ public class SendMessageResponse implements Serializable {
                 ", receiverId=" + receiverId +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
-                ", isAttachment=" + isAttachment +
+                ", getIsAttachment=" + isAttachment +
                 ", success=" + success +
                 ", error='" + error + '\'' +
                 '}';

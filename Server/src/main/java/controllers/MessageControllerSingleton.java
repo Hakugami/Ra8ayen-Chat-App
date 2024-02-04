@@ -11,7 +11,6 @@ import service.MessageService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -50,17 +49,21 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageModel.setMessageId(request.getMessageId());
             messageModel.setChatId(request.getReceiverId());
             messageModel.setMessageContent(request.getMessageContent());
-            if(request.isAttachment()){
+            if (request.getIsAttachment()) {
                 messageModel.setAttachment(true);
                 messageModel.setAttachmentData(request.getAttachmentData());
-            }else{
+            } else {
                 messageModel.setAttachment(false);
             }
             //add UseModel to messageModel
             messageModel.setSender(request.getSender());
             for (String number : phoneNumber) {
                 if (OnlineControllerImpl.clients.containsKey(number)) {
-                    OnlineControllerImpl.clients.get(number).receiveNewMessage(messageModel);
+                    if (request.isGroupMessage()) {
+                        OnlineControllerImpl.clients.get(number).receiveGroupChatMessage(messageModel);
+                    } else {
+                        OnlineControllerImpl.clients.get(number).receiveNewMessage(messageModel);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -79,15 +82,15 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
 
             //   List<MessageModel> messageModels = new ArrayList<>();
 
-        for(int i=0;i<messages.size();i++){
-            messageModels.get(i).setAttachment(messages.get(i).isAttachment());
-            messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
-            if(messageModels.get(i).isAttachment()){
-                System.out.println("Attatch Size From Server "+messageModels.get(i).getAttachmentData().length);
-            }else{
-                System.out.println("Attatch Size From Server "+0);
+            for (int i = 0; i < messages.size(); i++) {
+                messageModels.get(i).setAttachment(messages.get(i).getIsAttachment());
+                messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
+                if (messageModels.get(i).isAttachment()) {
+                    System.out.println("Attatch Size From Server " + messageModels.get(i).getAttachmentData().length);
+                } else {
+                    System.out.println("Attatch Size From Server " + 0);
+                }
             }
-        }
 
             response.setMessageList(messageModels);
             response.setSuccess(true);

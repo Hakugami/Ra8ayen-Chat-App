@@ -11,7 +11,7 @@ public class Message {
     private LocalDateTime time;
     private boolean isAttachment;
 
-    private byte[] Attachment;
+    private byte[] attachment;
 
     public Message(){
 
@@ -63,10 +63,10 @@ public class Message {
         this.time = time;
     }
 
-    public boolean isAttachment() {
+    public boolean getIsAttachment() {
         return isAttachment;
     }
-    public void setAttachment(boolean attachment) {
+    public void setIsAttachment(boolean attachment) {
         isAttachment = attachment;
     }
 
@@ -78,15 +78,15 @@ public class Message {
                 ", receiverId=" + receiverId +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
-                ", isAttachment=" + isAttachment +
+                ", getIsAttachment=" + isAttachment +
                 '}';
     }
 
     public byte[] getAttachmentData() {
-        return Attachment;
+        return attachment;
     }
 
     public void setAttachmentData(byte[] attachment) {
-        Attachment = attachment;
+        this.attachment = attachment;
     }
 }

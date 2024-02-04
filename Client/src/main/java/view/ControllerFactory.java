@@ -14,9 +14,22 @@ public class ControllerFactory {
     private ContactElementController contactElementController;
     private MainWindowController mainWindowController;
     private NotificationContextMenuController notificationContextMenuController;
+    private VoiceChatPopUpController voiceChatPopUpController;
 
     public void setChatController(ChatController chatController) {
         this.chatController = chatController;
+    }
+    public void setVoiceChatPopUpController(VoiceChatPopUpController voiceChatPopUpController) {
+        this.voiceChatPopUpController = voiceChatPopUpController;
+    }
+
+    public VoiceChatPopUpController getVoiceChatPopUpController() throws IOException {
+        if(voiceChatPopUpController == null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/VoiceChatPopUp.fxml"));
+            Parent parent = fxmlLoader.load();
+            voiceChatPopUpController = fxmlLoader.getController();
+        }
+        return voiceChatPopUpController;
     }
 
     public ChatController getChatController() {

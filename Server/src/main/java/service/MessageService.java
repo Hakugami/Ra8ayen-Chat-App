@@ -35,8 +35,8 @@ public class MessageService {
     }
 
     public void sendMessage(SendMessageRequest request) {
-        System.out.println("Attachment received : "+request.isAttachment());
-        if(request.isAttachment()){
+        System.out.println("Attachment received : "+request.getIsAttachment());
+        if(request.getIsAttachment()){
             Message message = MapMessageRequestToMessage(request);
             int MessageID = messageDao.sendMessageWithAttachment(message);
             if(MessageID !=-1){ //message Send Successfully send Attachment to Attachment Doa
@@ -67,11 +67,11 @@ public class MessageService {
             for(Message checkMessage:messageListWithoutAttachment){
                 Attachment attachment=attachmentDao.get(checkMessage.getMessageId());
                 if(attachment!=null){
-                    checkMessage.setAttachment(true);
+                    checkMessage.setIsAttachment(true);
                  //   System.out.println("From Message Service "+attachment.getAttachment().length);
                     checkMessage.setAttachmentData(attachment.getAttachment());
                 }else{
-                    checkMessage.setAttachment(false);
+                    checkMessage.setIsAttachment(false);
                 }
             }
         return messageListWithoutAttachment;
@@ -99,7 +99,7 @@ public class MessageService {
         message.setSenderId(sendMessageRequest.getSenderId());
         message.setMessageContent(sendMessageRequest.getMessageContent());
         message.setReceiverId(sendMessageRequest.getReceiverId());
-        message.setAttachment(sendMessageRequest.isAttachment());
+        message.setIsAttachment(sendMessageRequest.getIsAttachment());
         message.setAttachmentData(sendMessageRequest.getAttachmentData());
         message.setTime(sendMessageRequest.getTime());
         return message;

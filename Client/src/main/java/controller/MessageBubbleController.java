@@ -3,6 +3,7 @@ package controller;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.MessageModel;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -90,42 +91,55 @@ public class MessageBubbleController implements Initializable {
     }
 
     private void displayCurrentUserMessage() {
-        try {
-            loadMessage();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            senderImage.setImage(CurrentUser.getInstance().getProfilePictureImage());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
-        messageVBox.getChildren().remove(senderInfoHBox);
+        Platform.runLater(() -> {
+            try {
+                loadMessage();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                senderImage.setImage(CurrentUser.getInstance().getProfilePictureImage());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+            completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            messageVBox.getChildren().remove(senderInfoHBox);
+        });
 
     }
 
     private void displayOtherUserMessage() throws RemoteException {
-        try {
-            loadMessage();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        // Get the sender's profile picture from the image cache
-        Image senderProfilePicture = CurrentUser.getInstance().getImageFromCache(message.getSender().getUserID());
+        Platform.runLater(() -> {
+            try {
+                loadMessage();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+            // Get the sender's profile picture from the image cache
+            Image senderProfilePicture = null;
+            try {
+                senderProfilePicture = CurrentUser.getInstance().getImageFromCache(message.getSender().getUserID());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
 
-        // If the image is not in the cache, convert it from bytes to an image and add it to the cache
-        if (senderProfilePicture == null) {
-            BufferedImage bufferedImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
-            senderProfilePicture = SwingFXUtils.toFXImage(bufferedImage, null);
-            CurrentUser.getInstance().addImageToCache(message.getSender().getUserID(), senderProfilePicture);
-        }
+            // If the image is not in the cache, convert it from bytes to an image and add it to the cache
+            if (senderProfilePicture == null) {
+                BufferedImage bufferedImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
+                senderProfilePicture = SwingFXUtils.toFXImage(bufferedImage, null);
+                try {
+                    CurrentUser.getInstance().addImageToCache(message.getSender().getUserID(), senderProfilePicture);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
-        // Set the sender's profile picture
-        senderImage.setImage(senderProfilePicture);
-        messageVBox.getStyleClass().add("receiver-bubble");
-        completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.LEFT_TO_RIGHT);
+            // Set the sender's profile picture
+            senderImage.setImage(senderProfilePicture);
+            messageVBox.getStyleClass().add("receiver-bubble");
+            completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.LEFT_TO_RIGHT);
 //        messageVBox.getStyleClass().add("rec");
+        });
     }
 
 private void loadMessage() throws RemoteException {

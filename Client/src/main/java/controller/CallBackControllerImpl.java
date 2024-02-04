@@ -1,11 +1,11 @@
 package controller;
 
+import controller.soundUtils.AudioChat;
 import dto.Controller.CallBackController;
 import dto.Model.MessageModel;
 import dto.Model.NotificationModel;
-import dto.requests.FriendRequest;
-import dto.requests.GetContactsRequest;
-import dto.requests.GetGroupRequest;
+import dto.requests.*;
+import dto.responses.AcceptVoiceCallResponse;
 import javafx.application.Platform;
 import model.ContactData;
 import model.CurrentUser;
@@ -57,17 +57,9 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
-       // Model.getInstance().getControllerFactory().getChatController();
-        System.out.println("Message Received----------------------------------------------------------------------------------------");
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
-            Platform.runLater(() -> Notifications.create().text(message.getSender().getUserName() +
-                    " sent you a message").title("New Message").showInformation());
+                Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         }
-        else if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
-            Platform.runLater(() -> Notifications.create().text(message.getSender().getUserName() +
-                    " sent a message to group").title("New Message").showInformation());
-        }
-        Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         if(message.getSender()!=null){
 
             System.out.println(message.getSender().getUserID());
@@ -78,6 +70,13 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         //get ChatID of message and display on
 
     }
+    @Override
+    public void receiveGroupChatMessage(MessageModel message) throws RemoteException {
+        if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
+            Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+        }
+    }
+
 
     @Override
     public void receiveAddContactRequest(FriendRequest friendRequest) throws RemoteException {
@@ -111,6 +110,35 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
+        });
+    }
+
+    @Override
+    public void receiveVoiceCallRequest(VoiceCallRequest voiceCallRequest) throws RemoteException {
+        Platform.runLater(()->{
+            try {
+                Model.getInstance().getControllerFactory().getChatController().receiveVoiceChatRequest(voiceCallRequest.getSenderPhoneNumber());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void establishVoiceCall(AcceptVoiceCallResponse acceptVoiceCallResponse) throws RemoteException {
+        Platform.runLater(()->{
+            try {
+                Model.getInstance().getControllerFactory().getVoiceChatPopUpController().establishVoiceCall(acceptVoiceCallResponse);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public void receiveVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException {
+        Platform.runLater(()->{
+            AudioChat.getInstance().setReceivedData(voicePacketRequest.getData());
         });
     }
 }

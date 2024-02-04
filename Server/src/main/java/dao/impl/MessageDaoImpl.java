@@ -6,8 +6,6 @@ import persistence.connection.DataSourceSingleton;
 import model.entities.MessageTable;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,7 +133,7 @@ private void createStatementForInsert( PreparedStatement statement, Message mess
     statement.setInt(2,message.getReceiverId());
     statement.setString(3,message.getMessageContent());
     statement.setTimestamp(4, Timestamp.valueOf(message.getTime()));
-    statement.setBoolean(5, message.isAttachment());
+    statement.setBoolean(5, message.getIsAttachment());
 }
 
 private Message getMessageFromResultSet(ResultSet resultSet) throws SQLException {
@@ -145,7 +143,7 @@ private Message getMessageFromResultSet(ResultSet resultSet) throws SQLException
     message.setReceiverId(resultSet.getInt(MessageTable.ReceiverID.name));
     message.setMessageContent(resultSet.getString(MessageTable.MessageContent.name));
     message.setTime(resultSet.getTimestamp(MessageTable.MessageTimestamp.name).toLocalDateTime());
-    message.setAttachment(resultSet.getBoolean(MessageTable.IsAttachment.name));
+    message.setIsAttachment(resultSet.getBoolean(MessageTable.IsAttachment.name));
     return  message;
 }
 public int sendMessageWithAttachment(Message message){
