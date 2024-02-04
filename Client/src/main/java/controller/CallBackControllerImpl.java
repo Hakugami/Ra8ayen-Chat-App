@@ -137,8 +137,9 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void receiveVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException {
+        System.out.println("This should be the receiver "+CurrentUser.getInstance().getPhoneNumber()+" and this should be the sender "+voicePacketRequest.getSenderPhoneNumber());
         Platform.runLater(()->{
-            AudioChat.getInstance().setReceivedData(voicePacketRequest.getData());
+            AudioChat.getInstance().setReceivedData(voicePacketRequest);
         });
     }
 }

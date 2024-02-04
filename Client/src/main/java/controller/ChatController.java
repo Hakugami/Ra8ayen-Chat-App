@@ -163,7 +163,8 @@ public class ChatController implements Initializable {
     }
 
 
-    private void sendVoiceCallRequest() throws RemoteException {
+
+    private void handleVoiceChat() throws IOException {
         String phoneNumber = "";
         if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
             phoneNumber = ((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getPhoneNumber();
@@ -176,17 +177,14 @@ public class ChatController implements Initializable {
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    private void handleVoiceChat() throws IOException {
-        sendVoiceCallRequest();
         Popup popup = new Popup();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chat/VoiceChatWait.fxml"));
         Parent root = loader.load();
         popup.getContent().add(root);
 
         VoiceChatWaitController voiceChatWaitController = loader.getController();
-        voiceChatWaitController.setPopup(popup);
+        voiceChatWaitController.setPopup(popup,phoneNumber,CurrentUser.getInstance().getPhoneNumber());
 
         popup.setAutoHide(true);
 

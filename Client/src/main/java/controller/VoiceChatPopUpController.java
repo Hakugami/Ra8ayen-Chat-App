@@ -3,7 +3,6 @@ package controller;
 import controller.soundUtils.AudioChat;
 import dto.requests.AcceptVoiceCallRequest;
 import dto.requests.RefuseVoiceCallRequest;
-import dto.requests.SendVoicePacketRequest;
 import dto.responses.AcceptVoiceCallResponse;
 import dto.responses.RefuseVoiceCallResponse;
 import javafx.fxml.Initializable;
@@ -57,30 +56,34 @@ public class VoiceChatPopUpController implements Initializable {
     }
 
     private void handleAcceptButton() throws RemoteException, NotBoundException {
-        AcceptVoiceCallRequest acceptVoiceCallRequest = new AcceptVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(),phoneNumber);
+        AcceptVoiceCallRequest acceptVoiceCallRequest = new AcceptVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(), phoneNumber);
         AcceptVoiceCallResponse acceptVoiceCallResponse = NetworkFactory.getInstance().acceptVoiceCallRequest(acceptVoiceCallRequest);
-        if(acceptVoiceCallResponse.isAccepted()){
+        if (acceptVoiceCallResponse.isAccepted()) {
             System.out.println("Call accepted");
-        }else{
+        } else {
             System.out.println("Call refused");
         }
     }
 
     private void handleRefuseButton() throws RemoteException, NotBoundException {
-        RefuseVoiceCallRequest refuseVoiceCallRequest = new RefuseVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(),phoneNumber);
-        RefuseVoiceCallResponse refuseVoiceCallResponse= NetworkFactory.getInstance().refuseVoiceCallRequest(refuseVoiceCallRequest);
-        if(refuseVoiceCallResponse.isRefused()){
+        RefuseVoiceCallRequest refuseVoiceCallRequest = new RefuseVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(), phoneNumber);
+        RefuseVoiceCallResponse refuseVoiceCallResponse = NetworkFactory.getInstance().refuseVoiceCallRequest(refuseVoiceCallRequest);
+        if (refuseVoiceCallResponse.isRefused()) {
             System.out.println("Call refused");
-        }else{
+        } else {
             System.out.println("Call accepted");
         }
     }
 
-    public void  establishVoiceCall(AcceptVoiceCallResponse acceptVoiceCallResponse) throws RemoteException {
-        AudioChat audioChat ;
+    public void establishVoiceCall(AcceptVoiceCallResponse acceptVoiceCallResponse) throws RemoteException {
+        AudioChat audioChat;
         System.out.println("Voice call established");
         AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
+
+        // Get all available mixers
         Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
+
+        // Select a specific mixer
         Mixer mixer = null;
         for (Mixer.Info mixerInfo : mixerInfos) {
             System.out.println(mixerInfo.getName());
@@ -89,26 +92,36 @@ public class VoiceChatPopUpController implements Initializable {
                 break;
             }
         }
+
         if (mixer == null) {
             System.out.println("Mixer not found");
+
         }
+        acceptVoiceCallResponse.setSenderPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+        System.out.println("Receiver phone number: " + acceptVoiceCallResponse.getReceiverPhoneNumber());
+        System.out.println("Sender phone number: " + acceptVoiceCallResponse.getSenderPhoneNumber());
+
         audioChat = AudioChat.getInstance();
         audioChat.setFormat(format);
         audioChat.setMixer(mixer);
+        audioChat.setReceiverPhoneNumber(acceptVoiceCallResponse.getReceiverPhoneNumber());
+        audioChat.setSenderPhoneNumber(acceptVoiceCallResponse.getSenderPhoneNumber());
 
-        try {
-            audioChat.start();
-        } catch (LineUnavailableException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        new Thread(() -> {
+            try {
+                audioChat.start();
+            } catch (LineUnavailableException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
 
 
     }
 
-    public void setPopup(Popup popup,String phoneNumber) throws RemoteException {
+    public void setPopup(Popup popup, String phoneNumber) throws RemoteException {
         this.popup = popup;
-        for(ContactData contactData : CurrentUser.getInstance().getContactDataList()){
-            if(contactData.getPhoneNumber().equals(phoneNumber)){
+        for (ContactData contactData : CurrentUser.getInstance().getContactDataList()) {
+            if (contactData.getPhoneNumber().equals(phoneNumber)) {
                 nameLabel.setText(contactData.getName());
                 profilePic.setFill(new ImagePattern(contactData.getImage().getImage()));
                 phoneNumber = contactData.getPhoneNumber();

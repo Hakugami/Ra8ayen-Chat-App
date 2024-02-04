@@ -46,6 +46,7 @@ public class VoiceChatControllerSingleton extends UnicastRemoteObject implements
         if (OnlineControllerImpl.clients.containsKey(acceptVoiceCallRequest.getReceiverPhoneNumber())) {
             AcceptVoiceCallResponse acceptVoiceCallResponse = new AcceptVoiceCallResponse(acceptVoiceCallRequest.getReceiverPhoneNumber(), acceptVoiceCallRequest.getSenderPhoneNumber(), true, null);
             OnlineControllerImpl.clients.get(acceptVoiceCallRequest.getReceiverPhoneNumber()).establishVoiceCall(acceptVoiceCallResponse);
+//            OnlineControllerImpl.clients.get(acceptVoiceCallRequest.getSenderPhoneNumber()).establishVoiceCall(acceptVoiceCallResponse);
             return acceptVoiceCallResponse;
         }
         return new AcceptVoiceCallResponse(acceptVoiceCallRequest.getReceiverPhoneNumber(), acceptVoiceCallRequest.getSenderPhoneNumber(), false, "User is not online");
@@ -62,7 +63,9 @@ public class VoiceChatControllerSingleton extends UnicastRemoteObject implements
     @Override
     public void sendVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException {
         if (OnlineControllerImpl.clients.containsKey(voicePacketRequest.getReceiverPhoneNumber())) {
-            OnlineControllerImpl.clients.get(voicePacketRequest.getReceiverPhoneNumber()).receiveVoiceMessage(voicePacketRequest);
+            System.out.println("Sending voice message to " + voicePacketRequest.getReceiverPhoneNumber());
+            System.out.println("Sending voice message from "+ voicePacketRequest.getSenderPhoneNumber());
+            OnlineControllerImpl.clients.get(voicePacketRequest.getSenderPhoneNumber()).receiveVoiceMessage(voicePacketRequest);
         }
     }
 }

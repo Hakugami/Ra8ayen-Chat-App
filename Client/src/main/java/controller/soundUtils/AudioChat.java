@@ -51,41 +51,39 @@ public class AudioChat {
         this.senderPhoneNumber = senderPhoneNumber;
     }
 
-    public void setReceivedData(byte[] receivedData) {
-        this.receivedData = receivedData;
+    public void setReceivedData(SendVoicePacketRequest sendVoicePacketRequest) {
+        this.receivedData = sendVoicePacketRequest.getData();
     }
 
 
+public void start() throws LineUnavailableException, IOException {
+    DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
-    public void start() throws LineUnavailableException, IOException {
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+    // Get a DataLine from the selected mixer
+    TargetDataLine microphone = (TargetDataLine) mixer.getLine(info);
+    microphone.open(format);
+    microphone.start();
 
-        // Get a DataLine from the selected mixer
-        TargetDataLine microphone = (TargetDataLine) mixer.getLine(info);
-        microphone.open(format);
-        microphone.start();
+    byte[] buffer = new byte[16384];
+    int numBytesRead;
 
-        byte[] buffer = new byte[16384];
-        int numBytesRead;
+    // Initialize JavaFX
+    new JFXPanel();
 
-        // Initialize JavaFX
-        new JFXPanel();
+    // Capture microphone data into a byte array and send it to the server continuously
+    while (true) {
+        if ((numBytesRead = microphone.read(buffer, 0, buffer.length)) > 0) {
+            SendVoicePacketRequest sendVoicePacketRequest = new SendVoicePacketRequest(receiverPhoneNumber, senderPhoneNumber ,buffer);
+            // Send the audio data to the server
+            try {
+                NetworkFactory.getInstance().sendVoicePacket(sendVoicePacketRequest);
+            } catch (NotBoundException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("Sent audio data of length: " + numBytesRead);
 
-        // Capture microphone data into a byte array and send it to the server continuously
-        while (true) {
-            if ((numBytesRead = microphone.read(buffer, 0, buffer.length)) > 0) {
-                SendVoicePacketRequest sendVoicePacketRequest = new SendVoicePacketRequest(receiverPhoneNumber, senderPhoneNumber ,buffer);
-                // Send the audio data to the server
-//                server.sendVoiceData(buffer);
-                try {
-                    NetworkFactory.getInstance().sendVoicePacket(sendVoicePacketRequest);
-                } catch (NotBoundException e) {
-                    throw new RuntimeException(e);
-                }
-                System.out.println("Sent audio data of length: " + numBytesRead);
-
-                // Here you would receive the voice data from the server and play it through the speakers, for example.
-//                byte[] receivedData = server.receiveVoiceData();
+            // Here you would receive the voice data from the server and play it through the speakers, for example.
+            if (receivedData != null) {
                 System.out.println("Received audio data of length: " + receivedData.length);
 
                 // Write the received audio data to a temporary file
@@ -104,4 +102,5 @@ public class AudioChat {
             }
         }
     }
+}
 }
