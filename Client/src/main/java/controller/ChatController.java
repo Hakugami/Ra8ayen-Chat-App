@@ -28,7 +28,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
@@ -80,8 +82,20 @@ public class ChatController implements Initializable {
 
     private String FileName;
 
+    public HBox customize;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        HBox root = null;
+        try {
+            root = Model.getInstance().getViewFactory().getCustomizeLabels();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(root!=null){
+            customize.getChildren().add(root);
+        }
+
         chatListView.prefWidthProperty().bind(((Pane) chatListView.getParent()).widthProperty());
         Model.getInstance().getControllerFactory().setChatController(this);
         System.out.println("ChatController: Initializing");
@@ -502,6 +516,7 @@ public class ChatController implements Initializable {
         System.out.println("Retrieving Messages of ChatID " + getMessageRequest.getChatId());
         getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
 
+
         Task<Void> serverRetrievalTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -594,6 +609,23 @@ public class ChatController implements Initializable {
             });
             t1.start();
         }
+    }
+    public void setStyle(String style){
+        System.out.println(style);
+        messageBox.setStyle(style);
+    }
+    public void setColor(Color textColor){
+        messageBox.setStyle("-fx-text-fill: " + toHexCode(textColor) + ";");
+    }
+    private String toHexCode(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+
+    public void setBackgroundColor(Color backgroundColor){
+        messageBox.setStyle("-fx-background-color: " + toHexCode(backgroundColor) + ";");
     }
 
 }

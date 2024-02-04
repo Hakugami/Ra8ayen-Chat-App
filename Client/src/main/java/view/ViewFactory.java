@@ -1,6 +1,7 @@
 package view;
 
 import controller.*;
+import javafx.scene.layout.HBox;
 import model.Chat;
 import token.TokenManager;
 import javafx.beans.property.ObjectProperty;
@@ -206,5 +207,8 @@ public class ViewFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    public HBox getCustomizeLabels() throws IOException {
+        return new FXMLLoader(getClass().getResource("/Fxml/Chat/customizeText.fxml")).load();
     }
 }

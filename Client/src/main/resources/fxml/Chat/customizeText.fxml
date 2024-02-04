@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
+   <children>
+      <Label fx:id="bold" prefHeight="33.0" prefWidth="94.0" text="    bold" />
+      <Label fx:id="italic" prefHeight="33.0" prefWidth="79.0" text="italic" />
+      <Label fx:id="underline" prefHeight="32.0" prefWidth="73.0" text="underline" />
+      <Label fx:id="sizeIncrease" prefHeight="36.0" prefWidth="62.0" text="      + ">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="sizeDecrease" prefHeight="33.0" prefWidth="91.0" text="     -">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="colorFont" prefHeight="33.0" prefWidth="82.0" text="color" />
+      <Label fx:id="backgroundColor" prefHeight="33.0" prefWidth="92.0" text="background" />
+   </children>
+</HBox>

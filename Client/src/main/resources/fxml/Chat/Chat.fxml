@@ -78,12 +78,15 @@
             </VBox>
          </center>
          <bottom>
+            <VBox>
+               <HBox fx:id="customize" prefHeight="56.0" prefWidth="900.0" />
             <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+
                <padding>
                   <Insets left="10.0" />
                </padding>
                <children>
-                  <Button fx:id="customizeButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="55.0" prefWidth="75.0" styleClass="Button_style" HBox.hgrow="ALWAYS">
+                  <Button fx:id="customizeButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"  prefHeight="55.0" prefWidth="75.0" styleClass="Button_style" HBox.hgrow="ALWAYS">
                      <graphic>
                         <FontAwesomeIconView glyphName="ARROW" />
                      </graphic>
@@ -117,6 +120,7 @@
                   </Button>
                </children>
             </HBox>
+            </VBox>
          </bottom>
       </BorderPane>
    </children>

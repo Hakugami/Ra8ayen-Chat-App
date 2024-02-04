@@ -57,11 +57,11 @@
                 </HBox>
                 <TextFlow fx:id="messageContentTextFlow">
                     <children>
-<!--                        <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="messageContent">-->
-<!--                            <font>-->
-<!--                                <Font size="14.0" />-->
-<!--                            </font>-->
-<!--                        </Text>-->
+                        <!--                        <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="messageContent">-->
+                        <!--                            <font>-->
+                        <!--                                <Font size="14.0" />-->
+                        <!--                            </font>-->
+                        <!--                        </Text>-->
                         <Label fx:id="messageLabel" wrapText="true" />
                     </children>
                     <VBox.margin>
