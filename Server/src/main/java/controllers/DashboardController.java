@@ -15,6 +15,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import model.entities.User;
+import network.manager.NetworkManagerSingleton;
 import service.TrackOnlineUsersService;
 
 //import service.TrackOnlineUsersService;
@@ -107,7 +108,7 @@ public class DashboardController implements Initializable {
         }, 0, 5, TimeUnit.SECONDS);*/
         //-----------------------------------------------------------------------------------------------------
 
-        if(ServiceStartController.isServerOn) {
+        if(NetworkManagerSingleton.getInstance().isServerRunning()) {
 
             //-----------------------------------------------------------------------------------------------------
             //onlineUseLabel

@@ -3,8 +3,6 @@ package network.manager;
 import controllers.*;
 import lookupnames.LookUpNames;
 import service.TrackOnlineUsersService;
-//import service.TrackOnlineUsersService;
-
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
@@ -16,11 +14,13 @@ public class NetworkManagerSingleton {
     private Registry registry;
     private static final int PORT = 2000;
     private boolean isServerRunning;
+    private boolean isFirsTimeStart;
 
     private NetworkManagerSingleton() {
         try {
             registry = LocateRegistry.createRegistry(PORT);
             isServerRunning = false;
+            isFirsTimeStart = true;
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
@@ -40,14 +40,13 @@ public class NetworkManagerSingleton {
     }
     public void start() {
         try {
-            registry.rebind(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());
-            registry.rebind(LookUpNames.AUTHENTICATIONCONTROLLER.name(), AuthenticationControllerSingleton.getInstance());
-            registry.rebind(LookUpNames.GROUPCHATCONTROLLER.name(), GroupChatControllerSingleton.getInstance());
-            registry.rebind(LookUpNames.INVITATIONCONTROLLER.name(), InvitationControllerSingleton.getInstance());
-            registry.rebind(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
-            registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
-            registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
-            registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
+            if(!isFirsTimeStart) {
+                exportRemoteObjects();
+            }
+            else {
+                isFirsTimeStart = false;
+            }
+            registryBinding();
             setServerRunning(true);
         } catch (RemoteException | MalformedURLException e) {
             System.out.println(e.getMessage());
@@ -62,12 +61,33 @@ public class NetworkManagerSingleton {
                 if(stub != null) {
                     UnicastRemoteObject.unexportObject(stub, true);
                 }
-                Naming.unbind(bind);
+                registry.unbind(bind);
             }
-            UnicastRemoteObject.unexportObject(registry, true);
-        } catch (RemoteException | NotBoundException | MalformedURLException e) {
+        } catch (RemoteException | NotBoundException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void registryBinding() throws RemoteException, MalformedURLException {
+        registry.rebind(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());
+        registry.rebind(LookUpNames.AUTHENTICATIONCONTROLLER.name(), AuthenticationControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.GROUPCHATCONTROLLER.name(), GroupChatControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.INVITATIONCONTROLLER.name(), InvitationControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
+    }
+
+    private void exportRemoteObjects() throws RemoteException, MalformedURLException {
+        UnicastRemoteObject.exportObject(OnlineControllerImpl.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(AuthenticationControllerSingleton.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(GroupChatControllerSingleton.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(InvitationControllerSingleton.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(MessageControllerSingleton.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(UserProfileControllerSingleton.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(ContactsControllerSingleton.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(TrackOnlineUsersService.getInstance(), PORT);
     }
 
     public Registry getRegistry() {

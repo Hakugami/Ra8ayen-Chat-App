@@ -60,12 +60,12 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
        // Model.getInstance().getControllerFactory().getChatController();
         System.out.println("Message Received----------------------------------------------------------------------------------------");
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
-                System.out.println("Selected "+((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
-                System.out.println("Message "+message.getMessageContent());
+            Platform.runLater(() -> Notifications.create().text(message.getSender().getUserName() +
+                    " sent you a message").title("New Message").showInformation());
         }
         else if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
-            System.out.println("Selected "+((Group)Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
-            System.out.println("Message "+message.getMessageContent());
+            Platform.runLater(() -> Notifications.create().text(message.getSender().getUserName() +
+                    " sent a message to group").title("New Message").showInformation());
         }
         Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         if(message.getSender()!=null){
