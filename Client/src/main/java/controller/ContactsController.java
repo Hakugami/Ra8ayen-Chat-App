@@ -301,14 +301,14 @@ public class ContactsController implements Initializable {
     public void contactListener(Chat contactData) {
         Model.getInstance().getViewFactory().getSelectedContact().setValue(contactData);
 
-        try {
-            Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
-
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
+//
+//        } catch (RemoteException e) {
+//            throw new RuntimeException(e);
+//        } catch (NotBoundException e) {
+//            throw new RuntimeException(e);
+//        }
        // System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getName());
     }
 

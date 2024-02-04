@@ -20,9 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CurrentUser extends UserModel {
+
+    private static final int MAX_MESSAGES = 100;
+
     private static CurrentUser currentUser;
     private Image profilePictureImage;
     private CallBackControllerImpl callBackController = CallBackControllerImpl.getInstance();
+    private Map<Integer, Image> imageCache ;
+
 
     private List<ContactData> contactDataList;
     private List<Group> groupList;
@@ -31,8 +36,9 @@ public class CurrentUser extends UserModel {
     private Map<Integer, List<MessageModel>> chatMessageMap;
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
-        chatList = new ConcurrentHashMap<ContactData, ChatData>();
+        chatList = new ConcurrentHashMap<>();
         chatMessageMap = new ConcurrentHashMap<>();
+        imageCache = new ConcurrentHashMap<>();
         groupList = new CopyOnWriteArrayList<>();
     }
 
@@ -47,15 +53,29 @@ public class CurrentUser extends UserModel {
         this.chatMessageMap = chatMessageMap;
     }
 
+    public void addImageToCache(int userId, Image image) {
+        imageCache.put(userId, image);
+    }
+
+    public Image getImageFromCache(int userId) {
+        return imageCache.get(userId);
+    }
     public void addMessageToCache(int chatId, MessageModel message) {
         if (chatMessageMap.containsKey(chatId)) {
-            chatMessageMap.get(chatId).add(message);
+            List<MessageModel> messageModelList = chatMessageMap.get(chatId);
+            messageModelList.add(message);
+
+            // If the number of messages exceeds the maximum, remove the oldest one
+            if (messageModelList.size() > MAX_MESSAGES) {
+                messageModelList.removeFirst();
+            }
         } else {
             List<MessageModel> messageModelList = new CopyOnWriteArrayList<>();
             messageModelList.add(message);
             chatMessageMap.put(chatId, messageModelList);
         }
     }
+
 
     public boolean isMessageCached(MessageModel messageModel) {
         if (chatMessageMap.containsKey(messageModel.getChatId())) {

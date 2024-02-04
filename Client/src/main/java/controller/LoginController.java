@@ -10,6 +10,7 @@ import dto.responses.GetGroupResponse;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import model.ContactData;
+import model.Group;
 import token.TokenManager;
 import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
@@ -148,6 +149,18 @@ private void retrieveData() {
             CurrentUser.getInstance().loadContactsList(responses);
             List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
             CurrentUser.getInstance().loadGroups(groupResponses);
+            // Retrieve messages for each contact chat ID
+            for (ContactData contact : CurrentUser.getInstance().getContactDataList()) {
+                Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(contact.getChatId());
+                System.out.println("loading messages for contact: " + contact.getName());
+            }
+
+            // Retrieve messages for each group ID
+            for (Group group : CurrentUser.getInstance().getGroupList()) {
+                Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(group.getGroupId());
+                System.out.println("loading messages for group: " + group.getGroupName());
+            }
+
             return null;
         }
     };
