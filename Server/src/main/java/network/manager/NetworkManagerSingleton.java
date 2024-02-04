@@ -2,6 +2,7 @@ package network.manager;
 
 import controllers.*;
 import lookupnames.LookUpNames;
+import service.SendHeartBeatService;
 import service.TrackOnlineUsersService;
 //import service.TrackOnlineUsersService;
 
@@ -82,6 +83,7 @@ public class NetworkManagerSingleton {
         registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
         registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
         registry.rebind(LookUpNames.VOICECHATCONTROLLER.name(), VoiceChatControllerSingleton.getInstance());
+        registry.rebind(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name(), SendHeartBeatService.getInstance());
     }
 
     private void exportRemoteObjects() throws RemoteException, MalformedURLException {
@@ -93,6 +95,7 @@ public class NetworkManagerSingleton {
         UnicastRemoteObject.exportObject(UserProfileControllerSingleton.getInstance(), PORT);
         UnicastRemoteObject.exportObject(ContactsControllerSingleton.getInstance(), PORT);
         UnicastRemoteObject.exportObject(TrackOnlineUsersService.getInstance(), PORT);
+        UnicastRemoteObject.exportObject(SendHeartBeatService.getInstance(), PORT);
     }
 
     public Registry getRegistry() {

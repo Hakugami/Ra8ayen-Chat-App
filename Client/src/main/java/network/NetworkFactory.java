@@ -66,6 +66,12 @@ public class NetworkFactory {
         trackOnlineUsers.updateOnlineUsersCount(onlineUsersCount);
     }
     //--------------------------------------------------------------------------------------
+    public void  sendHeartbeat(String phoneNumber,CallBackController callBackController) throws RemoteException, NotBoundException {
+        SendHeartBeatToServerFromClient sendHeartBeatToServerFromClient = (SendHeartBeatToServerFromClient) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name());
+        sendHeartBeatToServerFromClient.sendHeartbeat(phoneNumber,callBackController);
+    }
+    //--------------------------------------------------------------------------------------
+
     public void disconnect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
         controller.disconnect(phoneNumber, callBackController);

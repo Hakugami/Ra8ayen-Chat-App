@@ -124,6 +124,7 @@ public class LoginController {
                          * */
                         onlineUsersCount++;
                         startTrackingOnlineUsers();
+                        new Logout().startHeartbeat();
                     } else {
                         System.err.println("Invalid fields1");
                     }
