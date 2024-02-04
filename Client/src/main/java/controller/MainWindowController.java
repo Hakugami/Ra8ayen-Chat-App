@@ -23,7 +23,11 @@ import model.Model;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 public class MainWindowController implements Initializable {
 
@@ -107,6 +111,28 @@ public class MainWindowController implements Initializable {
 
 
         addContact_btn.setOnAction(this::openAddWindow);
+
+        new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                System.out.println("Setting tree view data");
+                Platform.runLater(() -> {
+                    try {
+                        Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
+                    } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
     }
 
     public void setSwappableWindow(Node node) {

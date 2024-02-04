@@ -39,11 +39,13 @@ import model.CurrentUser;
 import model.Group;
 import model.Model;
 import network.NetworkFactory;
+import org.controlsfx.control.Notifications;
 import utils.ImageUtls;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.rmi.NotBoundException;
@@ -165,6 +167,7 @@ public class ChatController implements Initializable {
 
 
     private void handleVoiceChat() throws IOException {
+
         String phoneNumber = "";
         if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
             phoneNumber = ((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getPhoneNumber();
@@ -177,10 +180,27 @@ public class ChatController implements Initializable {
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
         }
-
+        Notifications.create()
+                .title("Voice Chat")
+                .text("Voice Chat Request Sent")
+                .showInformation();
+        FXMLLoader loader = new FXMLLoader();
         Popup popup = new Popup();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chat/VoiceChatWait.fxml"));
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            InputStream fxmlStream = getClass().getResourceAsStream("/fxml/chat/VoiceChatWait.fxml");
+            root = loader.load(fxmlStream);
+            Notifications.create()
+                    .title("Voice Chat")
+                    .text("Voice Chat Wait Controller is set")
+                    .showInformation();
+        } catch (IOException e) {
+            Notifications.create()
+                    .title("Voice Chat controller")
+                    .text(e.getMessage())
+                    .showInformation();
+            throw new RuntimeException(e);
+        }
         popup.getContent().add(root);
 
         VoiceChatWaitController voiceChatWaitController = loader.getController();

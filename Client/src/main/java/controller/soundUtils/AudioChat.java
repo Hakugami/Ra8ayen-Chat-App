@@ -5,6 +5,7 @@ import dto.requests.SendVoicePacketRequest;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import model.CurrentUser;
 import network.NetworkFactory;
 
 import javax.sound.sampled.*;
@@ -23,6 +24,8 @@ public class AudioChat {
 
     private  String receiverPhoneNumber;
     private  String senderPhoneNumber;
+
+    private SendVoicePacketRequest sendVoicePacketRequest;
 
     private byte[] receivedData;
 
@@ -52,7 +55,7 @@ public class AudioChat {
     }
 
     public void setReceivedData(SendVoicePacketRequest sendVoicePacketRequest) {
-        this.receivedData = sendVoicePacketRequest.getData();
+       this.sendVoicePacketRequest = sendVoicePacketRequest;
     }
 
 
@@ -81,8 +84,17 @@ public void start() throws LineUnavailableException, IOException {
                 throw new RuntimeException(e);
             }
             System.out.println("Sent audio data of length: " + numBytesRead);
-
-            // Here you would receive the voice data from the server and play it through the speakers, for example.
+            try {
+                SendVoicePacketRequest receivedPacket = NetworkFactory.getInstance().receiveVoiceMessage(senderPhoneNumber);
+                System.out.println("THIS SHOULD BE DIFFERENT FOR THE CLIENTS------------------- " + receiverPhoneNumber+" MY PHONE IS  "+CurrentUser.getInstance().getPhoneNumber());
+                if (receivedPacket != null&&!receivedPacket.getSenderPhoneNumber().equals(CurrentUser.getInstance().getPhoneNumber())) {
+                    receivedData = receivedPacket.getData();
+                } else {
+                    System.out.println("No packet received from the server");
+                }
+            } catch (NotBoundException e) {
+                throw new RuntimeException(e);
+            }
             if (receivedData != null) {
                 System.out.println("Received audio data of length: " + receivedData.length);
 

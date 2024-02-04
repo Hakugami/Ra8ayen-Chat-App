@@ -15,6 +15,7 @@ import model.ContactData;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
+import org.controlsfx.control.Notifications;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -56,6 +57,8 @@ public class VoiceChatPopUpController implements Initializable {
     }
 
     private void handleAcceptButton() throws RemoteException, NotBoundException {
+        Notifications.create().title("Voice Call").text("Voice call established").showInformation();
+        System.out.println("IS THIS MISSING????-------- "+phoneNumber);
         AcceptVoiceCallRequest acceptVoiceCallRequest = new AcceptVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(), phoneNumber);
         AcceptVoiceCallResponse acceptVoiceCallResponse = NetworkFactory.getInstance().acceptVoiceCallRequest(acceptVoiceCallRequest);
         if (acceptVoiceCallResponse.isAccepted()) {
@@ -97,15 +100,14 @@ public class VoiceChatPopUpController implements Initializable {
             System.out.println("Mixer not found");
 
         }
-        acceptVoiceCallResponse.setSenderPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
         System.out.println("Receiver phone number: " + acceptVoiceCallResponse.getReceiverPhoneNumber());
         System.out.println("Sender phone number: " + acceptVoiceCallResponse.getSenderPhoneNumber());
 
         audioChat = AudioChat.getInstance();
         audioChat.setFormat(format);
         audioChat.setMixer(mixer);
-        audioChat.setReceiverPhoneNumber(acceptVoiceCallResponse.getReceiverPhoneNumber());
-        audioChat.setSenderPhoneNumber(acceptVoiceCallResponse.getSenderPhoneNumber());
+        audioChat.setReceiverPhoneNumber(acceptVoiceCallResponse.getSenderPhoneNumber());
+        audioChat.setSenderPhoneNumber(acceptVoiceCallResponse.getReceiverPhoneNumber());
 
         new Thread(() -> {
             try {
@@ -124,7 +126,7 @@ public class VoiceChatPopUpController implements Initializable {
             if (contactData.getPhoneNumber().equals(phoneNumber)) {
                 nameLabel.setText(contactData.getName());
                 profilePic.setFill(new ImagePattern(contactData.getImage().getImage()));
-                phoneNumber = contactData.getPhoneNumber();
+                this.phoneNumber = contactData.getPhoneNumber();
             }
         }
     }

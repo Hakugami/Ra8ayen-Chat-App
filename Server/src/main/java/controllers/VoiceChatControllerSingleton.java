@@ -11,12 +11,19 @@ import dto.responses.VoiceCallResponse;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class VoiceChatControllerSingleton extends UnicastRemoteObject implements VoiceChatController {
     private static VoiceChatControllerSingleton instance;
 
+    private final Map<String, List<SendVoicePacketRequest>> voicePackets;
+
     private VoiceChatControllerSingleton() throws RemoteException {
         super();
+        voicePackets = new ConcurrentHashMap<>();
     }
 
     public static VoiceChatControllerSingleton getInstance() throws RemoteException {
@@ -60,12 +67,46 @@ public class VoiceChatControllerSingleton extends UnicastRemoteObject implements
         return new RefuseVoiceCallResponse(refuseVoiceCallRequest.getReceiverPhoneNumber(), refuseVoiceCallRequest.getSenderPhoneNumber(), false, "User is not online");
     }
 
-    @Override
-    public void sendVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException {
-        if (OnlineControllerImpl.clients.containsKey(voicePacketRequest.getReceiverPhoneNumber())) {
-            System.out.println("Sending voice message to " + voicePacketRequest.getReceiverPhoneNumber());
-            System.out.println("Sending voice message from "+ voicePacketRequest.getSenderPhoneNumber());
-            OnlineControllerImpl.clients.get(voicePacketRequest.getSenderPhoneNumber()).receiveVoiceMessage(voicePacketRequest);
+
+//    @Override
+//    public void sendVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException {
+////        if (OnlineControllerImpl.clients.containsKey(voicePacketRequest.getReceiverPhoneNumber())) {
+////            System.out.println("Sending voice message to " + voicePacketRequest.getReceiverPhoneNumber());
+////            System.out.println("Sending voice message from "+ voicePacketRequest.getSenderPhoneNumber());
+////            OnlineControllerImpl.clients.get(voicePacketRequest.getReceiverPhoneNumber()).receiveVoiceMessage(voicePacketRequest);
+////        }
+//        voicePackets.get(voicePacketRequest.getReceiverPhoneNumber()).add(voicePacketRequest);
+//    }
+
+@Override
+public void sendVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException {
+    if (voicePackets != null) {
+        List<SendVoicePacketRequest> packets = voicePackets.get(voicePacketRequest.getReceiverPhoneNumber());
+        if (packets == null) {
+            packets = new ArrayList<>();
+            voicePackets.put(voicePacketRequest.getReceiverPhoneNumber(), packets);
+        }
+        packets.add(voicePacketRequest);
+    } else {
+        throw new RuntimeException("Voice packets is null");
+    }
+}
+
+@Override
+public SendVoicePacketRequest receiveVoiceMessage(String phoneNumber) throws RemoteException {
+    synchronized (voicePackets) {
+        List<SendVoicePacketRequest> packets = voicePackets.get(phoneNumber);
+        if (packets != null && !packets.isEmpty()) {
+            for (int i = packets.size() - 1; i >= 0; i--) {
+                SendVoicePacketRequest packet = packets.get(i);
+                if (!packet.getSenderPhoneNumber().equals(phoneNumber)) {
+                    packets.remove(i);
+                    System.out.println("Returning packet with sender phone number: " + packet.getSenderPhoneNumber() + " and receiver phone number: " + phoneNumber);
+                    return packet;
+                }
+            }
         }
     }
+    return null;
+}
 }

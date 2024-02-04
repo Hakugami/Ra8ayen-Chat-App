@@ -140,5 +140,10 @@ public class NetworkFactory {
         return controller.refuseVoiceCallRequest(request);
     }
 
+    public SendVoicePacketRequest receiveVoiceMessage(String phoneNumber) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.receiveVoiceMessage(phoneNumber);
+    }
+
 
 }

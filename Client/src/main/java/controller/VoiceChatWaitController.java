@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
+import org.controlsfx.control.Notifications;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -32,6 +33,7 @@ public class VoiceChatWaitController implements Initializable {
 
     }
     public void  establishVoiceCall(String receiverPhoneNumber,String senderPhoneNumber) {
+        Notifications.create().title("Voice Call").text("Voice call established").showInformation();
         AudioChat audioChat ;
         System.out.println("Voice call established");
         AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
@@ -73,6 +75,7 @@ public class VoiceChatWaitController implements Initializable {
 
     }
     public void setPopup(Popup popup,String receiverPhoneNumber,String senderPhoneNumber) throws RemoteException {
+        Notifications.create().title("Incoming Call").text("You have an incoming call").showInformation();
         establishVoiceCall(receiverPhoneNumber,senderPhoneNumber);
         this.popup = popup;
     }

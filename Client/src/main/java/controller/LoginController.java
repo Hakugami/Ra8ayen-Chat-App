@@ -183,11 +183,7 @@ private void retrieveData() {
                     Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
                     try {
                         Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (NotBoundException e) {
-                        throw new RuntimeException(e);
-                    } catch (ClassNotFoundException e) {
+                    } catch (SQLException | NotBoundException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 } catch (RemoteException e) {

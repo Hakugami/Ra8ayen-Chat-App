@@ -17,5 +17,6 @@ public interface VoiceChatController extends Remote {
     public AcceptVoiceCallResponse AcceptVoiceCallRequest(AcceptVoiceCallRequest acceptVoiceCallRequest) throws RemoteException;
     public RefuseVoiceCallResponse refuseVoiceCallRequest(RefuseVoiceCallRequest refuseVoiceCallRequest) throws RemoteException;
     public void sendVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException;
+    public SendVoicePacketRequest receiveVoiceMessage(String phoneNumber) throws RemoteException;
 
 }
