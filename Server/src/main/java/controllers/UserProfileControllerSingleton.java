@@ -1,6 +1,7 @@
 package controllers;
 
 import Mapper.UserMapperImpl;
+import concurrency.manager.ConcurrencyManager;
 import dto.Controller.UserProfileController;
 import dto.Model.UserModel;
 import dto.requests.GetContactsRequest;
@@ -48,16 +49,17 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         updateUserResponse.setUserModel(userMapper.entityToModel(user));
         updateUserResponse.setUpdated(userService.updateUser(user));
         List<GetContactsResponse> contacts = contactService.getContacts(new GetContactsRequest(user.getUserID()));
-        for (GetContactsResponse contact : contacts) {
-            try {
-                //check if the user is online
-                if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null){
-                    OnlineControllerImpl.clients.get(contact.getPhoneNumber()).updateOnlineList();
+        ConcurrencyManager.getInstance().submitTask(() -> {
+            for (GetContactsResponse contact : contacts) {
+                try {
+                    if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null){
+                        OnlineControllerImpl.clients.get(contact.getPhoneNumber()).updateOnlineList();
+                    }
+                } catch (SQLException | ClassNotFoundException | NotBoundException | RemoteException e) {
+                    System.out.println(e.getMessage());
                 }
-            } catch (SQLException | ClassNotFoundException | NotBoundException e) {
-                throw new RuntimeException(e);
             }
-        }
+        });
         return updateUserResponse;
     }
 

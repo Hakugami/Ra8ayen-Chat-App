@@ -3,6 +3,7 @@ package controllers;
 import Mapper.InvitationMapper;
 import Mapper.UserMapper;
 import Mapper.UserMapperImpl;
+import concurrency.manager.ConcurrencyManager;
 import dto.Controller.InvitationController;
 import dto.Model.NotificationModel;
 import dto.Model.UserModel;
@@ -21,8 +22,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class InvitationControllerSingleton extends UnicastRemoteObject implements InvitationController {
@@ -32,7 +31,6 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     private final UserMapper userMapper;
     private final UserService userService;
     private final EmailService emailService;
-    private final ExecutorService executorService;
     private final ContactService contactService;
     protected InvitationControllerSingleton() throws RemoteException {
         super();
@@ -42,7 +40,6 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         userMapper = new UserMapperImpl();
         contactService = new ContactService();
         emailService = new EmailService();
-        executorService = Executors.newFixedThreadPool(3);
     }
     public static InvitationControllerSingleton getInstance() throws RemoteException {
         if (instance == null) {
@@ -74,7 +71,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                 else {
                     String myEmail = currentUser.getEmailAddress();
 
-                    executorService.submit(() -> emailService.sendEmail(myEmail, user.getEmailAddress(),
+                    ConcurrencyManager.getInstance().submitTask(() -> emailService.sendEmail(myEmail, user.getEmailAddress(),
                             "Chat App (رغايين)",
                             "You have a friend request from "
                                     + currentUser.getUserName() +
@@ -86,7 +83,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                     friendRequest.setSenderPhoneNumber(currentUser.getPhoneNumber());
                     friendRequest.setUserModel(userMapper.entityToModel(currentUser));
                     if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
-                        executorService.submit(() -> {
+                        ConcurrencyManager.getInstance().submitTask(() -> {
                             try {
                                 OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
                             } catch (RemoteException e) {

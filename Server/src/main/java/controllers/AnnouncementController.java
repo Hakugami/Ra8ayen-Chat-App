@@ -1,5 +1,6 @@
 package controllers;
 
+import concurrency.manager.ConcurrencyManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,13 +29,16 @@ public class AnnouncementController implements Initializable {
     private void handleAnnouncementButtonAction() {
         String announcement = announcementTextArea.getText();
         String announcementTitle = announcementTitleTextField.getText();
-        for (String username : OnlineControllerImpl.clients.keySet()) {
-            try {
-                OnlineControllerImpl.clients.get(username).receiveAnnouncement(announcement, announcementTitle);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+        ConcurrencyManager.getInstance().submitTask(() ->
+        {
+            for (String username : OnlineControllerImpl.clients.keySet()) {
+                try {
+                    OnlineControllerImpl.clients.get(username).receiveAnnouncement(announcement, announcementTitle);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
-        }
+        });
         announcementTextArea.setText("");
         announcementTitleTextField.setText("");
     }

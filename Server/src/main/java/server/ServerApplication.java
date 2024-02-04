@@ -1,5 +1,6 @@
 package server;
 
+import concurrency.manager.ConcurrencyManager;
 import controllers.ServerController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +31,8 @@ public class ServerApplication extends Application {
         if(NetworkManagerSingleton.getInstance().isServerRunning()) {
             NetworkManagerSingleton.getInstance().stop();
         }
+
+        ConcurrencyManager.getInstance().shutdown();
 
         System.exit(0);
     }

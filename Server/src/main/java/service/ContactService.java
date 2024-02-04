@@ -2,6 +2,7 @@ package service;
 
 import Mapper.ChatMapper;
 import Mapper.UserContactMapper;
+import concurrency.manager.ConcurrencyManager;
 import controllers.OnlineControllerImpl;
 import dao.ChatDao;
 import dao.ChatParticipantsDao;
@@ -36,8 +37,20 @@ public class ContactService{
         int chatID = createChat(acceptFriendRequest);
         addChatParticipants(acceptFriendRequest, friendID, chatID);
         addUserContacts(acceptFriendRequest, friendID);
-        OnlineControllerImpl.clients.get(acceptFriendRequest.getFriendPhoneNumber()).updateOnlineList();
-        OnlineControllerImpl.clients.get(acceptFriendRequest.getMyPhoneNumber()).updateOnlineList();
+        ConcurrencyManager.getInstance().submitTask(() -> {
+            try {
+                OnlineControllerImpl.clients.get(acceptFriendRequest.getFriendPhoneNumber()).updateOnlineList();
+            } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+        ConcurrencyManager.getInstance().submitTask(() -> {
+            try {
+                OnlineControllerImpl.clients.get(acceptFriendRequest.getMyPhoneNumber()).updateOnlineList();
+            } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        });
         return new AcceptFriendResponse(true, "");
     }
 
@@ -108,7 +121,7 @@ public class ContactService{
 
         return listOfGetContactsResponse;
     }
-    public List<GetContactChatResponse> getContactPrivateChat(List<GetContactChatRequest> getContactChatRequests) throws RemoteException{
+    public List<GetContactChatResponse> getContactPrivateChat(List<GetContactChatRequest> getContactChatRequests) {
         List<GetContactChatResponse> getContactChatResponses = new ArrayList<>();
         for(GetContactChatRequest request: getContactChatRequests){
             getContactChatResponses.add(getContactChat(request));
