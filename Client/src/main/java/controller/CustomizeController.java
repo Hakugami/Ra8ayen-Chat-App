@@ -1,5 +1,7 @@
 package controller;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.StyleMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -59,8 +61,9 @@ public class CustomizeController {
         ColorDegree = 0;
         BackGroundDegree = 0;
         fontSize=15;
-        styleMessage  = new StyleMessage(false,false,false,16,"#000000","#FFFFFF");
+        styleMessage  = new StyleMessage(false,false,false,16,"#000000","#ED7D31");
         event();
+        addFontAwasemIcon();
        Model.getInstance().getControllerFactory().setCustomizeController(this);
 
     }
@@ -205,6 +208,35 @@ public class CustomizeController {
         styleMessage1.setFontSize(styleMessage.getFontSize());
         styleMessage1.setBackgroundColor(styleMessage.getBackgroundColor());
         return styleMessage1;
+    }
+
+    void addFontAwasemIcon(){
+
+        FontAwesomeIconView iconBold = new FontAwesomeIconView(FontAwesomeIcon.BOLD);
+        FontAwesomeIconView iconItalic = new FontAwesomeIconView(FontAwesomeIcon.ITALIC);
+        FontAwesomeIconView iconUnderline = new FontAwesomeIconView(FontAwesomeIcon.UNDERLINE);
+        FontAwesomeIconView iconColor = new FontAwesomeIconView(FontAwesomeIcon.PAINT_BRUSH);
+        FontAwesomeIconView iconBackground = new FontAwesomeIconView(FontAwesomeIcon.TINT);
+        FontAwesomeIconView iconPlus = new FontAwesomeIconView(FontAwesomeIcon.PLUS);
+        FontAwesomeIconView iconMinus = new FontAwesomeIconView(FontAwesomeIcon.MINUS);
+
+        iconBold.setSize("1em");
+        iconItalic.setSize("1em");
+        iconUnderline.setSize("1em");
+        iconColor.setSize("1em");
+        iconBackground.setSize("1em");
+        iconPlus.setSize("1em");
+        iconMinus.setSize("1em");
+
+        // Set the graphic of the Label to the FontAwesome icon
+        italic.setGraphic(iconItalic);
+        bold.setGraphic(iconBold);
+        sizeIncrease.setGraphic(iconPlus);
+        sizeDecrease.setGraphic(iconMinus);
+        colorFont.setGraphic(iconColor);
+        underline.setGraphic(iconUnderline);
+        backgroundColor.setGraphic(iconBackground);
+
     }
 
 }

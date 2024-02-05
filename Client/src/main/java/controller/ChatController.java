@@ -825,15 +825,18 @@ private Task<Void> createDisplayTask(GetMessageRequest getMessageRequest) {
 
     public void setStyle(String style) {
         System.out.println(style);
-        messageBox.setStyle(style);
+        String existingStyle = messageBox.getStyle() + style;
+        messageBox.setStyle(existingStyle);
     }
     public void setColor(String textColor){
-        messageBox.setStyle("-fx-text-fill: " +textColor+ ";");
+        String existingStyle = messageBox.getStyle() + "-fx-text-fill: " +textColor+ ";";
+        messageBox.setStyle(existingStyle);
     }
 
 
     public void setBackgroundColor(String backgroundColor){
-        messageBox.setStyle("-fx-background-color: " +backgroundColor + ";");
+        String existingStyle = messageBox.getStyle() + "-fx-background-color: " +backgroundColor + ";";
+        messageBox.setStyle(existingStyle);
     }
 
 }
