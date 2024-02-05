@@ -1,37 +1,37 @@
 package controller;
 
 //import dto.Controller.TrackOnlineUsers;
+
 import dto.requests.GetContactChatRequest;
 import dto.requests.GetContactsRequest;
 import dto.requests.GetGroupRequest;
+import dto.requests.LoginRequest;
 import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
-import javafx.animation.RotateTransition;
-import javafx.animation.ScaleTransition;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
-import javafx.scene.control.Label;
-import model.ContactData;
-import model.Group;
-import token.TokenManager;
-import dto.requests.LoginRequest;
 import dto.responses.LoginResponse;
+import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.ContactData;
 import model.CurrentUser;
+import model.Group;
 import model.Model;
 import network.NetworkFactory;
+import token.TokenManager;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -61,7 +61,7 @@ public class LoginController {
     @FXML
     AnchorPane loginXml;
 
-  //  private TrackOnlineUsers server;
+    //  private TrackOnlineUsers server;
     private int onlineUsersInDashboard;
     private int onlineUsersCount;
 
@@ -81,7 +81,7 @@ public class LoginController {
         next.setOnAction(event -> {
 
             try {
-                if(NetworkFactory.getInstance().checkPhoneNumber(phoneNumberField.getText())) {
+                if (NetworkFactory.getInstance().checkPhoneNumber(phoneNumberField.getText())) {
                     // Create a TranslateTransition for the password label and password field
                     TranslateTransition transition1 = new TranslateTransition(Duration.seconds(1), Password_lbl);
                     TranslateTransition transition2 = new TranslateTransition(Duration.seconds(1), passwordField);
@@ -116,8 +116,7 @@ public class LoginController {
                     rotateTransition1.play();
                     rotateTransition2.play();
                     rotateTransition3.play();
-                }
-                else {
+                } else {
                     System.exit(0);
                 }
             } catch (RemoteException | NotBoundException e) {
@@ -148,10 +147,17 @@ public class LoginController {
         });
         registerButton.setOnAction(this::handleRegisterButton);
 
+        exitButton.setOnAction(event -> {
+            System.exit(0);
+        });
+        minimizeButton.setOnAction(event -> {
+            Stage stage = (Stage) minimizeButton.getScene().getWindow();
+            stage.setIconified(true);
+        });
 
 
         onlineUsersCount = 0;
-        onlineUsersInDashboard=0;
+        onlineUsersInDashboard = 0;
 
 
     }
@@ -178,7 +184,8 @@ public class LoginController {
                     TokenManager.getInstance().setToken(token);
                     System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
-                        retrieveData();;
+                        retrieveData();
+                        ;
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
@@ -205,76 +212,76 @@ public class LoginController {
         });
     }
 
-private void retrieveData() {
-    Task<Void> task = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-            NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
-            CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken()));
-            List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
-            CurrentUser.getInstance().loadContactsList(responses);
-            List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
-            CurrentUser.getInstance().loadGroups(groupResponses);
-            // Retrieve messages for each contact chat ID
-            for (ContactData contact : CurrentUser.getInstance().getContactDataList()) {
-                Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(contact.getChatId());
-                System.out.println("loading messages for contact: " + contact.getName());
+    private void retrieveData() {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
+                CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken()));
+                List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
+                CurrentUser.getInstance().loadContactsList(responses);
+                List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
+                CurrentUser.getInstance().loadGroups(groupResponses);
+                // Retrieve messages for each contact chat ID
+                for (ContactData contact : CurrentUser.getInstance().getContactDataList()) {
+                    Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(contact.getChatId());
+                    System.out.println("loading messages for contact: " + contact.getName());
+                }
+
+                // Retrieve messages for each group ID
+                for (Group group : CurrentUser.getInstance().getGroupList()) {
+                    Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(group.getGroupId());
+                    System.out.println("loading messages for group: " + group.getGroupName());
+                }
+
+                return null;
             }
+        };
 
-            // Retrieve messages for each group ID
-            for (Group group : CurrentUser.getInstance().getGroupList()) {
-                Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(group.getGroupId());
-                System.out.println("loading messages for group: " + group.getGroupName());
+        // Handle any exceptions that occurred in the task
+        task.exceptionProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                Throwable ex = newValue;
+                System.out.println("Exception occurred in task: " + ex);
             }
+        });
 
-            return null;
-        }
-    };
-
-    // Handle any exceptions that occurred in the task
-    task.exceptionProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue != null) {
-            Throwable ex = newValue;
-            System.out.println("Exception occurred in task: " + ex);
-        }
-    });
-
-    // Update the UI after the task has completed
-    task.stateProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue == Worker.State.SUCCEEDED) {
-            Platform.runLater(() -> {
-                // Update the UI here
-                try {
-                    Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+        // Update the UI after the task has completed
+        task.stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                Platform.runLater(() -> {
+                    // Update the UI here
                     try {
-                        Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
-                    } catch (SQLException | NotBoundException | ClassNotFoundException e) {
+                        Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                        try {
+                            Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
+                        } catch (SQLException | NotBoundException | ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
-    });
+                });
+            }
+        });
 
-    // Start the task on a new thread
-    new Thread(task).start();
-}
+        // Start the task on a new thread
+        new Thread(task).start();
+    }
 
-   private void startTrackingOnlineUsers() {
+    private void startTrackingOnlineUsers() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(() -> {
             try {
                 // online users in the dashboard
                 onlineUsersInDashboard = NetworkFactory.getInstance().getOnlineUsersCount();
                 //compare between current users numbers in dashboard and if there is a new user login
-                if(onlineUsersCount > onlineUsersInDashboard){
+                if (onlineUsersCount > onlineUsersInDashboard) {
                     // if yes ---> increment online users numbers in dashbpard
-                    onlineUsersInDashboard=onlineUsersCount;
+                    onlineUsersInDashboard = onlineUsersCount;
                     // update dashboard
                     NetworkFactory.getInstance().updateOnlineUsersCount(onlineUsersInDashboard);
-                    System.out.println("onlineUsersCount : "+onlineUsersCount+" , "+"onlineUsersInDashboard : "+onlineUsersInDashboard);
+                    System.out.println("onlineUsersCount : " + onlineUsersCount + " , " + "onlineUsersInDashboard : " + onlineUsersInDashboard);
 
                 }
 
@@ -286,16 +293,16 @@ private void retrieveData() {
 
 
     private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
-      //  List<ChatData> listOfChats = new ArrayList<>();
+        //  List<ChatData> listOfChats = new ArrayList<>();
         List<GetContactChatRequest> listOfContactId = new ArrayList<>();
-        for(ContactData getContactsResponse: CurrentUser.getInstance().getContactDataList()){
+        for (ContactData getContactsResponse : CurrentUser.getInstance().getContactDataList()) {
             listOfContactId.add(new GetContactChatRequest(CurrentUser.getInstance().getUserID(), getContactsResponse.getId()));
         }
-     List<GetContactChatResponse> getContactChatResponses = NetworkFactory.getInstance().getPrivateChats(listOfContactId);
-        for(GetContactChatResponse getContactsResponse: getContactChatResponses){
-           for(int i = 0 ; i<CurrentUser.getInstance().getContactDataList().size();i++){
+        List<GetContactChatResponse> getContactChatResponses = NetworkFactory.getInstance().getPrivateChats(listOfContactId);
+        for (GetContactChatResponse getContactsResponse : getContactChatResponses) {
+            for (int i = 0; i < CurrentUser.getInstance().getContactDataList().size(); i++) {
 
-           }
+            }
         }
     }
 
