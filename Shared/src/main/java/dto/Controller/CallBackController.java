@@ -24,6 +24,8 @@ public interface CallBackController extends Remote {
     public void deleteContact() throws RemoteException;*/
 
     public void respond() throws RemoteException;
+    public void userIsOnline(String username) throws RemoteException;
+    public void userIsOffline(String username) throws RemoteException;
     public void receiveNotification(NotificationModel notification) throws RemoteException;
     public void receiveNewMessage(MessageModel message) throws RemoteException;
     public void receiveGroupChatMessage(MessageModel message) throws RemoteException;

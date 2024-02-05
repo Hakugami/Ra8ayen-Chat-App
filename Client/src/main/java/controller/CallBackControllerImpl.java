@@ -14,13 +14,13 @@ import model.Model;
 import network.NetworkFactory;
 import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class CallBackControllerImpl extends UnicastRemoteObject implements CallBackController, Serializable {
     private static CallBackControllerImpl callBackController;
@@ -43,12 +43,22 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     }
 
     @Override
+    public void userIsOnline(String friendName) throws RemoteException {
+        Platform.runLater(() ->Notifications.create().title("Friend Online").text(friendName+" is now online").showInformation());
+    }
+
+    @Override
+    public void userIsOffline(String friendName) throws RemoteException {
+        Platform.runLater(() ->Notifications.create().title("Friend Offline").text(friendName+" is now offline").showInformation());
+    }
+
+    @Override
     public void receiveNotification(NotificationModel notification) throws RemoteException {
         NotificationManager.getInstance().addNotification(notification);
-
             Platform.runLater(()-> {
                 try {
                     Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
+                    Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -60,20 +70,19 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
                 Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         }
-        if(message.getSender()!=null){
-
-            System.out.println(message.getSender().getUserID());
-            System.out.println(message.getSender().getProfilePicture());
-        }else{
-            System.out.println("Sender Object is null");
+        else {
+            Platform.runLater(() -> Notifications.create().title("New Message").text(message.getSender().getUserName() + " sent you a new message.").showInformation());
         }
-        //get ChatID of message and display on
-
     }
     @Override
     public void receiveGroupChatMessage(MessageModel message) throws RemoteException {
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
             Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+        }
+        else {
+            Optional<Group> groupName = CurrentUser.getCurrentUser().getGroupList().stream().
+                    filter(group -> group.getGroupId() == message.getChatId()).findFirst();
+            groupName.ifPresent(group -> Platform.runLater(() -> Notifications.create().title("New Group Message").text(message.getSender().getUserName() + " sent a new message to " + group.getGroupName()).showInformation()));
         }
     }
 
