@@ -202,7 +202,7 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
-    @Override
+
     public List<String> getContactsPhoneNumbers(int userID) {
         List<String> phoneNumbers = new ArrayList<>();
         String query = "SELECT ua.PhoneNumber FROM UserAccounts ua " +

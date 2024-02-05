@@ -7,8 +7,11 @@ import dto.requests.GetGroupRequest;
 import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.scene.control.Label;
 import model.ContactData;
 import model.Group;
 import token.TokenManager;
@@ -49,6 +52,11 @@ public class LoginController {
     public Button loginButton;
     @FXML
     public Button registerButton;
+    public Button next;
+    public Label Password_lbl;
+    public Label User_Name_lbl;
+    public Button minimizeButton;
+    public Button exitButton;
 
     @FXML
     AnchorPane loginXml;
@@ -60,6 +68,63 @@ public class LoginController {
 
     @FXML
     public void initialize() {
+        // Initially hide the password label and password field
+        Password_lbl.setVisible(false);
+        passwordField.setVisible(false);
+        loginButton.setVisible(false);
+
+        // Set initial position for animation
+        Password_lbl.setTranslateX(200);
+        passwordField.setTranslateX(200);
+        loginButton.setTranslateX(200);
+
+        next.setOnAction(event -> {
+
+            try {
+                if(NetworkFactory.getInstance().checkPhoneNumber(phoneNumberField.getText())) {
+                    // Create a TranslateTransition for the password label and password field
+                    TranslateTransition transition1 = new TranslateTransition(Duration.seconds(1), Password_lbl);
+                    TranslateTransition transition2 = new TranslateTransition(Duration.seconds(1), passwordField);
+                    TranslateTransition transition3 = new TranslateTransition(Duration.seconds(1), loginButton);
+
+                    // Create a RotateTransition for the password label and password field
+                    RotateTransition rotateTransition1 = new RotateTransition(Duration.seconds(1), Password_lbl);
+                    RotateTransition rotateTransition2 = new RotateTransition(Duration.seconds(1), passwordField);
+                    RotateTransition rotateTransition3 = new RotateTransition(Duration.seconds(1), loginButton);
+
+                    // Set the end position (original position) for the animation
+                    transition1.setToX(0);
+                    transition2.setToX(0);
+                    transition3.setToX(0);
+
+                    // Set the rotation angle for the RotateTransition
+                    rotateTransition1.setToAngle(360);
+                    rotateTransition2.setToAngle(360);
+
+
+                    User_Name_lbl.setVisible(false);
+                    next.setVisible(false);
+                    phoneNumberField.setVisible(false);
+                    Password_lbl.setVisible(true);
+                    passwordField.setVisible(true);
+                    loginButton.setVisible(true);
+
+                    // Start the animations
+                    transition1.play();
+                    transition2.play();
+                    transition3.play();
+                    rotateTransition1.play();
+                    rotateTransition2.play();
+                    rotateTransition3.play();
+                }
+                else {
+                    System.exit(0);
+                }
+            } catch (RemoteException | NotBoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         phoneNumberField.setOnAction(event -> {
             try {
                 handleLoginButton(event);

@@ -209,6 +209,22 @@ public class ViewFactory {
         }
     }
     public HBox getCustomizeLabels() throws IOException {
-        return new FXMLLoader(getClass().getResource("/Fxml/Chat/customizeText.fxml")).load();
+        return new FXMLLoader(getClass().getResource("/fxml/Chat/customizeText.fxml")).load();
+    }
+
+    public Node getVoiceChatPopUp() {
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatPopUp.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getVoiceChatWait() {
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatWait.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

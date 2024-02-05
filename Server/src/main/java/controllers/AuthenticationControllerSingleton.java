@@ -15,6 +15,7 @@ import session.manager.SessionManager;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -83,6 +84,11 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
             registerResponse.setError("Registration failed. Please try again.");
         }
         return registerResponse;
+    }
+
+    @Override
+    public boolean checkPhoneNumber(String phoneNumber) throws RemoteException {
+        return userService.getUserByPhoneNumber(phoneNumber) != null;
     }
 
     private String generateToken() {

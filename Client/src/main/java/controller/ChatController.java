@@ -150,7 +150,7 @@ public class ChatController implements Initializable {
 
     public void receiveVoiceChatRequest(String phoneNumber) throws IOException {
         Popup popup = new Popup();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chat/VoiceChatPopUp.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatPopUp.fxml"));
         Parent root = loader.load();
         popup.getContent().add(root);
 
@@ -194,27 +194,32 @@ public class ChatController implements Initializable {
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
         }
-        Notifications.create()
-                .title("Voice Chat")
-                .text("Voice Chat Request Sent")
-                .showInformation();
-        FXMLLoader loader = new FXMLLoader();
+
+//        Notifications.create()
+//                .title("Voice Chat")
+//                .text("Voice Chat Request Sent")
+//                .showInformation();
+//        FXMLLoader loader = new FXMLLoader();
+//        Popup popup = new Popup();
+//        Parent root = null;
+//        try {
+//            InputStream fxmlStream = getClass().getResourceAsStream("/fxml/chat/VoiceChatWait.fxml");
+//            root = loader.load(fxmlStream);
+//            Notifications.create()
+//                    .title("Voice Chat")
+//                    .text("Voice Chat Wait Controller is set")
+//                    .showInformation();
+//        } catch (IOException e) {
+//            Notifications.create()
+//                    .title("Voice Chat controller")
+//                    .text(e.getMessage())
+//                    .showInformation();
+//            throw new RuntimeException(e);
+//        }
         Popup popup = new Popup();
-        Parent root = null;
-        try {
-            InputStream fxmlStream = getClass().getResourceAsStream("/fxml/chat/VoiceChatWait.fxml");
-            root = loader.load(fxmlStream);
-            Notifications.create()
-                    .title("Voice Chat")
-                    .text("Voice Chat Wait Controller is set")
-                    .showInformation();
-        } catch (IOException e) {
-            Notifications.create()
-                    .title("Voice Chat controller")
-                    .text(e.getMessage())
-                    .showInformation();
-            throw new RuntimeException(e);
-        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatWait.fxml"));
+        Parent root = loader.load();
+
         popup.getContent().add(root);
 
         VoiceChatWaitController voiceChatWaitController = loader.getController();

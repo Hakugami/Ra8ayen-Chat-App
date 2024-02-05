@@ -145,5 +145,14 @@ public class NetworkFactory {
         return controller.receiveVoiceMessage(phoneNumber);
     }
 
+    public boolean checkPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
+        AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
+        try {
+            return controller.checkPhoneNumber(phoneNumber);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
