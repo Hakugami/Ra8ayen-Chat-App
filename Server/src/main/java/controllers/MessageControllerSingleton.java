@@ -56,7 +56,9 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
                 messageModel.setAttachment(false);
             }
             //add UseModel to messageModel
+            messageModel.setStyleMessage(request.getStyleMessage());
             messageModel.setSender(request.getSender());
+
             for (String number : phoneNumber) {
                 if (OnlineControllerImpl.clients.containsKey(number)) {
                     if (request.isGroupMessage()) {

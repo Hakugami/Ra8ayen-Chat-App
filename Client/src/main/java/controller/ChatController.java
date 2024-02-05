@@ -289,6 +289,8 @@ public class ChatController implements Initializable {
         SendMessageRequest request = new SendMessageRequest();
         request.setMessageContent(message);
 
+        request.setStyleMessage(messageModel.getStyleMessage());
+
         UserModel userModel = new UserModel();
         userModel.setProfilePicture(CurrentUser.getInstance().getProfilePicture());
         userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
@@ -318,6 +320,7 @@ public class ChatController implements Initializable {
             request.setAttachmentData(uploadedFileBytes);
         }
         request.setTime(LocalDateTime.now());
+
         try {
             //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
             System.out.println(request);

@@ -1,5 +1,6 @@
 package dto.requests;
 
+import dto.Model.StyleMessage;
 import dto.Model.UserModel;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class SendMessageRequest implements Serializable {
     private byte[] attachment;
     private UserModel sender;
 
+    private StyleMessage styleMessage;
 
     private boolean isGroupMessage;
     public int getMessageId() {
@@ -108,5 +110,13 @@ public class SendMessageRequest implements Serializable {
 
     public void setGroupMessage(boolean groupMessage) {
         isGroupMessage = groupMessage;
+    }
+
+    public StyleMessage getStyleMessage() {
+        return styleMessage;
+    }
+
+    public void setStyleMessage(StyleMessage styleMessage) {
+        this.styleMessage = styleMessage;
     }
 }
