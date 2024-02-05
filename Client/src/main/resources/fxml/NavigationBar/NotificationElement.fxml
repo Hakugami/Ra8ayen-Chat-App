@@ -6,6 +6,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
@@ -14,6 +17,24 @@
         <HBox.margin>
             <Insets />
         </HBox.margin>
+      <Circle fx:id="profileCircle" fill="DODGERBLUE" layoutX="66.0" layoutY="39.0" radius="32.0" strokeType="INSIDE">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Circle>
 
 
         <ImageView fx:id="ImagId">
@@ -23,7 +44,7 @@
 
         </ImageView>
     </Pane>
-    <Label fx:id="Name" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="78.0" styleClass="Label" text="Rawda" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
+    <Label fx:id="Name" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="78.0" styleClass="Label" text="Rawda" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>

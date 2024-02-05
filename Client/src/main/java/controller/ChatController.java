@@ -723,6 +723,9 @@ private void retrieveMessages(GetMessageRequest getMessageRequest) throws Remote
 //                    // Remove the profile pictures from the MessageModel
 //                    message.getSender().setProfilePicture(null);
 //                    message.getReceiver().setProfilePicture(null);
+//                    if(message.getChatId()==4){
+//                        System.out.println("GROUP 4 works paleees"+message.getMessageContent());
+//                    }
 
                     if (!CurrentUser.getInstance().isMessageCached(message)) {
                         CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
@@ -756,22 +759,7 @@ private Task<Void> createDisplayTask(GetMessageRequest getMessageRequest) {
         }
     };
 }
-    public void addNewMessage(MessageModel newMessage) {
-        // Check if the new message belongs to the currently selected contact or group
-        if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
-            ContactData selectedContact = (ContactData) Model.getInstance().getViewFactory().getSelectedContact().get();
-            if (newMessage.getChatId() == selectedContact.getChatId()) {
-                // Add the new message to the chatMessages list
-                Platform.runLater(() -> chatMessages.add(newMessage));
-            }
-        } else if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
-            Group selectedGroup = (Group) Model.getInstance().getViewFactory().getSelectedContact().get();
-            if (newMessage.getChatId() == selectedGroup.getGroupId()) {
-                // Add the new message to the chatMessages list
-                Platform.runLater(() -> chatMessages.add(newMessage));
-            }
-        }
-    }
+
 
 
 

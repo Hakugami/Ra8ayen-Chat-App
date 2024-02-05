@@ -1,6 +1,8 @@
 package dto.requests;
 
-public class GetNotificationsRequest {
+import java.io.Serializable;
+
+public class GetNotificationsRequest implements Serializable {
     int userID;
     public GetNotificationsRequest(int userID) {
         this.userID = userID;

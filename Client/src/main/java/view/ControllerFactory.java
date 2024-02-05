@@ -17,6 +17,7 @@ public class ControllerFactory {
     private VoiceChatPopUpController voiceChatPopUpController;
     private SideNavBarController sideNavBarController;
 
+
     private CustomizeController customizeController;
 
     public void setChatController(ChatController chatController) {
@@ -100,13 +101,26 @@ public class ControllerFactory {
         return mainWindowController;
     }
 
-    public NotificationContextMenuController getNotificationContextMenuController() throws IOException {
-        if(notificationContextMenuController == null){
+    public void setNotificationContextMenuController(NotificationContextMenuController notificationContextMenuController) {
+        this.notificationContextMenuController = notificationContextMenuController;
+    }
+
+    public NotificationContextMenuController getNotificationContextMenuController() {
+        if (notificationContextMenuController == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationContextMenu.fxml"));
-            Parent parent = fxmlLoader.load();
-            notificationContextMenuController = fxmlLoader.getController();
+            try {
+                Parent parent = fxmlLoader.load();
+                notificationContextMenuController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return notificationContextMenuController;
+    }
+    public NotificationElementController getNotificationElementController() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationElement.fxml"));
+        Parent parent = fxmlLoader.load();
+        return fxmlLoader.getController();
     }
     public CustomizeController getCustomizeController() throws IOException {
         if(customizeController==null){

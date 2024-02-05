@@ -74,7 +74,7 @@ public class VoiceChatWaitController implements Initializable {
 
 
     }
-    public void setPopup(Popup popup,String receiverPhoneNumber,String senderPhoneNumber) throws RemoteException {
+    public void setPopup(Popup popup,String receiverPhoneNumber,String senderPhoneNumber) {
         Notifications.create().title("Incoming Call").text("You have an incoming call").showInformation();
         establishVoiceCall(receiverPhoneNumber,senderPhoneNumber);
         this.popup = popup;

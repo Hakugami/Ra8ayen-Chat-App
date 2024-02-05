@@ -115,16 +115,26 @@ public class ContactsController implements Initializable {
     }
 
     public void changeStatusColor(Color color) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
-        Platform.runLater(() -> statusCircle.setFill(color));
+        Platform.runLater(() -> {
+            statusCircle.getStyleClass().removeAll("online", "offline", "away", "busy");
+        });
+
         if(color.equals(Color.GREEN)){
+            statusCircle.getStyleClass().add("online");
             CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Online);
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Available);
         }
         else if(color.equals(Color.RED)){
+            statusCircle.getStyleClass().add("busy");
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Busy);
         }
         else if(color.equals(Color.YELLOW)){
+            statusCircle.getStyleClass().add("away");
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Away);
+        }
+        else if(color.equals(Color.GRAY)){
+            statusCircle.getStyleClass().add("offline");
+            CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Offline);
         }
         // Get the current user
         CurrentUser currentUser = CurrentUser.getInstance();

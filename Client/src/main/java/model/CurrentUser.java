@@ -141,14 +141,14 @@ public class CurrentUser extends UserModel {
             if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Available)){
                 color = Color.GREEN;
             }
+            else if(userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)){
+                color = Color.GRAY;
+            }
             else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Busy)){
                 color = Color.RED;
             }
             else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Away)){
                 color = Color.YELLOW;
-            }
-            else if(userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)){
-                color = Color.GRAY;
             }
             contactData.setColor(color);
             contactData.setChatId(userModel.getChatId());

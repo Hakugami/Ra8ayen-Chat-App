@@ -2,14 +2,9 @@ package controller;
 
 //import dto.Controller.TrackOnlineUsers;
 
-import dto.requests.GetContactChatRequest;
-import dto.requests.GetContactsRequest;
-import dto.requests.GetGroupRequest;
-import dto.requests.LoginRequest;
-import dto.responses.GetContactChatResponse;
-import dto.responses.GetContactsResponse;
-import dto.responses.GetGroupResponse;
-import dto.responses.LoginResponse;
+import dto.Model.NotificationModel;
+import dto.requests.*;
+import dto.responses.*;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -31,6 +26,8 @@ import model.CurrentUser;
 import model.Group;
 import model.Model;
 import network.NetworkFactory;
+import notification.NotificationManager;
+import org.controlsfx.control.Notifications;
 import token.TokenManager;
 
 import java.rmi.NotBoundException;
@@ -213,6 +210,17 @@ public class LoginController {
                     Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(group.getGroupId());
                     System.out.println("loading messages for group: " + group.getGroupName());
                 }
+                GetNotificationsRequest request = new GetNotificationsRequest(CurrentUser.getInstance().getUserID());
+                GetNotificationsResponse response = NetworkFactory.getInstance().getNotifications(request);
+                for (int i = 0; i < response.getNotifications().size(); i++) {
+                    FriendRequest friendRequest = new FriendRequest();
+                    friendRequest.setReceiverPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+                    friendRequest.setSenderPhoneNumber(response.getUsers().get(i).getPhoneNumber());
+                    friendRequest.setUserModel(response.getUsers().get(i));
+                    NotificationManager.getInstance().addNotification(friendRequest);
+                    Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
+                }
+
 
                 return null;
             }

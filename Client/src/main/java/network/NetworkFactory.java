@@ -92,6 +92,11 @@ public class NetworkFactory {
         return controller.acceptContact(request);
     }
 
+    public boolean rejectFriendRequest(RejectContactRequest request) throws RemoteException, NotBoundException {
+        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+        return controller.rejectFriendRequest(request);
+    }
+
     public List<GetContactsResponse> getContacts(GetContactsRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
         ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
         return controller.getContacts(request);
@@ -152,6 +157,11 @@ public class NetworkFactory {
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public GetNotificationsResponse getNotifications(GetNotificationsRequest request) throws RemoteException, NotBoundException {
+        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+        return controller.getNotifications(request);
     }
 
 

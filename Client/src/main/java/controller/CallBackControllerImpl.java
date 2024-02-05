@@ -56,12 +56,8 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     public void receiveNotification(NotificationModel notification) throws RemoteException {
         NotificationManager.getInstance().addNotification(notification);
             Platform.runLater(()-> {
-                try {
-                    Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
-                    Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
+                Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
             });
     }
 

@@ -83,3 +83,31 @@
     -fx-pref-width: 300px;
     -fx-pref-height: 25px;
 }
+
+/* Style for online status */
+#statusCircle.online {
+    -fx-fill: linear-gradient(to bottom, #4CAF50, #8BC34A); /* Green gradient for online */
+    -fx-stroke: linear-gradient(to bottom, #4CAF50, #8BC34A);
+    -fx-stroke-line-cap: round;
+}
+
+/* Style for offline status */
+#statusCircle.offline {
+    -fx-fill: linear-gradient(to bottom, #f44336, #e57373); /* Red gradient for offline */
+    -fx-stroke: linear-gradient(to bottom, #f44336, #e57373);
+    -fx-stroke-line-cap: round;
+}
+
+/* Style for away status */
+#statusCircle.away {
+    -fx-fill: linear-gradient(to bottom, #ff9800, #ffb74d); /* Orange gradient for away */
+    -fx-stroke: linear-gradient(to bottom, #ff9800, #ffb74d);
+    -fx-stroke-line-cap: round;
+}
+
+/* Style for busy status */
+#statusCircle.busy {
+    -fx-fill: linear-gradient(to bottom, #9c27b0, #ba68c8); /* Purple gradient for busy */
+    -fx-stroke: linear-gradient(to bottom, #9c27b0, #ba68c8);
+    -fx-stroke-line-cap: round;
+}
