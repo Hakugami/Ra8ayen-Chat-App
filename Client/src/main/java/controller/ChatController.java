@@ -329,6 +329,7 @@ public class ChatController implements Initializable {
         try {
             messageModel.setStyleMessage(Model.getInstance().getControllerFactory().getCustomizeController().getMessageStyle());
             Model.getInstance().getControllerFactory().getCustomizeController().setNewStyle();
+            messageModel.setTime(LocalDateTime.now());
             System.out.println("Message Style set from chat controller");
         } catch (IOException e) {
             throw new RuntimeException(e);

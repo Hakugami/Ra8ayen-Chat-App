@@ -3,6 +3,7 @@ package controllers;
 import concurrency.manager.ConcurrencyManager;
 import dto.Controller.MessageController;
 import dto.Model.MessageModel;
+import dto.Model.StyleMessage;
 import dto.requests.ChatBotRequest;
 import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
@@ -104,8 +105,19 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             //   List<MessageModel> messageModels = new ArrayList<>();
 
             for (int i = 0; i < messages.size(); i++) {
+                StyleMessage styleMessage = new StyleMessage();
+                styleMessage.setBackgroundColor(messages.get(i).getTextBackground());
+                styleMessage.setFontStyle(messages.get(i).getFontStyle());
+                styleMessage.setFontColor(messages.get(i).getFontColor());
+                styleMessage.setBold(messages.get(i).isBold());
+                styleMessage.setFontSize(messages.get(i).getFontSize());
+                styleMessage.setItalic(messages.get(i).isItalic());
+                styleMessage.setUnderline(messages.get(i).isUnderline());
+                System.out.println(messages.get(i).getTextBackground()+"-------------------------------------------------------------------------------------------------------------");
+                messageModels.get(i).setStyleMessage(styleMessage);
                 messageModels.get(i).setAttachment(messages.get(i).getIsAttachment());
                 messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
+                System.out.println(styleMessage+"-------------------------------------------------------------------------------------------------------------");
                 if (messageModels.get(i).isAttachment()) {
                     System.out.println("Attatch Size From Server " + messageModels.get(i).getAttachmentData().length);
                 } else {

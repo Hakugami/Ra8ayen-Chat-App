@@ -73,7 +73,8 @@ public class MessageBubbleController implements Initializable {
         //displayCurrentUserMessage();
         messageLabel.maxWidthProperty().bind(
                 Model.getInstance().getControllerFactory().getChatController().chatListView.widthProperty().multiply(0.7));
-
+        completeMessageHBox.prefWidthProperty().bind(messageLabel.widthProperty());
+        completeMessageHBox.prefHeightProperty().bind(messageLabel.heightProperty());
         try {
             if (message.getSender().getUserID()== CurrentUser.getInstance().getUserID()) {
                 displayCurrentUserMessage();
@@ -102,7 +103,7 @@ public class MessageBubbleController implements Initializable {
                 throw new RuntimeException(e);
             }
             completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
-            messageVBox.getChildren().remove(senderInfoHBox);
+//            messageVBox.getChildren().remove(senderInfoHBox);
         });
 
     }
@@ -137,7 +138,7 @@ public class MessageBubbleController implements Initializable {
             senderImage.setImage(senderProfilePicture);
             messageVBox.getStyleClass().add("receiver-bubble");
             completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.LEFT_TO_RIGHT);
-//        messageVBox.getStyleClass().add("rec");
+
         });
     }
 
@@ -150,13 +151,15 @@ private void loadMessage() throws RemoteException {
     // Set the sender's name and phone number
     senderNameLabel.setText(message.getSender().getUserName());
     senderPhoneLabel.setText(message.getSender().getPhoneNumber());
+    if (message.getTime() != null) {
+        messageTimeLabel.setText(message.getTime().toString());
+    } else {
+        messageTimeLabel.setText(""); // or set a default value
+    }
 
     // If the message has an attachment, set the file icon and file size
     if (message.isAttachment() && message.getAttachmentData() != null) {
-        FontAwesomeIcon icon = FontAwesomeIcon.DOWNLOAD;
-        FontAwesomeIconView itemIcon = new FontAwesomeIconView(icon);
-        itemIcon.setSize("16px");
-        fileNameLabel.setGraphic(itemIcon);
+        fileIconImageView.setVisible(true);
         fileSizeLabel.setText(String.valueOf(message.getAttachmentData().length));
     }
     setMessageStyle();
@@ -207,9 +210,17 @@ private void loadMessage() throws RemoteException {
                 }else{
                     fp= FontPosture.REGULAR;
                 }
+                if(message.getStyleMessage().isUnderline()){
+                    style = "-fx-underline: true;";
+                    messageLabel.setStyle(style);
+                }
+                else {
+                    style = "-fx-underline: false;";
+                    messageLabel.setStyle(style);
+                }
                 size = message.getStyleMessage().getFontSize();
                 CustomFont = Font.font("Arial",fw,fp,size);
-
+                System.out.println(fw + " " + fp + " " + size + " " + style+ "=------------------------------------------------------" );
                 messageLabel.setFont(CustomFont);
                 messageLabel.setStyle("-fx-text-fill: " +message.getStyleMessage().getFontColor()+ ";");
                 messageVBox.setStyle("-fx-background-color: " +message.getStyleMessage().getBackgroundColor()+ ";");

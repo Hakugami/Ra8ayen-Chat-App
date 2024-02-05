@@ -52,6 +52,13 @@ public class MessageService {
         }
         else {
             Message message = messageMapper.sendRequestToEntity(request);
+            message.setBold(request.getStyleMessage().isBold());
+            message.setItalic(request.getStyleMessage().isItalic());
+            message.setUnderline(request.getStyleMessage().isUnderline());
+            message.setFontSize(request.getStyleMessage().getFontSize());
+            message.setFontColor(request.getStyleMessage().getFontColor());
+            message.setTextBackground(request.getStyleMessage().getBackgroundColor());
+            message.setFontStyle(request.getStyleMessage().getFontStyle());
           MessageID =  messageDao.saveAndReturnId(message);
         }
         return MessageID;

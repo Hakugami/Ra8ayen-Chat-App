@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -17,10 +18,10 @@
                     <children>
                         <VBox minWidth="50.0" prefWidth="50.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label fx:id="senderNameLabel" style="colo: grey;" styleClass="sender-info" textFill="#464646" />
+                                <Label fx:id="senderNameLabel" prefHeight="18.0" prefWidth="74.0" styleClass="sender-info" text="test name" textFill="#464646" />
                             </children>
                         </VBox>
-                        <Label fx:id="senderPhoneLabel" style="colo: grey;" styleClass="sender-info" textFill="#464646">
+                        <Label fx:id="senderPhoneLabel" alignment="CENTER" prefHeight="18.0" prefWidth="106.0" styleClass="sender-info" text="010101" textFill="#464646">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>
@@ -30,12 +31,15 @@
                         <Insets bottom="3.0" left="5.0" right="5.0" />
                     </VBox.margin>
                 </HBox>
-                <HBox fx:id="messageAttachmentHBox" prefHeight="24.0" prefWidth="190.0">
+                <HBox fx:id="messageAttachmentHBox" minHeight="-Infinity" prefHeight="24.0" prefWidth="190.0">
                     <children>
-                        <ImageView fx:id="fileIconImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
-                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                        <ImageView fx:id="fileIconImageView" fitHeight="28.0" fitWidth="50.0" onMouseClicked="#openDownloadSelector" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../Images/download.png" />
+                     </image></ImageView>
+                        <VBox minHeight="-Infinity" prefHeight="32.0" prefWidth="140.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label fx:id="fileNameLabel" onMouseClicked="#openDownloadSelector">
+                                <Label fx:id="fileNameLabel">
                                     <font>
                                         <Font size="18.0" />
                                     </font>

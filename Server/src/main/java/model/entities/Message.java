@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 
 public class Message {
@@ -12,6 +13,13 @@ public class Message {
     private boolean isAttachment;
 
     private byte[] attachment;
+    private String fontStyle;
+    private String fontColor;
+    private String textBackground;
+    private int fontSize;
+    private boolean isBold;
+    private boolean isItalic;
+    private boolean isUnderline;
 
     public Message(){
 
@@ -70,6 +78,62 @@ public class Message {
         isAttachment = attachment;
     }
 
+    public String getFontStyle() {
+        return fontStyle;
+    }
+
+    public void setFontStyle(String fontStyle) {
+        this.fontStyle = fontStyle;
+    }
+
+    public String getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(String fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public String getTextBackground() {
+        return textBackground;
+    }
+
+    public void setTextBackground(String textBackground) {
+        this.textBackground = textBackground;
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public boolean isBold() {
+        return isBold;
+    }
+
+    public void setBold(boolean bold) {
+        isBold = bold;
+    }
+
+    public boolean isItalic() {
+        return isItalic;
+    }
+
+    public void setItalic(boolean italic) {
+        isItalic = italic;
+    }
+
+    public boolean isUnderline() {
+        return isUnderline;
+    }
+
+    public void setUnderline(boolean underline) {
+        isUnderline = underline;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -78,7 +142,15 @@ public class Message {
                 ", receiverId=" + receiverId +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
-                ", getIsAttachment=" + isAttachment +
+                ", isAttachment=" + isAttachment +
+                ", attachment=" + Arrays.toString(attachment) +
+                ", fontStyle='" + fontStyle + '\'' +
+                ", fontColor='" + fontColor + '\'' +
+                ", textBackground='" + textBackground + '\'' +
+                ", fontSize=" + fontSize +
+                ", isBold=" + isBold +
+                ", isItalic=" + isItalic +
+                ", isUnderline=" + isUnderline +
                 '}';
     }
 
