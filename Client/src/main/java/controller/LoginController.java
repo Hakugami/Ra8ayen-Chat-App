@@ -2,9 +2,11 @@ package controller;
 
 //import dto.Controller.TrackOnlineUsers;
 
-import dto.Model.NotificationModel;
 import dto.requests.*;
-import dto.responses.*;
+import dto.responses.GetContactsResponse;
+import dto.responses.GetGroupResponse;
+import dto.responses.GetNotificationsResponse;
+import dto.responses.LoginResponse;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -18,7 +20,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ContactData;
@@ -33,7 +34,6 @@ import token.TokenManager;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,6 +66,11 @@ public class LoginController {
     @FXML
     public void initialize() {
         // Initially hide the password label and password field
+        String[] data = TokenManager.getInstance().loadData();
+        if (data != null) {
+            phoneNumberField.setText(data[1]);
+            passwordField.setText(data[2]);
+        }
         Password_lbl.setVisible(false);
         passwordField.setVisible(false);
         loginButton.setVisible(false);
@@ -128,8 +133,10 @@ public class LoginController {
                 if (validateFields()) {
                     LoginRequest loginRequest = new LoginRequest(phoneNumberField.getText(), passwordField.getText());
                     LoginResponse loginResponse = NetworkFactory.getInstance().login(loginRequest);
+                    StringBuilder sb = new StringBuilder();
                     String token = loginResponse.getToken();
-                    TokenManager.getInstance().setToken(token);
+                    sb.append(token).append("\n").append(phoneNumberField.getText()).append("\n").append(passwordField.getText()).append("\n").append('1');
+                    TokenManager.getInstance().setToken(sb.toString());
                     System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
                         retrieveData();
@@ -160,34 +167,34 @@ public class LoginController {
         });
     }
 
- private void shakeAnimation(){
-    final int shakeDistance = 20; // Increase the shake distance
-    final int shakeCount = 4; // Increase the shake count
-    final int shakeDuration = 500;
+    private void shakeAnimation() {
+        final int shakeDistance = 20; // Increase the shake distance
+        final int shakeCount = 4; // Increase the shake count
+        final int shakeDuration = 500;
 
-    Timeline shakeTimeline = new Timeline(new KeyFrame(Duration.millis(shakeDuration / (shakeCount * 2)),
-            new KeyValue(loginXml.translateXProperty(), shakeDistance, Interpolator.EASE_BOTH)));
+        Timeline shakeTimeline = new Timeline(new KeyFrame(Duration.millis(shakeDuration / (shakeCount * 2)),
+                new KeyValue(loginXml.translateXProperty(), shakeDistance, Interpolator.EASE_BOTH)));
 
-    for (int i = 1; i < shakeCount; i++) {
-        shakeTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(i * shakeDuration / shakeCount),
-                new KeyValue(loginXml.translateXProperty(), shakeDistance * (i % 2 == 0 ? 1 : -1), Interpolator.EASE_BOTH)));
+        for (int i = 1; i < shakeCount; i++) {
+            shakeTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(i * shakeDuration / shakeCount),
+                    new KeyValue(loginXml.translateXProperty(), shakeDistance * (i % 2 == 0 ? 1 : -1), Interpolator.EASE_BOTH)));
+        }
+
+        shakeTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(shakeDuration),
+                new KeyValue(loginXml.translateXProperty(), 0, Interpolator.EASE_BOTH)));
+
+        // Create a flash animation (Timeline) for the password field
+        Timeline flashTimeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;")),
+                new KeyFrame(Duration.millis(250), new KeyValue(passwordField.styleProperty(), "-fx-background-color: red;")),
+                new KeyFrame(Duration.millis(500), new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;"))
+        );
+        flashTimeline.setCycleCount(4);
+
+        // Play the animations
+        shakeTimeline.play();
+        flashTimeline.play();
     }
-
-    shakeTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(shakeDuration),
-            new KeyValue(loginXml.translateXProperty(), 0, Interpolator.EASE_BOTH)));
-
-    // Create a flash animation (Timeline) for the password field
-    Timeline flashTimeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;")),
-            new KeyFrame(Duration.millis(250), new KeyValue(passwordField.styleProperty(), "-fx-background-color: red;")),
-            new KeyFrame(Duration.millis(500), new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;"))
-    );
-    flashTimeline.setCycleCount(4);
-
-    // Play the animations
-    shakeTimeline.play();
-    flashTimeline.play();
-}
 
     private void retrieveData() {
         Task<Void> task = new Task<Void>() {
@@ -279,20 +286,6 @@ public class LoginController {
         }, 0, 5, TimeUnit.SECONDS);
     }
 
-
-    private void LoadDataToChatList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
-        //  List<ChatData> listOfChats = new ArrayList<>();
-        List<GetContactChatRequest> listOfContactId = new ArrayList<>();
-        for (ContactData getContactsResponse : CurrentUser.getInstance().getContactDataList()) {
-            listOfContactId.add(new GetContactChatRequest(CurrentUser.getInstance().getUserID(), getContactsResponse.getId()));
-        }
-        List<GetContactChatResponse> getContactChatResponses = NetworkFactory.getInstance().getPrivateChats(listOfContactId);
-        for (GetContactChatResponse getContactsResponse : getContactChatResponses) {
-            for (int i = 0; i < CurrentUser.getInstance().getContactDataList().size(); i++) {
-
-            }
-        }
-    }
 
     private boolean validateFields() throws SQLException, ClassNotFoundException {
         if (!isValidPhoneNumber(phoneNumberField.getText()) ||

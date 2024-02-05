@@ -17,8 +17,8 @@
 
 <AnchorPane prefHeight="750.0" styleClass="anchor-pane" stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
    <HBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="102.0" prefWidth="300.0" styleClass="h-box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="93.0" prefWidth="87.0" HBox.hgrow="ALWAYS">
-         <ImageView fx:id="ImagProfile" fitHeight="65.0" fitWidth="65.0" layoutX="11.0" layoutY="9.0" preserveRatio="true" styleClass="ImageView">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="77.0" prefWidth="84.0" HBox.hgrow="ALWAYS">
+         <ImageView fx:id="ImagProfile" fitHeight="57.0" fitWidth="65.0" layoutX="11.0" layoutY="9.0" preserveRatio="true" styleClass="ImageView" visible="false">
             <clip>
                <Circle fx:id="imageClip" centerX="40" centerY="40" radius="40" />
             </clip>
@@ -27,7 +27,41 @@
             </viewport>
 
          </ImageView>
-         <Circle fx:id="statusCircle" layoutX="55.0" layoutY="74.0" radius="11.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" styleClass="Circle" AnchorPane.rightAnchor="10.0">
+         <Circle fx:id="myProfilePic" layoutX="42.0" layoutY="48.0" radius="33.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+            <stroke>
+               <LinearGradient endX="1.0" endY="1.0">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color red="0.6071972250938416" green="0.8552631735801697" blue="0.14650341868400574" />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="0.9342105388641357" green="0.8513137698173523" blue="0.43682992458343506" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </LinearGradient>
+            </stroke>
+            <fill>
+               <LinearGradient endX="1.0" endY="1.0">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color red="0.6071972250938416" green="0.8552631735801697" blue="0.14650341868400574" />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="0.05190058425068855" green="0.5077607035636902" blue="0.9342105388641357" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </LinearGradient>
+            </fill>
+         </Circle>
+         <Circle fx:id="statusCircle" layoutX="64.0" layoutY="74.0" radius="11.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" styleClass="Circle" AnchorPane.rightAnchor="9.0">
             <stroke>
                <LinearGradient endX="1.0" endY="1.0">
                   <stops>

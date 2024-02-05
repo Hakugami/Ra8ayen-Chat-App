@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
 import model.*;
@@ -42,6 +43,8 @@ public class ContactsController implements Initializable {
     TreeView<Node> treeView;
     @FXML
     public ImageView ImagProfile;
+    @FXML
+    public Circle myProfilePic;
 
     @FXML
     public Circle imageClip;
@@ -55,10 +58,15 @@ public class ContactsController implements Initializable {
         Model.getInstance().getControllerFactory().setContactsController(this);
         observableContactDataList = FXCollections.observableArrayList();
 
-        double parentWidth = statusCircle.getParent().getBoundsInLocal().getWidth();
-        double circleWidth = statusCircle.getRadius() * 2;
-        statusCircle.setLayoutX((parentWidth - circleWidth) / 2);
-        statusCircle.setLayoutY(parentWidth - circleWidth);
+
+        double myProfilePicBottomRightX = myProfilePic.getLayoutX() + myProfilePic.getRadius() * 2;
+        double myProfilePicBottomRightY = myProfilePic.getLayoutY() + myProfilePic.getRadius() * 2;
+
+        // Set the position of the statusCircle to the bottom right corner of the myProfilePic
+        statusCircle.setLayoutX(myProfilePicBottomRightX - statusCircle.getRadius());
+        statusCircle.setLayoutY(myProfilePicBottomRightY - statusCircle.getRadius()- 25);
+
+
         try {
             setImageProfileData();
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
@@ -181,6 +189,7 @@ public class ContactsController implements Initializable {
             System.out.println("Not Null data found");
             Image newImage = CurrentUser.getInstance().getProfilePictureImage();
             ImagProfile.setImage(newImage);
+            myProfilePic.setFill(new ImagePattern(newImage));
         } else {
             System.out.println("Null data found");
         }

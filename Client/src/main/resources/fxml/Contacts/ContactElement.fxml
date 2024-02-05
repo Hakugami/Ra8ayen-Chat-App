@@ -23,7 +23,7 @@
               </clip>
    
             </ImageView>
-            <Circle fx:id="profilePicCircle" fill="DODGERBLUE" layoutX="29.0" layoutY="39.0" radius="28.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE">
+            <Circle fx:id="profilePicCircle" fill="DODGERBLUE" layoutX="36.0" layoutY="39.0" radius="25.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE">
                <stroke>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>

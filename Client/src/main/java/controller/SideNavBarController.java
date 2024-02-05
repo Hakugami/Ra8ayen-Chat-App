@@ -91,7 +91,6 @@ public class SideNavBarController implements Initializable {
     }
     private void addListeners (){
         contacts_btn.setOnAction(event -> onContactsClick());
-        calls_btn.setOnAction(event -> onCallsClick());
     }
 
     private void onCallsClick() {
