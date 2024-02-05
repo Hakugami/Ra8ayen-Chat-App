@@ -20,6 +20,7 @@ public class StatusContextMenuController implements Initializable {
     public Label available;
     public Label busy;
     public Label away;
+    public Label offline;
 
     private ContactsController contactsController;
     private Popup popup;
@@ -53,6 +54,15 @@ public class StatusContextMenuController implements Initializable {
         away.setOnMouseClicked(mouseEvent -> {
             try {
                 contactsController.changeStatusColor(Color.YELLOW);
+            } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            popup.hide();
+        });
+        offline.setOnMouseClicked(mouseEvent -> {
+            try {
+                contactsController.changeStatusColor(Color.GRAY);
+
             } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

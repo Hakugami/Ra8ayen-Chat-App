@@ -1,5 +1,6 @@
 
 package controller;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -14,7 +15,7 @@ public class StatusElementController {
     private Label statusName;
 
    public void setStatusColor(Color color){
-        statusColor.setFill(color);
+     statusColor.setVisible(false);
     }
     public void setStatusName(String name){
         statusName.setText(name);
