@@ -7,14 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import network.manager.NetworkManagerSingleton;
-import org.controlsfx.control.Notifications;
-import service.SendHeartBeatService;
-
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 public class ServerApplication extends Application {
-    SendHeartBeatService service ;
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("/Fxml/Server.fxml"));
@@ -40,8 +36,7 @@ public class ServerApplication extends Application {
         System.exit(0);
     }
 
-    public static void main(String[] args) throws RemoteException {
+    public static void main(String[] args) {
         launch();
-
     }
 }

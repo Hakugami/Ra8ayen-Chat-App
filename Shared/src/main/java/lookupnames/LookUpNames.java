@@ -1,7 +1,5 @@
 package lookupnames;
 
-//import dto.Controller.TrackOnlineUsers;
-
 public enum LookUpNames {
     TRACKONLINEUSERS,
     SENDHEARTBEATTOSERVERFROMCLIENT,
@@ -12,7 +10,5 @@ public enum LookUpNames {
     GROUPCHATCONTROLLER,
     INVITATIONCONTROLLER,
     CONTACTCONTROLLER,
-    VOICECHATCONTROLLER;
-
-
+    VOICECHATCONTROLLER
 }

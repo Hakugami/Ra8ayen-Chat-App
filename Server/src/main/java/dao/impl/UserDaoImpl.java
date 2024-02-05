@@ -92,11 +92,6 @@ public class UserDaoImpl implements UserDao {
             parameters.add(user.getProfilePicture());
         }
 
-//        if (!user.getPasswordHash().equals(originalUser.getPasswordHash())) {
-//            query.append("PasswordHash = ?, ");
-//            parameters.add(user.getPasswordHash());
-//        }
-
         if (!user.getBio().equals(originalUser.getBio())) {
             query.append("Bio = ?, ");
             parameters.add(user.getBio());
@@ -205,6 +200,26 @@ public class UserDaoImpl implements UserDao {
         }
 
         return userList;
+    }
+
+    @Override
+    public List<String> getContactsPhoneNumbers(int userID) {
+        List<String> phoneNumbers = new ArrayList<>();
+        String query = "SELECT ua.PhoneNumber FROM UserAccounts ua " +
+                "INNER JOIN UserContacts uc ON ua.UserID  = uc.FriendID " +
+                "WHERE uc.UserID = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userID);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    phoneNumbers.add(resultSet.getString(UserTable.PhoneNumber.name()));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return phoneNumbers;
     }
 
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {

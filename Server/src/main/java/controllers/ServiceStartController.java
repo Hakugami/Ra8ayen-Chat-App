@@ -27,8 +27,10 @@ public class ServiceStartController implements Initializable {
     @FXML
     private void handleStartButtonClick() {
         try {
-            ConcurrencyManager.getInstance().submitTask(() ->NetworkManagerSingleton.getInstance().start());
-            progressIndicator.setStyle("-fx-progress-color: green;");
+            if(!NetworkManagerSingleton.getInstance().isServerRunning()) {
+                ConcurrencyManager.getInstance().submitTask(() ->NetworkManagerSingleton.getInstance().start());
+                progressIndicator.setStyle("-fx-progress-color: green;");
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

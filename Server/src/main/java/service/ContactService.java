@@ -146,17 +146,17 @@ public class ContactService{
         UserContactsDaoImpl userContactsDao = new UserContactsDaoImpl();
         List<Integer> friends = userContactsDao.getFriendsIDs(userId);
         UserDaoImpl userDao = new UserDaoImpl();
-        int index = 0;
         for(String friendPhoneNumber : friendsPhoneNumbers) {
             User user = userDao.getUserByPhoneNumber(friendPhoneNumber);
             if(user != null && friends.contains(user.getUserID())) {
-//                friendsPhoneNumbers.set(index++, friendPhoneNumber + "added to group");
                 users.add(user.getUserID());
-            }
-            else {
-//                friendsPhoneNumbers.set(index++, friendPhoneNumber + "not added to group");
             }
         }
         return users;
+    }
+
+    public List<String> getFriendsPhoneNumbers(int userID) {
+        UserDaoImpl userDao = new UserDaoImpl();
+        return userDao.getContactsPhoneNumbers(userID);
     }
 }
