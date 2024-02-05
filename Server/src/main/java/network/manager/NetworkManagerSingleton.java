@@ -44,7 +44,6 @@ public class NetworkManagerSingleton {
     }
     public void start() {
         try {
-            registryBinding();
             if(!isFirsTimeStart) {
                 exportRemoteObjects();
             }

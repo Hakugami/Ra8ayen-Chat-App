@@ -51,6 +51,11 @@ public class NetworkFactory {
         return controller.sendMessage(request);
     }
 
+    public ChatBotResponse chatBot(ChatBotRequest request) throws RemoteException, NotBoundException {
+        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+        return controller.getChatBotResponse(request);
+    }
+
     public void connect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
         controller.connect(phoneNumber, callBackController);

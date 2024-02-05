@@ -66,6 +66,9 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
                 CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
                 Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+                if(Model.getInstance().getControllerFactory().getSideNavBarControllerBot()) {
+                    Model.getInstance().getControllerFactory().getChatController().botSendMessage(message);
+                }
         }
         else {
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
@@ -77,6 +80,9 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
             Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+            if(Model.getInstance().getControllerFactory().getSideNavBarControllerBot()) {
+                Model.getInstance().getControllerFactory().getChatController().botSendMessage(message);
+            }
         }
         else {
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);

@@ -1,12 +1,16 @@
 package controllers;
 
+import concurrency.manager.ConcurrencyManager;
 import dto.Controller.MessageController;
 import dto.Model.MessageModel;
+import dto.requests.ChatBotRequest;
 import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
+import dto.responses.ChatBotResponse;
 import dto.responses.GetMessageResponse;
 import dto.responses.SendMessageResponse;
 import model.entities.Message;
+import service.ChatBotService;
 import service.MessageService;
 
 import java.rmi.RemoteException;
@@ -18,11 +22,13 @@ import java.util.stream.Collectors;
 public class MessageControllerSingleton extends UnicastRemoteObject implements MessageController {
     private static final Logger logger = Logger.getLogger(MessageController.class.getName());
     private static MessageControllerSingleton instance;
-    private MessageService messageService;
+    private final MessageService messageService;
+    private final ChatBotService chatBotService;
 
     protected MessageControllerSingleton() throws RemoteException {
         super();
         messageService = new MessageService();
+        chatBotService = new ChatBotService();
     }
 
     public static MessageControllerSingleton getInstance() throws RemoteException {
@@ -37,7 +43,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
     public SendMessageResponse sendMessage(SendMessageRequest request) throws RemoteException {
         SendMessageResponse response = new SendMessageResponse();
         try {
-            int messageId= messageService.sendMessage(request);
+            int messageId = messageService.sendMessage(request);
             response.setSuccess(true);
             response.setError("Message sent successfully");
 
@@ -48,6 +54,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
 
             messageModel.setMessageId(messageId);
             messageModel.setChatId(request.getReceiverId());
+
             messageModel.setMessageContent(request.getMessageContent());
             if (request.getIsAttachment()) {
                 messageModel.setAttachment(true);
@@ -59,15 +66,27 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageModel.setStyleMessage(request.getStyleMessage());
             messageModel.setSender(request.getSender());
 
-            for (String number : phoneNumber) {
-                if (OnlineControllerImpl.clients.containsKey(number)) {
-                    if (request.isGroupMessage()) {
-                        OnlineControllerImpl.clients.get(number).receiveGroupChatMessage(messageModel);
-                    } else {
-                        OnlineControllerImpl.clients.get(number).receiveNewMessage(messageModel);
+            ConcurrencyManager.getInstance().submitTask(() -> {
+                messageModel.setSender(request.getSender());
+
+                for (String number : phoneNumber) {
+                    if (OnlineControllerImpl.clients.containsKey(number)) {
+                        if (request.isGroupMessage()) {
+                            try {
+                                OnlineControllerImpl.clients.get(number).receiveGroupChatMessage(messageModel);
+                            } catch (RemoteException e) {
+                                System.out.println("Error in sending message to " + number + " : " + e.getMessage());
+                            }
+                        } else {
+                            try {
+                                OnlineControllerImpl.clients.get(number).receiveNewMessage(messageModel);
+                            } catch (RemoteException e) {
+                                System.out.println("Error in sending message to " + number + " : " + e.getMessage());
+                            }
+                        }
                     }
                 }
-            }
+            });
         } catch (Exception e) {
             response.setSuccess(false);
             response.setError("Failed to send message: " + e.getMessage());
@@ -102,6 +121,17 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             response.setError("Failed to retrieve messages: " + e.getMessage());
         }
         return response;
+    }
+
+    public ChatBotResponse getChatBotResponse(ChatBotRequest chatBotRequest) {
+        ChatBotResponse chatBotResponse = new ChatBotResponse();
+        try {
+            chatBotResponse.setChatBotResponse(chatBotService.getResponse(chatBotRequest.getMessageReceived()));
+            chatBotResponse.setSuccess(true);
+        } catch (Exception e) {
+            chatBotResponse.setSuccess(false);
+        }
+        return chatBotResponse;
     }
 
 }

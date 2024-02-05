@@ -2,9 +2,11 @@ package controller;
 
 import dto.Model.MessageModel;
 import dto.Model.UserModel;
+import dto.requests.ChatBotRequest;
 import dto.requests.GetMessageRequest;
 import dto.requests.SendMessageRequest;
 import dto.requests.VoiceCallRequest;
+import dto.responses.ChatBotResponse;
 import dto.responses.GetMessageResponse;
 import dto.responses.SendMessageResponse;
 import dto.responses.VoiceCallResponse;
@@ -254,6 +256,64 @@ public class ChatController implements Initializable {
                 ImagContact.setImage(image);
             }
         });
+    }
+
+    public void botSendMessage(MessageModel model) {
+        ChatBotRequest chatBotRequest = new ChatBotRequest(model.getMessageContent());
+        try {
+            ChatBotResponse chatBotResponse = NetworkFactory.getInstance().chatBot(chatBotRequest);
+            MessageModel messageModel = new MessageModel();
+            messageModel.setMessageContent(chatBotResponse.getChatBotResponse());
+            messageModel.setSender(CurrentUser.getInstance());
+            chatListView.getItems().add(messageModel);
+
+            SendMessageRequest request = new SendMessageRequest();
+            request.setMessageContent(chatBotResponse.getChatBotResponse());
+
+            request.setStyleMessage(messageModel.getStyleMessage());
+
+            UserModel userModel = new UserModel();
+            userModel.setProfilePicture(CurrentUser.getInstance().getProfilePicture());
+            userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
+            userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
+            userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
+            userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
+            userModel.setBio(CurrentUser.getCurrentUser().getBio());
+            userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
+            userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
+            request.setSenderId(CurrentUser.getInstance().getUserID());
+            request.setSender(userModel);
+
+
+            if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
+                request.setReceiverId(((Group) Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId());
+
+                request.setGroupMessage(true);
+            } else {
+                request.setReceiverId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
+                request.setGroupMessage(false);
+            }
+            if (uploadedFileBytes == null) {
+                System.out.println("UploadFile NULL");
+                request.setIsAttachment(false);
+            } else {
+                request.setIsAttachment(true);
+                request.setAttachmentData(uploadedFileBytes);
+            }
+            request.setTime(LocalDateTime.now());
+
+            try {
+                //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
+                System.out.println(request);
+                CurrentUser.getInstance().addMessageToCache(request.getReceiverId(), messageModel);
+                SendMessageResponse response = NetworkFactory.getInstance().sendMessage(request);
+                System.out.println(response);
+            } catch (RemoteException | NotBoundException e) {
+                e.printStackTrace();
+            }
+        } catch (RemoteException | NotBoundException e) {
+            System.out.println("Failed to send message to chat bot: " + e.getMessage());
+        }
     }
 
 

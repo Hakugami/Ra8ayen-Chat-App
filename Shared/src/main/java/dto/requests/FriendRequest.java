@@ -9,8 +9,6 @@ public class FriendRequest extends NotificationModel implements Serializable {
     private String senderPhoneNumber;
     private String receiverPhoneNumber;
     UserModel userModel;
-
-
     public FriendRequest() {
     }
 
