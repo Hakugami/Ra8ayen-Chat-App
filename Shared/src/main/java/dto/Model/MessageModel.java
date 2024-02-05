@@ -15,6 +15,8 @@ public class MessageModel implements Serializable {
     private int chatId;
     private boolean isGroupMessage;
 
+    private StyleMessage styleMessage;
+
     public int getChatId() {
         return chatId;
     }
@@ -142,5 +144,13 @@ public class MessageModel implements Serializable {
                 ", senderId=" + senderId +
                 ", receiverId=" + receiverId +
                 '}';
+    }
+
+    public StyleMessage getStyleMessage() {
+        return styleMessage;
+    }
+
+    public void setStyleMessage(StyleMessage styleMessage) {
+        this.styleMessage = styleMessage;
     }
 }

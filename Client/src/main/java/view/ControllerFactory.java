@@ -17,6 +17,8 @@ public class ControllerFactory {
     private VoiceChatPopUpController voiceChatPopUpController;
     private SideNavBarController sideNavBarController;
 
+    private CustomizeController customizeController;
+
     public void setChatController(ChatController chatController) {
         this.chatController = chatController;
     }
@@ -106,5 +108,16 @@ public class ControllerFactory {
         }
         return notificationContextMenuController;
     }
+    public CustomizeController getCustomizeController() throws IOException {
+        if(customizeController==null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/customizeText.fxml"));
+            Parent parent= fxmlLoader.load();
+            customizeController = fxmlLoader.getController();
+        }
+        return customizeController;
+    }
 
+    public void setCustomizeController(CustomizeController customizeController) {
+        this.customizeController = customizeController;
+    }
 }

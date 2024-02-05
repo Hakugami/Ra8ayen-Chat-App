@@ -265,6 +265,13 @@ public class ChatController implements Initializable {
         }
         MessageModel messageModel = new MessageModel();
         messageModel.setSender(CurrentUser.getInstance());
+        try {
+            messageModel.setStyleMessage(Model.getInstance().getControllerFactory().getCustomizeController().getMessageStyle());
+            Model.getInstance().getControllerFactory().getCustomizeController().setNewStyle();
+            System.out.println("Message Style set from chat controller");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         if (uploadedFileBytes != null) {
             messageModel.setAttachment(true);
             messageModel.setAttachmentData(uploadedFileBytes);
@@ -272,6 +279,7 @@ public class ChatController implements Initializable {
         } else {
             messageModel.setMessageContent(message);
         }
+
         chatListView.getItems().add(messageModel);
         messageBox.clear();
 
@@ -351,7 +359,10 @@ public class ChatController implements Initializable {
                     protected Node call() throws Exception {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/MessageBubble.fxml"));
                         MessageBubbleController controller = new MessageBubbleController();
+                        if(item.getStyleMessage()!=null)
+                            System.out.println("Message Style arrive to update item");
                         controller.setMessage(item);
+
                         loader.setController(controller);
                         return loader.load();
                     }
@@ -619,18 +630,13 @@ public class ChatController implements Initializable {
         System.out.println(style);
         messageBox.setStyle(style);
     }
-    public void setColor(Color textColor){
-        messageBox.setStyle("-fx-text-fill: " + toHexCode(textColor) + ";");
-    }
-    private String toHexCode(Color color) {
-        return String.format("#%02X%02X%02X",
-                (int) (color.getRed() * 255),
-                (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255));
+    public void setColor(String textColor){
+        messageBox.setStyle("-fx-text-fill: " +textColor+ ";");
     }
 
-    public void setBackgroundColor(Color backgroundColor){
-        messageBox.setStyle("-fx-background-color: " + toHexCode(backgroundColor) + ";");
+
+    public void setBackgroundColor(String backgroundColor){
+        messageBox.setStyle("-fx-background-color: " +backgroundColor + ";");
     }
 
 }

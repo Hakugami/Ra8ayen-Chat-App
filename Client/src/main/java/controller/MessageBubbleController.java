@@ -14,8 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.text.*;
 import javafx.stage.FileChooser;
 import model.CurrentUser;
 import model.Model;
@@ -160,6 +159,7 @@ private void loadMessage() throws RemoteException {
         fileNameLabel.setGraphic(itemIcon);
         fileSizeLabel.setText(String.valueOf(message.getAttachmentData().length));
     }
+    setMessageStyle();
 }
     @FXML
     void openDownloadSelector() {
@@ -189,4 +189,35 @@ private void loadMessage() throws RemoteException {
             });
             t2.start();
         }
+
+      private void setMessageStyle(){
+          Font CustomFont;
+          String style;
+          FontWeight fw;
+          FontPosture fp;
+          int size;
+            if(message.getStyleMessage()!=null){
+                if(message.getStyleMessage().isBold()){
+                    fw= FontWeight.BOLD;
+                }else{
+                    fw = FontWeight.NORMAL;
+                }
+                if(message.getStyleMessage().isItalic()){
+                    fp= FontPosture.ITALIC;
+                }else{
+                    fp= FontPosture.REGULAR;
+                }
+                size = message.getStyleMessage().getFontSize();
+                CustomFont = Font.font("Arial",fw,fp,size);
+
+                messageLabel.setFont(CustomFont);
+                messageLabel.setStyle("-fx-text-fill: " +message.getStyleMessage().getFontColor()+ ";");
+                messageVBox.setStyle("-fx-background-color: " +message.getStyleMessage().getBackgroundColor()+ ";");
+            }
+          /*try {
+              Model.getInstance().getControllerFactory().getCustomizeController().setDefaultStyle();
+          } catch (IOException e) {
+              throw new RuntimeException(e);
+          }*/
+      }
 }
