@@ -26,6 +26,30 @@ public class MessageDaoImpl implements MessageDao {
         return false;
     }
 
+
+    public int saveAndReturnId(Message message) {
+    String query= "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment) VALUES(?,?,?,?,?)";
+    try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+         PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        createStatementForInsert(statement,message);
+        int affectedRows = statement.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Creating message failed, no rows affected.");
+        }
+
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Creating message failed, no ID obtained.");
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+    return -1;
+}
+
     @Override
     public List<Message> getChatMessages(int chatID) {
         String query = "SELECT * FROM Messages where  ReceiverID = ? ";

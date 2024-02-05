@@ -37,7 +37,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
     public SendMessageResponse sendMessage(SendMessageRequest request) throws RemoteException {
         SendMessageResponse response = new SendMessageResponse();
         try {
-            messageService.sendMessage(request);
+            int messageId= messageService.sendMessage(request);
             response.setSuccess(true);
             response.setError("Message sent successfully");
 
@@ -46,7 +46,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             System.out.println(phoneNumber);
             MessageModel messageModel = new MessageModel();
 
-            messageModel.setMessageId(request.getMessageId());
+            messageModel.setMessageId(messageId);
             messageModel.setChatId(request.getReceiverId());
             messageModel.setMessageContent(request.getMessageContent());
             if (request.getIsAttachment()) {

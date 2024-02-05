@@ -34,11 +34,12 @@ public class MessageService {
         this.attachmentDao = new AttachmentDaoImpl();
     }
 
-    public void sendMessage(SendMessageRequest request) {
+    public int sendMessage(SendMessageRequest request) {
         System.out.println("Attachment received : "+request.getIsAttachment());
+        int MessageID = -1;
         if(request.getIsAttachment()){
             Message message = MapMessageRequestToMessage(request);
-            int MessageID = messageDao.sendMessageWithAttachment(message);
+             MessageID = messageDao.sendMessageWithAttachment(message);
             if(MessageID !=-1){ //message Send Successfully send Attachment to Attachment Doa
                 System.out.println("Message Content Save successfully");
                 Attachment attachment = MapMessageRequestToAttachment(MessageID,request);
@@ -51,12 +52,9 @@ public class MessageService {
         }
         else {
             Message message = messageMapper.sendRequestToEntity(request);
-            if (messageDao.save(message)) {
-                System.out.println("Message saved successfully");
-            } else {
-                System.out.println("Failed to save message");
-            }
+          MessageID =  messageDao.saveAndReturnId(message);
         }
+        return MessageID;
     }
 
     public List<Message> getMessages(GetMessageRequest request) {

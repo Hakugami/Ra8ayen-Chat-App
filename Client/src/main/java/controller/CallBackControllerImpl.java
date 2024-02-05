@@ -68,18 +68,22 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     @Override
     public void receiveNewMessage(MessageModel message) throws RemoteException {
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
+                CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
                 Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         }
         else {
+            CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
             Platform.runLater(() -> Notifications.create().title("New Message").text(message.getSender().getUserName() + " sent you a new message.").showInformation());
         }
     }
     @Override
     public void receiveGroupChatMessage(MessageModel message) throws RemoteException {
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
+            CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
             Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
         }
         else {
+            CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
             Optional<Group> groupName = CurrentUser.getCurrentUser().getGroupList().stream().
                     filter(group -> group.getGroupId() == message.getChatId()).findFirst();
             groupName.ifPresent(group -> Platform.runLater(() -> Notifications.create().title("New Group Message").text(message.getSender().getUserName() + " sent a new message to " + group.getGroupName()).showInformation()));

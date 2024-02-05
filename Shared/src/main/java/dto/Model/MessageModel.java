@@ -3,6 +3,7 @@ package dto.Model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class MessageModel implements Serializable {
     private int MessageId;
@@ -130,6 +131,19 @@ public class MessageModel implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MessageModel that = (MessageModel) o;
+        return Objects.equals(MessageId, that.MessageId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(MessageId);
+    }
+
+    @Override
     public String toString() {
         return "MessageModel{" +
                 "MessageId=" + MessageId +
@@ -153,4 +167,6 @@ public class MessageModel implements Serializable {
     public void setStyleMessage(StyleMessage styleMessage) {
         this.styleMessage = styleMessage;
     }
+
+
 }

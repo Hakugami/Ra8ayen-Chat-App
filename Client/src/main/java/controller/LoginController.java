@@ -10,8 +10,7 @@ import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
 import dto.responses.LoginResponse;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -24,6 +23,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ContactData;
@@ -78,69 +78,20 @@ public class LoginController {
         passwordField.setTranslateX(200);
         loginButton.setTranslateX(200);
 
-        next.setOnAction(event -> {
+        next.setOnAction(this::checkPhoneNumberAnimation);
 
-            try {
-                if (NetworkFactory.getInstance().checkPhoneNumber(phoneNumberField.getText())) {
-                    // Create a TranslateTransition for the password label and password field
-                    TranslateTransition transition1 = new TranslateTransition(Duration.seconds(1), Password_lbl);
-                    TranslateTransition transition2 = new TranslateTransition(Duration.seconds(1), passwordField);
-                    TranslateTransition transition3 = new TranslateTransition(Duration.seconds(1), loginButton);
+        phoneNumberField.setOnAction(this::checkPhoneNumberAnimation);
 
-                    // Create a RotateTransition for the password label and password field
-                    RotateTransition rotateTransition1 = new RotateTransition(Duration.seconds(1), Password_lbl);
-                    RotateTransition rotateTransition2 = new RotateTransition(Duration.seconds(1), passwordField);
-                    RotateTransition rotateTransition3 = new RotateTransition(Duration.seconds(1), loginButton);
-
-                    // Set the end position (original position) for the animation
-                    transition1.setToX(0);
-                    transition2.setToX(0);
-                    transition3.setToX(0);
-
-                    // Set the rotation angle for the RotateTransition
-                    rotateTransition1.setToAngle(360);
-                    rotateTransition2.setToAngle(360);
-
-
-                    User_Name_lbl.setVisible(false);
-                    next.setVisible(false);
-                    phoneNumberField.setVisible(false);
-                    Password_lbl.setVisible(true);
-                    passwordField.setVisible(true);
-                    loginButton.setVisible(true);
-
-                    // Start the animations
-                    transition1.play();
-                    transition2.play();
-                    transition3.play();
-                    rotateTransition1.play();
-                    rotateTransition2.play();
-                    rotateTransition3.play();
-                } else {
-                    System.exit(0);
-                }
-            } catch (RemoteException | NotBoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        phoneNumberField.setOnAction(event -> {
-            try {
-                handleLoginButton(event);
-            } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
         passwordField.setOnAction(event -> {
             try {
-                handleLoginButton(event);
+                handleLoginButton();
             } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
                 throw new RuntimeException(e);
             }
         });
         loginButton.setOnAction(event -> {
             try {
-                handleLoginButton(event);
+                handleLoginButton();
             } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
                 throw new RuntimeException(e);
             }
@@ -174,7 +125,7 @@ public class LoginController {
     }
 
 
-    private void handleLoginButton(ActionEvent event) throws SQLException, ClassNotFoundException, RemoteException, NotBoundException {
+    private void handleLoginButton() throws SQLException, ClassNotFoundException, RemoteException, NotBoundException {
         Platform.runLater(() -> {
             try {
                 if (validateFields()) {
@@ -185,7 +136,6 @@ public class LoginController {
                     System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
                         retrieveData();
-                        ;
                         Stage currentStage = (Stage) loginButton.getScene().getWindow();
                         BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
                         currentStage.setScene(new Scene(mainArea));
@@ -199,6 +149,7 @@ public class LoginController {
                         new Logout().startHeartbeat();
                     } else {
                         System.err.println("Invalid fields1");
+                        shakeAnimation();
                     }
                 } else {
                     System.err.println("Invalid fields2");
@@ -211,6 +162,35 @@ public class LoginController {
             }
         });
     }
+
+ private void shakeAnimation(){
+    final int shakeDistance = 20; // Increase the shake distance
+    final int shakeCount = 4; // Increase the shake count
+    final int shakeDuration = 500;
+
+    Timeline shakeTimeline = new Timeline(new KeyFrame(Duration.millis(shakeDuration / (shakeCount * 2)),
+            new KeyValue(loginXml.translateXProperty(), shakeDistance, Interpolator.EASE_BOTH)));
+
+    for (int i = 1; i < shakeCount; i++) {
+        shakeTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(i * shakeDuration / shakeCount),
+                new KeyValue(loginXml.translateXProperty(), shakeDistance * (i % 2 == 0 ? 1 : -1), Interpolator.EASE_BOTH)));
+    }
+
+    shakeTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(shakeDuration),
+            new KeyValue(loginXml.translateXProperty(), 0, Interpolator.EASE_BOTH)));
+
+    // Create a flash animation (Timeline) for the password field
+    Timeline flashTimeline = new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;")),
+            new KeyFrame(Duration.millis(250), new KeyValue(passwordField.styleProperty(), "-fx-background-color: red;")),
+            new KeyFrame(Duration.millis(500), new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;"))
+    );
+    flashTimeline.setCycleCount(4);
+
+    // Play the animations
+    shakeTimeline.play();
+    flashTimeline.play();
+}
 
     private void retrieveData() {
         Task<Void> task = new Task<Void>() {
@@ -333,5 +313,51 @@ public class LoginController {
             return false;
         }
 
+    }
+
+    private void checkPhoneNumberAnimation(ActionEvent event) {
+
+        try {
+            if (NetworkFactory.getInstance().checkPhoneNumber(phoneNumberField.getText())) {
+                // Create a TranslateTransition for the password label and password field
+                TranslateTransition transition1 = new TranslateTransition(Duration.seconds(1), Password_lbl);
+                TranslateTransition transition2 = new TranslateTransition(Duration.seconds(1), passwordField);
+                TranslateTransition transition3 = new TranslateTransition(Duration.seconds(1), loginButton);
+
+                // Create a RotateTransition for the password label and password field
+                RotateTransition rotateTransition1 = new RotateTransition(Duration.seconds(1), Password_lbl);
+                RotateTransition rotateTransition2 = new RotateTransition(Duration.seconds(1), passwordField);
+                RotateTransition rotateTransition3 = new RotateTransition(Duration.seconds(1), loginButton);
+
+                // Set the end position (original position) for the animation
+                transition1.setToX(0);
+                transition2.setToX(0);
+                transition3.setToX(0);
+
+                // Set the rotation angle for the RotateTransition
+                rotateTransition1.setToAngle(360);
+                rotateTransition2.setToAngle(360);
+
+
+                User_Name_lbl.setVisible(false);
+                next.setVisible(false);
+                phoneNumberField.setVisible(false);
+                Password_lbl.setVisible(true);
+                passwordField.setVisible(true);
+                loginButton.setVisible(true);
+
+                // Start the animations
+                transition1.play();
+                transition2.play();
+                transition3.play();
+                rotateTransition1.play();
+                rotateTransition2.play();
+                rotateTransition3.play();
+            } else {
+                System.exit(0);
+            }
+        } catch (RemoteException | NotBoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
