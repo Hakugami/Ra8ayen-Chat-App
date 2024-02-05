@@ -7,12 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import model.Model;
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,9 +32,12 @@ public class SideNavBarController implements Initializable {
     private MenuItem themesMenuItem;
     @FXML
     private ContextMenu settingsContextMenu;
+    @FXML
+    private ToggleButton chatBotToggleButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Model.getInstance().getControllerFactory().setSideNavBarController(this);
         addListeners();
         // Add action listeners to the menu items
         profileMenuItem.setOnAction(event -> {
@@ -64,7 +66,7 @@ public class SideNavBarController implements Initializable {
                 double y = settings_btn.getScene().getWindow().getY() + settings_btn.getScene().getY() + settings_btn.getHeight() / 2;
                 popup.show(settings_btn.getScene().getWindow(), x, y+500);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Failed to load settings context menu");
             }
         });
         notificationButton.setOnAction(event -> {
@@ -79,12 +81,14 @@ public class SideNavBarController implements Initializable {
                 double y = notificationButton.getScene().getWindow().getY() + notificationButton.getScene().getY() + notificationButton.getHeight() / 2;
                 popup.show(notificationButton.getScene().getWindow(), x, y+500);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Failed to load notification context menu");
             }
         });
     }
 
-
+    public boolean isChatBotEnabled() {
+        return chatBotToggleButton.isSelected();
+    }
     private void addListeners (){
         contacts_btn.setOnAction(event -> onContactsClick());
         calls_btn.setOnAction(event -> onCallsClick());

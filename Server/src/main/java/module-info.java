@@ -13,6 +13,7 @@ module server {
     requires java.desktop;
     requires javax.mail;
     requires org.controlsfx.controls;
+    requires chatter.bot.api;
 
     opens server to javafx.fxml;
     exports server;

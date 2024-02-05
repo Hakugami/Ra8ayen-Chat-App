@@ -15,12 +15,19 @@ public class ControllerFactory {
     private MainWindowController mainWindowController;
     private NotificationContextMenuController notificationContextMenuController;
     private VoiceChatPopUpController voiceChatPopUpController;
+    private SideNavBarController sideNavBarController;
 
     public void setChatController(ChatController chatController) {
         this.chatController = chatController;
     }
     public void setVoiceChatPopUpController(VoiceChatPopUpController voiceChatPopUpController) {
         this.voiceChatPopUpController = voiceChatPopUpController;
+    }
+    public void setSideNavBarController(SideNavBarController sideNavBarController) {
+        this.sideNavBarController = sideNavBarController;
+    }
+    public boolean getSideNavBarControllerBot() {
+        return sideNavBarController.isChatBotEnabled();
     }
 
     public VoiceChatPopUpController getVoiceChatPopUpController() throws IOException {
