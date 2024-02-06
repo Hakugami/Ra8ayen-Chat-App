@@ -3,6 +3,7 @@ package application;
 import dto.Model.UserModel;
 import dto.requests.UpdateUserRequest;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import model.CurrentUser;
 import model.Model;
@@ -30,6 +31,9 @@ public class HelloApplication extends Application {
             NetworkFactory.getInstance().disconnect(CurrentUser.getCurrentUser().getPhoneNumber(), CurrentUser.getInstance().getCallBackController());
             UnicastRemoteObject.unexportObject(CurrentUser.getCurrentUser().getCallBackController(), true);
         }
+
+        Platform.exit();
+        System.exit(0);
     }
 
     private boolean makeUserOffline() {

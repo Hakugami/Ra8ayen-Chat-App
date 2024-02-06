@@ -2,6 +2,7 @@ package dto.Controller;
 
 import dto.Model.MessageModel;
 import dto.Model.NotificationModel;
+import dto.requests.AcceptFriendRequest;
 import dto.requests.FriendRequest;
 import dto.requests.SendVoicePacketRequest;
 import dto.requests.VoiceCallRequest;
@@ -25,6 +26,7 @@ public interface CallBackController extends Remote {
 
     public void respond() throws RemoteException;
     public void userIsOnline(String username) throws RemoteException;
+    public void updateNotificationList(AcceptFriendRequest notification) throws RemoteException;
     public void userIsOffline(String username) throws RemoteException;
     public void receiveNotification(NotificationModel notification) throws RemoteException;
     public void receiveNewMessage(MessageModel message) throws RemoteException;

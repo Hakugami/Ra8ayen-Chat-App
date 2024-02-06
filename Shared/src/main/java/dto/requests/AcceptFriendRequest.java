@@ -27,6 +27,9 @@ public class AcceptFriendRequest extends NotificationModel implements Serializab
         this.friendPhoneNumber = friendPhoneNumber;
     }
 
+    public AcceptFriendRequest() {
+        super();
+    }
     public int getUserID() {
         return userID;
     }

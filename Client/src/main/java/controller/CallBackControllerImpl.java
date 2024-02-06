@@ -99,6 +99,15 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     }
 
     @Override
+    public void updateNotificationList(AcceptFriendRequest notification) throws RemoteException {
+        NotificationManager.getInstance().removeNotification(notification);
+        Model.getInstance().getControllerFactory().getNotificationContextMenuController().removeUserFromList(notification.getUserModel());
+        Platform.runLater(()-> {
+            Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
+        });
+    }
+
+    @Override
     public void createNewChat(String senderPhoneNumber) throws RemoteException {
 
     }

@@ -57,16 +57,33 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     @Override
     public AddContactResponse addContact(AddContactRequest addContactRequest) throws RemoteException {
         AddContactResponse addContactResponse = new AddContactResponse();
-        boolean isDone = false;
         List<String> responses = new ArrayList<>();
         User currentUser = userService.getUserById(addContactRequest.getUserId());
         for(String phoneNumber : addContactRequest.getFriendsPhoneNumbers()) {
             User user = userService.getUserByPhoneNumber(phoneNumber);
             if(user != null) {
+                if(phoneNumber.equalsIgnoreCase(currentUser.getPhoneNumber())){
+                    responses.add("You can't add yourself");
+                    continue;
+                }
                 Notification notification = invitationMapper.addContactRequestToNotification(currentUser.getUserID(), user.getUserID());
                 if(invitationService.ReceiverMakeInviteBefore(notification)){
                     responses.add("Invitation has accepted " + phoneNumber);
-                    AcceptUserAsFriend(notification.getSenderId(),phoneNumber);
+                    int notificationID = invitationService.deleteNotificationBySenderAndReceiver(notification);
+                    ConcurrencyManager.getInstance().submitTask(() -> {
+                        try {
+                            AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest();
+                            acceptFriendRequest.setId(notificationID);
+                            acceptFriendRequest.setUserID(user.getUserID());
+                            acceptFriendRequest.setMyPhoneNumber(currentUser.getPhoneNumber());
+                            acceptFriendRequest.setFriendPhoneNumber(user.getPhoneNumber());
+                            acceptFriendRequest.setUserModel(userMapper.entityToModel(user));
+                            OnlineControllerImpl.clients.get(currentUser.getPhoneNumber()).updateNotificationList(acceptFriendRequest);
+                        } catch (RemoteException e) {
+                            System.out.println("Error in updating notification list");
+                        }
+                    });
+                    AcceptUserAsFriend(notification.getSenderId(), currentUser.getPhoneNumber(), phoneNumber);
                 }
                 else {
                     String myEmail = currentUser.getEmailAddress();
@@ -76,18 +93,19 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                             "You have a friend request from "
                                     + currentUser.getUserName() +
                                     " with phone number " + phoneNumber));
-                    isDone = invitationService.inviteContact(notification);
+                    int notificationID = invitationService.inviteContact(notification);
                     responses.add("Invitation has been sent to " + phoneNumber);
                     FriendRequest friendRequest = new FriendRequest();
                     friendRequest.setReceiverPhoneNumber(phoneNumber);
                     friendRequest.setSenderPhoneNumber(currentUser.getPhoneNumber());
                     friendRequest.setUserModel(userMapper.entityToModel(currentUser));
+                    friendRequest.setId(notificationID);
                     if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
                         ConcurrencyManager.getInstance().submitTask(() -> {
                             try {
                                 OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
                             } catch (RemoteException e) {
-                                System.out.println("Error sending notification to " + phoneNumber);
+                                addContactResponse.setDone(false);
                             }
                         });
                     }
@@ -97,7 +115,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                 responses.add(phoneNumber + "not found");
             }
         }
-        addContactResponse.setDone(isDone);
+        addContactResponse.setDone(true);
         addContactResponse.setResponses(responses);
         addContactResponse.setFriendsPhoneNumbers(addContactRequest.getFriendsPhoneNumbers());
 
@@ -109,7 +127,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         GetNotificationsResponse getNotificationsResponse = new GetNotificationsResponse();
         List<Notification> notifications = invitationService.getNotifications();
         notifications = notifications.stream()
-                .filter(notification -> notification.getReceiverId() != getNotificationsRequest.getUserID())
+                .filter(notification -> notification.getReceiverId() == getNotificationsRequest.getUserID())
                 .toList();
         List<Integer> senderIds = notifications.stream()
                 .map(Notification::getSenderId)
@@ -132,8 +150,11 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         return getNotificationsResponse;
     }
 
-    private void AcceptUserAsFriend(int UserID, String PhoneNumber){
-        AcceptFriendRequest acceptFriendRequest= new AcceptFriendRequest(UserID,PhoneNumber);
+    private void AcceptUserAsFriend(int UserID, String PhoneNumber, String friendPhoneNumber){
+        AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest();
+        acceptFriendRequest.setUserID(UserID);
+        acceptFriendRequest.setMyPhoneNumber(PhoneNumber);
+        acceptFriendRequest.setFriendPhoneNumber(friendPhoneNumber);
         try {
             contactService.acceptContact(acceptFriendRequest);
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {

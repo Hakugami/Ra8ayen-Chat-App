@@ -47,7 +47,6 @@ public class ServiceStartController implements Initializable {
             System.out.println(e.getMessage());
         }
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(NetworkManagerSingleton.getInstance().isServerRunning()) {

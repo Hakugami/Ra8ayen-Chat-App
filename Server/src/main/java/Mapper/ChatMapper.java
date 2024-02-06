@@ -33,7 +33,7 @@ public class ChatMapper {
     }
     public Chat chatFromAcceptFriendRequest(AcceptFriendRequest acceptFriendRequest){
         Chat chat = new Chat();
-        chat.setName(acceptFriendRequest.getUserModel().getUserName());
+        chat.setName("");
         return chat;
     }
 }
