@@ -3,12 +3,15 @@ package controller;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.MessageModel;
+import dto.Model.UserModel;
 import dto.requests.RetrieveAttachmentRequest;
 import dto.responses.RetrieveAttachmentResponse;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -18,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
@@ -71,6 +75,7 @@ public class MessageBubbleController implements Initializable {
 
     private volatile byte[]  uploadedFileBytes;
 
+
     FileChooser fileSaver;
 
     @Override
@@ -89,7 +94,39 @@ public class MessageBubbleController implements Initializable {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+
+        senderImage.setOnMouseClicked(event -> {
+            try {
+                showProfile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
+
+    public void showProfile() throws IOException {
+        Popup popup = new Popup();
+        UserModel user = message.getSender();
+        System.out.println("press show profile========="+user.getUserName());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/OthersProfile.fxml"));
+        Parent root = loader.load();
+        popup.getContent().add(root);
+        OthersProfileController controller = Model.getInstance().getControllerFactory().getOthersProfileController();
+        controller.setPopup(popup, user);
+        controller.setData();
+
+        popup.show(senderImage.getScene().getWindow());
+        //show the left of the chat window
+        double x = senderImage.localToScreen(senderImage.getBoundsInLocal()).getMinX() + senderImage.getFitWidth()/2;
+        double y = senderImage.localToScreen(senderImage.getBoundsInLocal()).getMinY() - popup.getHeight() + 10;
+
+        popup.show(senderImage.getScene().getWindow(), x, y);
+
+        popup.setAutoHide(true);
+
+
+    }
+
 
     public  void setMessage(MessageModel message) {
         this.message = message;

@@ -1,14 +1,24 @@
-.hbox-style Label {
-    -fx-background-color: rgba(246, 241, 238, 0.7); /* light gray with 70% opacity */
-    -fx-border-radius: 15; /* make the label rounder */
-    -fx-background-radius: 15; /* make the label rounder */
-    -fx-padding: 5px; /* Add padding */
-    -fx-cursor: hand; /* Change cursor to hand when hovering over the label */
-    /* align the text to the center */
-    -fx-alignment: center;
+/* CustomizeText.css */
 
+.hbox-style ToggleButton, .hbox-style Button {
+    /* Lighter background color */
+    -fx-background-color: rgb(246, 241, 238);
+
+    /* Button color */
+    -fx-text-fill: rgb(108, 95, 91);
+
+    /* Make the button round */
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+
+    /* Add some cool effects */
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+    -fx-cursor: hand; /* Change cursor to hand when hovering over the button */
+    -fx-alignment: center; /* align the text to the center */
 }
 
-.hbox-style Label:hover {
-    -fx-background-color: rgba(237, 125, 49, 0.7); /* Change color on hover */
+.hbox-style ToggleButton:hover, .hbox-style Button:hover {
+    /* Darker color on hover */
+    -fx-background-color: rgb(237, 125, 49);
 }

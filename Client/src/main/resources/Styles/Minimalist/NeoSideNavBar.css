@@ -1,0 +1,120 @@
+.main_menu_container {
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-alignment: center;
+}
+
+.left_container{
+    -fx-background-color: rgb(79, 74, 69);
+    -fx-border-color: rgb(108, 95, 91);
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgb(108, 95, 91), 5, 0, 0, 4);
+}
+
+.title_container{
+    -fx-alignment: top-center;
+    -fx-padding: 10;
+}
+
+.title_container FontAwesomeIconView{
+    -fx-fill: rgb(237, 125, 49);
+}
+
+.title_container Text{
+    -fx-fill: rgb(246, 241, 238);
+    -fx-font-size: 1.5em;
+}
+
+/* Navigation Menu */
+
+.menu_container {
+    -fx-alignment: top-center;
+}
+
+.menu_container Button{
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container Button:hover{
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container Button:pressed{
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container Button FontAwesomIconView{
+    -fx-fill: rgb(246, 241, 238);
+}
+
+.menu_container Button:hover FontAwesomIconView{
+    -fx-fill: rgb(79, 74, 69);
+}
+
+.menu_container Button:pressed FontAwesomIconView{
+    -fx-fill: rgb(79, 74, 69);
+}
+
+.menu_container ToggleButton{
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton:hover{
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton:pressed{
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton FontAwesomeIconView{
+    -fx-fill: black;
+}
+
+.menu_container ToggleButton:hover FontAwesomeIconView{
+    -fx-fill: rgb(79, 74, 69);
+}
+
+.menu_container ToggleButton:pressed FontAwesomeIconView{
+    -fx-fill: rgb(79, 74, 69);
+}
+
+.menu_container ToggleButton:selected FontAwesomeIconView{
+    -fx-fill: rgb(79, 74, 69);
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.user_icon_container{
+    -fx-alignment: bottom-center;
+    -fx-padding: 10;
+}

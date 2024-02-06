@@ -353,15 +353,7 @@ public class ChatController implements Initializable {
 
         request.setStyleMessage(messageModel.getStyleMessage());
 
-        UserModel userModel = new UserModel();
-        userModel.setProfilePicture(CurrentUser.getInstance().getProfilePicture());
-        userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
-        userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
-        userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
-        userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
-        userModel.setBio(CurrentUser.getCurrentUser().getBio());
-        userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
-        userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
+        UserModel userModel = getUserModel();
         request.setSenderId(CurrentUser.getInstance().getUserID());
         request.setSender(userModel);
 
@@ -393,6 +385,19 @@ public class ChatController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+
+    private static UserModel getUserModel() throws RemoteException {
+        UserModel userModel = new UserModel();
+        userModel.setProfilePicture(CurrentUser.getInstance().getProfilePicture());
+        userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
+        userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
+        userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
+        userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
+        userModel.setBio(CurrentUser.getCurrentUser().getBio());
+        userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
+        userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
+        return userModel;
     }
 
     class CustomListCell extends ListCell<MessageModel> {

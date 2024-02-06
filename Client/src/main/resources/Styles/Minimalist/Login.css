@@ -1,68 +1,98 @@
 .login_container{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 10;
-    -fx-border-color: #000000;
-    -fx-border-radius: 10;
+    -fx-spacing: 15;
+    -fx-padding: 0 20% 0 0; /* top right bottom left */
+    -fx-background-color: rgb(246, 241, 238); /* New color */
+    -fx-font:  11px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
 }
 
 .login_logo_container{
     -fx-alignment: center;
-    -fx-background-color: #000000;
+    -fx-background-color: rgb(79, 74, 69); /* New color */
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
 }
 
 .login_logo_container Text{
     -fx-font-size: 2em;
-    -fx-fill: #ffffff;
+    -fx-fill: rgb(108, 95, 91); /* New color */
 }
 
 .login_logo_container FontAwesomeIconView{
-    -fx-fill: #ECF39E;
+    -fx-fill: rgb(237, 125, 49); /* New color */
 }
 
-/* login form style */
+/* Rest of the CSS rules... */
 
 .login_form_container{
     -fx-spacing: 15;
-    -fx-alignment: top-left;
+    -fx-alignment: center;
 }
 
 .login_form_container Label{
     -fx-font-size: 1.1em;
     -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-margin-bottom: 10px; /* Add space below each label */
 }
 
 .input_field{
-    -fx-background-color: #ffffff;
+    -fx-background-color: #f2f2f2;
     -fx-background-radius: 5;
-    -fx-border-color: #000000;
+    -fx-border-color: #cccccc;
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each input field */
 }
 
 .login_form_container Button{
-    -fx-background-color: #000000;
+    -fx-background-color: #4CAF50;
     -fx-background-radius: 5;
-    -fx-border-color: #000000;
+    -fx-border-color: #4CAF50;
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
     -fx-text-fill: #ffffff;
-    -fx-pref-width: 350;
-    -fx-pref-height: 30;
 }
 
 .login_form_container Button:hover{
     -fx-background-color: #ffffff;
     -fx-background-radius: 5;
-    -fx-border-color: #000000;
+    -fx-border-color: #4CAF50;
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: #000000;
-    -fx-pref-width: 350;
-    -fx-pref-height: 30;
+    -fx-text-fill: #4CAF50;
     -fx-cursor: hand;
 }
 
 .error_lbl{
     -fx-font-size: 1.1em;
     -fx-text-fill: #ff0000;
+    -fx-margin-top: 20px; /* Add space above the error label */
+}
+
+#exitButton, #minimizeButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+}
+
+#exitButton:hover {
+    -fx-background-color: #ff0000; /* Red color on hover */
+    -fx-background-radius: 5;
+    -fx-border-color: #ff0000; /* Red border on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}
+
+#minimizeButton:hover {
+    -fx-background-color: #4d4d4d; /* Darker color on hover */
+    -fx-background-radius: 5;
+    -fx-border-color: #4d4d4d; /* Darker border on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
 }

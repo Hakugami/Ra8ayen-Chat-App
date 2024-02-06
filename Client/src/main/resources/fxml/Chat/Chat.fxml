@@ -79,7 +79,7 @@
          </center>
          <bottom>
             <VBox>
-               <HBox fx:id="customize" alignment="CENTER" prefHeight="39.0" prefWidth="900.0" styleClass="list_View" />
+               <HBox fx:id="customize" alignment="CENTER" prefHeight="66.0" prefWidth="900.0" styleClass="list_View" />
             <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="71.0" prefWidth="900.0" styleClass="hbox-style" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="messageBox" prefHeight="53.0" prefWidth="741.0" styleClass="send-message" HBox.hgrow="ALWAYS">

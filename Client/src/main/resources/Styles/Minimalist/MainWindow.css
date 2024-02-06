@@ -1,44 +1,42 @@
 .custom_title_bar {
-    -fx-background-color: #000000;
+    -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
     -fx-alignment: center-right;
     -fx-spacing: 10;
     -fx-border-radius: 50;
 }
 
 .window_button {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
+    -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
     -fx-border-radius: 20;
     -fx-font-size: 1.1em;
 }
 
 .window_button:hover {
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: rgb(79, 74, 69); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
 }
 
-.window_button:pressed {
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
+.add_button {
+    -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
+    -fx-shape: "M 50 0 A 50 50, 0, 1, 1, 50 -1 Z"; /* SVG path for a circle */
+    -fx-min-width: 50px; /* Ensure the button is large enough to be circular */
+    -fx-min-height: 50px; /* Ensure the button is large enough to be circular */
+    -fx-max-width: 50px; /* Limit the button size to maintain the circular shape */
+    -fx-max-height: 50px; /* Limit the button size to maintain the circular shape */
+    -fx-font-size: 1.1em;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1); /* Add shadow for depth */
 }
 
-.window_button:armed {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
+.add_button:hover {
+    -fx-background-color: rgb(79, 74, 69); /* Darker shade of gray */
+    -fx-text-fill: rgb(237, 125, 49);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1); /* Add shadow for depth */
 }
 
-.window_button:disabled {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
+.add_button FontAwesomeIconView {
+    -fx-font-size: 1.5em;
+    -fx-fill: rgb(237, 125, 49);
+    -fx-alignment: center;
 }
-
-.window_button:default {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-}
-
-.window_button:focused {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
-}
-

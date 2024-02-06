@@ -1,67 +1,113 @@
-.contacts_container{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 10;
-    -fx-border-color: #000000;
-
+.tree-view  {
+    -fx-background-color: rgb(246, 241, 238); /* light gray */
+}
+.tree-view .tree-cell {
+    -fx-background-color:rgb(246, 241, 238); /* light gray */
+}
+.tree-view .tree-cell:selected {
+    -fx-background-color: rgba(237, 125, 49, 0.4); /* orange */
+    -fx-text-fill: white;
+}
+.tree-view .tree-cell:filled:hover {
+    -fx-background-color: rgb(243, 215, 189); /* light gray */
+    -fx-text-fill: white;
+}
+.tree-view .scroll-bar {
+    -fx-opacity: 0;
 }
 
-.contacts_list_view{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
+.tree-view .scroll-bar .thumb {
+    -fx-background-color: transparent;
 }
 
-.contacts_list_view .list-cell{
-    -fx-padding: 10;
-    -fx-border-color: #000000;
-    -fx-border-width: 0 0 1 0;
+.tree-view .scroll-bar .track {
+    -fx-background-color: transparent;
 }
 
-.contacts_list_view .list-cell:empty{
-    -fx-border-width: 0;
+.tree-view .scroll-bar .thumb:horizontal:hover,
+.tree-view .scroll-bar .thumb:horizontal:pressed {
+    -fx-background-color: transparent;
 }
 
-.contacts_list_view .list-cell:selected{
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
+.tree-view .scroll-bar {
+    -fx-background-color: rgb(246, 241, 238);
 }
 
-.contacts_button{
-    -fx-background-color: #000000;
-    -fx-background-radius: 5;
-    -fx-border-color: #000000;
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
-    -fx-text-fill: #ffffff;
-    -fx-pref-width: 40;
-    -fx-pref-height: 30;
+/* Style the TextField */
+.TextField {
+    -fx-background-color: rgb(246, 241, 238);
+    -fx-border-color: rgb(108, 95, 91);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
 }
 
-.contacts_button:hover{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-    -fx-border-color: #000000;
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
-    -fx-text-fill: #000000;
-    -fx-pref-width: 40;
-    -fx-pref-height: 30;
-    -fx-cursor: hand;
+.anchor-pane {
+    -fx-background-color: rgb(246, 241, 238);
+    -fx-border-color: linear-gradient(to bottom, rgb(108, 95, 91), rgb(79, 74, 69)); /* gradient border */
+    -fx-border-width: 0 1px 0 0; /* top right bottom left */
 }
 
-.contacts_text_field{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-    -fx-border-color: #000000;
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
-    -fx-pref-width: 300;
-    -fx-pref-height: 30;
+/* Style the Label */
+.Label {
+    -fx-text-fill: rgb(79, 74, 69);
+    -fx-font-size: 14px;
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-font-weight: bold;
 }
 
-.contacts_text_field:focused{
-    -fx-border-color: #000000;
-    -fx-border-width: 2;
+/* Style the ImageView */
+.ImageView {
+    -fx-border-color: rgb(108, 95, 91);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+/* Style the Circle */
+/* Contacts.css */
+
+.Circle:hover {
+    -fx-stroke: rgb(237, 125, 49); /* Change the stroke color on hover */
+}
+
+/*!* Style the TreeView *!*/
+/*.TreeView {*/
+/*    -fx-background-color: rgb(246, 241, 238);*/
+/*}*/
+
+#myLabel {
+    -fx-text-fill: rgb(79, 74, 69);
+    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-font-weight: bold;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 25px;
+}
+
+/* Style for online status */
+.online-status{
+    -fx-fill: linear-gradient(to bottom, #4CAF50, #8BC34A); /* Green gradient for online */
+    -fx-stroke: linear-gradient(to bottom, #4CAF50, #8BC34A);
+    -fx-stroke-line-cap: round;
+}
+
+/* Style for offline status */
+.offline-status{
+    -fx-fill: linear-gradient(to bottom, #f44336, #e57373); /* Red gradient for offline */
+    -fx-stroke: linear-gradient(to bottom, #f44336, #e57373);
+    -fx-stroke-line-cap: round;
+}
+
+/* Style for away status */
+.away-status{
+    -fx-fill: linear-gradient(to bottom, #ff9800, #ffb74d); /* Orange gradient for away */
+    -fx-stroke: linear-gradient(to bottom, #ff9800, #ffb74d);
+    -fx-stroke-line-cap: round;
+}
+
+/* Style for busy status */
+.busy-status {
+    -fx-fill: linear-gradient(to bottom, #9c27b0, #ba68c8); /* Purple gradient for busy */
+    -fx-stroke: linear-gradient(to bottom, #9c27b0, #ba68c8);
+    -fx-stroke-line-cap: round;
 }
