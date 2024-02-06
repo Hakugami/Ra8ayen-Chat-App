@@ -4,9 +4,11 @@ import controller.soundUtils.AudioChat;
 import dto.Controller.CallBackController;
 import dto.Model.MessageModel;
 import dto.Model.NotificationModel;
+import dto.Model.UserModel;
 import dto.requests.*;
 import dto.responses.AcceptVoiceCallResponse;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import model.ContactData;
 import model.CurrentUser;
 import model.Group;
@@ -20,6 +22,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class CallBackControllerImpl extends UnicastRemoteObject implements CallBackController, Serializable {
@@ -100,9 +103,11 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void updateNotificationList(AcceptFriendRequest notification) throws RemoteException {
-        NotificationManager.getInstance().removeNotification(notification);
-        Model.getInstance().getControllerFactory().getNotificationContextMenuController().removeUserFromList(notification.getUserModel());
-        Platform.runLater(()-> {
+        List<NotificationModel> notifications = NotificationManager.getInstance().getNotifactionsList();
+        notifications.removeIf(n -> n.getId() == notification.getId());
+        ObservableList<UserModel> users = Model.getInstance().getControllerFactory().getNotificationContextMenuController().notificationListItems;
+        users.removeIf(u -> u.getPhoneNumber().equals(notification.getFriendPhoneNumber()));
+        Platform.runLater(() -> {
             Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
         });
     }

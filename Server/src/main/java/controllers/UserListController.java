@@ -1,5 +1,6 @@
 package controllers;
 
+import concurrency.manager.ConcurrencyManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +18,7 @@ import model.entities.UserTable;
 import org.controlsfx.control.Notifications;
 import service.UserService;
 import java.net.URL;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -41,7 +42,7 @@ public class UserListController implements Initializable {
         }
 
         usersTableView.getColumns().add(getIconColumn());
-        loadUsers();
+        ConcurrencyManager.getInstance().submitTask(this::loadUsers);
     }
 
     private TableColumn<User, Void> getIconColumn() {
@@ -105,7 +106,13 @@ public class UserListController implements Initializable {
     private void setUserProperty(User user, UserTable userTable, String newValue) {
         switch (userTable) {
             case UserID -> user.setUserID(Integer.parseInt(newValue));
-            case PhoneNumber -> user.setPhoneNumber(newValue);
+            case PhoneNumber -> {
+                if (newValue.length() != 11) {
+                    Notifications.create().title("Invalid").text("Invalid Input: Phone number should be 11 digits").showError();
+                } else {
+                    user.setPhoneNumber(newValue);
+                }
+            }
             case DisplayName -> user.setUserName(newValue);
             case EmailAddress -> user.setEmailAddress(newValue);
             case Gender -> {
@@ -116,7 +123,13 @@ public class UserListController implements Initializable {
                 }
             }
             case Country -> user.setCountry(newValue);
-            case DateOfBirth -> user.setDateOfBirth(Date.valueOf(newValue));
+            case DateOfBirth, LastLogin -> {
+                try {
+                    user.setLastLogin(Timestamp.valueOf(newValue).toString());
+                } catch (IllegalArgumentException e) {
+                    Notifications.create().title("Invalid").text("Invalid Input: Should be valid date format").showError();
+                }
+            }
             case Bio -> user.setBio(newValue);
             case UserStatus -> {
                 try {
@@ -132,20 +145,15 @@ public class UserListController implements Initializable {
                     Notifications.create().title("Invalid").text("Invalid Input: Write Away OR Busy OR Available").showError();
                 }
             }
-            case LastLogin -> user.setLastLogin(newValue);
         }
     }
 
-    private void loadUsers() {
+    public void loadUsers() {
         try {
             ObservableList<User> users = FXCollections.observableArrayList(userService.getAllUsers());
             usersTableView.setItems(users);
         } catch (Exception e) {
             System.out.println("An error occurred while loading the users.");
         }
-    }
-
-    public VBox getVBoxRoot() {
-        return vbRoot;
     }
 }
