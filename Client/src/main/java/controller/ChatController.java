@@ -1,6 +1,7 @@
 package controller;
 
 import dto.Model.MessageModel;
+import dto.Model.StyleMessage;
 import dto.Model.UserModel;
 import dto.requests.ChatBotRequest;
 import dto.requests.GetMessageRequest;
@@ -263,16 +264,23 @@ public class ChatController implements Initializable {
         System.out.println("Bot Message Arrive to Chat Controller");
         ChatBotRequest chatBotRequest = new ChatBotRequest(model.getMessageContent());
         try {
+            StyleMessage styleMessage = new StyleMessage();
+            styleMessage.setBold(true);
+            styleMessage.setItalic(false);
+            styleMessage.setUnderline(false);
+            styleMessage.setFontSize(16);
+            styleMessage.setFontStyle("Arial");
+            styleMessage.setFontColor("#000000");
+            styleMessage.setBackgroundColor("#ffffff");
             ChatBotResponse chatBotResponse = NetworkFactory.getInstance().chatBot(chatBotRequest);
             MessageModel messageModel = new MessageModel();
             messageModel.setMessageContent(chatBotResponse.getChatBotResponse());
             messageModel.setSender(CurrentUser.getInstance());
+            messageModel.setStyleMessage(styleMessage);
             chatListView.getItems().add(messageModel);
 
             SendMessageRequest request = new SendMessageRequest();
             request.setMessageContent(chatBotResponse.getChatBotResponse());
-
-            request.setStyleMessage(messageModel.getStyleMessage());
 
             UserModel userModel = new UserModel();
             userModel.setProfilePicture(CurrentUser.getInstance().getProfilePicture());
@@ -285,6 +293,7 @@ public class ChatController implements Initializable {
             userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
             request.setSenderId(CurrentUser.getInstance().getUserID());
             request.setSender(userModel);
+
 
 
             if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
@@ -311,6 +320,8 @@ public class ChatController implements Initializable {
 //            messageModel.getStyleMessage().setBackgroundColor("#ffffff");
 //            request.setStyleMessage(messageModel.getStyleMessage());
             request.setTime(LocalDateTime.now());
+
+            request.setStyleMessage(styleMessage);
 
             try {
                 //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
