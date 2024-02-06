@@ -11,6 +11,10 @@ import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NetworkManagerSingleton {
     private static NetworkManagerSingleton instance;
@@ -18,14 +22,38 @@ public class NetworkManagerSingleton {
     private static final int PORT = 2000;
     private boolean isServerRunning;
     private boolean isFirsTimeStart;
-
+    private List<Remote> stubs;
+    private Map<String, Remote> lookUpMap;
 
     private NetworkManagerSingleton() {
         try {
             registry = LocateRegistry.createRegistry(PORT);
             isServerRunning = false;
             isFirsTimeStart = true;
-        } catch (RemoteException e) {
+            stubs = Arrays.asList(
+                    OnlineControllerImpl.getInstance(),
+                    AuthenticationControllerSingleton.getInstance(),
+                    GroupChatControllerSingleton.getInstance(),
+                    InvitationControllerSingleton.getInstance(),
+                    MessageControllerSingleton.getInstance(),
+                    UserProfileControllerSingleton.getInstance(),
+                    ContactsControllerSingleton.getInstance(),
+                    TrackOnlineUsersService.getInstance(),
+                    SendHeartBeatService.getInstance(),
+                    VoiceChatControllerSingleton.getInstance()
+            );
+            lookUpMap = new HashMap<>();
+            lookUpMap.put(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());
+            lookUpMap.put(LookUpNames.AUTHENTICATIONCONTROLLER.name(), AuthenticationControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.GROUPCHATCONTROLLER.name(), GroupChatControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.INVITATIONCONTROLLER.name(), InvitationControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
+            lookUpMap.put(LookUpNames.VOICECHATCONTROLLER.name(), VoiceChatControllerSingleton.getInstance());
+            lookUpMap.put(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name(), SendHeartBeatService.getInstance());
+        } catch (RemoteException | MalformedURLException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -45,14 +73,18 @@ public class NetworkManagerSingleton {
     public void start() {
         try {
             if(!isFirsTimeStart) {
-                exportRemoteObjects();
+                for (Remote stub : stubs) {
+                    UnicastRemoteObject.exportObject(stub, PORT);
+                }
             }
             else {
                 isFirsTimeStart = false;
             }
-            registryBinding();
+            for (Map.Entry<String, Remote> entry : lookUpMap.entrySet()) {
+                registry.rebind(entry.getKey(), entry.getValue());
+            }
             setServerRunning(true);
-        } catch (RemoteException | MalformedURLException e) {
+        } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -70,35 +102,6 @@ public class NetworkManagerSingleton {
         } catch (RemoteException | NotBoundException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    private void registryBinding() throws RemoteException, MalformedURLException {
-        registry.rebind(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());
-        registry.rebind(LookUpNames.AUTHENTICATIONCONTROLLER.name(), AuthenticationControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.GROUPCHATCONTROLLER.name(), GroupChatControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.INVITATIONCONTROLLER.name(), InvitationControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.MESSAGECONTROLLER.name(), MessageControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.USERPROFILECONTROLLER.name(), UserProfileControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
-        registry.rebind(LookUpNames.VOICECHATCONTROLLER.name(), VoiceChatControllerSingleton.getInstance());
-        registry.rebind(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name(), SendHeartBeatService.getInstance());
-    }
-
-    private void exportRemoteObjects() throws RemoteException, MalformedURLException {
-        UnicastRemoteObject.exportObject(OnlineControllerImpl.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(AuthenticationControllerSingleton.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(GroupChatControllerSingleton.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(InvitationControllerSingleton.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(MessageControllerSingleton.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(UserProfileControllerSingleton.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(ContactsControllerSingleton.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(TrackOnlineUsersService.getInstance(), PORT);
-        UnicastRemoteObject.exportObject(SendHeartBeatService.getInstance(), PORT);
-    }
-
-    public Registry getRegistry() {
-        return registry;
     }
 }
 
