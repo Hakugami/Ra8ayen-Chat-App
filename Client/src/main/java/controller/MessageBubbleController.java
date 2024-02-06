@@ -195,8 +195,8 @@ void openDownloadSelector() throws NotBoundException, RemoteException {
         System.out.println("Open download selector");
         RetrieveAttachmentResponse retrieveAttachmentResponse = NetworkFactory.getInstance().retrieveAttachment(new RetrieveAttachmentRequest(message.getMessageId()));
         byte[] attachmentData = retrieveAttachmentResponse.getAttachmentData();
-        long totalBytes = attachmentData.length;
         if (attachmentData != null) {
+            long totalBytes = attachmentData.length;
             InputStream inputStream = new ByteArrayInputStream(attachmentData);
             fileSaver = new FileChooser();
             fileSaver.setTitle("Save File");

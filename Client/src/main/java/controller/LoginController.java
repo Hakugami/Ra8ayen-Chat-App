@@ -66,6 +66,7 @@ public class LoginController {
     @FXML
     public void initialize() {
         // Initially hide the password label and password field
+        Model.getInstance().getControllerFactory().setLoginController(this);
         String[] data = TokenManager.getInstance().loadData();
         if (data != null) {
             phoneNumberField.setText(data[1]);
@@ -160,6 +161,7 @@ public class LoginController {
                     //just to check result without any data : what happened when login button is clicked
                     //onlineUsersCount++;
                     //startTrackingOnlineUsers();
+                    shakeAnimation();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 System.out.println(e.getMessage());
@@ -196,7 +198,7 @@ public class LoginController {
         flashTimeline.play();
     }
 
-    private void retrieveData() {
+    public void retrieveData() {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {

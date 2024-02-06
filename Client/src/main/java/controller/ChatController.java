@@ -732,7 +732,7 @@ private void retrieveMessages(GetMessageRequest getMessageRequest) throws Remote
     }
 
     public void ChooseFileToSend() {
-        final long MAX_FILE_SIZE = 1024 * 1024; // 1 MB
+        final long MAX_FILE_SIZE = (1024 * 1024)*1000; // 1 MB x 1000
 
         AtomicReference<File> selectedFile = new AtomicReference<>();
         selectedFile.set(fileChooser.showOpenDialog(null));

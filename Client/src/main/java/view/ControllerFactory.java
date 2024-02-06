@@ -16,10 +16,27 @@ public class ControllerFactory {
     private NotificationContextMenuController notificationContextMenuController;
     private VoiceChatPopUpController voiceChatPopUpController;
     private SideNavBarController sideNavBarController;
+    private LoginController loginController;
 
 
     private CustomizeController customizeController;
 
+
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
+    }
+    public LoginController getLoginController() {
+        if (loginController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Login/Login.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                loginController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return loginController;
+    }
     public void setChatController(ChatController chatController) {
         this.chatController = chatController;
     }
@@ -45,7 +62,7 @@ public class ControllerFactory {
     public ChatController getChatController() {
         if (chatController == null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
                 Parent parent = fxmlLoader.load();
                 chatController = fxmlLoader.getController();
             } catch (IOException e) {
