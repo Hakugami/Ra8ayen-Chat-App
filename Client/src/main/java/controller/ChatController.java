@@ -841,6 +841,8 @@ private Task<Void> createDisplayTask(GetMessageRequest getMessageRequest) {
         messageBox.setStyle(existingStyle);
     }
     public void setFontFamily(String FontFamily){
+        System.out.println(FontFamily);
+
         Font font = Font.font(FontFamily);
         messageBox.setFont(font);
     }

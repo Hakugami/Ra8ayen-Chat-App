@@ -185,6 +185,7 @@ public class MessageDaoImpl implements MessageDao {
     message.setBold(resultSet.getBoolean(MessageTable.IsBold.name));
     message.setItalic(resultSet.getBoolean(MessageTable.IsItalic.name));
     message.setUnderline(resultSet.getBoolean(MessageTable.IsUnderline.name));
+    message.setFontStyle(resultSet.getString(MessageTable.FontStyle.name));
     return message;
 }
 

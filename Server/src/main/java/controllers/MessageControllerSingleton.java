@@ -107,6 +107,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             //   List<MessageModel> messageModels = new ArrayList<>();
 
             for (int i = 0; i < messages.size(); i++) {
+
                 StyleMessage styleMessage = new StyleMessage();
                 styleMessage.setBackgroundColor(messages.get(i).getTextBackground());
                 styleMessage.setFontStyle(messages.get(i).getFontStyle());
@@ -115,6 +116,8 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
                 styleMessage.setFontSize(messages.get(i).getFontSize());
                 styleMessage.setItalic(messages.get(i).isItalic());
                 styleMessage.setUnderline(messages.get(i).isUnderline());
+                styleMessage.setFontStyle(messages.get(i).getFontStyle());
+
                 System.out.println(messages.get(i).getTextBackground()+"-------------------------------------------------------------------------------------------------------------");
                 messageModels.get(i).setStyleMessage(styleMessage);
                 messageModels.get(i).setAttachment(messages.get(i).getIsAttachment());

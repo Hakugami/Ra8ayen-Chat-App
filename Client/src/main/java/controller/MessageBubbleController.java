@@ -284,10 +284,11 @@ void openDownloadSelector() throws NotBoundException, RemoteException {
                     messageLabel.setStyle(style);
                 }
                 size = message.getStyleMessage().getFontSize();
-                CustomFont = Font.font("Arial",fw,fp,size);
+                CustomFont = Font.font(message.getStyleMessage().getFontStyle(),fw,fp,size);
                 System.out.println(fw + " " + fp + " " + size + " " + style+ "=------------------------------------------------------" );
-                messageLabel.setFont(CustomFont);
                 messageLabel.setStyle("-fx-text-fill: " +message.getStyleMessage().getFontColor()+ ";");
+                messageLabel.setFont(CustomFont);
+
                 messageVBox.setStyle("-fx-background-color: " +message.getStyleMessage().getBackgroundColor()+ ";");
                 }
             }

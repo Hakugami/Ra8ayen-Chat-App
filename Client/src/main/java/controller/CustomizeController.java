@@ -6,8 +6,10 @@ import dto.Model.StyleMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -20,22 +22,22 @@ import java.io.IOException;
 
 public class CustomizeController {
     @FXML
-    Label italic;
+    ToggleButton italic;
     @FXML
-    Label bold;
+    ToggleButton bold;
     @FXML
-    Label colorFont;
+    Button colorFont;
     @FXML
-    Label sizeIncrease;
+    Button sizeIncrease;
     @FXML
-    Label sizeDecrease;
+    Button sizeDecrease;
     @FXML
-    Label underline;
+    ToggleButton underline;
     @FXML
-    Label backgroundColor;
+    Button backgroundColor;
 
     @FXML
-    Label fontFamily;
+    Button fontFamily;
     Popup colorPickerPopup;
 
     Popup colorGroundPickerPopup;
@@ -224,6 +226,7 @@ public class CustomizeController {
         styleMessage1.setUnderline(styleMessage.isUnderline());
         styleMessage1.setFontSize(styleMessage.getFontSize());
         styleMessage1.setBackgroundColor(styleMessage.getBackgroundColor());
+        styleMessage1.setFontStyle(styleMessage.getFontStyle());
         return styleMessage1;
     }
 
@@ -247,6 +250,7 @@ public class CustomizeController {
         iconMinus.setSize("1em");
         iconFontFamily.setSize("1em");
         // Set the graphic of the Label to the FontAwesome icon
+
         italic.setGraphic(iconItalic);
         bold.setGraphic(iconBold);
         sizeIncrease.setGraphic(iconPlus);
@@ -271,6 +275,7 @@ public class CustomizeController {
     }
     public void setStyle(String style){
         System.out.println("Style has been Arrived " +style);
+        styleMessage.setFontStyle(style);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
