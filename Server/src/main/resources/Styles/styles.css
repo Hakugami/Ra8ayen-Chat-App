@@ -1,14 +1,14 @@
 #sidebar {
-    -fx-background-color: #f58c32;
+    -fx-background-color: #6C5F5B;
 }
 
 #sidebarButtons{
-    -fx-background-color: #f58c32;
+    -fx-background-color: #6C5F5B;
     -fx-text-fill: #ffffff;
 }
 
 #sidebarButtons:hover {
-    -fx-background-color: #e47624;
+    -fx-background-color: #5B514D;
 }
 
 #subScene {
