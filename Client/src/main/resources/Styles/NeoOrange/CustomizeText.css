@@ -22,3 +22,13 @@
     /* Darker color on hover */
     -fx-background-color: rgb(237, 125, 49);
 }
+
+.hbox-style ToggleButton:pressed, .hbox-style Button:pressed {
+    /* Even darker color when pressed */
+    -fx-background-color: rgb(108, 95, 91);
+}
+
+.hbox-style ToggleButton:selected {
+    /* Darker color when selected */
+    -fx-background-color: rgb(108, 95, 91);
+}

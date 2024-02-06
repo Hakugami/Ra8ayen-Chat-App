@@ -8,7 +8,8 @@
     /* Add a border */
     -fx-border-color: rgb(237, 125, 49);
     -fx-border-width: 2px;
-
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
     /* Add a drop shadow for 3D effect */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);
 
@@ -21,6 +22,8 @@
     /* Background color */
     -fx-background-color: rgb(246, 241, 238);
     /* Add a border */
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
     -fx-border-color: rgb(237, 125, 49);
     -fx-border-width: 2px;
 
@@ -44,6 +47,11 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);
+}
+
+.button:hover {
+    /* Darker color on hover */
+    -fx-background-color: rgb(108, 95, 91);
 }
 
 .label {
@@ -79,4 +87,9 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 1);
+}
+
+#exitButton:hover {
+    /* Darker color on hover */
+    -fx-background-color: rgb(108, 95, 91);
 }

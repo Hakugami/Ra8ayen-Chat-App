@@ -1,8 +1,14 @@
+.main_window {
+    -fx-background-color: rgb(79, 74, 69); /* Darker shade of gray */
+    -fx-background-radius: 1000px;
+    -fx-border-radius: 1000px;
+}
 .custom_title_bar {
     -fx-background-color: rgb(108, 95, 91); /* Darker shade of gray */
     -fx-alignment: center-right;
     -fx-spacing: 10;
     -fx-border-radius: 50;
+
 }
 
 .window_button {

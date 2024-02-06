@@ -11,18 +11,19 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="572.0" prefWidth="200.0" stylesheets="@../../Styles/NeoOrange/OthersProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OthersProfileController">
-   <VBox layoutX="15.0" layoutY="48.0" prefHeight="524.0" prefWidth="200.0" styleClass="container_vbox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="200.0" stylesheets="@../../Styles/NeoOrange/OthersProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OthersProfileController">
+   <VBox layoutY="-2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="200.0" styleClass="container_vbox">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
          <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="41.0" prefWidth="200.0">
             <Button fx:id="exitButton" mnemonicParsing="false" text="X">
                <HBox.margin>
-                  <Insets right="5.0" />
+                  <Insets bottom="5.0" right="5.0" />
                </HBox.margin></Button>
          </HBox>
          <Pane prefHeight="200.0" prefWidth="200.0">
-            <Circle fx:id="profileCircle" layoutX="88.0" layoutY="50.0" radius="49.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+            <Circle fx:id="profileCircle" layoutX="88.0" layoutY="48.0" radius="49.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
                <fill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -56,7 +57,7 @@
                   </LinearGradient>
                </stroke>
             </Circle>
-            <Circle fx:id="statusCircle" layoutX="121.0" layoutY="87.0" radius="15.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+            <Circle fx:id="statusCircle" layoutX="121.0" layoutY="83.0" radius="15.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
                <fill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -91,14 +92,23 @@
                </stroke>
             </Circle>
          </Pane>
-         <Label fx:id="name" text="Name" />
+         <Label fx:id="name" text="Name">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin></Label>
          <Label fx:id="lastLogin" text="Last Login" />
       </VBox>
-      <VBox alignment="CENTER" prefHeight="247.0" prefWidth="200.0">
+      <VBox alignment="CENTER" prefHeight="250.0" prefWidth="200.0">
+         <Label text="Bio" />
+         <Label fx:id="bio" alignment="CENTER" prefHeight="26.0" prefWidth="200.0" text="Test bio" wrapText="true" />
          <Label text="Phone number" />
-         <Label fx:id="phoneNumber" text="0101" />
+         <Label fx:id="phoneNumber" alignment="CENTER" prefWidth="200.0" text="0101" />
          <Label text="Email" />
-         <Label fx:id="email" text="test@test.com" />
+         <TextFlow textAlignment="CENTER">
+            <children>
+               <Label fx:id="email" alignment="CENTER" prefHeight="30.0" prefWidth="177.0" text="test@test.com" textAlignment="CENTER" wrapText="true" />
+            </children>
+         </TextFlow>
          <Label text="Gender" />
          <Label fx:id="gender" text="M" />
          <Label text="Country" />

@@ -43,6 +43,7 @@ public class OthersProfileController implements Initializable {
     public  UserModel otherUserModel;
 
     public static Popup otherProfilePopup;
+    public Label bio;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -102,6 +103,7 @@ public class OthersProfileController implements Initializable {
         gender.setText(otherUserModel.getGender().name());
         country.setText(otherUserModel.getCountry());
         dateOfBirth.setText(String.valueOf(otherUserModel.getDateOfBirth()));
+        bio.setText(otherUserModel.getBio());
         BufferedImage bufferedImage = ImageUtls.convertByteToImage(otherUserModel.getProfilePicture());
         Image image = SwingFXUtils.toFXImage(bufferedImage, null);
         profileCircle.setFill(new ImagePattern(image));
