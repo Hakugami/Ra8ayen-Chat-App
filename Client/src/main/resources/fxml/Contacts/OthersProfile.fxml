@@ -13,116 +13,93 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="200.0" stylesheets="@../../Styles/NeoOrange/OthersProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OthersProfileController">
-   <VBox layoutY="-2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="200.0" styleClass="container_vbox">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../Styles/NeoOrange/OthersProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OthersProfileController">
+   <VBox alignment="CENTER" layoutY="-2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" styleClass="container_vbox">
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
          <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="41.0" prefWidth="200.0">
-            <Button fx:id="exitButton" mnemonicParsing="false" text="X">
+            <Button fx:id="exitButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" text="X">
                <HBox.margin>
                   <Insets bottom="5.0" right="5.0" />
                </HBox.margin></Button>
          </HBox>
-         <Pane prefHeight="200.0" prefWidth="200.0">
-            <Circle fx:id="profileCircle" layoutX="88.0" layoutY="48.0" radius="49.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
-               <fill>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.7065314054489136" green="0.7799999713897705" blue="0.06239999830722809" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </fill>
-               <stroke>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Circle>
-            <Circle fx:id="statusCircle" layoutX="121.0" layoutY="83.0" radius="15.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
-               <fill>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.34200000762939453" green="0.7599999904632568" blue="0.3569285571575165" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </fill>
-               <stroke>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.5725613236427307" green="0.6578947305679321" blue="0.533016562461853" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Circle>
-         </Pane>
+         <Circle fx:id="profileCircle" radius="39.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+            <fill>
+               <LinearGradient endX="1.0" endY="1.0">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color red="0.7065314054489136" green="0.7799999713897705" blue="0.06239999830722809" />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="1.0" green="1.0" blue="1.0" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </LinearGradient>
+            </fill>
+            <stroke>
+               <LinearGradient endX="1.0" endY="1.0">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="1.0" green="1.0" blue="1.0" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </LinearGradient>
+            </stroke>
+         </Circle>
+         <Pane prefHeight="33.0" prefWidth="376.0" />
          <Label fx:id="name" text="Name">
             <VBox.margin>
                <Insets top="10.0" />
             </VBox.margin></Label>
-         <Label fx:id="lastLogin" text="Last Login" />
+         <Label fx:id="lastLogin" text="Last Login">
+            <VBox.margin>
+               <Insets bottom="2.0" />
+            </VBox.margin>
+         </Label>
       </VBox>
-      <VBox alignment="CENTER" prefHeight="250.0" prefWidth="200.0">
-         <Label text="Bio" />
-         <Label fx:id="bio" alignment="CENTER" prefHeight="26.0" prefWidth="200.0" text="Test bio" wrapText="true" />
-         <Label text="Phone number" />
-         <Label fx:id="phoneNumber" alignment="CENTER" prefWidth="200.0" text="0101" />
-         <Label text="Email" />
-         <TextFlow textAlignment="CENTER">
-            <children>
-               <Label fx:id="email" alignment="CENTER" prefHeight="30.0" prefWidth="177.0" text="test@test.com" textAlignment="CENTER" wrapText="true" />
-            </children>
-         </TextFlow>
-         <Label text="Gender" />
-         <Label fx:id="gender" text="M" />
-         <Label text="Country" />
-         <Label fx:id="country" text="Default Country" />
-         <Label text="Date of Birth" />
-         <Label fx:id="dateOfBirth" text="10/10/10" />
-      </VBox>
+      <HBox alignment="CENTER" minWidth="-Infinity" prefHeight="140.0" prefWidth="400.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="140.0" prefWidth="200.0">
+               <Label text="Bio:" />
+               <Label fx:id="bio" alignment="CENTER" prefHeight="26.0" prefWidth="200.0" text="Test bio" wrapText="true" />
+               <Label text="Country:" />
+               <Label fx:id="country" text="Default Country" />
+               <Label text="Date of Birth:" />
+               <Label fx:id="dateOfBirth" text="10/10/10" />
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0">
+               <children>
+                  <Label text="Phone number:" />
+                  <Label fx:id="phoneNumber" alignment="CENTER" prefWidth="200.0" text="0101" />
+                  <Label text="Email:" />
+                  <TextFlow textAlignment="CENTER">
+                     <children>
+                        <Label fx:id="email" alignment="CENTER" minWidth="-Infinity" prefHeight="26.0" prefWidth="150.0" text="test@test.com" textAlignment="CENTER" wrapText="true" />
+                     </children>
+                  </TextFlow>
+                  <Label text="Gender:" />
+                  <Label fx:id="gender" text="M" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <Button fx:id="addButton" mnemonicParsing="false" text="Add">
+         <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" text="Add">
             <HBox.margin>
                <Insets right="5.0" />
             </HBox.margin>
          </Button>
-         <Button fx:id="blockButton" mnemonicParsing="false" text="Block" />
+         <Button fx:id="blockButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" text="Block" />
       </HBox>
    </VBox>
 </AnchorPane>

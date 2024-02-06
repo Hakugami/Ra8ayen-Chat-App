@@ -260,6 +260,7 @@ public class ChatController implements Initializable {
     }
 
     public void botSendMessage(MessageModel model) {
+        System.out.println("Bot Message Arrive to Chat Controller");
         ChatBotRequest chatBotRequest = new ChatBotRequest(model.getMessageContent());
         try {
             ChatBotResponse chatBotResponse = NetworkFactory.getInstance().chatBot(chatBotRequest);
@@ -301,6 +302,14 @@ public class ChatController implements Initializable {
                 request.setIsAttachment(true);
                 request.setAttachmentData(uploadedFileBytes);
             }
+//            messageModel.getStyleMessage().setBold(false);
+//            messageModel.getStyleMessage().setItalic(false);
+//            messageModel.getStyleMessage().setUnderline(false);
+//            messageModel.getStyleMessage().setFontSize(16);
+//            messageModel.getStyleMessage().setFontStyle("Arial");
+//            messageModel.getStyleMessage().setFontColor("#000000");
+//            messageModel.getStyleMessage().setBackgroundColor("#ffffff");
+//            request.setStyleMessage(messageModel.getStyleMessage());
             request.setTime(LocalDateTime.now());
 
             try {
