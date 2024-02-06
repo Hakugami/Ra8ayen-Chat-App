@@ -190,7 +190,7 @@ public class MessageDaoImpl implements MessageDao {
 
     public int sendMessageWithAttachment(Message message) {
         ResultSet generatedKeys = null;
-        String query = "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment) VALUES(?,?,?,?,?)";
+        String query = "INSERT INTO Messages(SenderID, ReceiverID, MessageContent,MessageTimestamp,IsAttachment, FontStyle, FontColor, TextBackground, FontSize, IsBold, IsItalic, IsUnderline) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             createStatementForInsert(statement, message);

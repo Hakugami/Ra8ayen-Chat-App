@@ -6,9 +6,11 @@ import dto.Model.MessageModel;
 import dto.Model.StyleMessage;
 import dto.requests.ChatBotRequest;
 import dto.requests.GetMessageRequest;
+import dto.requests.RetrieveAttachmentRequest;
 import dto.requests.SendMessageRequest;
 import dto.responses.ChatBotResponse;
 import dto.responses.GetMessageResponse;
+import dto.responses.RetrieveAttachmentResponse;
 import dto.responses.SendMessageResponse;
 import model.entities.Message;
 import service.ChatBotService;
@@ -59,7 +61,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             messageModel.setMessageContent(request.getMessageContent());
             if (request.getIsAttachment()) {
                 messageModel.setAttachment(true);
-                messageModel.setAttachmentData(request.getAttachmentData());
+//                messageModel.setAttachmentData(request.getAttachmentData());
             } else {
                 messageModel.setAttachment(false);
             }
@@ -116,7 +118,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
                 System.out.println(messages.get(i).getTextBackground()+"-------------------------------------------------------------------------------------------------------------");
                 messageModels.get(i).setStyleMessage(styleMessage);
                 messageModels.get(i).setAttachment(messages.get(i).getIsAttachment());
-                messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
+//                messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
                 System.out.println(styleMessage+"-------------------------------------------------------------------------------------------------------------");
                 if (messageModels.get(i).isAttachment()) {
                     System.out.println("Attatch Size From Server " + messageModels.get(i).getAttachmentData().length);
@@ -144,6 +146,22 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
             chatBotResponse.setSuccess(false);
         }
         return chatBotResponse;
+    }
+
+    @Override
+    public RetrieveAttachmentResponse retrieveAttachment(RetrieveAttachmentRequest request) throws RemoteException {
+        RetrieveAttachmentResponse response = new RetrieveAttachmentResponse();
+        response.setMessageId(request.getMessageId());
+        System.out.println("Message ID: " + request.getMessageId() + " Attachment ID: " + request.getAttachmentId());
+        try {
+            response.setAttachmentData(messageService.getAttachment(request).getAttachment());
+            response.setSuccess(true);
+            response.setError("Attachment retrieved successfully");
+        } catch (Exception e) {
+            response.setSuccess(false);
+            response.setError("Failed to retrieve attachment: " + e.getMessage());
+        }
+        return response;
     }
 
 }

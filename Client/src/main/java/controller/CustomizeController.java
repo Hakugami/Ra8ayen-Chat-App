@@ -239,5 +239,38 @@ public class CustomizeController {
 
     }
 
+    //set a default style via the css
+    /*
+
+    .receiver-bubble {
+
+     -fx-background-color: rgb(108, 95, 91);
+ -fx-background-radius: 15 0 15 15;
+}
+
+.sender-info {
+
+}
+
+.messageContent {
+    -fx-text-fill: rgb(79, 74, 69);
+}
+
+.timestamp {
+    -fx-text-fill: rgb(246, 241, 238);
+}
+
+     */
+    public StyleMessage getDefaultStyle(){
+        styleMessage.setFontColor("#000000");
+        styleMessage.setBackgroundColor("#6C5F5B");
+        styleMessage.setFontSize(16);
+        styleMessage.setBold(true);
+        styleMessage.setItalic(false);
+        styleMessage.setUnderline(false);
+        return styleMessage;
+    }
+
+
 }
 

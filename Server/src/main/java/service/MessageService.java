@@ -8,6 +8,7 @@ import dao.impl.ChatParticipantsDaoImpl;
 import dao.impl.MessageDaoImpl;
 import dao.impl.UserDaoImpl;
 import dto.requests.GetMessageRequest;
+import dto.requests.RetrieveAttachmentRequest;
 import dto.requests.SendMessageRequest;
 import model.entities.Attachment;
 import model.entities.ChatParticipant;
@@ -39,6 +40,7 @@ public class MessageService {
         int MessageID = -1;
         if(request.getIsAttachment()){
             Message message = MapMessageRequestToMessage(request);
+            System.out.println(message.getAttachmentData().length+" From Message Service");
              MessageID = messageDao.sendMessageWithAttachment(message);
             if(MessageID !=-1){ //message Send Successfully send Attachment to Attachment Doa
                 System.out.println("Message Content Save successfully");
@@ -74,12 +76,17 @@ public class MessageService {
                 if(attachment!=null){
                     checkMessage.setIsAttachment(true);
                  //   System.out.println("From Message Service "+attachment.getAttachment().length);
-                    checkMessage.setAttachmentData(attachment.getAttachment());
+//                    checkMessage.setAttachmentData(attachment.getAttachment());
+                    checkMessage.setAttachmentData(new byte[0]);
                 }else{
                     checkMessage.setIsAttachment(false);
                 }
             }
         return messageListWithoutAttachment;
+    }
+
+    public Attachment getAttachment(RetrieveAttachmentRequest request){
+        return attachmentDao.get(request.getMessageId());
     }
 
     public MessageMapper getMessageMapper() {

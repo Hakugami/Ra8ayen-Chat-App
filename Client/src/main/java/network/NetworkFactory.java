@@ -169,5 +169,10 @@ public class NetworkFactory {
         return controller.getNotifications(request);
     }
 
+    public RetrieveAttachmentResponse retrieveAttachment(RetrieveAttachmentRequest request) throws RemoteException, NotBoundException {
+        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+        return controller.retrieveAttachment(request);
+    }
+
 
 }

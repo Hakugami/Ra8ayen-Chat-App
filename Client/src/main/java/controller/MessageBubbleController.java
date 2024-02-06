@@ -3,6 +3,8 @@ package controller;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.MessageModel;
+import dto.requests.RetrieveAttachmentRequest;
+import dto.responses.RetrieveAttachmentResponse;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -18,15 +20,18 @@ import javafx.scene.text.*;
 import javafx.stage.FileChooser;
 import model.CurrentUser;
 import model.Model;
+import network.NetworkFactory;
 import utils.ImageUtls;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class MessageBubbleController implements Initializable {
@@ -152,33 +157,81 @@ private void loadMessage() throws RemoteException {
     senderNameLabel.setText(message.getSender().getUserName());
     senderPhoneLabel.setText(message.getSender().getPhoneNumber());
     if (message.getTime() != null) {
-        messageTimeLabel.setText(message.getTime().toString());
+//        messageTimeLabel.setText(message.getTime().toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String time = message.getTime().format(formatter);
+        messageTimeLabel.setText(time);
+
     } else {
         messageTimeLabel.setText(""); // or set a default value
     }
 
     // If the message has an attachment, set the file icon and file size
-    if (message.isAttachment() && message.getAttachmentData() != null) {
+    if (message.isAttachment()) {
         fileIconImageView.setVisible(true);
-        fileSizeLabel.setText(String.valueOf(message.getAttachmentData().length));
     }
     setMessageStyle();
 }
-    @FXML
-    void openDownloadSelector() {
-        if (message.isAttachment()) {
-            if (message.getAttachmentData() != null) {
-                fileSaver = new FileChooser();
-                fileSaver.setTitle("Save File");
-                fileSaver.setInitialFileName(message.getMessageContent());
-                File fileToSave = fileSaver.showSaveDialog(null);
-                if (fileToSave != null) {
-                    saveFile(fileToSave);
-                }
+//    @FXML
+//    void openDownloadSelector() throws NotBoundException, RemoteException {
+//        if (message.isAttachment()) {
+//            RetrieveAttachmentResponse retrieveAttachmentResponse = NetworkFactory.getInstance().retrieveAttachment(new RetrieveAttachmentRequest(message.getMessageId()));
+//            message.setAttachmentData(retrieveAttachmentResponse.getAttachmentData());
+//            if (message.getAttachmentData() != null) {
+//                fileSaver = new FileChooser();
+//                fileSaver.setTitle("Save File");
+//                fileSaver.setInitialFileName(message.getMessageContent());
+//                File fileToSave = fileSaver.showSaveDialog(null);
+//                if (fileToSave != null) {
+//                    saveFile(fileToSave);
+//                }
+//
+//            }
+//        }
+//    }
+@FXML
+void openDownloadSelector() throws NotBoundException, RemoteException {
+    if (message.isAttachment()) {
+        System.out.println("Open download selector");
+        RetrieveAttachmentResponse retrieveAttachmentResponse = NetworkFactory.getInstance().retrieveAttachment(new RetrieveAttachmentRequest(message.getMessageId()));
+        byte[] attachmentData = retrieveAttachmentResponse.getAttachmentData();
+        long totalBytes = attachmentData.length;
+        if (attachmentData != null) {
+            InputStream inputStream = new ByteArrayInputStream(attachmentData);
+            fileSaver = new FileChooser();
+            fileSaver.setTitle("Save File");
+            fileSaver.setInitialFileName(message.getMessageContent());
+            File fileToSave = fileSaver.showSaveDialog(null);
 
+            if (fileToSave != null) {
+                fileNameLabel.setVisible(false);
+                Thread downloadThread = new Thread(() -> {
+                    try (FileOutputStream out = new FileOutputStream(fileToSave)) {
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        long totalBytesRead = 0;
+
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            out.write(buffer, 0, bytesRead);
+                            totalBytesRead += bytesRead;
+
+                            double progress = (double) totalBytesRead / totalBytes;
+
+                            long finalTotalBytesRead = totalBytesRead;
+                            Platform.runLater(() -> {
+                                fileSizeLabel.setText(finalTotalBytesRead + " / " + totalBytes + " bytes");
+                            });
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+                downloadThread.start();
             }
         }
     }
+}
     void saveFile(File fileToSave){
             Thread t2 = new Thread(new Runnable() {
                 @Override
@@ -199,6 +252,13 @@ private void loadMessage() throws RemoteException {
           FontWeight fw;
           FontPosture fp;
           int size;
+          if(message.isAttachment()){
+              try {
+                  message.setStyleMessage(Model.getInstance().getControllerFactory().getCustomizeController().getDefaultStyle());
+              } catch (IOException e) {
+                  throw new RuntimeException(e);
+              }
+          }else{
             if(message.getStyleMessage()!=null){
                 if(message.getStyleMessage().isBold()){
                     fw= FontWeight.BOLD;
@@ -224,6 +284,7 @@ private void loadMessage() throws RemoteException {
                 messageLabel.setFont(CustomFont);
                 messageLabel.setStyle("-fx-text-fill: " +message.getStyleMessage().getFontColor()+ ";");
                 messageVBox.setStyle("-fx-background-color: " +message.getStyleMessage().getBackgroundColor()+ ";");
+                }
             }
           /*try {
               Model.getInstance().getControllerFactory().getCustomizeController().setDefaultStyle();
