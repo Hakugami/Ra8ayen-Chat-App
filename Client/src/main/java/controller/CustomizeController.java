@@ -8,9 +8,15 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import model.Model;
+import org.controlsfx.control.PropertySheet;
+
+
+import java.io.IOException;
 
 public class CustomizeController {
     @FXML
@@ -28,6 +34,8 @@ public class CustomizeController {
     @FXML
     Label backgroundColor;
 
+    @FXML
+    Label fontFamily;
     Popup colorPickerPopup;
 
     Popup colorGroundPickerPopup;
@@ -186,6 +194,15 @@ public class CustomizeController {
            });
 
        });
+       fontFamily.setOnMouseClicked(mouseEvent -> {
+           Platform.runLater(new Runnable() {
+               @Override
+               public void run() {
+                   appearContextFontFamily(mouseEvent);
+               }
+           });
+
+       });
    }
     private String toHexCode(Color color) {
         return String.format("#%02X%02X%02X",
@@ -219,6 +236,7 @@ public class CustomizeController {
         FontAwesomeIconView iconBackground = new FontAwesomeIconView(FontAwesomeIcon.TINT);
         FontAwesomeIconView iconPlus = new FontAwesomeIconView(FontAwesomeIcon.PLUS);
         FontAwesomeIconView iconMinus = new FontAwesomeIconView(FontAwesomeIcon.MINUS);
+        FontAwesomeIconView iconFontFamily = new FontAwesomeIconView(FontAwesomeIcon.FONT);
 
         iconBold.setSize("1em");
         iconItalic.setSize("1em");
@@ -227,7 +245,7 @@ public class CustomizeController {
         iconBackground.setSize("1em");
         iconPlus.setSize("1em");
         iconMinus.setSize("1em");
-
+        iconFontFamily.setSize("1em");
         // Set the graphic of the Label to the FontAwesome icon
         italic.setGraphic(iconItalic);
         bold.setGraphic(iconBold);
@@ -236,6 +254,29 @@ public class CustomizeController {
         colorFont.setGraphic(iconColor);
         underline.setGraphic(iconUnderline);
         backgroundColor.setGraphic(iconBackground);
+        fontFamily.setGraphic(iconFontFamily);
+    }
+    public void appearContextFontFamily(MouseEvent mouseEvent){
+        try {
+            AnchorPane root = Model.getInstance().getViewFactory().getCustomizeFontStyle();
+            Popup popup = new Popup();
+            Model.getInstance().getControllerFactory().getCustomizeFontStyleController().setPopup(popup);
+            popup.getContent().add(root);
+            popup.setAutoHide(true);
+            popup.show(fontFamily.getScene().getWindow(),mouseEvent.getScreenX(), mouseEvent.getScreenY()-200);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public void setStyle(String style){
+        System.out.println("Style has been Arrived " +style);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Model.getInstance().getControllerFactory().getChatController().setFontFamily(style);
+            }
+        });
 
     }
 

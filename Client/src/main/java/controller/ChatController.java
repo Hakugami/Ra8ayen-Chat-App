@@ -35,6 +35,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
@@ -838,6 +839,10 @@ private Task<Void> createDisplayTask(GetMessageRequest getMessageRequest) {
     public void setBackgroundColor(String backgroundColor){
         String existingStyle = messageBox.getStyle() + "-fx-background-color: " +backgroundColor + ";";
         messageBox.setStyle(existingStyle);
+    }
+    public void setFontFamily(String FontFamily){
+        Font font = Font.font(FontFamily);
+        messageBox.setFont(font);
     }
 
 }

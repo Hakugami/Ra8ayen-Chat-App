@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="600.0" styleClass="hbox-style" stylesheets="@../../Styles/NeoOrange/CustomizeText.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
-   <Label fx:id="bold" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
-      <HBox.margin>
-         <Insets left="20.0" />
-      </HBox.margin>
-   </Label>
-   <Label fx:id="italic" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
-   <Label fx:id="underline" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
-   <Label fx:id="sizeIncrease" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
-      <font>
-         <Font size="20.0" />
-      </font>
-   </Label>
-   <Label fx:id="sizeDecrease" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
-      <font>
-         <Font size="20.0" />
-      </font>
-   </Label>
-   <Label fx:id="colorFont" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
-   <Label fx:id="backgroundColor" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="670.0" styleClass="hbox-style" stylesheets="@../../Styles/NeoOrange/CustomizeText.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
+   <children>
+      <Label fx:id="bold" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+         <HBox.margin>
+            <Insets left="20.0" />
+         </HBox.margin>
+      </Label>
+      <Label fx:id="italic" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
+      <Label fx:id="underline" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
+      <Label fx:id="sizeIncrease" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="sizeDecrease" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="colorFont" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
+      <Label fx:id="backgroundColor" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
+      <Label fx:id="fontFamily" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0" />
+   </children>
 </HBox>

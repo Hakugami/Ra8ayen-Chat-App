@@ -21,6 +21,7 @@ public class ControllerFactory {
 
     private CustomizeController customizeController;
 
+    private CustomizeFontStyleController customizeFontStyleController;
 
     public void setLoginController(LoginController loginController) {
         this.loginController = loginController;
@@ -62,7 +63,7 @@ public class ControllerFactory {
     public ChatController getChatController() {
         if (chatController == null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml"));
                 Parent parent = fxmlLoader.load();
                 chatController = fxmlLoader.getController();
             } catch (IOException e) {
@@ -150,5 +151,20 @@ public class ControllerFactory {
 
     public void setCustomizeController(CustomizeController customizeController) {
         this.customizeController = customizeController;
+    }
+
+
+    public CustomizeFontStyleController getCustomizeFontStyleController() throws IOException {
+        if(customizeFontStyleController==null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/CustomizeFontStyle.fxml"));
+            Parent parent= fxmlLoader.load();
+            customizeFontStyleController = fxmlLoader.getController();
+        }
+        return customizeFontStyleController;
+    }
+
+    public void setCustomizeFontStyleController(CustomizeFontStyleController customizeFontStyleController) {
+
+        this.customizeFontStyleController = customizeFontStyleController;
     }
 }

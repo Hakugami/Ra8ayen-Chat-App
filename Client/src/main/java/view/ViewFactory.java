@@ -1,7 +1,9 @@
 package view;
 
 import controller.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import model.Chat;
 import token.TokenManager;
 import javafx.beans.property.ObjectProperty;
@@ -226,5 +228,8 @@ public class ViewFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    public AnchorPane getCustomizeFontStyle() throws IOException {
+        return new FXMLLoader(getClass().getResource("/fxml/Chat/CustomizeFontStyle.fxml")).load();
     }
 }

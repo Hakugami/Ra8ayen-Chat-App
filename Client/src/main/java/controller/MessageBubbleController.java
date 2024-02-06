@@ -116,6 +116,11 @@ public class MessageBubbleController implements Initializable {
     private void displayOtherUserMessage() throws RemoteException {
         Platform.runLater(() -> {
             try {
+                if(message.getStyleMessage()!=null ) {
+                    if (message.getStyleMessage().getBackgroundColor()!=null&&message.getStyleMessage().getBackgroundColor().equals("#ED7D31")) {
+                        message.getStyleMessage().setBackgroundColor("#6C5F5B");
+                    }
+                }
                 loadMessage();
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
