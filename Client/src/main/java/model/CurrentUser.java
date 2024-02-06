@@ -82,6 +82,8 @@ public class CurrentUser extends UserModel {
             List<MessageModel> messageModelList = chatMessageMap.get(messageModel.getChatId());
             for (MessageModel message : messageModelList) {
                 // Only consider messages with a message ID greater than the last message in the cache as new
+                System.out.println("Message id====="+message.getMessageId());
+                System.out.println("MessageModel id====="+messageModel.getMessageId());
                 if (message.getMessageId() < messageModel.getMessageId()) {
                     return true;
                 }

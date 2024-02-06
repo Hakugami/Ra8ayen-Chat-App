@@ -68,7 +68,9 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     public void receiveNewMessage(MessageModel message) throws RemoteException {
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData){
                 CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
-                Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+                if(((ContactData)Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId()==message.getChatId()){
+                    Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+                }
                 if(Model.getInstance().getControllerFactory().getSideNavBarControllerBot()) {
                     Model.getInstance().getControllerFactory().getChatController().botSendMessage(message);
                 }
@@ -82,7 +84,9 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     public void receiveGroupChatMessage(MessageModel message) throws RemoteException {
         if(Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group){
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
-            Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+            if(((Group)Model.getInstance().getViewFactory().getSelectedContact().get()).getGroupId()==message.getChatId()){
+                Model.getInstance().getControllerFactory().getChatController().setNewMessage(message);
+            }
             if(Model.getInstance().getControllerFactory().getSideNavBarControllerBot()) {
                 Model.getInstance().getControllerFactory().getChatController().botSendMessage(message);
             }

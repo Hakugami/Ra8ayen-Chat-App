@@ -128,12 +128,12 @@ public class ChatController implements Initializable {
         ImagContact.setClip(imageClip);
 
         nameProperty.set("Contact Name");
-        chatListView.getItems().addListener((javafx.collections.ListChangeListener<MessageModel>) c -> {
-            Timeline timeline = new Timeline(new KeyFrame(
-                    Duration.millis(100),
-                    ae -> chatListView.scrollTo(chatMessages.size() - 1)));
-            timeline.play();
-        });
+//        chatListView.getItems().addListener((javafx.collections.ListChangeListener<MessageModel>) c -> {
+//            Timeline timeline = new Timeline(new KeyFrame(
+//                    Duration.millis(100),
+//                    ae -> chatListView.scrollTo(chatMessages.size() - 1)));
+//            timeline.play();
+//        });
 
         try {
             getMessageOfContact();

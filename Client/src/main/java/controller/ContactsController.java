@@ -202,7 +202,7 @@ public class ContactsController implements Initializable {
             StatusElementController controller = loader.getController();
             controller.setStatusName(status);
             controller.setStatusColor(color);
-            return new HBox(node); // Wrap the Node in an HBox
+            return  (HBox)node;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -217,7 +217,7 @@ public class ContactsController implements Initializable {
             controller.setStatus(contactData.getColor());
             controller.setImagId(contactData.getImage().getImage());
             controller.setChatID(contactData.getChatId());
-            return new HBox(node); // Wrap the Node in an HBox
+            return (HBox)node;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
