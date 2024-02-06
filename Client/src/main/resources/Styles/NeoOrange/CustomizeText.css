@@ -32,3 +32,45 @@
     /* Darker color when selected */
     -fx-background-color: rgb(108, 95, 91);
 }
+
+/* Styles for the JavaFX ColorPicker */
+.color-picker {
+    -fx-color-label-visible: false;
+    -fx-background-color: rgb(246, 241, 238); /* Background color for the entire ColorPicker */
+    -fx-border-radius: 15; /* Border radius for the entire ColorPicker */
+    -fx-background-radius: 15;
+    -fx-padding: 5px; /* Padding for the entire ColorPicker */
+    -fx-cursor: hand; /* Change cursor to hand when hovering over the ColorPicker */
+    -fx-alignment: center; /* Align the text to the center */
+}
+
+.color-picker:hover {
+    -fx-background-color: rgb(237, 125, 49); /* Darker background color on hover */
+}
+
+.color-picker:pressed {
+    -fx-background-color: rgb(108, 95, 91); /* Even darker background color when pressed */
+}
+
+/* Style the color palette area */
+.color-picker .color-picker-color {
+    -fx-background-color: rgb(246, 241, 238);
+}
+
+/* Style the selected color indicator */
+.color-picker .color-picker-label .color-picker-color-label {
+    -fx-background-color: rgb(237, 125, 49);
+}
+
+/* Style the drop-down arrow icon */
+.color-picker .arrow-button .arrow {
+    -fx-background-color: rgb(108, 95, 91);
+}
+
+/* Style the drop-down arrow icon when pressed */
+.color-picker .arrow-button:pressed {
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-background-insets: 1;
+}
+
+

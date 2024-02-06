@@ -68,30 +68,27 @@
          </Label>
       </VBox>
       <HBox alignment="CENTER" minWidth="-Infinity" prefHeight="140.0" prefWidth="400.0">
-         <children>
-            <VBox alignment="CENTER" prefHeight="140.0" prefWidth="200.0">
-               <Label text="Bio:" />
-               <Label fx:id="bio" alignment="CENTER" prefHeight="26.0" prefWidth="200.0" text="Test bio" wrapText="true" />
-               <Label text="Country:" />
-               <Label fx:id="country" text="Default Country" />
-               <Label text="Date of Birth:" />
-               <Label fx:id="dateOfBirth" text="10/10/10" />
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0">
+         <VBox alignment="CENTER" prefHeight="140.0" prefWidth="200.0">
+            <Label text="Bio:"/>
+            <Label fx:id="bio" alignment="CENTER" prefHeight="26.0" prefWidth="200.0" text="Test bio" wrapText="true"/>
+            <Label text="Country:"/>
+            <Label fx:id="country" text="Default Country"/>
+            <Label text="Date of Birth:"/>
+            <Label fx:id="dateOfBirth" text="10/10/10"/>
+         </VBox>
+         <VBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0">
+            <Label text="Phone number:"/>
+            <Label fx:id="phoneNumber" alignment="CENTER" prefWidth="200.0" text="0101"/>
+            <Label text="Email:"/>
+            <TextFlow textAlignment="CENTER">
                <children>
-                  <Label text="Phone number:" />
-                  <Label fx:id="phoneNumber" alignment="CENTER" prefWidth="200.0" text="0101" />
-                  <Label text="Email:" />
-                  <TextFlow textAlignment="CENTER">
-                     <children>
-                        <Label fx:id="email" alignment="CENTER" minWidth="-Infinity" prefHeight="26.0" prefWidth="150.0" text="test@test.com" textAlignment="CENTER" wrapText="true" />
-                     </children>
-                  </TextFlow>
-                  <Label text="Gender:" />
-                  <Label fx:id="gender" text="M" />
+                  <Label fx:id="email" alignment="CENTER" minWidth="-Infinity" prefHeight="26.0" prefWidth="150.0"
+                         text="test@test.com" textAlignment="CENTER" wrapText="true"/>
                </children>
-            </VBox>
-         </children>
+            </TextFlow>
+            <Label text="Gender:"/>
+            <Label fx:id="gender" text="M"/>
+         </VBox>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" text="Add">

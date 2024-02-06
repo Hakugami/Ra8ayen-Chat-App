@@ -36,7 +36,7 @@
                                  <image>
                                     <Image url="@../../Images/user.png" />
                                  </image>
-                  
+
                                     </ImageView>
                            </children>
                         </Pane>

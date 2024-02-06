@@ -20,6 +20,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -259,10 +260,12 @@ public class ContactsController implements Initializable {
                         // It's a contact node
                         Pane pane = (Pane) rootHBox.getChildren().get(0);
                         ImageView imageView = (ImageView) pane.getChildren().getFirst();
-                        if (rootHBox.getChildren().get(1) instanceof Label) {
-                            System.out.println("Second child is a Label");
-                            Label label = (Label) rootHBox.getChildren().get(1);
-                            Label label2 = (Label)rootHBox.getChildren().get(3);
+                        if (rootHBox.getChildren().get(1) instanceof VBox) {
+                            System.out.println("Second child is a Vbox");
+                            VBox vBox = (VBox) rootHBox.getChildren().get(1);
+                            Label label = (Label) vBox.getChildren().get(0);
+                            HBox hBox = (HBox) vBox.getChildren().get(1);
+                            Label label2 = (Label)hBox.getChildren().get(0);
 
                             String name = label.getText();
                             int ID = Integer.parseInt(label2.getText());
@@ -298,7 +301,7 @@ public class ContactsController implements Initializable {
                                 throw new RuntimeException(e);
                             }
                         } else {
-                            System.out.println("Second child is not a Label");
+                            System.out.println("Second child is not a vbox");
                         }
                     }
                 }

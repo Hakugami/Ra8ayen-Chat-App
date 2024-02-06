@@ -18,16 +18,15 @@
 <AnchorPane prefHeight="750.0" styleClass="anchor-pane" stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
    <HBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="102.0" prefWidth="300.0" styleClass="h-box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="77.0" prefWidth="84.0" HBox.hgrow="ALWAYS">
-         <ImageView fx:id="ImagProfile" fitHeight="57.0" fitWidth="65.0" layoutX="11.0" layoutY="9.0" preserveRatio="true" styleClass="ImageView" visible="false">
+         <ImageView fx:id="ImagProfile" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="9.0" preserveRatio="true" styleClass="ImageView" visible="false">
             <clip>
-               <Circle fx:id="imageClip" centerX="40" centerY="40" radius="40" />
+               <Circle fx:id="imageClip" centerX="30" centerY="30" radius="30" />
             </clip>
             <viewport>
                <Rectangle2D />
             </viewport>
-
          </ImageView>
-         <Circle fx:id="myProfilePic" layoutX="42.0" layoutY="48.0" radius="33.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+         <Circle fx:id="myProfilePic" layoutX="40.0" layoutY="40.0" radius="30.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL">
             <stroke>
                <LinearGradient endX="1.0" endY="1.0">
                   <stops>
@@ -61,7 +60,7 @@
                </LinearGradient>
             </fill>
          </Circle>
-         <Circle fx:id="statusCircle" layoutX="64.0" layoutY="74.0" radius="11.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" styleClass="Circle" AnchorPane.rightAnchor="9.0">
+         <Circle fx:id="statusCircle" layoutX="60.0" layoutY="60.0" radius="11.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE" styleClass="Circle" AnchorPane.rightAnchor="9.0">
             <stroke>
                <LinearGradient endX="1.0" endY="1.0">
                   <stops>
@@ -93,7 +92,8 @@
                      </Stop>
                   </stops>
                </LinearGradient>
-            </fill></Circle>
+            </fill>
+         </Circle>
       </AnchorPane>
       <AnchorPane>
          <HBox.margin>
