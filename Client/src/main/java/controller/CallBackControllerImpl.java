@@ -79,6 +79,22 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
             Platform.runLater(() -> Notifications.create().title("New Message").text(message.getSender().getUserName() + " sent you a new message.").showInformation());
         }
+        // Find the contact in the contact list that matches the sender of the new message
+        for (ContactData contact : CurrentUser.getInstance().getContactDataList()) {
+            if (contact.getChatId()==message.getChatId()) {
+                // Update the lastMessage property of the contact
+                System.out.println("Setting last message to: " + message.getMessageContent());
+                contact.setLastMessage(message.getMessageContent());
+                Platform.runLater(() -> {
+                    try {
+                        Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            }
+        }
     }
     @Override
     public void receiveGroupChatMessage(MessageModel message) throws RemoteException {
@@ -96,6 +112,21 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
             Optional<Group> groupName = CurrentUser.getCurrentUser().getGroupList().stream().
                     filter(group -> group.getGroupId() == message.getChatId()).findFirst();
             groupName.ifPresent(group -> Platform.runLater(() -> Notifications.create().title("New Group Message").text(message.getSender().getUserName() + " sent a new message to " + group.getGroupName()).showInformation()));
+        }
+        for (Group group : CurrentUser.getInstance().getGroupList()) {
+            if (group.getGroupId()==message.getChatId()) {
+                // Update the lastMessage property of the contact
+                System.out.println("Setting last message to: " + message.getMessageContent());
+                group.setLastMessage(message.getMessageContent());
+                Platform.runLater(() -> {
+                    try {
+                        Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                break;
+            }
         }
     }
 

@@ -67,12 +67,15 @@
       </Label>
       <HBox spacing="5.0">
          <Label fx:id="chatID" prefHeight="18.0" prefWidth="0.0" text="Label" visible="false" />
-         <Label fx:id="lastMessage" prefHeight="18.0" prefWidth="107.0" textFill="WHITE" />
+         <Label fx:id="lastMessage" prefHeight="18.0" prefWidth="107.0" textFill="WHITE" wrapText="true">
+            <font>
+               <Font name="Arial" size="12.0" />
+            </font></Label>
       </HBox>
    </VBox>
    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="37.0">
       <children>
-         <Circle fill="DODGERBLUE" radius="9.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" visible="false">
+         <Circle fx:id="notifyCircle" fill="DODGERBLUE" radius="9.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" visible="false">
             <stroke>
                <LinearGradient endX="1.0" endY="1.0">
                   <stops>

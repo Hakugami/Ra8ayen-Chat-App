@@ -220,6 +220,9 @@ public class ContactsController implements Initializable {
             controller.setStatus(contactData.getColor());
             controller.setImagId(contactData.getImage().getImage());
             controller.setChatID(contactData.getChatId());
+            controller.setLastMessageProperty(contactData.getLastMessage());
+            System.out.println("Last message of contact ------------------"+contactData.getLastMessage());
+            controller.setLastMessageLabel(contactData.getLastMessage());
             return new HBox(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -234,6 +237,8 @@ public class ContactsController implements Initializable {
             controller.setStatus(Color.PURPLE);
             controller.setImagId(group.getGroupImage().getImage());
             controller.setChatID(group.getGroupId());
+            controller.setLastMessageProperty(group.getLastMessage());
+            controller.setLastMessageLabel(group.getLastMessage());
             return new HBox(node); // Wrap the Node in an HBox
         } catch (IOException e) {
             throw new RuntimeException(e);
