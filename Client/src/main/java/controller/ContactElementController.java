@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +29,15 @@ public class ContactElementController {
         if (ImagId != null && ImagId.getImage() != null) {
             profilePicCircle.setFill(new ImagePattern(ImagId.getImage()));
         }
+        double shiftAmount = 50; // Change this to the amount you want to shift to the left
+        double currentLayoutX = profilePicCircle.getLayoutX();
+        profilePicCircle.setLayoutX(currentLayoutX - shiftAmount);
+
+        Name.setPadding(new Insets(0, 0, 0, -shiftAmount)); // Shift to the left by adding negative padding
+
+
+        double statusCircleLayoutX = status.getLayoutX();
+        status.setLayoutX(statusCircleLayoutX - shiftAmount);
     }
     public void setName(String name) {
         Name.setText(name);

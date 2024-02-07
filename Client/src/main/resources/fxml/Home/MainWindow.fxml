@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane fx:id="mainBorderPane" stylesheets="@../../Styles/NeoOrange/MainWindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+<BorderPane fx:id="mainBorderPane" stylesheets="@../../Styles/Minimalist/MainWindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
      <top>
        <HBox fx:id="customTitleBar" styleClass="custom_title_bar">
             <Button fx:id="minimizeButton" styleClass="window_button" text="−" />

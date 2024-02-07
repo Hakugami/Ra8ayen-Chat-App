@@ -124,6 +124,22 @@ public class CustomizeController {
            });
 
        });
+         underline.setOnMouseClicked(mouseEvent -> {
+              Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                     if(!IsUnderline){
+                          styleMessage.setUnderline(true);
+                          Model.getInstance().getControllerFactory().getChatController().setStyle("-fx-underline: true;");
+                     }else{
+                          styleMessage.setUnderline(false);
+                          Model.getInstance().getControllerFactory().getChatController().setStyle("-fx-underline: false;");
+                     }
+                     IsUnderline = !IsUnderline;
+                }
+              });
+
+         });
        sizeIncrease.setOnMouseClicked(mouseEvent -> {
            Platform.runLater(new Runnable() {
                @Override

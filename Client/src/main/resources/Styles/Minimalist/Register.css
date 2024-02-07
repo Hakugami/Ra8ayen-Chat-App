@@ -1,64 +1,163 @@
 .register_form_container {
     -fx-spacing: 15;
     -fx-padding: 0 20% 0 0; /* top right bottom left */
-    -fx-background-color: rgb(160, 196, 157); /* New color */
-    -fx-font:  11px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-background-color: #323232; /* Dark background */
+    -fx-font: 11px 'SF Pro Display', 'Arial', sans-serif; /* New font */
 }
 
 .register_logo_container {
     -fx-alignment: center;
-    -fx-background-color: rgb(196, 215, 178); /* New color */
-    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-background-color: #353535; /* Darker shade of gray */
+    -fx-font: 15px 'SF Pro Display', 'Arial', sans-serif; /* New font */
 }
 
 .register_logo_container Text {
     -fx-font-size: 2em;
-    -fx-fill: rgb(225, 236, 200); /* New color */
+    -fx-fill: #737373; /* Medium gray text color */
 }
 
 .register_logo_container FontAwesomeIconView {
-    -fx-fill: rgb(247, 255, 229); /* New color */
+    -fx-fill: #FF4A4A; /* Red color for the icon */
 }
 
 .register_form_container Label {
     -fx-font-size: 1.1em;
     -fx-font-weight: bold;
-    -fx-text-fill: rgb(247, 255, 229); /* New color */
+    -fx-text-fill: #FFFFFF;
     -fx-margin-bottom: 10px; /* Add space below each label */
 }
 
+.register_form_container ImageView {
+    -fx-margin-bottom: 10px; /* Add space below each label */
+    -fx-background-color: #353535; /* Darker shade of gray */
+    -fx-border-color: #FF4A4A; /* Red color border */
+}
+
 .input_field {
-    -fx-background-color: rgb(160, 196, 157); /* New color */
+    -fx-background-color: #4C4C4C; /* Dark gray background */
     -fx-background-radius: 5;
-    -fx-border-color: rgb(225, 236, 200); /* New color */
+    -fx-border-color: #737373; /* Medium gray border color */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
     -fx-padding: 10px;
     -fx-border-width: 2px;
     -fx-margin-bottom: 10px; /* Add space below each input field */
+    -fx-text-fill: #FFFFFF;
 }
 
-.register_form_container Button {
-    -fx-background-color: rgb(225, 236, 200); /* New color */
-    -fx-background-radius: 5;
-    -fx-border-color: rgb(247, 255, 229); /* New color */
+.register_form_container ComboBox {
+    -fx-background-color: #323232; /* Dark background */
+    -fx-border-color: #737373; /* Medium gray border color */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: rgb(160, 196, 157); /* New color */
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each ComboBox */
+    -fx-text-fill: #737373; /* Medium gray text color */
+}
+
+.register_form_container DatePicker {
+    -fx-background-color: #323232; /* Dark background */
+    -fx-control-inner-background: #323232; /* Dark background for the text area content */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each DatePicker */
+    -fx-text-fill: #FFFFFF;
+}
+
+.register_form_container DatePicker .arrow-button {
+    -fx-background-color: #323232; /* Dark background */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each DatePicker */
+
+}
+
+.register_form_container DatePicker .arrow-button:hover {
+    -fx-background-color: #323232; /* Dark background */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each DatePicker */
+    -fx-cursor: hand;
+}
+
+.register_form_container DatePicker .arrow-button .arrow {
+    -fx-background-color: #323232; /* Dark background */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each DatePicker */
+    -fx-text-fill: #737373; /* Medium gray text color */
+}
+
+.register_form_container DatePicker .arrow-button .arrow:hover {
+    -fx-background-color: #323232; /* Dark background */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each DatePicker */
+    -fx-text-fill: #737373; /* Medium gray text color */
+    -fx-cursor: hand;
+}
+
+.register_form_container TextArea {
+    -fx-control-inner-background: #323232; /* Dark background for the text area content */
+    -fx-background-color: #323232; /* Dark background */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-margin-bottom: 10px; /* Add space below each TextArea */
+    -fx-text-fill: #FFFFFF;
+}
+
+
+.register_form_container Button {
+    -fx-background-color: #2C80FF; /* Blue color for the button */
+    -fx-background-radius: 5;
+    -fx-border-color: #2C80FF; /* Blue border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
 
 .register_form_container Button:hover {
-    -fx-background-color: rgb(247, 255, 229); /* New color */
+    -fx-background-color: #FFFFFF; /* White background on hover */
     -fx-background-radius: 5;
-    -fx-border-color: rgb(225, 236, 200); /* New color */
+    -fx-border-color: #2C80FF; /* Blue border color on hover */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: rgb(160, 196, 157); /* New color */
+    -fx-text-fill: #2C80FF; /* Blue text color on hover */
     -fx-cursor: hand;
 }
 
 .error_lbl {
     -fx-font-size: 1.1em;
-    -fx-text-fill: #ff0000; /* Keep the error color as red */
+    -fx-text-fill: #FF4A4A; /* Red color for the error label */
     -fx-margin-top: 20px; /* Add space above the error label */
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-hbar-policy: never; /* hide horizontal scrollbar */
+    -fx-vbar-policy: never; /* hide vertical scrollbar */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
 }

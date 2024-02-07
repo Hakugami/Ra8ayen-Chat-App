@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane styleClass="list_View" stylesheets="@../../Styles/NeoOrange/Chat.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+<AnchorPane styleClass="list_View" stylesheets="@../../Styles/Minimalist/Chat.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
    <children>
       <BorderPane prefHeight="750.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -80,11 +80,11 @@
          <bottom>
             <VBox>
                <HBox fx:id="customize" alignment="CENTER" prefHeight="66.0" prefWidth="900.0" styleClass="list_View" />
-            <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="71.0" prefWidth="900.0" styleClass="hbox-style" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="70.0" prefWidth="900.0" styleClass="hbox-style" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="messageBox" prefHeight="53.0" prefWidth="741.0" styleClass="send-message" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="messageBox" prefHeight="70.0" prefWidth="741.0" promptText="Type a message" styleClass="send-message" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font name="System Bold" size="20.0" />
+                        <Font name="Arial Bold" size="12.0" />
                      </font>
                      <padding>
                         <Insets right="30.0" />
@@ -95,10 +95,10 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                      <HBox.margin>
-                        <Insets right="10.0" />
+                        <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                      <graphic>
-                        <FontAwesomeIconView glyphName="PAPERCLIP" />
+                        <FontAwesomeIconView glyphName="PAPERCLIP" size="16" />
                      </graphic>
                   </Button>
                   <Button fx:id="sendMessage" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="55.0" prefWidth="80.0" styleClass="send-message_button" textFill="#ebe7e7" textOverrun="CENTER_ELLIPSIS" wrapText="true" HBox.hgrow="ALWAYS">
@@ -108,10 +108,13 @@
                      <graphic>
                         <FontAwesomeIconView glyphName="PAPER_PLANE" />
                      </graphic>
+                        <HBox.margin>
+                           <Insets right="5.0" />
+                        </HBox.margin>
                   </Button>
                </children>
                   <VBox.margin>
-                     <Insets bottom="3.0" />
+                     <Insets />
                   </VBox.margin>
                   <padding>
                      <Insets left="10.0" />

@@ -12,88 +12,84 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="270.0" spacing="15.0" stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
-   <children>
-      <Pane prefHeight="70.0" prefWidth="70.0">
-         <children>
-            <ImageView fx:id="ImagId" preserveRatio="true" visible="false">
-               <clip>
-                  <Circle fx:id="imageClip" centerX="35" centerY="35" radius="35" />
-               </clip>
-            </ImageView>
-            <Circle fx:id="profilePicCircle" fill="DODGERBLUE" layoutX="35.0" layoutY="35.0" radius="30.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE">
-               <stroke>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.8815789222717285" green="0.7064195275306702" blue="0.4611963927745819" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Circle>
-            <Circle fx:id="status" fill="DODGERBLUE" layoutX="56.0" layoutY="56.0" radius="9.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
-               <stroke>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.8815789222717285" green="0.7064195275306702" blue="0.4611963927745819" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="0.6842105388641357" green="0.42726200819015503" blue="0.1868908405303955" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Circle>
-         </children>
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
-      </Pane>
-      <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="132.0">
-         <Label fx:id="Name" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" text="Rawda">
-            <font>
-               <Font name="System Bold" size="14.0" />
-            </font>
-         </Label>
-         <HBox spacing="5.0">
-            <Label fx:id="chatID" prefHeight="18.0" prefWidth="0.0" text="Label" visible="false" />
-            <Label fx:id="lastMessage" prefHeight="18.0" prefWidth="107.0" />
-         </HBox>
-      </VBox>
-      <VBox alignment="CENTER" prefHeight="70.0" prefWidth="37.0">
-         <children>
-            <Circle fill="DODGERBLUE" radius="9.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" visible="false">
-               <stroke>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.42650464177131653" green="0.43421053886413574" blue="0.3417397737503052" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </stroke>
-            </Circle>
-         </children>
-      </VBox>
-   </children>
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="270.0" spacing="15.0" stylesheets="@../../Styles/Minimalist/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
+   <Pane prefHeight="70.0" prefWidth="70.0">
+      <HBox.margin>
+         <Insets />
+      </HBox.margin>
+      <ImageView fx:id="ImagId" preserveRatio="true" visible="false">
+         <clip>
+            <Circle fx:id="imageClip" centerX="35" centerY="35" radius="35" />
+         </clip>
+      </ImageView>
+      <Circle fx:id="profilePicCircle" fill="DODGERBLUE" layoutX="35.0" layoutY="35.0" radius="25.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.8815789222717285" green="0.7064195275306702" blue="0.4611963927745819" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Circle>
+      <Circle fx:id="status" fill="DODGERBLUE" layoutX="50.0" layoutY="56.0" radius="5.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.8815789222717285" green="0.7064195275306702" blue="0.4611963927745819" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.6842105388641357" green="0.42726200819015503" blue="0.1868908405303955" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Circle>
+   </Pane>
+   <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="132.0">
+      <Label fx:id="Name" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" text="Rawda" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <HBox spacing="5.0">
+         <Label fx:id="chatID" prefHeight="18.0" prefWidth="0.0" text="Label" visible="false" />
+         <Label fx:id="lastMessage" prefHeight="18.0" prefWidth="107.0" textFill="WHITE" />
+      </HBox>
+   </VBox>
+   <VBox alignment="CENTER" prefHeight="70.0" prefWidth="37.0">
+      <children>
+         <Circle fill="DODGERBLUE" radius="9.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" visible="false">
+            <stroke>
+               <LinearGradient endX="1.0" endY="1.0">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color red="0.42650464177131653" green="0.43421053886413574" blue="0.3417397737503052" />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="1.0" green="1.0" blue="1.0" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </LinearGradient>
+            </stroke>
+         </Circle>
+      </children>
+   </VBox>
 </HBox>

@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="750.0" styleClass="anchor-pane" stylesheets="@../../Styles/NeoOrange/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
+<AnchorPane prefHeight="750.0" styleClass="anchor-pane" stylesheets="@../../Styles/Minimalist/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactsController">
    <HBox alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="102.0" prefWidth="300.0" styleClass="h-box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="77.0" prefWidth="84.0" HBox.hgrow="ALWAYS">
          <ImageView fx:id="ImagProfile" fitHeight="60.0" fitWidth="60.0" layoutX="10.0" layoutY="9.0" preserveRatio="true" styleClass="ImageView" visible="false">

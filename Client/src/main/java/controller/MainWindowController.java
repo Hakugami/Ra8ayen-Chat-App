@@ -112,30 +112,30 @@ public class MainWindowController implements Initializable {
 
         addContact_btn.setOnAction(this::openAddWindow);
 //
-        new Thread(() -> {
-           try {
-                TimeUnit.SECONDS.sleep(5);
-                System.out.println("Setting tree view data");
-                Platform.runLater(() -> {
-                    Model.getInstance().getControllerFactory().getLoginController().retrieveData();
-                });
-                System.out.println("should have retrieved data");
-                Platform.runLater(() -> {
-                    try {
-                        Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
-                    } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
+//        new Thread(() -> {
+//           try {
+//                TimeUnit.SECONDS.sleep(5);
+//                System.out.println("Setting tree view data");
+//                Platform.runLater(() -> {
+//                    Model.getInstance().getControllerFactory().getLoginController().retrieveData();
+//                });
+//                System.out.println("should have retrieved data");
+//                Platform.runLater(() -> {
+//                    try {
+//                        Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+//                    } catch (RemoteException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    try {
+//                        Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
+//                    } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }).start();
 
     }
 
