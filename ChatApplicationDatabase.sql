@@ -40,6 +40,13 @@ CREATE TABLE Messages (
     MessageContent TEXT NOT NULL,
     MessageTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     IsAttachment BOOLEAN,
+    FontStyle VARCHAR(50),
+    FontColor VARCHAR(50),
+    TextBackground VARCHAR(50),
+    FontSize INT,
+    IsBold BOOLEAN,
+    IsItalic BOOLEAN,
+    IsUnderline BOOLEAN,
     FOREIGN KEY (SenderID) REFERENCES UserAccounts(UserID),
     FOREIGN KEY (ReceiverID) REFERENCES Chat(ChatID)
 );
@@ -70,4 +77,12 @@ CREATE TABLE UserNotifications (
     FOREIGN KEY (SenderID) REFERENCES UserAccounts(UserID)
 );
 
-
+CREATE TABLE BlockedUsers (
+    BlockID INT AUTO_INCREMENT PRIMARY KEY,
+    BlockingUserID INT NOT NULL,
+    BlockedUserID INT NOT NULL,
+    BlockDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (BlockingUserID) REFERENCES UserAccounts(UserID),
+    FOREIGN KEY (BlockedUserID) REFERENCES UserAccounts(UserID),
+    UNIQUE (BlockingUserID, BlockedUserID)
+);
