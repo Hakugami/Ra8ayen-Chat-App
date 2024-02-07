@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="720.0" styleClass="hbox-style" stylesheets="@../../Styles/NeoOrange/CustomizeText.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="720.0" styleClass="hbox-style" stylesheets="@../../Styles/Minimalist/CustomizeText.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
     <ToggleButton fx:id="italic" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
         <HBox.margin>
             <Insets right="5.0" />

@@ -227,7 +227,9 @@ public class LoginController {
                     friendRequest.setSenderPhoneNumber(response.getUsers().get(i).getPhoneNumber());
                     friendRequest.setUserModel(response.getUsers().get(i));
                     NotificationManager.getInstance().addNotification(friendRequest);
+                    Platform.runLater(() -> {
                     Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
+                    });
                 }
 
 

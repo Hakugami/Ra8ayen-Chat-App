@@ -19,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
@@ -71,6 +73,8 @@ public class MessageBubbleController implements Initializable {
     private Pane messageStatusPane;
     @FXML
     private Label messageStatusLabel;
+    @FXML
+    private Circle circlePic;
     private MessageModel message;
 
     private volatile byte[]  uploadedFileBytes;
@@ -96,6 +100,13 @@ public class MessageBubbleController implements Initializable {
         }
 
         senderImage.setOnMouseClicked(event -> {
+            try {
+                showProfile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        circlePic.setOnMouseClicked(event -> {
             try {
                 showProfile();
             } catch (IOException e) {
@@ -141,11 +152,15 @@ public class MessageBubbleController implements Initializable {
             }
             try {
                 senderImage.setImage(CurrentUser.getInstance().getProfilePictureImage());
+                circlePic.setFill(new ImagePattern(CurrentUser.getInstance().getProfilePictureImage()));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
             completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
-//            messageVBox.getChildren().remove(senderInfoHBox);
+            messageVBox.getChildren().remove(senderInfoHBox);
+            if(!message.isAttachment()){
+                messageVBox.getChildren().remove(messageAttachmentHBox);
+            }
         });
 
     }
@@ -183,8 +198,12 @@ public class MessageBubbleController implements Initializable {
 
             // Set the sender's profile picture
             senderImage.setImage(senderProfilePicture);
+            circlePic.setFill(new ImagePattern(senderProfilePicture));
             messageVBox.getStyleClass().add("receiver-bubble");
             completeMessageHBox.nodeOrientationProperty().set(javafx.geometry.NodeOrientation.LEFT_TO_RIGHT);
+            if(!message.isAttachment()){
+                messageVBox.getChildren().remove(messageAttachmentHBox);
+            }
 
         });
     }
@@ -192,15 +211,11 @@ public class MessageBubbleController implements Initializable {
 private void loadMessage() throws RemoteException {
     // Set the message content
     messageLabel.setText(message.getMessageContent());
-
-
-
     // Set the sender's name and phone number
-    senderNameLabel.setText(message.getSender().getUserName());
-    senderPhoneLabel.setText(message.getSender().getPhoneNumber());
+
     if (message.getTime() != null) {
 //        messageTimeLabel.setText(message.getTime().toString());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
         String time = message.getTime().format(formatter);
         messageTimeLabel.setText(time);
 
@@ -313,12 +328,16 @@ void openDownloadSelector() throws NotBoundException, RemoteException {
                     fp= FontPosture.REGULAR;
                 }
                 if(message.getStyleMessage().isUnderline()){
+                    System.out.println("Underline");
                     style = "-fx-underline: true;";
                     messageLabel.setStyle(style);
+                    messageLabel.setUnderline(true);
                 }
                 else {
+                    System.out.println("Not Underline");
                     style = "-fx-underline: false;";
                     messageLabel.setStyle(style);
+                    messageLabel.setUnderline(false);
                 }
                 size = message.getStyleMessage().getFontSize();
                 CustomFont = Font.font(message.getStyleMessage().getFontStyle(),fw,fp,size);

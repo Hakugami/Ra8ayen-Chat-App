@@ -1,98 +1,98 @@
-.login_container{
+.login_container {
     -fx-spacing: 15;
     -fx-padding: 0 20% 0 0; /* top right bottom left */
-    -fx-background-color: rgb(246, 241, 238); /* New color */
-    -fx-font:  11px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-background-color: #323232; /* Dark background */
+    -fx-font: 11px 'SF Pro Display', 'Arial', sans-serif; /* New font */
 }
 
-.login_logo_container{
+.login_logo_container {
     -fx-alignment: center;
-    -fx-background-color: rgb(79, 74, 69); /* New color */
-    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-background-color: #353535; /* Darker shade of gray */
+    -fx-font: 15px 'SF Pro Display', 'Arial', sans-serif; /* New font */
 }
 
-.login_logo_container Text{
+.login_logo_container Text {
     -fx-font-size: 2em;
-    -fx-fill: rgb(108, 95, 91); /* New color */
+    -fx-fill: #737373; /* Medium gray text color */
 }
 
-.login_logo_container FontAwesomeIconView{
-    -fx-fill: rgb(237, 125, 49); /* New color */
+.login_logo_container FontAwesomeIconView {
+    -fx-fill: #FF4A4A; /* Red color for the icon */
 }
 
-/* Rest of the CSS rules... */
-
-.login_form_container{
+.login_form_container {
     -fx-spacing: 15;
     -fx-alignment: center;
 }
 
-.login_form_container Label{
+.login_form_container Label {
     -fx-font-size: 1.1em;
     -fx-font-weight: bold;
-    -fx-text-fill: #333333;
+    -fx-text-fill: #FFFFFF; /* White text color */
     -fx-margin-bottom: 10px; /* Add space below each label */
 }
 
-.input_field{
-    -fx-background-color: #f2f2f2;
+.input_field {
+    -fx-background-color: #4C4C4C; /* Dark gray background */
     -fx-background-radius: 5;
-    -fx-border-color: #cccccc;
+    -fx-border-color: #737373; /* Medium gray border color */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
     -fx-padding: 10px;
     -fx-border-width: 2px;
     -fx-margin-bottom: 10px; /* Add space below each input field */
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
 
-.login_form_container Button{
-    -fx-background-color: #4CAF50;
+.login_form_container Button {
+    -fx-background-color: #2C80FF; /* Blue color for the button */
     -fx-background-radius: 5;
-    -fx-border-color: #4CAF50;
+    -fx-border-color: #2C80FF; /* Blue border color */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
 
-.login_form_container Button:hover{
-    -fx-background-color: #ffffff;
+.login_form_container Button:hover {
+    -fx-background-color: #FFFFFF; /* White background on hover */
     -fx-background-radius: 5;
-    -fx-border-color: #4CAF50;
+    -fx-border-color: #2C80FF; /* Blue border color on hover */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: #4CAF50;
+    -fx-text-fill: #2C80FF; /* Blue text color on hover */
     -fx-cursor: hand;
 }
 
-.error_lbl{
+.error_lbl {
     -fx-font-size: 1.1em;
-    -fx-text-fill: #ff0000;
+    -fx-text-fill: #FF4A4A; /* Red color for the error label */
     -fx-margin-top: 20px; /* Add space above the error label */
 }
 
-#exitButton, #minimizeButton {
+#exitButton,
+#minimizeButton {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-font-size: 1.1em;
-    -fx-text-fill: #000000;
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
 
 #exitButton:hover {
-    -fx-background-color: #ff0000; /* Red color on hover */
+    -fx-background-color: #FF4A4A; /* Red color on hover */
     -fx-background-radius: 5;
-    -fx-border-color: #ff0000; /* Red border on hover */
+    -fx-border-color: #FF4A4A; /* Red border color on hover */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #FFFFFF; /* White text color on hover */
     -fx-cursor: hand;
 }
 
 #minimizeButton:hover {
-    -fx-background-color: #4d4d4d; /* Darker color on hover */
+    -fx-background-color: #737373; /* Medium gray background on hover */
     -fx-background-radius: 5;
-    -fx-border-color: #4d4d4d; /* Darker border on hover */
+    -fx-border-color: #737373; /* Medium gray border color on hover */
     -fx-border-radius: 5;
     -fx-font-size: 1.1em;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #FFFFFF; /* White text color on hover */
     -fx-cursor: hand;
 }

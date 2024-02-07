@@ -5,33 +5,59 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
 <HBox fx:id="completeMessageHBox" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../../Styles/NeoOrange/MessageBubble.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ImageView fx:id="senderImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
-        <VBox fx:id="messageVBox" minWidth="200.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="10.0" styleClass="message-bubble">
+      <Pane prefHeight="89.0" prefWidth="42.0">
+         <children>
+              <ImageView fx:id="senderImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+            <Circle fx:id="circlePic" layoutX="21.0" layoutY="19.0" radius="18.0" strokeLineCap="BUTT" strokeLineJoin="BEVEL">
+               <stroke>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.7763158082962036" green="0.050316765904426575" blue="0.050316765904426575" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </stroke>
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.10611598193645477" green="0.5067718625068665" blue="0.8815789222717285" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Circle>
+         </children>
+      </Pane>
+        <VBox fx:id="messageVBox" nodeOrientation="RIGHT_TO_LEFT" styleClass="message-bubble">
             <children>
-                <HBox fx:id="senderInfoHBox" alignment="CENTER">
-                    <children>
-                        <VBox minWidth="50.0" prefWidth="50.0" HBox.hgrow="ALWAYS">
-                            <children>
-                                <Label fx:id="senderNameLabel" prefHeight="18.0" prefWidth="74.0" styleClass="sender-info" text="test name" textFill="#464646" />
-                            </children>
-                        </VBox>
-                        <Label fx:id="senderPhoneLabel" alignment="CENTER" prefHeight="18.0" prefWidth="106.0" styleClass="sender-info" text="010101" textFill="#464646">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </Label>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="3.0" left="5.0" right="5.0" />
-                    </VBox.margin>
-                </HBox>
-                <HBox fx:id="messageAttachmentHBox" minHeight="-Infinity" prefHeight="24.0" prefWidth="190.0">
+                <HBox fx:id="messageAttachmentHBox">
                     <children>
                         <ImageView fx:id="fileIconImageView" fitHeight="28.0" fitWidth="50.0" onMouseClicked="#openDownloadSelector" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
@@ -67,7 +93,7 @@
                 </TextFlow>
                 <HBox alignment="CENTER">
                     <children>
-                        <Label fx:id="messageTimeLabel" prefHeight="18.0" prefWidth="170.0" styleClass="timestamp">
+                        <Label fx:id="messageTimeLabel" styleClass="timestamp">
                             <HBox.margin>
                                 <Insets right="5.0" />
                             </HBox.margin>

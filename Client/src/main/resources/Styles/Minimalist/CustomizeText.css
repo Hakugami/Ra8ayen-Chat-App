@@ -1,14 +1,80 @@
-.hbox-style Label {
-    -fx-background-color: rgba(246, 241, 238, 0.7); /* light gray with 70% opacity */
-    -fx-border-radius: 15; /* make the label rounder */
-    -fx-background-radius: 15; /* make the label rounder */
-    -fx-padding: 5px; /* Add padding */
-    -fx-cursor: hand; /* Change cursor to hand when hovering over the label */
-    /* align the text to the center */
-    -fx-alignment: center;
+/* CustomizeText.css */
 
+.hbox-style{
+    -fx-spacing: 5px;
+    -fx-alignment: center;
+    -fx-background-color: Transparent;
 }
 
-.hbox-style Label:hover {
-    -fx-background-color: rgba(237, 125, 49, 0.7); /* Change color on hover */
+.hbox-style ToggleButton, .hbox-style Button {
+    /* Lighter background color */
+    -fx-background-color: #FFFFFF;
+
+    /* Button color */
+    -fx-text-fill: #4C4C4C;
+
+    /* Make the button round */
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+
+    /* Add some cool effects */
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+    -fx-cursor: hand; /* Change cursor to hand when hovering over the button */
+    -fx-alignment: center; /* align the text to the center */
+}
+
+.hbox-style ToggleButton:hover, .hbox-style Button:hover {
+    /* Darker color on hover */
+    -fx-background-color: #FF4A4A;
+}
+
+.hbox-style ToggleButton:pressed, .hbox-style Button:pressed {
+    /* Even darker color when pressed */
+    -fx-background-color: #4C4C4C;
+}
+
+.hbox-style ToggleButton:selected {
+    /* Darker color when selected */
+    -fx-background-color: #4C4C4C;
+}
+
+/* Styles for the JavaFX ColorPicker */
+.color-picker {
+    -fx-color-label-visible: false;
+    -fx-background-color: #FFFFFF; /* Background color for the entire ColorPicker */
+    -fx-border-radius: 15; /* Border radius for the entire ColorPicker */
+    -fx-background-radius: 15;
+    -fx-padding: 5px; /* Padding for the entire ColorPicker */
+    -fx-cursor: hand; /* Change cursor to hand when hovering over the ColorPicker */
+    -fx-alignment: center; /* Align the text to the center */
+}
+
+.color-picker:hover {
+    -fx-background-color: #FF4A4A; /* Darker background color on hover */
+}
+
+.color-picker:pressed {
+    -fx-background-color: #4C4C4C; /* Even darker background color when pressed */
+}
+
+/* Style the color palette area */
+.color-picker .color-picker-color {
+    -fx-background-color: #FFFFFF;
+}
+
+/* Style the selected color indicator */
+.color-picker .color-picker-label .color-picker-color-label {
+    -fx-background-color: #FF4A4A;
+}
+
+/* Style the drop-down arrow icon */
+.color-picker .arrow-button .arrow {
+    -fx-background-color: #4C4C4C;
+}
+
+/* Style the drop-down arrow icon when pressed */
+.color-picker .arrow-button:pressed {
+    -fx-background-color: #4C4C4C;
+    -fx-background-insets: 1;
 }

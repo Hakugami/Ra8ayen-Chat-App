@@ -68,6 +68,8 @@ public class ContactsController implements Initializable {
         statusCircle.setLayoutY(myProfilePicBottomRightY - statusCircle.getRadius()- 25);
 
 
+
+
         try {
             setImageProfileData();
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
