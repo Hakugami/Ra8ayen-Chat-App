@@ -15,6 +15,7 @@ import dto.responses.SendMessageResponse;
 import model.entities.Message;
 import service.ChatBotService;
 import service.MessageService;
+import utils.CompressionUtils;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -118,11 +119,9 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
                 styleMessage.setUnderline(messages.get(i).isUnderline());
                 styleMessage.setFontStyle(messages.get(i).getFontStyle());
 
-                System.out.println(messages.get(i).getTextBackground()+"-------------------------------------------------------------------------------------------------------------");
                 messageModels.get(i).setStyleMessage(styleMessage);
                 messageModels.get(i).setAttachment(messages.get(i).getIsAttachment());
 //                messageModels.get(i).setAttachmentData(messages.get(i).getAttachmentData());
-                System.out.println(styleMessage+"-------------------------------------------------------------------------------------------------------------");
                 if (messageModels.get(i).isAttachment()) {
                     System.out.println("Attatch Size From Server " + messageModels.get(i).getAttachmentData().length);
                 } else {

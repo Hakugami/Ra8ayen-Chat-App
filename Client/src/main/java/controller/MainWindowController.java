@@ -137,6 +137,18 @@ public class MainWindowController implements Initializable {
 //            }
 //        }).start();
 
+        new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(10);
+                System.out.println("Setting tree view data");
+                Platform.runLater(() -> {
+                    Model.getInstance().getViewFactory().refreshLatestMessages();
+                });
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
     }
 
     public void setSwappableWindow(Node node) {

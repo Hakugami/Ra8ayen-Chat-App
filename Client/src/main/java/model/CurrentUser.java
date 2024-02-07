@@ -14,6 +14,7 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CurrentUser extends UserModel {
 
-    private static final int MAX_MESSAGES = 100;
+    private static final int MAX_MESSAGES = 50;
 
     private static CurrentUser currentUser;
     private Image profilePictureImage;
@@ -37,7 +38,7 @@ public class CurrentUser extends UserModel {
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
         chatList = new ConcurrentHashMap<>();
-        chatMessageMap = new ConcurrentHashMap<>();
+        chatMessageMap = new LinkedHashMap<>();
         imageCache = new ConcurrentHashMap<>();
         groupList = new CopyOnWriteArrayList<>();
     }

@@ -47,7 +47,7 @@ public class ContactElementController {
         profilePicCircle.setLayoutX(currentLayoutX - shiftAmount);
 
         Name.setPadding(new Insets(0, 0, 0, -shiftAmount)); // Shift to the left by adding negative padding
-        lastMessage.setPadding(new Insets(0, 0, 0, -shiftAmount)); // Shift to the left by adding negative padding
+        lastMessage.setPadding(new Insets(0, 0, 0, -shiftAmount-10)); // Shift to the left by adding negative padding
 
         double statusCircleLayoutX = status.getLayoutX();
         status.setLayoutX(statusCircleLayoutX - shiftAmount);

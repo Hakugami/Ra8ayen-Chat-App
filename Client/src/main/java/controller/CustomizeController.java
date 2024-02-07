@@ -72,6 +72,7 @@ public class CustomizeController {
         styleMessage  = new StyleMessage(false,false,false,16,"#000000","#ED7D31");
         event();
         addFontAwesomeIcon();
+        createToolTip();
        Model.getInstance().getControllerFactory().setCustomizeController(this);
 
     }
@@ -88,6 +89,15 @@ public class CustomizeController {
         colorPicker.setPadding(new Insets(10));
 
         return popup;
+    }
+
+    private void createToolTip(){
+        Tooltip tooltip = new Tooltip("Font Color");
+        tooltip.setStyle("-fx-font-size: 10");
+        colorFont.setTooltip(tooltip);
+        Tooltip tooltip1 = new Tooltip("Background Color");
+        tooltip1.setStyle("-fx-font-size: 10");
+        backgroundColor.setTooltip(tooltip1);
     }
    public  void event(){
        italic.setOnMouseClicked(mouseEvent -> {

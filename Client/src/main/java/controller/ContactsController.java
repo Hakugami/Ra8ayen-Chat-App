@@ -221,7 +221,6 @@ public class ContactsController implements Initializable {
             controller.setImagId(contactData.getImage().getImage());
             controller.setChatID(contactData.getChatId());
             controller.setLastMessageProperty(contactData.getLastMessage());
-            System.out.println("Last message of contact ------------------"+contactData.getLastMessage());
             controller.setLastMessageLabel(contactData.getLastMessage());
             return new HBox(node);
         } catch (IOException e) {

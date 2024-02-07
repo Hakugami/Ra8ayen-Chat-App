@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="720.0" styleClass="hbox-style" stylesheets="@../../Styles/Minimalist/CustomizeText.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
@@ -36,12 +37,15 @@
          <Insets left="5.0" right="5.0" />
       </HBox.margin>
     </Button>
-   <ColorPicker fx:id="colorFont" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" styleClass="color-picker">
+   <ColorPicker fx:id="colorFont" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" promptText="Font Color" styleClass="color-picker">
       <HBox.margin>
          <Insets right="5.0" />
       </HBox.margin>
+      <value>
+         <Color red="0.9868420958518982" green="0.9868420958518982" blue="0.9868420958518982" />
+      </value>
    </ColorPicker>
-   <ColorPicker fx:id="backgroundColor" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" styleClass="color-picker" />
+   <ColorPicker fx:id="backgroundColor" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" promptText="Background color" styleClass="color-picker" />
     <Button fx:id="fontFamily" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
       <HBox.margin>
          <Insets left="5.0" />
