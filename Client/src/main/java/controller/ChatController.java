@@ -311,14 +311,7 @@ public class ChatController implements Initializable {
                 request.setIsAttachment(true);
                 request.setAttachmentData(uploadedFileBytes);
             }
-//            messageModel.getStyleMessage().setBold(false);
-//            messageModel.getStyleMessage().setItalic(false);
-//            messageModel.getStyleMessage().setUnderline(false);
-//            messageModel.getStyleMessage().setFontSize(16);
-//            messageModel.getStyleMessage().setFontStyle("Arial");
-//            messageModel.getStyleMessage().setFontColor("#000000");
-//            messageModel.getStyleMessage().setBackgroundColor("#ffffff");
-//            request.setStyleMessage(messageModel.getStyleMessage());
+
             request.setTime(LocalDateTime.now());
 
             request.setStyleMessage(styleMessage);
@@ -543,6 +536,9 @@ public class ChatController implements Initializable {
         GetMessageRequest getMessageRequest = new GetMessageRequest();
         getMessageRequest.setChatId(chatId);
         Task<Void> databaseQueryTask = createDatabaseQueryTask(getMessageRequest);
+        databaseQueryTask.setOnSucceeded(event -> {
+          new Thread(createDisplayTask(getMessageRequest)).start();
+        });
         new Thread(databaseQueryTask).start();
     }
 
@@ -739,6 +735,16 @@ private void retrieveMessages(GetMessageRequest getMessageRequest) throws Remote
     getMessageRequest.setPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
 
     Task<Void> displayTask = createDisplayTask(getMessageRequest);
+    displayTask.setOnSucceeded(event -> {
+        Platform.runLater(() -> {
+            try {
+                Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+            Model.getInstance().getControllerFactory().getChatController().chatListView.scrollTo(chatMessages.getLast());
+        });
+    });
 
     new Thread(displayTask).start();
 
@@ -800,20 +806,6 @@ private void retrieveMessages(GetMessageRequest getMessageRequest) throws Remote
                 // Update the cache with the retrieved messages
                 for (MessageModel message : getMessageResponse.getMessageList()) {
                     // Add the sender's and receiver's profile pictures to the image cache
-//                    BufferedImage senderImage = ImageUtls.convertByteToImage(message.getSender().getProfilePicture());
-//                    BufferedImage receiverImage = ImageUtls.convertByteToImage(message.getReceiver().getProfilePicture());
-//                    Image fxSenderImage = SwingFXUtils.toFXImage(senderImage, null);
-//                    Image fxReceiverImage = SwingFXUtils.toFXImage(receiverImage, null);
-//                    CurrentUser.getInstance().addImageToCache(message.getSender().getUserID(), fxSenderImage);
-//                    CurrentUser.getInstance().addImageToCache(message.getReceiver().getUserID(), fxReceiverImage);
-//
-//                    // Remove the profile pictures from the MessageModel
-//                    message.getSender().setProfilePicture(null);
-//                    message.getReceiver().setProfilePicture(null);
-//                    if(message.getChatId()==4){
-//                        System.out.println("GROUP 4 works paleees"+message.getMessageContent());
-//                    }
-
                     if (!CurrentUser.getInstance().isMessageCached(message)) {
                         CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
                     }
@@ -825,7 +817,7 @@ private void retrieveMessages(GetMessageRequest getMessageRequest) throws Remote
 }
 
 private Task<Void> createDisplayTask(GetMessageRequest getMessageRequest) {
-    return new Task<Void>() {
+    return new Task<>() {
         @Override
         protected Void call() throws Exception {
             List<MessageModel> cachedMessages = CurrentUser.getInstance().getChatMessageMap().get(getMessageRequest.getChatId());
@@ -836,8 +828,24 @@ private Task<Void> createDisplayTask(GetMessageRequest getMessageRequest) {
                     for (MessageModel cachedMessage : cachedMessages) {
                         // Only add the message to the chatMessages list if it's not already in the set
                         if (!addedMessages.contains(cachedMessage)) {
-                            Platform.runLater(()->chatMessages.add(cachedMessage));
+                            chatMessages.add(cachedMessage);
                             addedMessages.add(cachedMessage);
+                        }
+                    }
+                    // Set the last message of each chatId as the lastMessage
+                    if (!cachedMessages.isEmpty()) {
+                        MessageModel lastMessage = cachedMessages.getLast();
+                        // Assuming ContactData and Group classes have a setLastMessage method
+                        if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof ContactData) {
+                            ContactData contactData = (ContactData) Model.getInstance().getViewFactory().getSelectedContact().get();
+                            if (contactData.getChatId() == getMessageRequest.getChatId()) {
+                                contactData.setLastMessage(lastMessage.getMessageContent());
+                            }
+                        } else if (Model.getInstance().getViewFactory().getSelectedContact().get() instanceof Group) {
+                            Group group = (Group) Model.getInstance().getViewFactory().getSelectedContact().get();
+                            if (group.getGroupId() == getMessageRequest.getChatId()) {
+                                group.setLastMessage(lastMessage.getMessageContent());
+                            }
                         }
                     }
                 });

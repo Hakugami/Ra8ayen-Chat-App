@@ -14,6 +14,11 @@ public class ContactData extends Chat {
 
     private ImageView image;
 
+
+    private int ChatId;
+
+    private volatile String lastMessage;
+
     public int getChatId() {
         return ChatId;
     }
@@ -21,9 +26,6 @@ public class ContactData extends Chat {
     public void setChatId(int chatId) {
         ChatId = chatId;
     }
-
-    private int ChatId;
-
     public ContactData(String name, Color color, String url) {
         Name = name;
         this.color = color;
@@ -81,5 +83,13 @@ public class ContactData extends Chat {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }
