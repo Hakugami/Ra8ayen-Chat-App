@@ -77,106 +77,66 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        /*int maleCount = 20;
-        int femaleCount = 25;
+        // Fetch users from the database
+        userDaoImp = new UserDaoImpl();
+        users = userDaoImp.getAll();
 
+        TrackOnlineUsersService trackOnlineUsersService = null;
+        try {
+            trackOnlineUsersService = TrackOnlineUsersService.getInstance();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
-        PieChart.Data maleData = new PieChart.Data("Male Users", maleCount);
-        PieChart.Data femaleData = new PieChart.Data("Female Users", femaleCount);
+        // binding label with stringProperty
+        onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
 
-        maleData.nameProperty().bind(Bindings.concat("Male Users: ", maleCount));
-        femaleData.nameProperty().bind(Bindings.concat("Female Users: ", femaleCount));
+        //offlineUserLabel
+        TrackOnlineUsersService finalTrackOnlineUsersService = trackOnlineUsersService;
+        StringBinding offlineUserCountBinding = new StringBinding() {
+            {
+                super.bind(finalTrackOnlineUsersService.onlineUsersCountStringProberty(), userss);
+            }
 
-        genderPieChart.getData().addAll(maleData, femaleData);
-        countryPieChart.getData().addAll(getCountryChartData());
+            @Override
+            protected String computeValue() {
+                int totalUserCount = users.size();
+                int onlineUserCount = Integer.parseInt(finalTrackOnlineUsersService.onlineUsersCountStringProberty().get());
+                int offlineUserCount = totalUserCount - onlineUserCount;
+                return String.valueOf(offlineUserCount);
+            }
+        };
+        offlineUserLabel.textProperty().bind(offlineUserCountBinding);
 
+        startUpdatingPieChart();
+        startUpdatingCountryPieChart();
+        bindCountryPieChartData();
+
+        ObservableList<PieChart.Data> genderChartData = FXCollections.observableArrayList();
+        ObservableList<PieChart.Data> countryChartData = FXCollections.observableArrayList();
+
+        genderPieChart.setData(genderChartData);
+        countryPieChart.setData(countryChartData);
         Platform.runLater(() -> {
-            maleData.getNode().getStyleClass().add("male-pie");
-            femaleData.getNode().getStyleClass().add("female-pie");
-        });*/
-        //-----------------------------------------------------------------------------------------------------
+            for (PieChart.Data data : genderChartData) {
+                Node node = data.getNode();
+                node.setStyle("-fx-pie-color: lightgray;");
+            }
 
-        /*onlineUsersLabel.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("updated label text: " + newValue);
+            for (PieChart.Data data : countryChartData) {
+                Node node = data.getNode();
+                node.setStyle("-fx-pie-color: lightgray;");
+            }
         });
-        onlineUsersLabel.setText(" " + count);
 
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(() -> {
-            count++;
-            Platform.runLater(() -> onlineUsersLabel.setText(" " + count));
-        }, 0, 5, TimeUnit.SECONDS);*/
-        //-----------------------------------------------------------------------------------------------------
-
-        if(NetworkManagerSingleton.getInstance().isServerRunning()) {
-
-            //-----------------------------------------------------------------------------------------------------
-            //onlineUseLabel
-            TrackOnlineUsersService trackOnlineUsersService = null;
-            try {
-                trackOnlineUsersService = TrackOnlineUsersService.getInstance();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-
-
-            System.out.println("proberty ---> " + trackOnlineUsersService.onlineUsersCountStringProberty().get());
-            System.out.println("label ---> " + onlineUsersLabel.getText());
-            // binding label with stringProperty
-            onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
-            //-----------------------------------------------------------------------------------------------------
-            //offlineUserLabel
-            TrackOnlineUsersService finalTrackOnlineUsersService = trackOnlineUsersService;
-            StringBinding offlineUserCountBinding = new StringBinding() {
-                {
-                    super.bind(finalTrackOnlineUsersService.onlineUsersCountStringProberty(), userss);
-                }
-
-                @Override
-                protected String computeValue() {
-                    int totalUserCount = users.size();
-                    System.out.println("userss.size(); --->"+users.size());
-                    int onlineUserCount = Integer.parseInt(finalTrackOnlineUsersService.onlineUsersCountStringProberty().get());
-                    int offlineUserCount = totalUserCount - onlineUserCount;
-                    return String.valueOf(offlineUserCount);
-                }
-            };
-            offlineUserLabel.textProperty().bind(offlineUserCountBinding);
-            //-----------------------------------------------------------------------------------------------------
-
-            startUpdatingPieChart();
-            startUpdatingCountryPieChart();
-            bindCountryPieChartData();
-        }
-        else {
-
-            ObservableList<PieChart.Data> genderChartData = FXCollections.observableArrayList();
-            ObservableList<PieChart.Data> countryChartData = FXCollections.observableArrayList();
-
-            genderPieChart.setData(genderChartData);
-            countryPieChart.setData(countryChartData);
-            Platform.runLater(() -> {
-                for (PieChart.Data data : genderChartData) {
-                    Node node = data.getNode();
-                    node.setStyle("-fx-pie-color: lightgray;");
-                }
-
-                for (PieChart.Data data : countryChartData) {
-                    Node node = data.getNode();
-                    node.setStyle("-fx-pie-color: lightgray;");
-                }
-            });
-
-            // Indicate No Data
-            if (genderChartData.isEmpty()) {
-                genderChartData.add(new PieChart.Data("No Data", 100));
-            }
-
-            if (countryChartData.isEmpty()) {
-                countryChartData.add(new PieChart.Data("No Data", 100));
-            }
+        // Indicate No Data
+        if (genderChartData.isEmpty()) {
+            genderChartData.add(new PieChart.Data("No Data", 100));
         }
 
+        if (countryChartData.isEmpty()) {
+            countryChartData.add(new PieChart.Data("No Data", 100));
+        }
     }
     //-----------------------------------------------------------------------------------------------------------
 
