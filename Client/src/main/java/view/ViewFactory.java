@@ -232,6 +232,10 @@ public class ViewFactory {
         return new FXMLLoader(getClass().getResource("/fxml/Chat/CustomizeFontStyle.fxml")).load();
     }
 
+    public AnchorPane getAddContactElement() throws IOException {
+        return new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml")).load();
+    }
+
 
     public void refreshLatestMessages() {
         try {

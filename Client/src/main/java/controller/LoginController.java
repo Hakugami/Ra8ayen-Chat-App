@@ -263,6 +263,7 @@ public class LoginController {
                     friendRequest.setReceiverPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
                     friendRequest.setSenderPhoneNumber(response.getUsers().get(i).getPhoneNumber());
                     friendRequest.setUserModel(response.getUsers().get(i));
+                    friendRequest.setId(response.getNotifications().get(i).getId());
                     NotificationManager.getInstance().addNotification(friendRequest);
                     Platform.runLater(() -> {
                         Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();

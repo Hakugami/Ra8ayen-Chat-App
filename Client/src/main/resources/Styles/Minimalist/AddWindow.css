@@ -1,57 +1,49 @@
 .root {
-    -fx-background-color: linear-gradient(to bottom, rgb(237, 125, 49), rgb(108, 95, 91));
+    -fx-background-color: #323232;
 }
 
 .button {
-    -fx-background-color: rgba(108, 95, 91, 1); /* No transparency */
-    -fx-text-fill: rgb(246, 241, 238);
+    -fx-background-color: #353535;
+    -fx-text-fill: #FFFFFF;
     -fx-font-size: 16px;
     -fx-font-family: Arial, sans-serif;
     -fx-background-radius: 50px;
 }
 .button:hover {
-    -fx-background-color: rgba(79, 74, 69, 1); /* No transparency */
-}
-
-.label {
-    -fx-text-fill: rgb(79, 74, 69);
-    -fx-font-size: 14px;
-    -fx-font-family: Arial, sans-serif;
-    -fx-wrap-text: true;
+    -fx-background-color: #4C4C4C;
 }
 
 .textField {
-    -fx-background-color: rgb(0, 0, 0);
-    -fx-text-fill: rgb(108, 95, 91);
-    -fx-border-color: rgb(79, 74, 69);
+    -fx-background-color: #3F3F3F;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #737373;
     -fx-border-width: 2px;
     -fx-padding: 10px;
 }
 
-.ImageView:hover{
-    -fx-cursor: hand;
+.label {
+    -fx-text-fill: #919191;
+    -fx-font-size: 14px;
+    -fx-font-family: Arial, sans-serif;
 }
 
-.tab-pane {
-    /* TabPane background color */
-    -fx-background-color: rgb(79, 74, 69);
+.list-view {
+    -fx-background-color: #323232;
+    -fx-control-inner-background: #353535;
+    -fx-cell-hover-color: #4C4C4C;
+    -fx-selection-bar: #2C80FF;
+    -fx-selection-bar-non-focused: #737373;
 }
 
-.tab {
-    /* Tab background color */
-    -fx-background-color: rgb(108, 95, 91);
-    /* Tab text color */
-    -fx-text-fill: rgb(246, 241, 238);
-    /* Tab border color */
-    -fx-border-color: rgb(79, 74, 69);
-    /* Tab border width */
-    -fx-border-width: 2px;
+.list-view .cell {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #353535;
 }
 
-.tab:hover {
-    /* Tab background color */
-    -fx-background-color: rgb(79, 74, 69);
+.list-view .cell:selected {
+    -fx-background-color: #2C80FF;
 }
 
-
-
+.list-view .cell:hover {
+    -fx-background-color: #4C4C4C;
+}

@@ -91,12 +91,12 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
 
     @Override
     public boolean checkToken(String token) throws RemoteException {
-        return false;
+        return sessionManager.getSession(token) != null;
     }
 
     @Override
     public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException {
-        return null;
+        return userService.userMapper.phoneToModel(phoneNumber);
     }
 
     private boolean FriendIsBlocked(String UserPhoneNumber , String FriendPhoneNumber){

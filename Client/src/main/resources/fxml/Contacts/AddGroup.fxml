@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,33 +12,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-
-<AnchorPane stylesheets="@../../Styles/NeoOrange/AddGroup.css" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddGroupGroupController">
-    <VBox alignment="BOTTOM_CENTER" prefHeight="71.0" prefWidth="198.0"
-          stylesheets="@../../Styles/NeoOrange/AddGroup.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane stylesheets="@../../Styles/Minimalist/AddGroup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddGroupGroupController">
+    <VBox alignment="BOTTOM_CENTER" prefWidth="200.0" styleClass="listView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox alignment="CENTER">
-            <ImageView fx:id="groupImage" fitHeight="110.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true"
-                       VBox.vgrow="SOMETIMES">
-                <Image url="@../../Images/group.png"/>
+            <ImageView fx:id="groupImage" fitHeight="69.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true" styleClass="ImageView" VBox.vgrow="SOMETIMES">
+                <Image url="@../../Images/group.png" />
             </ImageView>
         </VBox>
-        <TextField fx:id="groupName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                   minWidth="-Infinity" prefHeight="26.0" prefWidth="198.0" promptText="Group name"/>
-        <TextField fx:id="phoneField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                   minWidth="-Infinity" prefHeight="26.0" prefWidth="198.0" promptText="Enter Phone Number"
-                   VBox.vgrow="ALWAYS"/>
+        <TextField fx:id="groupName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="259.0" promptText="Group name" styleClass="textField" />
+      <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+         <children>
+              <TextField fx:id="phoneField" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="Enter Phone Number" styleClass="textField" />
+               <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="54.0" text="+" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                   <HBox.margin>
+                       <Insets right="5.0" />
+                   </HBox.margin>
+             </Button>
+         </children>
+      </HBox>
+      <ListView fx:id="contactsToAddList" prefHeight="150.0" prefWidth="200.0" styleClass="listView" />
+      <Button fx:id="addAllButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="confirm" />
         <HBox alignment="CENTER" prefHeight="46.0" prefWidth="152.0" VBox.vgrow="ALWAYS">
             <TextFlow prefHeight="200.0" prefWidth="200.0">
-                <Label fx:id="serverReply" prefHeight="45.0" prefWidth="137.0"/>
+                <Label fx:id="serverReply" prefHeight="45.0" prefWidth="87.0" />
             </TextFlow>
-            <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                    prefHeight="30.0" prefWidth="68.0" text="add" textAlignment="CENTER" HBox.hgrow="ALWAYS">
-                <HBox.margin>
-                    <Insets right="5.0"/>
-                </HBox.margin>
-          </Button>
         </HBox>
     </VBox>
 </AnchorPane>

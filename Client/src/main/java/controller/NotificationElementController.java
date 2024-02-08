@@ -57,6 +57,7 @@ public class NotificationElementController implements Initializable {
     }
 
     public void refuseButtonAction() {
+
         for(NotificationModel notificationModel : NotificationManager.getInstance().getNotifactionsList()){
             if(((FriendRequest)notificationModel).getUserModel().getPhoneNumber().equals(friendModel.getPhoneNumber())){
                 try {

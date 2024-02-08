@@ -20,8 +20,24 @@ public class ControllerFactory {
     private OthersProfileController othersProfileController;
     private CustomizeController customizeController;
     private CustomizeFontStyleController customizeFontStyleController;
+    private AddContactController addContactController;
 
 
+    public void setAddContactController(AddContactController addContactController) {
+        this.addContactController = addContactController;
+    }
+    public AddContactController getAddContactController() {
+        if (addContactController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                addContactController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return addContactController;
+    }
     public void setOthersProfileController(OthersProfileController othersProfileController) {
         this.othersProfileController = othersProfileController;
     }
