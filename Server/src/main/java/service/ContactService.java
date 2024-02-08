@@ -116,6 +116,14 @@ public class ContactService{
             getContactsResponse.setUserMode(GetContactsResponse.UserMode.valueOf(user.getUsermode().name()));
             getContactsResponse.setLastLogin(user.getLastLogin());
             getContactsResponse.setChatId(chat.getChatId());
+
+            if(ContactBlockedUser(getContactsRequest.getIdUser(), user.getPhoneNumber())){
+                getContactsResponse.setStatus(false);
+                getContactsResponse.setUserStatus(GetContactsResponse.UserStatus.Offline);
+                getContactsResponse.setUserMode(GetContactsResponse.UserMode.Busy);
+              //  getContactsResponse.setUserMode();
+                System.out.println("Yes SomeOne Block You");
+            }
             listOfGetContactsResponse.add(getContactsResponse);
         }
 
@@ -159,4 +167,11 @@ public class ContactService{
         UserDaoImpl userDao = new UserDaoImpl();
         return userDao.getContactsPhoneNumbers(userID);
     }
+    public boolean ContactBlockedUser(int userID, String FriendPhoneNumber){
+        UserDao userDao = new UserDaoImpl();
+        BlockedUserService blockedUserService = new BlockedUserService();
+        User user = userDao.get(userID);
+        return blockedUserService.checkIfUserBlocked(FriendPhoneNumber,user.getPhoneNumber());
+    }
+
 }

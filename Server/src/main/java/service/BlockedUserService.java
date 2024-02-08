@@ -25,7 +25,7 @@ public class BlockedUserService {
 
         //check before add User as blocked if they are friend
         ChatDao chatDao = new ChatDaoImpl();
-        Chat chat = chatDao.getPrivateChat(blockedUsers.getBlockingUserId(),blockedUsers.getBlockId());
+        Chat chat = chatDao.getPrivateChat(blockedUsers.getBlockingUserId(),blockedUsers.getBlockedUserId());
 
         if(chat==null){ //no private chat between them
              blockUserResponse = blockMapper.getBlockUserResponseFromBlockUser(blockedUsers,false,"No private chat between them");
@@ -42,4 +42,13 @@ public class BlockedUserService {
 
         return blockUserResponse;
     }
+    public boolean checkIfUserBlocked(String UserPhoneNumber, String FriendPhoneNumber){
+        BlockedUserDao blockedUserDao;
+        BlockMapper blockMapper = new BlockMapper();
+        blockedUserDao = new BlockedUserDaoImpl();
+
+        BlockedUsers blockedUsers = blockMapper.getBlockUserFromPhoneNumberUserAndFriendUser(UserPhoneNumber,FriendPhoneNumber);
+        return blockedUserDao.FriendIsBlocked(blockedUsers);
+    }
+
 }

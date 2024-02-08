@@ -10,6 +10,7 @@ import dto.responses.GetContactsResponse;
 import dto.responses.UpdateUserResponse;
 import model.entities.User;
 import server.ServerApplication;
+import service.BlockedUserService;
 import service.ContactService;
 import service.UserService;
 import session.Session;
@@ -31,14 +32,15 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     SessionManager sessionManager;
     UserMapperImpl userMapper;
 
+    BlockedUserService blockedUserService;
     private UserProfileControllerSingleton() throws RemoteException {
         super();
         userService = new UserService();
         sessionManager = SessionManager.getInstance();
         userMapper = new UserMapperImpl();
         contactService = new ContactService();
+        blockedUserService = new BlockedUserService();
     }
-
     public static UserProfileControllerSingleton getInstance() throws RemoteException {
         if (userProfileControllerSingleton == null) {
             userProfileControllerSingleton = new UserProfileControllerSingleton();
@@ -46,7 +48,6 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         }
         return userProfileControllerSingleton;
     }
-
     @Override
     public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
         User user = userMapper.modelToEntity(updateUserRequest.getUserModel());
@@ -57,7 +58,12 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         ConcurrencyManager.getInstance().submitTask(() -> {
             for (GetContactsResponse contact : contacts) {
                 try {
-                    if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null) {
+                    if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null){
+                        //here i check if user need to change his status
+                        if(updateUserRequest.isChangeStatus() && getInstance().FriendIsBlocked(updateUserRequest.getUserModel().getPhoneNumber(), contact.getPhoneNumber()) ){
+                          System.out.println("This Contact is Blocked "+contact.getPhoneNumber());
+                            continue;
+                        }
                         OnlineControllerImpl.clients.get(contact.getPhoneNumber()).updateOnlineList();
                     }
                 } catch (SQLException | ClassNotFoundException | NotBoundException | RemoteException e) {
@@ -73,8 +79,8 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     @Override
     public UserModel getUserModel(String Token) throws RemoteException {
         System.out.println("User profile request received from client.");
-        Session session = sessionManager.getSession(Token);
-        if (session != null) {
+        Session session = sessionManager.getSession(Token) ;
+        if(session != null){
             logger.info("User profile request received from client.");
             return userService.userMapper.phoneToModel(session.getUser().getPhoneNumber());
 
@@ -85,14 +91,16 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
 
     @Override
     public boolean checkToken(String token) throws RemoteException {
-        Session session = sessionManager.getSession(token);
-        return session != null;
+        return false;
     }
 
     @Override
     public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException {
-        User user = userService.getUserByPhoneNumber(phoneNumber);
-        return userMapper.entityToModel(user);
+        return null;
+    }
+
+    private boolean FriendIsBlocked(String UserPhoneNumber , String FriendPhoneNumber){
+        return blockedUserService.checkIfUserBlocked(UserPhoneNumber, FriendPhoneNumber);
     }
 
 }

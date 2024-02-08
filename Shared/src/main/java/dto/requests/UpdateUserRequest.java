@@ -7,11 +7,14 @@ import java.io.Serializable;
 public class UpdateUserRequest implements Serializable {
     private UserModel userModel;
 
+    private boolean changeStatus ;
+
     public UpdateUserRequest(UserModel userModel) {
         this.userModel = userModel;
     }
 
     public UpdateUserRequest() {
+        changeStatus = false;
     }
 
     public UserModel getUserModel() {
@@ -26,5 +29,13 @@ public class UpdateUserRequest implements Serializable {
         return "UpdateUserRequest{" +
                 "userModel=" + userModel +
                 '}';
+    }
+
+    public boolean isChangeStatus() {
+        return changeStatus;
+    }
+
+    public void setChangeStatus(boolean changeStatus) {
+        this.changeStatus = changeStatus;
     }
 }

@@ -171,6 +171,7 @@ public class ContactsController implements Initializable {
 
 // Create the UpdateUserRequest with the new UserModel instance
         UpdateUserRequest updateUserRequest = new UpdateUserRequest(user);
+        updateUserRequest.setChangeStatus(true);
 
 // Send the request
         NetworkFactory.getInstance().updateUser(updateUserRequest);

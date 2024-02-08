@@ -92,6 +92,7 @@ public class BlockedUserDaoImpl implements BlockedUserDao {
         return false;
     }
 
+
     @Override
     public int deleteByBlockingAndBlockedUser(BlockedUsers blockedUser) {
         String query = "DELETE FROM BlockedUsers WHERE BlockingUserID = ? AND BlockedUserID = ?";
@@ -122,6 +123,28 @@ public class BlockedUserDaoImpl implements BlockedUserDao {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public boolean FriendIsBlocked(BlockedUsers blockedUsers) {
+        String query = "SELECT * FROM BlockedUsers WHERE BlockingUserID = ? AND BlockedUserID = ?";
+        try(Connection connection= DataSourceSingleton.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1,blockedUsers.getBlockingUserId());
+            statement.setInt(2,blockedUsers.getBlockedUserId());
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                System.out.println("Message From Doa Block Exist "+resultSet.toString());
+                return true;
+            }else{
+                System.out.println("Message From Doa No Block Found ");
+                return false;
+            }
+        } catch (SQLException e) {
+           // throw new RuntimeException(e);
+            System.out.println(" Message From Doa Exception happened " + e.getMessage());
+            return false;
+        }
     }
 
     private BlockedUsers createBlockedUser(ResultSet resultSet) throws SQLException {

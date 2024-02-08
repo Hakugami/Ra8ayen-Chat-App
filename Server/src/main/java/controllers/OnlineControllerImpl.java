@@ -3,6 +3,7 @@ import concurrency.manager.ConcurrencyManager;
 import dto.Controller.CallBackController;
 import dto.Controller.OnlineController;
 import model.entities.User;
+import service.BlockedUserService;
 import service.ContactService;
 import service.UserService;
 
@@ -17,10 +18,13 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     private static final Logger logger = Logger.getLogger(OnlineController.class.getName());
     private static OnlineControllerImpl onlineController;
     private final ContactService contactService;
+
+    private final BlockedUserService blockedUserService;
     public static Map<String, CallBackController> clients =new ConcurrentHashMap<>();
     private OnlineControllerImpl() throws RemoteException {
         super();
         contactService = new ContactService();
+        blockedUserService = new BlockedUserService();
     }
     public static OnlineControllerImpl getInstance() throws RemoteException {
         if (onlineController == null) {
@@ -52,7 +56,8 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
         User user = new UserService().getUserByPhoneNumber(phoneNumber);
         List<String> userFriends = contactService.getFriendsPhoneNumbers(user.getUserID());
         for (String friendPhoneNumber : userFriends) {
-            if (clients.containsKey(friendPhoneNumber)) {
+            if (clients.containsKey(friendPhoneNumber) && UserNotBlocked(phoneNumber,friendPhoneNumber)) {
+
                 try {
                     if(userStatus.equals(User.UserStatus.Online))
                         clients.get(friendPhoneNumber).userIsOnline(user.getUserName());
@@ -65,5 +70,9 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
             }
         }
     }
+    private boolean UserNotBlocked(String UserPhoneNumber , String FriendPhoneNumber){
+        return !blockedUserService.checkIfUserBlocked(UserPhoneNumber, FriendPhoneNumber);
+    }
+
 }
 
