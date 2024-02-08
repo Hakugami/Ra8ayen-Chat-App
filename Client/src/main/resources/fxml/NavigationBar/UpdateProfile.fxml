@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane styleClass="register_form_container" stylesheets="@../../Styles/NeoOrange/UpdateProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateProfileController">
+<AnchorPane styleClass="register_form_container" stylesheets="@../../Styles/Minimalist/UpdateProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateProfileController">
    <VBox alignment="CENTER" prefHeight="66.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <Label text="Edit Profile" />
    </VBox>

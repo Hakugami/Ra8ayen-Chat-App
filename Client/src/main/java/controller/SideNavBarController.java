@@ -13,6 +13,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
@@ -78,13 +79,18 @@ public class SideNavBarController implements Initializable {
         Model.getInstance().getViewFactory().getSelectedMenuItem().setValue("Contacts");
 
     }
-    private void handleLogout() throws NotBoundException, RemoteException {
-        String[] data = TokenManager.getInstance().loadData();
-        String write = data[0] + "\n" + data[1] + "\n" + 0;
-        HelloApplication.disconnectUser();
-        Model.getInstance().getViewFactory().showLoginWindow();
-        TokenManager.getInstance().setToken(write);
-    }
+private void handleLogout() throws NotBoundException, RemoteException {
+    String[] data = TokenManager.getInstance().loadData();
+    String write = data[0] + "\n" + data[1] + "\n" + 0;
+    HelloApplication.disconnectUser();
+
+    // Get the current stage and hide it
+    Stage currentStage = (Stage) logout_btn.getScene().getWindow();
+    currentStage.hide();
+
+    Model.getInstance().getViewFactory().showLoginWindow();
+    TokenManager.getInstance().setToken(write);
+}
 
     private void handleNotification(ActionEvent event) {
         try {
