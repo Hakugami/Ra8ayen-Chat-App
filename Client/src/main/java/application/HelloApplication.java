@@ -62,7 +62,6 @@ public class HelloApplication extends Application {
     public static void disconnectUser() throws RemoteException, NotBoundException {
         if (makeUserOffline()) {
             NetworkFactory.getInstance().disconnect(CurrentUser.getCurrentUser().getPhoneNumber(), CurrentUser.getInstance().getCallBackController());
-            ConcurrencyManager.getInstance().forceShutdown();
         }
 
     }
