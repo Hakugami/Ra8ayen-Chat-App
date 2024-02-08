@@ -1,5 +1,6 @@
 package controllers;
 
+import dao.impl.UserDaoImpl;
 import dto.Controller.AuthenticationController;
 import dto.requests.LoginRequest;
 import dto.requests.RegisterRequest;
@@ -18,6 +19,7 @@ import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -28,12 +30,16 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
     private final HashService hashService;
     private EncryptionService encryptionService;
     private final SessionManager sessionManager;
-public AuthenticationControllerSingleton() throws RemoteException {
+    UserDaoImpl userDaoImp = new UserDaoImpl();
+    List<User> users = userDaoImp.getAll();
+    static int offlineUsers ;
+private AuthenticationControllerSingleton() throws RemoteException {
     super();
     userService = new UserService();
     hashService = new HashService(getClass().getClassLoader().getResourceAsStream("hashing.properties"));
     encryptionService = new EncryptionService(getClass().getClassLoader().getResourceAsStream("keystore.jceks"), "Buh123!","Buh1234!", getClass().getClassLoader().getResourceAsStream("encryption.properties"));
     sessionManager = SessionManager.getInstance();
+    offlineUsers = users.size();
 }
 
 
@@ -82,6 +88,9 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
         if (user != null) {
             registerResponse.setSuccess(true);
             UsersTableStateSingleton.getInstance().addUser(user);
+            //offlineUsers++;
+            UpdateOfflineUsers(getOfflineUsers()+1);
+            UsersTableStateSingleton.getInstance().addUser(user);
         } else {
             registerResponse.setSuccess(false);
             registerResponse.setError("Registration failed. Please try again.");
@@ -96,5 +105,15 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
 
     private String generateToken() {
         return UUID.randomUUID().toString();
+    }
+
+    public static void setOfflineUsers(int offlineUsers) {
+        AuthenticationControllerSingleton.offlineUsers = offlineUsers;
+    }
+    public static int getOfflineUsers(){
+        return AuthenticationControllerSingleton.offlineUsers;
+    }
+    public static void UpdateOfflineUsers(int offlineUsers){
+        setOfflineUsers(offlineUsers);
     }
 }

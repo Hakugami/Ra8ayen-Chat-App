@@ -5,6 +5,7 @@ import controllers.OnlineControllerImpl;
 import dto.Controller.CallBackController;
 import dto.Controller.SendHeartBeatToServerFromClient;
 
+import java.net.MalformedURLException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -60,7 +61,7 @@ public class SendHeartBeatService extends UnicastRemoteObject implements SendHea
                     CallBackController callBackController = clientCallBackMap.get(phoneNumber);
                     OnlineControllerImpl.getInstance().disconnect(phoneNumber, callBackController);
                     logger.info("client with phoneNumber =  " + phoneNumber + " is disconnected now");
-                } catch (RemoteException e) {
+                } catch (RemoteException | MalformedURLException e) {
                     System.out.println(e.getMessage());
                 }
                 iterator.remove();

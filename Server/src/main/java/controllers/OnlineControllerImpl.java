@@ -5,8 +5,10 @@ import dto.Controller.OnlineController;
 import model.entities.User;
 import service.BlockedUserService;
 import service.ContactService;
+import service.TrackOnlineUsersService;
 import service.UserService;
 
+import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -18,15 +20,19 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     private static final Logger logger = Logger.getLogger(OnlineController.class.getName());
     private static OnlineControllerImpl onlineController;
     private final ContactService contactService;
+    TrackOnlineUsersService trackOnlineUsersService;
+    AuthenticationControllerSingleton auth;
 
     private final BlockedUserService blockedUserService;
     public static Map<String, CallBackController> clients =new ConcurrentHashMap<>();
-    private OnlineControllerImpl() throws RemoteException {
+    private OnlineControllerImpl() throws RemoteException, MalformedURLException {
         super();
         contactService = new ContactService();
         blockedUserService = new BlockedUserService();
+        trackOnlineUsersService = new TrackOnlineUsersService();
+        auth = AuthenticationControllerSingleton.getInstance();
     }
-    public static OnlineControllerImpl getInstance() throws RemoteException {
+    public static OnlineControllerImpl getInstance() throws RemoteException, MalformedURLException {
         if (onlineController == null) {
             onlineController = new OnlineControllerImpl();
             logger.info("OnlineControllerImpl object bound to name 'OnlineController'.");
@@ -37,11 +43,19 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     @Override
     public boolean connect(String phoneNumber, CallBackController callBackController) throws RemoteException {
         ConcurrencyManager.getInstance().submitTask(() -> friendStatusNotifier(phoneNumber, User.UserStatus.Online));
+
+
+
         if(clients.containsKey(phoneNumber)) {
             return false;
         }
         else {
             clients.put(phoneNumber, callBackController);
+            System.out.println("connect clients = "+clients.size());
+            trackOnlineUsersService.updateOnlineUsersCount(clients.size());
+            System.out.println("connect 1 : " + auth.getOfflineUsers());
+            auth.UpdateOfflineUsers(auth.getOfflineUsers()- clients.size());
+            System.out.println("connect 2 : " + (auth.getOfflineUsers()));
             return true;
         }
     }
@@ -49,6 +63,11 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     public void disconnect(String phoneNumber, CallBackController callBackController) throws RemoteException {
         ConcurrencyManager.getInstance().submitTask(() -> friendStatusNotifier(phoneNumber, User.UserStatus.Offline));
         clients.remove(phoneNumber);
+        System.out.println("disconnect clients = "+clients.size());
+        trackOnlineUsersService.updateOnlineUsersCount(clients.size());
+        System.out.println("disconnect 1 : " + auth.getOfflineUsers());
+        auth.UpdateOfflineUsers(auth.getOfflineUsers()+ 1);
+        System.out.println("disconnect 2 : " + (auth.getOfflineUsers()+1));
     }
 
     private void friendStatusNotifier(String phoneNumber, User.UserStatus userStatus) {

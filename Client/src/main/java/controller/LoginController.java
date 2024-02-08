@@ -143,9 +143,9 @@ public class LoginController {
                          * tracking number of online users
                          *
                          * */
-                        onlineUsersCount++;
-                        startTrackingOnlineUsers();
-                        new Logout().startHeartbeat();
+                        //onlineUsersCount++;
+                        //startTrackingOnlineUsers();
+                        //new Logout().startHeartbeat();
                     } else {
                         System.err.println("Invalid fields1");
                         shakeAnimation();
