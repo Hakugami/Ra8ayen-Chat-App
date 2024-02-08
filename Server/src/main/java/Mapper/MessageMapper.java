@@ -9,6 +9,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(uses = {UserMapper.class})
 public interface MessageMapper {
+
+
     Message sendRequestToEntity(SendMessageRequest request);
     SendMessageRequest entityToSendRequest(Message message);
     @Mapping(source = "chatId", target = "receiverId")

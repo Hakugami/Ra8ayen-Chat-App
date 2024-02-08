@@ -77,37 +77,32 @@ public class UserDaoImpl implements UserDao {
         StringBuilder query = new StringBuilder("UPDATE UserAccounts SET ");
         List<Object> parameters = new ArrayList<>();
 
-        if (!user.getUserName().equals(originalUser.getUserName())) {
+        if (user.getUserName() != null && !user.getUserName().equals(originalUser.getUserName())) {
             query.append("DisplayName = ?, ");
             parameters.add(user.getUserName());
         }
 
-        if (!user.getEmailAddress().equals(originalUser.getEmailAddress())) {
+        if (user.getEmailAddress() != null && !user.getEmailAddress().equals(originalUser.getEmailAddress())) {
             query.append("EmailAddress = ?, ");
             parameters.add(user.getEmailAddress());
         }
 
-        if (!Arrays.equals(user.getProfilePicture(), originalUser.getProfilePicture())) {
+        if (user.getProfilePicture() != null && !Arrays.equals(user.getProfilePicture(), originalUser.getProfilePicture())) {
             query.append("ProfilePicture = ?, ");
             parameters.add(user.getProfilePicture());
         }
 
-//        if (!user.getPasswordHash().equals(originalUser.getPasswordHash())) {
-//            query.append("PasswordHash = ?, ");
-//            parameters.add(user.getPasswordHash());
-//        }
-
-        if (!user.getBio().equals(originalUser.getBio())) {
+        if (user.getBio() != null && !user.getBio().equals(originalUser.getBio())) {
             query.append("Bio = ?, ");
             parameters.add(user.getBio());
         }
 
-        if (user.getUserStatus() != originalUser.getUserStatus()) {
+        if (user.getUserStatus() != null && user.getUserStatus() != originalUser.getUserStatus()) {
             query.append("UserStatus = ?, ");
             parameters.add(user.getUserStatus().name());
         }
 
-        if (user.getUsermode() != originalUser.getUsermode()) {
+        if (user.getUsermode() != null && user.getUsermode() != originalUser.getUsermode()) {
             query.append("UserMode = ?, ");
             parameters.add(user.getUsermode().name());
         }
@@ -205,6 +200,26 @@ public class UserDaoImpl implements UserDao {
         }
 
         return userList;
+    }
+
+
+    public List<String> getContactsPhoneNumbers(int userID) {
+        List<String> phoneNumbers = new ArrayList<>();
+        String query = "SELECT ua.PhoneNumber FROM UserAccounts ua " +
+                "INNER JOIN UserContacts uc ON ua.UserID  = uc.FriendID " +
+                "WHERE uc.UserID = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userID);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    phoneNumbers.add(resultSet.getString(UserTable.PhoneNumber.name()));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return phoneNumbers;
     }
 
     private User convertResultSetToUser(ResultSet resultSet) throws SQLException {

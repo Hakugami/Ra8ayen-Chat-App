@@ -4,23 +4,19 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="750.0" prefWidth="50.0" styleClass="main_menu_container" stylesheets="@../../Styles/NeoOrange/NeoSideNavBar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SideNavBarController">
-   <AnchorPane prefHeight="750.0" prefWidth="50.0">
-      <VBox prefHeight="66.0" prefWidth="100.0" styleClass="title_container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<VBox alignment="CENTER" prefHeight="750.0" prefWidth="50.0" styleClass="main_menu_container" stylesheets="@../../Styles/Minimalist/NeoSideNavBar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SideNavBarController">
+   <AnchorPane prefHeight="750.0" prefWidth="50.0" VBox.vgrow="ALWAYS">
+      <VBox alignment="CENTER" prefHeight="66.0" prefWidth="100.0" styleClass="title_container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <FontAwesomeIconView glyphName="COMMENTS" size="30" />
       </VBox>
-      <VBox layoutY="99.0" prefHeight="400.0" prefWidth="100.0" styleClass="menu_container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <VBox alignment="CENTER" layoutY="99.0" prefHeight="400.0" prefWidth="100.0" styleClass="menu_container" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <Button fx:id="contacts_btn" mnemonicParsing="false">
             <graphic>
                <FontAwesomeIconView glyphName="ADDRESS_BOOK" />
-            </graphic>
-         </Button>
-         <Button fx:id="calls_btn" mnemonicParsing="false">
-            <graphic>
-               <FontAwesomeIconView glyphName="PHONE" />
             </graphic>
          </Button>
          <Button fx:id="notificationButton" mnemonicParsing="false">
@@ -28,8 +24,13 @@
                <FontAwesomeIconView glyphName="BELL" />
             </graphic>
          </Button>
+         <ToggleButton fx:id="chatBotToggleButton" mnemonicParsing="false">
+            <graphic>
+               <FontAwesomeIconView glyphName="ANDROID" selectionFill="BLACK" />
+            </graphic>
+         </ToggleButton>
       </VBox>
-      <VBox layoutY="543.0" prefHeight="140.0" prefWidth="100.0" styleClass="menu_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <VBox alignment="CENTER" layoutY="543.0" prefHeight="140.0" prefWidth="100.0" styleClass="menu_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <Button fx:id="settings_btn" mnemonicParsing="false">
             <graphic>
                <FontAwesomeIconView glyphName="COG" />
@@ -48,9 +49,7 @@
                <FontAwesomeIconView glyphName="EXTERNAL_LINK" />
             </graphic>
          </Button>
-         <AnchorPane prefHeight="57.0" prefWidth="54.0">
-            <FontAwesomeIconView glyphName="USER" layoutX="20.0" layoutY="35.0" size="20" styleClass="user_icon_container" AnchorPane.bottomAnchor="19.14285659790039" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.714285850524902" AnchorPane.topAnchor="17.85714340209961" />
-         </AnchorPane>
+         <AnchorPane prefHeight="57.0" prefWidth="54.0" />
       </VBox>
    </AnchorPane>
 </VBox>

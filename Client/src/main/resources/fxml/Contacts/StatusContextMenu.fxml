@@ -4,10 +4,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="100.0" prefWidth="100.0" stylesheets="@../../Styles/NeoOrange/StatusContextMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StatusContextMenuController">
-    <VBox fx:id="statusContextMenu" prefHeight="100.0" prefWidth="100.0" styleClass="status-context-menu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Label fx:id="available" prefHeight="32.0" prefWidth="96.0" styleClass="menu-item" text="Available" />
-        <Label fx:id="busy" prefHeight="32.0" prefWidth="100.0" styleClass="menu-item" text="Busy" />
-        <Label fx:id="away" prefHeight="32.0" prefWidth="100.0" styleClass="menu-item" text="Away" />
+<AnchorPane fx:id="anchorPane" prefHeight="153.0" prefWidth="100.0" stylesheets="@../../Styles/NeoOrange/StatusContextMenu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StatusContextMenuController">
+    <VBox fx:id="statusContextMenu" alignment="CENTER" prefHeight="131.0" prefWidth="100.0" styleClass="status-context-menu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label fx:id="available" prefHeight="35.0" prefWidth="96.0" styleClass="menu-item" text="Available" />
+        <Label fx:id="busy" prefHeight="35.0" prefWidth="100.0" styleClass="menu-item" text="Busy" />
+        <Label fx:id="away" prefHeight="35.0" prefWidth="100.0" styleClass="menu-item" text="Away" />
+      <Label fx:id="offline" prefHeight="35.0" prefWidth="100.0" text="Offline" />
     </VBox>
 </AnchorPane>

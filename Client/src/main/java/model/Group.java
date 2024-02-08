@@ -1,6 +1,5 @@
 package model;
 
-import controller.ContactData;
 import javafx.scene.image.ImageView;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public class Group extends Chat {
     private String groupName;
     private ImageView groupImage;
     List<ContactData> groupMembers;
-
+    private String lastMessage;
     public Group(){
         groupMembers = new CopyOnWriteArrayList<>();
     }
@@ -66,5 +65,13 @@ public class Group extends Chat {
 
     public void setGroupMembers(List<ContactData> groupMembers) {
         this.groupMembers = groupMembers;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }

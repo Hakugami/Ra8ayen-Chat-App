@@ -1,75 +1,115 @@
-.tree-view  {
-    -fx-background-color: rgb(246, 241, 238); /* light gray */
+/* General Styling */
+* {
+    -fx-font-smoothing-type: lcd; /* Improved font smoothing */
 }
+
+/* TreeView Styling */
+.tree-view {
+    -fx-background-color: #F6F1EE; /* Light gray background */
+}
+
 .tree-view .tree-cell {
-    -fx-background-color:rgb(246, 241, 238); /* light gray */
+    -fx-background-color: #F6F1EE; /* Light gray background for cells */
 }
-.tree-view .tree-cell:filled:hover {
-    -fx-background-color: rgb(243, 215, 189); /* light gray */
+
+.tree-view .tree-cell:selected {
+    -fx-background-color: rgba(237, 125, 49, 0.4); /* Orange selection with transparency */
     -fx-text-fill: white;
 }
+
+.tree-view .tree-cell:filled:hover {
+    -fx-background-color: #F3D7BD; /* Light brown hover color */
+    -fx-text-fill: white;
+}
+
 .tree-view .scroll-bar {
     -fx-opacity: 0;
 }
 
-.tree-view .scroll-bar .thumb {
-    -fx-background-color: transparent;
-}
-
+.tree-view .scroll-bar .thumb,
 .tree-view .scroll-bar .track {
-    -fx-background-color: transparent;
+    -fx-background-color: transparent; /* Hide scrollbar thumb and track */
 }
 
 .tree-view .scroll-bar .thumb:horizontal:hover,
 .tree-view .scroll-bar .thumb:horizontal:pressed {
-    -fx-background-color: transparent;
+    -fx-background-color: transparent; /* Hide horizontal scrollbar thumb on hover/press */
 }
 
 .tree-view .scroll-bar {
-    -fx-background-color: rgb(246, 241, 238);
+    -fx-background-color: #F6F1EE; /* Light gray background for scrollbar */
 }
 
-/* Style the TextField */
+/* TextField Styling */
 .TextField {
-    -fx-background-color: rgb(246, 241, 238);
-    -fx-border-color: rgb(108, 95, 91);
+    -fx-background-color: #F6F1EE; /* Light gray background */
+    -fx-border-color: #6C5F5B; /* Border color */
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-font-size: 14px;
-    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-font-family: 'SF Pro Display', 'Arial', sans-serif; /* New font family */
 }
 
-/* Style the Label */
+/* AnchorPane Styling */
+.anchor-pane {
+    -fx-background-color: #F6F1EE; /* Light gray background */
+    -fx-border-color: linear-gradient(to bottom, #6C5F5B, #4F4A45); /* Gradient border */
+    -fx-border-width: 0 1px 0 0; /* Top right bottom left */
+}
+
+/* Label Styling */
 .Label {
-    -fx-text-fill: rgb(79, 74, 69);
+    -fx-text-fill: #4F4A45; /* Dark brown text color */
     -fx-font-size: 14px;
-    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-font-family: 'SF Pro Display', 'Arial', sans-serif; /* New font family */
     -fx-font-weight: bold;
 }
 
-/* Style the ImageView */
+/* ImageView Styling */
 .ImageView {
-    -fx-border-color: rgb(108, 95, 91);
+    -fx-border-color: #6C5F5B; /* Border color */
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
 }
 
-/* Style the Circle */
-/* Contacts.css */
-
+/* Circle Styling */
 .Circle:hover {
-    -fx-stroke: rgb(237, 125, 49); /* Change the stroke color on hover */
+    -fx-stroke: #ED7D31; /* Orange stroke color on hover */
 }
 
-/*!* Style the TreeView *!*/
-/*.TreeView {*/
-/*    -fx-background-color: rgb(246, 241, 238);*/
-/*}*/
-
+/* Label with ID Styling */
 #myLabel {
-    -fx-text-fill: rgb(79, 74, 69);
-    -fx-font:  15px 'SF Pro Display', 'Arial' , 'sans-serif'; /* New font */
+    -fx-text-fill: #4F4A45; /* Dark brown text color */
+    -fx-font: 15px 'SF Pro Display', 'Arial', sans-serif; /* New font family */
     -fx-font-weight: bold;
     -fx-pref-width: 300px;
     -fx-pref-height: 25px;
+}
+
+/* Online Status Styling */
+.online-status {
+    -fx-fill: linear-gradient(to bottom, #4CAF50, #8BC34A); /* Green gradient for online */
+    -fx-stroke: linear-gradient(to bottom, #4CAF50, #8BC34A);
+    -fx-stroke-line-cap: round;
+}
+
+/* Offline Status Styling */
+.offline-status {
+    -fx-fill: linear-gradient(to bottom, #f44336, #e57373); /* Red gradient for offline */
+    -fx-stroke: linear-gradient(to bottom, #f44336, #e57373);
+    -fx-stroke-line-cap: round;
+}
+
+/* Away Status Styling */
+.away-status {
+    -fx-fill: linear-gradient(to bottom, #ff9800, #ffb74d); /* Orange gradient for away */
+    -fx-stroke: linear-gradient(to bottom, #ff9800, #ffb74d);
+    -fx-stroke-line-cap: round;
+}
+
+/* Busy Status Styling */
+.busy-status {
+    -fx-fill: linear-gradient(to bottom, #9c27b0, #ba68c8); /* Purple gradient for busy */
+    -fx-stroke: linear-gradient(to bottom, #9c27b0, #ba68c8);
+    -fx-stroke-line-cap: round;
 }

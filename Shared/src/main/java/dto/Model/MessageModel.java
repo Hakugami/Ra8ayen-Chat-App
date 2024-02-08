@@ -2,6 +2,8 @@ package dto.Model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class MessageModel implements Serializable {
     private int MessageId;
@@ -10,8 +12,11 @@ public class MessageModel implements Serializable {
     private String messageContent;
     private LocalDateTime time;
     private boolean isAttachment;
-
+    private byte[] Attachment;
     private int chatId;
+    private boolean isGroupMessage;
+
+    private StyleMessage styleMessage;
 
     public int getChatId() {
         return chatId;
@@ -101,6 +106,43 @@ public class MessageModel implements Serializable {
         this.receiver = receiver;
     }
 
+    public byte[] getAttachment() {
+        return Attachment;
+    }
+
+    public void setAttachment(byte[] attachment) {
+        Attachment = attachment;
+    }
+
+    public boolean isGroupMessage() {
+        return isGroupMessage;
+    }
+
+    public void setGroupMessage(boolean groupMessage) {
+        isGroupMessage = groupMessage;
+    }
+
+    public byte[] getAttachmentData() {
+        return Attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        Attachment = attachment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MessageModel that = (MessageModel) o;
+        return Objects.equals(MessageId, that.MessageId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(MessageId);
+    }
+
     @Override
     public String toString() {
         return "MessageModel{" +
@@ -109,7 +151,22 @@ public class MessageModel implements Serializable {
                 ", receiver=" + receiver +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
-                ", isAttachment=" + isAttachment +
+                ", getIsAttachment=" + isAttachment +
+                ", Attachment=" + Arrays.toString(Attachment) +
+                ", chatId=" + chatId +
+                ", isGroupMessage=" + isGroupMessage +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
                 '}';
     }
+
+    public StyleMessage getStyleMessage() {
+        return styleMessage;
+    }
+
+    public void setStyleMessage(StyleMessage styleMessage) {
+        this.styleMessage = styleMessage;
+    }
+
+
 }

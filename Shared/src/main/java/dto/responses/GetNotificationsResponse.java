@@ -3,10 +3,11 @@ package dto.responses;
 import dto.Model.NotificationModel;
 import dto.Model.UserModel;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class GetNotificationsResponse {
+public class GetNotificationsResponse implements Serializable {
     List<NotificationModel> notifications;
     List<UserModel> users;
     boolean isDone;

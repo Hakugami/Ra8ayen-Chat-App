@@ -1,8 +1,8 @@
 package view;
 
-import controller.*;
-import model.Chat;
-import token.TokenManager;
+import controller.ContactsController;
+import dto.Model.MessageModel;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,48 +10,55 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.Chat;
+import model.CurrentUser;
 import model.Model;
-import network.NetworkFactory;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class ViewFactory {
     private final StringProperty selectedMenuItem;
     private final ObjectProperty<Chat> selectedContact;
     private BorderPane mainArea;
 
+    private static final Logger LOGGER = Logger.getLogger(ViewFactory.class.getName());
 
     public ViewFactory() {
         this.selectedMenuItem = new SimpleStringProperty("");
         this.selectedContact = new SimpleObjectProperty<>();
     }
 
+
     public StringProperty getSelectedMenuItem() {
         return selectedMenuItem;
     }
+
     public ObjectProperty<Chat> getSelectedContact() {
         return selectedContact;
     }
 
     public BorderPane getMainArea() {
-        if (mainArea == null) {
+
             try {
                 mainArea = new FXMLLoader(getClass().getResource("/fxml/Home/MainWindow.fxml")).load();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+
         return mainArea;
     }
 
-    public BorderPane autoLogin() throws NotBoundException, RemoteException {
-        NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken());
-        return getMainArea();
+    public void autoLogin(){
+        Model.getInstance().getControllerFactory().getLoginController().autoLoginTransition();
     }
 
     public void showProfile() {
@@ -84,7 +91,7 @@ public class ViewFactory {
 //        LoginController client = new LoginController();
 //        client.connectToServer();
 //        client.startTrackingOnlineUsers();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Authentication/Login.fxml"));
         createStage(loader);
     }
 
@@ -156,19 +163,13 @@ public class ViewFactory {
 
     public Node getContacts() {
         try {
-            return new FXMLLoader(getClass().getResource("/Fxml/Contacts/Contacts.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Node getSettings() {
-        try {
-            return new FXMLLoader(getClass().getResource("/FXML/Settings.fxml")).load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     public Node getRegister() {
         try {
@@ -195,7 +196,6 @@ public class ViewFactory {
     }
 
 
-
     public Node getContactElement() throws IOException {
         return new FXMLLoader(getClass().getResource("/Fxml/Contacts/ContactElement.fxml")).load();
     }
@@ -204,6 +204,79 @@ public class ViewFactory {
         try {
             return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/UpdateProfile.fxml")).load();
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public HBox getCustomizeLabels() throws IOException {
+        return new FXMLLoader(getClass().getResource("/fxml/Chat/customizeText.fxml")).load();
+    }
+
+    public Node getVoiceChatPopUp() {
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatPopUp.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getVoiceChatWait() {
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatWait.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public AnchorPane getCustomizeFontStyle() throws IOException {
+        return new FXMLLoader(getClass().getResource("/fxml/Chat/CustomizeFontStyle.fxml")).load();
+    }
+
+
+    public void refreshLatestMessages() {
+        try {
+            // Loop over each group
+            CurrentUser.getInstance().getGroupList().stream().forEach(group -> {
+                // Get the messages for the group
+                List<MessageModel> messages = null;
+                try {
+                    messages = CurrentUser.getInstance().getChatMessageMap().get(group.getGroupId());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+                if (messages != null && !messages.isEmpty()) {
+                    // Set the last message of the group
+                    group.setLastMessage(messages.getLast().getMessageContent());
+                }
+            });
+
+            CurrentUser.getInstance().getContactDataList().stream().forEach(contactData -> {
+                // Get the messages for the contact data
+                List<MessageModel> messages = null;
+                try {
+                    messages = CurrentUser.getInstance().getChatMessageMap().get(contactData.getChatId());
+                    if (messages == null || messages.isEmpty()) {
+                        LOGGER.info("No messages found for chatId: " + contactData.getChatId());
+                    } else {
+                        LOGGER.info("Messages found for chatId: " + contactData.getChatId() + " Number of messages: " + messages.size());
+                        // Set the last message of the contact data
+                        contactData.setLastMessage(messages.get(messages.size() - 1).getMessageContent());
+                    }
+                } catch (RemoteException e) {
+                    LOGGER.severe("RemoteException occurred while retrieving messages for chatId: " + contactData.getChatId() + " Exception: " + e.getMessage());
+                    throw new RuntimeException(e);
+                }
+            });
+
+            // Update the tree view data in the ContactsController on the JavaFX Application Thread
+            Platform.runLater(() -> {
+                try {
+                    Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }

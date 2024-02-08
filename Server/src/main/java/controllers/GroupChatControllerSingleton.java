@@ -2,6 +2,7 @@ package controllers;
 
 import Mapper.ChatMapper;
 import Mapper.ChatParticipantMapper;
+import concurrency.manager.ConcurrencyManager;
 import dto.Controller.GroupChatController;
 import dto.requests.AddUserToGroupRequest;
 import dto.requests.CreateGroupChatRequest;
@@ -74,20 +75,26 @@ public class GroupChatControllerSingleton extends UnicastRemoteObject implements
         }
 
         List<String> friendsPhoneNumbers = request.getFriendsPhoneNumbers();
-        try {
-            OnlineControllerImpl.clients.get(request.getAdminPhoneNumber()).updateOnlineList();
-        } catch (SQLException | NotBoundException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        for(String friendPhoneNumber : friendsPhoneNumbers){
+
+        ConcurrencyManager.getInstance().submitTask(() -> {
             try {
-                if(OnlineControllerImpl.clients.containsKey(friendPhoneNumber)){
-                    OnlineControllerImpl.clients.get(friendPhoneNumber).updateOnlineList();
-                }
-            } catch (SQLException | NotBoundException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                OnlineControllerImpl.clients.get(request.getAdminPhoneNumber()).updateOnlineList();
+            } catch (SQLException | NotBoundException | ClassNotFoundException | RemoteException e) {
+                System.out.println("Error updating online list for " + request.getAdminPhoneNumber() + " " + e.getMessage());
             }
-        }
+        });
+
+        ConcurrencyManager.getInstance().submitTask( () -> {
+            for(String friendPhoneNumber : friendsPhoneNumbers){
+                        try {
+                            if(OnlineControllerImpl.clients.containsKey(friendPhoneNumber)){
+                                OnlineControllerImpl.clients.get(friendPhoneNumber).updateOnlineList();
+                            }
+                        } catch (SQLException | NotBoundException | ClassNotFoundException | RemoteException e) {
+                            System.out.println("Error updating online list for " + friendPhoneNumber + " " + e.getMessage());
+                        }
+                    }
+                });
         createGroupChatResponse.setCreated(isCreated);
         createGroupChatResponse.setResponses(request.getFriendsPhoneNumbers());
         return createGroupChatResponse;

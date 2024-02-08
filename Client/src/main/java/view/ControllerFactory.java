@@ -14,9 +14,65 @@ public class ControllerFactory {
     private ContactElementController contactElementController;
     private MainWindowController mainWindowController;
     private NotificationContextMenuController notificationContextMenuController;
+    private VoiceChatPopUpController voiceChatPopUpController;
+    private SideNavBarController sideNavBarController;
+    private LoginController loginController;
+    private OthersProfileController othersProfileController;
+    private CustomizeController customizeController;
+    private CustomizeFontStyleController customizeFontStyleController;
 
+
+    public void setOthersProfileController(OthersProfileController othersProfileController) {
+        this.othersProfileController = othersProfileController;
+    }
+    public OthersProfileController getOthersProfileController() {
+        if (othersProfileController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Contacts/OthersProfile.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                othersProfileController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return othersProfileController;
+    }
+
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
+    }
+    public LoginController getLoginController() {
+        if (loginController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Authentication/Login.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                loginController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return loginController;
+    }
     public void setChatController(ChatController chatController) {
         this.chatController = chatController;
+    }
+    public void setVoiceChatPopUpController(VoiceChatPopUpController voiceChatPopUpController) {
+        this.voiceChatPopUpController = voiceChatPopUpController;
+    }
+    public void setSideNavBarController(SideNavBarController sideNavBarController) {
+        this.sideNavBarController = sideNavBarController;
+    }
+    public boolean getSideNavBarControllerBot() {
+        return sideNavBarController.isChatBotEnabled();
+    }
+
+    public VoiceChatPopUpController getVoiceChatPopUpController() throws IOException {
+        if(voiceChatPopUpController == null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/VoiceChatPopUp.fxml"));
+            Parent parent = fxmlLoader.load();
+            voiceChatPopUpController = fxmlLoader.getController();
+        }
+        return voiceChatPopUpController;
     }
 
     public ChatController getChatController() {
@@ -78,13 +134,52 @@ public class ControllerFactory {
         return mainWindowController;
     }
 
-    public NotificationContextMenuController getNotificationContextMenuController() throws IOException {
-        if(notificationContextMenuController == null){
+    public void setNotificationContextMenuController(NotificationContextMenuController notificationContextMenuController) {
+        this.notificationContextMenuController = notificationContextMenuController;
+    }
+
+    public NotificationContextMenuController getNotificationContextMenuController() {
+        if (notificationContextMenuController == null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationContextMenu.fxml"));
-            Parent parent = fxmlLoader.load();
-            notificationContextMenuController = fxmlLoader.getController();
+            try {
+                Parent parent = fxmlLoader.load();
+                notificationContextMenuController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return notificationContextMenuController;
     }
+    public NotificationElementController getNotificationElementController() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationElement.fxml"));
+        Parent parent = fxmlLoader.load();
+        return fxmlLoader.getController();
+    }
+    public CustomizeController getCustomizeController() throws IOException {
+        if(customizeController==null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/customizeText.fxml"));
+            Parent parent= fxmlLoader.load();
+            customizeController = fxmlLoader.getController();
+        }
+        return customizeController;
+    }
 
+    public void setCustomizeController(CustomizeController customizeController) {
+        this.customizeController = customizeController;
+    }
+
+
+    public CustomizeFontStyleController getCustomizeFontStyleController() throws IOException {
+        if(customizeFontStyleController==null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/CustomizeFontStyle.fxml"));
+            Parent parent= fxmlLoader.load();
+            customizeFontStyleController = fxmlLoader.getController();
+        }
+        return customizeFontStyleController;
+    }
+
+    public void setCustomizeFontStyleController(CustomizeFontStyleController customizeFontStyleController) {
+
+        this.customizeFontStyleController = customizeFontStyleController;
+    }
 }

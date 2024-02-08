@@ -1,7 +1,10 @@
 package controller;
 
+import dto.Model.NotificationModel;
 import dto.Model.UserModel;
 import dto.requests.AcceptFriendRequest;
+import dto.requests.FriendRequest;
+import dto.requests.RejectContactRequest;
 import dto.responses.AcceptFriendResponse;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.Initializable;
@@ -9,9 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import model.CurrentUser;
+import model.Model;
 import network.NetworkFactory;
+import notification.NotificationManager;
+import org.controlsfx.control.Notifications;
 import utils.ImageUtls;
 
 import java.net.URL;
@@ -25,6 +32,7 @@ public class NotificationElementController implements Initializable {
     public Button refuseButton;
     public Label Name;
     public Circle imageClip;
+    public Circle profileCircle;
     public ImageView ImagId;
     public UserModel friendModel;
 
@@ -39,13 +47,28 @@ public class NotificationElementController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+        refuseButton.setOnAction(actionEvent -> refuseButtonAction());
     }
     public void setData(UserModel userModel) {
         Name.setText(userModel.getUserName());
         Image image = SwingFXUtils.toFXImage(ImageUtls.convertByteToImage(userModel.getProfilePicture()), null);
-        ImagId.setImage(image);
-        imageClip.setClip(new Circle(50, 50, 50));
+        profileCircle.setFill(new ImagePattern(image));
         this.friendModel = userModel;
+    }
+
+    public void refuseButtonAction() {
+        for(NotificationModel notificationModel : NotificationManager.getInstance().getNotifactionsList()){
+            if(((FriendRequest)notificationModel).getUserModel().getPhoneNumber().equals(friendModel.getPhoneNumber())){
+                try {
+                    NetworkFactory.getInstance().rejectFriendRequest(new RejectContactRequest(notificationModel.getId()));
+                } catch (RemoteException | NotBoundException e) {
+                    throw new RuntimeException(e);
+                }
+                NotificationManager.getInstance().getNotifactionsList().remove(notificationModel);
+                Model.getInstance().getControllerFactory().getNotificationContextMenuController().removeUserFromList(friendModel);
+                break;
+            }
+        }
     }
 
     public void acceptButtonAction() throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
@@ -54,8 +77,14 @@ public class NotificationElementController implements Initializable {
         AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest(CurrentUser.getInstance().getUserID(),CurrentUser.getInstance().getPhoneNumber(),friendModel.getPhoneNumber(),model);
         AcceptFriendResponse acceptFriendResponse= NetworkFactory.getInstance().acceptFriendRequest(acceptFriendRequest);
         if(acceptFriendResponse.isDone()){
-            acceptButton.setDisable(true);
-            refuseButton.setDisable(true);
+            CurrentUser.getInstance().getCallBackController().userIsOnline(friendModel.getUserName());
+            for(NotificationModel notificationModel : NotificationManager.getInstance().getNotifactionsList()){
+                if(((FriendRequest)notificationModel).getUserModel().getPhoneNumber().equals(friendModel.getPhoneNumber())){
+                    NotificationManager.getInstance().getNotifactionsList().remove(notificationModel);
+                    Model.getInstance().getControllerFactory().getNotificationContextMenuController().removeUserFromList(friendModel);
+                    break;
+                }
+            }
         }
         System.out.println(acceptFriendResponse);
     }

@@ -69,3 +69,30 @@
     -fx-text-fill: #ff0000;
     -fx-margin-top: 20px; /* Add space above the error label */
 }
+
+#exitButton, #minimizeButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #000000;
+}
+
+#exitButton:hover {
+    -fx-background-color: #ff0000; /* Red color on hover */
+    -fx-background-radius: 5;
+    -fx-border-color: #ff0000; /* Red border on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}
+
+#minimizeButton:hover {
+    -fx-background-color: #4d4d4d; /* Darker color on hover */
+    -fx-background-radius: 5;
+    -fx-border-color: #4d4d4d; /* Darker border on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}

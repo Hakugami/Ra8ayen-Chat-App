@@ -1,67 +1,117 @@
-.contacts_container{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 10;
-    -fx-border-color: #000000;
-
+/* General Styling */
+* {
+    -fx-font-smoothing-type: lcd; /* Improved font smoothing */
 }
 
-.contacts_list_view{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
+/* TreeView Styling */
+.tree-view {
+    -fx-background-color: #353535; /* Dark gray background */
 }
 
-.contacts_list_view .list-cell{
-    -fx-padding: 10;
-    -fx-border-color: #000000;
-    -fx-border-width: 0 0 1 0;
+.tree-view .tree-cell {
+    -fx-background-color: #353535; /* Dark gray background for cells */
 }
 
-.contacts_list_view .list-cell:empty{
-    -fx-border-width: 0;
+.tree-view .tree-cell:selected {
+    -fx-background-color: rgba(44, 128, 255, 0.4); /* Blue selection with transparency */
+    -fx-text-fill: #FFFFFF; /* White text for selection */
 }
 
-.contacts_list_view .list-cell:selected{
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
+.tree-view .tree-cell:filled:hover {
+    -fx-background-color: #3F3F3F; /* Slightly lighter gray hover color */
+    -fx-text-fill: #FFFFFF; /* White text for hover */
 }
 
-.contacts_button{
-    -fx-background-color: #000000;
-    -fx-background-radius: 5;
-    -fx-border-color: #000000;
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
-    -fx-text-fill: #ffffff;
-    -fx-pref-width: 40;
-    -fx-pref-height: 30;
+.tree-view .scroll-bar {
+    -fx-opacity: 0; /* Hide scrollbar */
 }
 
-.contacts_button:hover{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-    -fx-border-color: #000000;
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
-    -fx-text-fill: #000000;
-    -fx-pref-width: 40;
-    -fx-pref-height: 30;
-    -fx-cursor: hand;
+.tree-view .scroll-bar .thumb,
+.tree-view .scroll-bar .track {
+    -fx-background-color: transparent; /* Hide scrollbar thumb and track */
 }
 
-.contacts_text_field{
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-    -fx-border-color: #000000;
-    -fx-border-radius: 5;
-    -fx-font-size: 1.1em;
-    -fx-pref-width: 300;
-    -fx-pref-height: 30;
+.tree-view .scroll-bar .thumb:horizontal:hover,
+.tree-view .scroll-bar .thumb:horizontal:pressed {
+    -fx-background-color: transparent; /* Hide horizontal scrollbar thumb on hover/press */
 }
 
-.contacts_text_field:focused{
-    -fx-border-color: #000000;
-    -fx-border-width: 2;
+.tree-view .scroll-bar {
+    -fx-background-color: #353535; /* Dark gray background for scrollbar */
+}
+
+
+/* TextField Styling */
+.TextField {
+    -fx-background-color: #353535; /* Dark gray background */
+    -fx-border-color: #2C80FF; /* Blue border color */
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #FFFFFF; /* White text color */
+    -fx-font-family: 'SF Pro Display', 'Arial', sans-serif; /* New font family */
+}
+
+/* AnchorPane Styling */
+.anchor-pane {
+    -fx-background-color: #353535; /* Dark gray background */
+    -fx-border-color: linear-gradient(to bottom, #4C4C4C, #737373); /* Gradient border */
+    -fx-border-width: 0 1px 0 0; /* Top right bottom left */
+}
+
+/* Label Styling */
+.Label {
+    -fx-text-fill: #ffffff; /* Light gray text color */
+    -fx-font-size: 14px;
+    -fx-font-family: 'SF Pro Display', 'Arial', sans-serif; /* New font family */
+    -fx-font-weight: bold;
+}
+
+/* ImageView Styling */
+.ImageView {
+    -fx-border-color: #4C4C4C; /* Dark gray border color */
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+/* Circle Styling */
+.Circle:hover {
+    -fx-stroke: #2C80FF; /* Blue stroke color on hover */
+}
+
+/* Label with ID Styling */
+#myLabel {
+    -fx-text-fill: #737373; /* Light gray text color */
+    -fx-font: 15px 'SF Pro Display', 'Arial', sans-serif; /* New font family */
+    -fx-font-weight: bold;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 25px;
+}
+
+/* Online Status Styling */
+.online-status {
+    -fx-fill: linear-gradient(to bottom, #29CB00, #2C80FF); /* Gradient for online (green to blue) */
+    -fx-stroke: linear-gradient(to bottom, #29CB00, #2C80FF);
+    -fx-stroke-line-cap: round;
+}
+
+/* Offline Status Styling */
+.offline-status {
+    -fx-fill: linear-gradient(to bottom, #FF4A4A, #737373); /* Gradient for offline (red to light gray) */
+    -fx-stroke: linear-gradient(to bottom, #FF4A4A, #737373);
+    -fx-stroke-line-cap: round;
+}
+
+/* Away Status Styling */
+.away-status {
+    -fx-fill: linear-gradient(to bottom, #FFEB3B, #FFC107); /* Gradient for away (yellow to amber) */
+    -fx-stroke: linear-gradient(to bottom, #FFEB3B, #FFC107);
+    -fx-stroke-line-cap: round;
+}
+
+/* Busy Status Styling */
+.busy-status {
+    -fx-fill: linear-gradient(to bottom, #FF9800, #FF5722); /* Gradient for busy (orange to deep orange) */
+    -fx-stroke: linear-gradient(to bottom, #FF9800, #FF5722);
+    -fx-stroke-line-cap: round;
 }

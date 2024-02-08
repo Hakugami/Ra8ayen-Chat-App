@@ -25,6 +25,10 @@ public class NotificationManager {
         notificationModelMap.add(notificationModel);
     }
 
+    public void addNotification(List<NotificationModel> notificationModel) {
+        notificationModelMap.addAll(notificationModel);
+    }
+
     public void removeNotification(NotificationModel notificationModel) {
         notificationModelMap.remove(notificationModel);
     }

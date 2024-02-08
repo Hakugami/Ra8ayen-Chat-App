@@ -1,0 +1,98 @@
+.root {
+    -fx-base: #FFFFFF; /* White */
+}
+
+.send-message_button {
+    -fx-background-radius: 15;
+    -fx-padding: 5 10 5 10;
+    -fx-background-color: #FFFFFF; /* White */
+    -fx-cursor: hand; /* Change cursor to hand when hovering over the button */
+}
+
+.send-message_button:hover {
+    -fx-background-color: #FF4A4A; /* Red on hover */
+}
+
+.header {
+    -fx-background-color: linear-gradient(to bottom, #323232, #353535); /* Dark to light gradient */
+    -fx-font-size: 20px; /* Increase font size */
+    -fx-text-fill: #FFFFFF; /* White font color */
+    -fx-padding: 10px; /* Add padding */
+}
+
+.list_View {
+    -fx-background-color: #323232; /* Dark gray */
+}
+
+.list_View .list-cell {
+    -fx-background-color: transparent;
+}
+
+.list_View .scroll-bar {
+    -fx-background-color: #323232; /* Dark gray */
+    -fx-opacity: 0.7; /* Make the scrollbar semi-transparent */
+}
+
+.list_View .scroll-bar .thumb {
+    -fx-background-color: #3F3F3F; /* Dark gray */
+    -fx-background-radius: 10; /* Make the scrollbar thumb rounder */
+}
+
+.list_View .scroll-bar .thumb:hover,
+.list_View .scroll-bar .thumb:pressed {
+    -fx-background-color: #FF4A4A; /* Red on hover and press */
+}
+
+.list_View .scroll-bar .increment-button,
+.list_View .scroll-bar .decrement-button {
+    -fx-background-color: transparent; /* Make the increment and decrement buttons invisible */
+}
+
+.Button_style {
+    -fx-background-color: #3F3F3F;
+    -fx-border-radius: 15; /* Make the button rounder */
+    -fx-background-radius: 15; /* Make the button rounder */
+}
+
+.Button_style:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* White on hover with 70% opacity */
+    -fx-cursor: hand; /* Change cursor to hand when hovering over the button */
+}
+
+.Button_style  FontAwesomeIconView{
+    -fx-fill: rgb(255, 255, 255); /* New color */
+}
+
+.chat_message_bubble {
+    -fx-background-color: linear-gradient(to bottom, #323232, #FF4A4A); /* Dark gray to red gradient */
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #3F3F3F; /* Dark gray border color */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0, 0, 0); /* Add shadow */
+    -fx-font: 15px 'SF Pro Display', 'Arial', 'sans-serif'; /* Change font */
+}
+
+.chat_message_bubble:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.hbox-style {
+    -fx-background-color: #3F3F3F;
+
+    -fx-padding: 10px; /* Add padding */
+}
+
+.send-message_button,
+.send-message {
+    -fx-background-color: #3F3F3F;
+    -fx-fill: #FFFFFF; /* White */
+    -fx-text-fill: #FFFFFF; /* White */
+    -fx-font:15px 'SF Pro Display', 'Arial', 'sans-serif'; /* Change font */
+}
+
+
+.send-message_button  FontAwesomeIconView{
+    -fx-fill: rgb(255, 255, 255); /* New color */
+}

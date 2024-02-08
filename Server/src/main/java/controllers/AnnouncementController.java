@@ -1,18 +1,16 @@
 package controllers;
 
+import concurrency.manager.ConcurrencyManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AnnouncementController implements Initializable {
-    @FXML
-    private VBox vbRoot;
     @FXML
     private TextArea announcementTextArea;
     @FXML
@@ -20,21 +18,19 @@ public class AnnouncementController implements Initializable {
     @FXML
     private TextField announcementTitleTextField;
 
-    VBox getVBoxRoot()
-    {
-        return vbRoot;
-    }
-
     private void handleAnnouncementButtonAction() {
         String announcement = announcementTextArea.getText();
         String announcementTitle = announcementTitleTextField.getText();
-        for (String username : OnlineControllerImpl.clients.keySet()) {
-            try {
-                OnlineControllerImpl.clients.get(username).receiveAnnouncement(announcement, announcementTitle);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+        ConcurrencyManager.getInstance().submitTask(() ->
+        {
+            for (String username : OnlineControllerImpl.clients.keySet()) {
+                try {
+                    OnlineControllerImpl.clients.get(username).receiveAnnouncement(announcement, announcementTitle);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
-        }
+        });
         announcementTextArea.setText("");
         announcementTitleTextField.setText("");
     }

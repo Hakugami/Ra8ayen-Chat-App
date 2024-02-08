@@ -11,6 +11,7 @@ public interface UserDao extends Dao<User> {
     User getUserByPhoneNumber(String phoneNumber);
     List<User> getAll();
     List<User> getContactsByUserID(int userID);
+    List<String> getContactsPhoneNumbers(int userID);
     boolean save(User user) throws SQLException;
     boolean update(User user);
     boolean delete(int userId);

@@ -51,21 +51,32 @@ public class NetworkFactory {
         return controller.sendMessage(request);
     }
 
-    public void connect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
+    public ChatBotResponse chatBot(ChatBotRequest request) throws RemoteException, NotBoundException {
+        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+        return controller.getChatBotResponse(request);
+    }
+
+    public boolean connect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
-        controller.connect(phoneNumber, callBackController);
+        return controller.connect(phoneNumber, callBackController);
     }
 
     //update Login Users numbers in dashboard----------------------------------------------
-    /*public int  getOnlineUsersCount() throws RemoteException, NotBoundException {
+    public int  getOnlineUsersCount() throws RemoteException, NotBoundException {
         TrackOnlineUsers trackOnlineUsers = (TrackOnlineUsers) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.TRACKONLINEUSERS.name());
         return trackOnlineUsers.getOnlineUsersCount();
     }
     public void updateOnlineUsersCount(int onlineUsersCount) throws RemoteException, NotBoundException {
         TrackOnlineUsers trackOnlineUsers = (TrackOnlineUsers) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.TRACKONLINEUSERS.name());
         trackOnlineUsers.updateOnlineUsersCount(onlineUsersCount);
-    }*/
+    }
     //--------------------------------------------------------------------------------------
+    public void  sendHeartbeat(String phoneNumber,CallBackController callBackController) throws RemoteException, NotBoundException {
+        SendHeartBeatToServerFromClient sendHeartBeatToServerFromClient = (SendHeartBeatToServerFromClient) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name());
+        sendHeartBeatToServerFromClient.sendHeartbeat(phoneNumber,callBackController);
+    }
+    //--------------------------------------------------------------------------------------
+
     public void disconnect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
         controller.disconnect(phoneNumber, callBackController);
@@ -84,6 +95,11 @@ public class NetworkFactory {
     public AcceptFriendResponse acceptFriendRequest(AcceptFriendRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
         ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
         return controller.acceptContact(request);
+    }
+
+    public boolean rejectFriendRequest(RejectContactRequest request) throws RemoteException, NotBoundException {
+        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+        return controller.rejectFriendRequest(request);
     }
 
     public List<GetContactsResponse> getContacts(GetContactsRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
@@ -114,5 +130,64 @@ public class NetworkFactory {
         return controller.getAllMessages(request);
     }
 
+    public void sendVoicePacket(SendVoicePacketRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        controller.sendVoiceMessage(request);
+    }
+
+    public VoiceCallResponse connect(VoiceCallRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.connect(request);
+    }
+
+    public AcceptVoiceCallResponse acceptVoiceCallRequest(AcceptVoiceCallRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.AcceptVoiceCallRequest(request);
+    }
+
+    public RefuseVoiceCallResponse refuseVoiceCallRequest(RefuseVoiceCallRequest request) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.refuseVoiceCallRequest(request);
+    }
+
+    public SendVoicePacketRequest receiveVoiceMessage(String phoneNumber) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        return controller.receiveVoiceMessage(phoneNumber);
+    }
+
+    public boolean checkPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
+        AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
+        try {
+            return controller.checkPhoneNumber(phoneNumber);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public GetNotificationsResponse getNotifications(GetNotificationsRequest request) throws RemoteException, NotBoundException {
+        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+        return controller.getNotifications(request);
+    }
+
+    public RetrieveAttachmentResponse retrieveAttachment(RetrieveAttachmentRequest request) throws RemoteException, NotBoundException {
+        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+        return controller.retrieveAttachment(request);
+    }
+
+    public BlockUserResponse blockUser(BlockUserRequest request) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+        BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+        return controller.blockUserByPhoneNumber(request);
+    }
+
+
+    public boolean checkToken(String token) throws RemoteException, NotBoundException {
+        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+        return controller.checkToken(token);
+    }
+
+    public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
+        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+        return controller.getUserModelByPhoneNumber(phoneNumber);
+    }
 
 }

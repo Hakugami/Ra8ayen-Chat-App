@@ -59,6 +59,25 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     @Override
+    public int saveNotification(Notification notification) {
+        String query = "INSERT INTO usernotifications (ReceiverID, SenderID, NotificationMessage) VALUES (?, ?, ?)";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, notification.getReceiverId());
+            statement.setInt(2, notification.getSenderId());
+            statement.setString(3, notification.getNotificationMessage());
+            statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            return -1;
+        }
+        return -1;
+    }
+    @Override
     public boolean delete(Notification notification) {
         String query = "DELETE FROM usernotifications WHERE NotificationID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
@@ -72,6 +91,36 @@ public class NotificationDaoImpl implements NotificationDao {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public int deleteBySenderAndReceiver(Notification notification) {
+        String selectQuery = "SELECT NotificationID FROM usernotifications WHERE SenderID = ? and ReceiverID = ?";
+        String deleteQuery = "DELETE FROM usernotifications WHERE SenderID = ? and ReceiverID = ?";
+        int notificationId = -1;
+
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+
+            selectStatement.setInt(1, notification.getReceiverId());
+            selectStatement.setInt(2, notification.getSenderId());
+
+            try (ResultSet resultSet = selectStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    notificationId = resultSet.getInt(NotificationTable.NOTIFICATIONID.name());
+                }
+            }
+
+            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+            deleteStatement.setInt(1, notification.getReceiverId());
+            deleteStatement.setInt(2, notification.getSenderId());
+            deleteStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return notificationId;
     }
 
     @Override
@@ -101,17 +150,13 @@ public class NotificationDaoImpl implements NotificationDao {
 }
     public boolean checkInvite(Notification notification){
         String query = "SELECT * FROM usernotifications WHERE SenderID = ? and ReceiverID = ?";
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, notification.getReceiverId());
             statement.setInt(2,notification.getSenderId());
             resultSet = statement.executeQuery();
-           if(resultSet.next()){
-               return true;
-           }else{
-               return false;
-           }
+            return resultSet.next();
         } catch (SQLException e) {
             return false;
         }

@@ -1,0 +1,34 @@
+.container_profile {
+    -fx-text-fill: rgb(246, 241, 238);
+}
+.container_profile Button {
+    -fx-background-color: rgb(79, 74, 69);
+    -fx-border-color: rgb(108, 95, 91);
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-pref-width: 80;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgb(108, 95, 91), 5, 0, 0, 6);
+}
+
+.container_profile Button:hover {
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-color: rgb(237, 125, 49);
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: rgb(79, 74, 69);
+    -fx-pref-width: 80;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgb(237, 125, 49), 5, 0, 0, 6);
+}
+
+.container_profile Label {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgb(246, 241, 238);
+
+}
+

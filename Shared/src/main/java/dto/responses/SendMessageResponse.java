@@ -12,6 +12,7 @@ public class SendMessageResponse implements Serializable {
     private boolean isAttachment;
     private boolean success;
     private String error;
+    private byte[] attachment;
 
     public int getMessageId() {
         return MessageId;
@@ -85,9 +86,17 @@ public class SendMessageResponse implements Serializable {
                 ", receiverId=" + receiverId +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
-                ", isAttachment=" + isAttachment +
+                ", getIsAttachment=" + isAttachment +
                 ", success=" + success +
                 ", error='" + error + '\'' +
                 '}';
+    }
+
+    public byte[] getAttachmentData() {
+        return attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        this.attachment = attachment;
     }
 }

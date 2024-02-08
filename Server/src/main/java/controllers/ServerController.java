@@ -1,14 +1,13 @@
 package controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import server.ServerApplication;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class ServerController implements Initializable {
     @FXML
@@ -21,71 +20,34 @@ public class ServerController implements Initializable {
     private Button usersButton;
     @FXML
     private Button dashboardButton;
+
     public void setSubSceneInitialNode()
     {
         settingsButton.fire();
     }
+
     private void handleBtnOnActionAnnouncement()
     {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Announcement.fxml"));
-            loader.load();
-            AnnouncementController announcementController = loader.getController();
-            spSubScene.getChildren().clear();
-            spSubScene.getChildren().add(announcementController.getVBoxRoot());
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
-        }
+        spSubScene.getChildren().clear();
+        spSubScene.getChildren().add(ServerApplication.scenes.get(Scenes.ANNOUNCEMENT));
     }
 
     private void handleBtnOnActionServiceStart()
     {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/ServiceStart.fxml"));
-            loader.load();
-            ServiceStartController serviceStartController = loader.getController();
-            spSubScene.getChildren().clear();
-            spSubScene.getChildren().add(serviceStartController.getVBoxRoot());
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
-        }
+        spSubScene.getChildren().clear();
+        spSubScene.getChildren().add(ServerApplication.scenes.get(Scenes.SERVICE_START));
     }
 
     private void handleBtnOnActionDashboardStart()
     {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Dashboard.fxml"));
-            loader.load();
-            DashboardController dashboardController = loader.getController();
-            spSubScene.getChildren().clear();
-            spSubScene.getChildren().add(dashboardController.getVBoxRoot());
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
-        }
+        spSubScene.getChildren().clear();
+        spSubScene.getChildren().add(ServerApplication.scenes.get(Scenes.DASHBOARD));
     }
+
     private void handleBtnOnActionUsersTableStart()
     {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/UserListView.fxml"));
-            loader.load();
-            UserListController userListController = loader.getController();
-            spSubScene.getChildren().clear();
-            spSubScene.getChildren().add(userListController.getVBoxRoot());
-        }
-        catch (IOException e)
-        {
-            System.out.println(e.getMessage());
-        }
+        spSubScene.getChildren().clear();
+        spSubScene.getChildren().add(ServerApplication.scenes.get(Scenes.USER_LIST_VIEW));
     }
 
     @Override

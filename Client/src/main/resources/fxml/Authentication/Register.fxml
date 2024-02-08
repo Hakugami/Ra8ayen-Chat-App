@@ -16,11 +16,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" styleClass="register_container" stylesheets="@../../Styles/NeoOrange/Register.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" styleClass="register_container" stylesheets="@../../Styles/Minimalist/Register.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
     <HBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox prefHeight="400.0" prefWidth="200.0" styleClass="register_logo_container">
             <FontAwesomeIconView glyphName="PHONE" size="20" />
-            <Text fill="#ffe9e9" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="register_logo_container" text="Chat App" />
+            <Text fill="#ffe9e9" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="register_logo_container" text="Ra8ayen" />
         </VBox>
         <AnchorPane prefHeight="871.0" prefWidth="1078.0" styleClass="register_form_container">
             <children>

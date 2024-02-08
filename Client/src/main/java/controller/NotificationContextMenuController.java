@@ -2,6 +2,7 @@ package controller;
 
 import dto.Model.UserModel;
 import dto.requests.FriendRequest;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import model.Model;
 import notification.NotificationManager;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,6 +22,7 @@ public class NotificationContextMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Model.getInstance().getControllerFactory().setNotificationContextMenuController(this);
         notificationListItems = FXCollections.observableArrayList();
         populateNotificationListItems();
         notificationList.setItems(notificationListItems);
@@ -43,6 +46,10 @@ public class NotificationContextMenuController implements Initializable {
                 }
             }
         });
+    }
+
+    public void removeUserFromList(UserModel userModel) {
+        Platform.runLater(() -> notificationListItems.remove(userModel));
     }
 
 public void populateNotificationListItems() {

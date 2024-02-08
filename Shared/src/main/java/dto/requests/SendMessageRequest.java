@@ -1,5 +1,6 @@
 package dto.requests;
 
+import dto.Model.StyleMessage;
 import dto.Model.UserModel;
 
 import java.io.Serializable;
@@ -14,7 +15,12 @@ public class SendMessageRequest implements Serializable {
     private LocalDateTime time;
     private boolean isAttachment;
 
+    private byte[] attachment;
     private UserModel sender;
+
+    private StyleMessage styleMessage;
+
+    private boolean isGroupMessage;
     public int getMessageId() {
         return MessageId;
     }
@@ -55,11 +61,11 @@ public class SendMessageRequest implements Serializable {
         this.time = time;
     }
 
-    public boolean isAttachment() {
+    public boolean getIsAttachment() {
         return isAttachment;
     }
 
-    public void setAttachment(boolean attachment) {
+    public void setIsAttachment(boolean attachment) {
         isAttachment = attachment;
     }
 
@@ -71,7 +77,7 @@ public class SendMessageRequest implements Serializable {
                 ", receiverId=" + receiverId +
                 ", messageContent='" + messageContent + '\'' +
                 ", time=" + time +
-                ", isAttachment=" + isAttachment +
+                ", getIsAttachment=" + isAttachment +
                 '}';
     }
     public UserModel getSender() {
@@ -80,5 +86,37 @@ public class SendMessageRequest implements Serializable {
 
     public void setSender(UserModel sender) {
         this.sender = sender;
+    }
+
+    public byte[] getAttachmentData() {
+        return attachment;
+    }
+
+    public void setAttachmentData(byte[] attachment) {
+        this.attachment = attachment;
+    }
+
+    public byte[] getAttachment() {
+        return attachment;
+    }
+
+    public void setIsAttachment(byte[] attachment) {
+        this.attachment = attachment;
+    }
+
+    public boolean isGroupMessage() {
+        return isGroupMessage;
+    }
+
+    public void setGroupMessage(boolean groupMessage) {
+        isGroupMessage = groupMessage;
+    }
+
+    public StyleMessage getStyleMessage() {
+        return styleMessage;
+    }
+
+    public void setStyleMessage(StyleMessage styleMessage) {
+        this.styleMessage = styleMessage;
     }
 }

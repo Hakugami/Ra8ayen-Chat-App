@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="720.0" styleClass="hbox-style" stylesheets="@../../Styles/Minimalist/CustomizeText.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomizeController">
+    <ToggleButton fx:id="italic" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+        <HBox.margin>
+            <Insets right="5.0" />
+        </HBox.margin>
+    </ToggleButton>
+    <ToggleButton fx:id="bold" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+      <HBox.margin>
+         <Insets right="5.0" />
+      </HBox.margin></ToggleButton>
+    <ToggleButton fx:id="underline" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+      <HBox.margin>
+         <Insets right="5.0" />
+      </HBox.margin></ToggleButton>
+
+    <!-- Buttons for Size Increase, Size Decrease, Color Font, Background Color, and Font Family -->
+    <Button fx:id="sizeIncrease" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+        <font>
+            <Font size="20.0" />
+        </font>
+    </Button>
+    <Button fx:id="sizeDecrease" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+        <font>
+            <Font size="20.0" />
+        </font>
+      <HBox.margin>
+         <Insets left="5.0" right="5.0" />
+      </HBox.margin>
+    </Button>
+   <ColorPicker fx:id="colorFont" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" promptText="Font Color" styleClass="color-picker">
+      <HBox.margin>
+         <Insets right="5.0" />
+      </HBox.margin>
+      <value>
+         <Color red="0.9868420958518982" green="0.9868420958518982" blue="0.9868420958518982" />
+      </value>
+   </ColorPicker>
+   <ColorPicker fx:id="backgroundColor" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" promptText="Background color" styleClass="color-picker" />
+    <Button fx:id="fontFamily" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="80.0">
+      <HBox.margin>
+         <Insets left="5.0" />
+      </HBox.margin></Button>
+</HBox>

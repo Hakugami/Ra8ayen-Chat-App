@@ -9,42 +9,65 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vbRoot" alignment="CENTER" prefHeight="571.0" prefWidth="760.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
-   <HBox alignment="CENTER" prefHeight="200.0" spacing="50.0" VBox.vgrow="ALWAYS">
+<VBox fx:id="vbRoot" alignment="CENTER" prefHeight="571.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
+   <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
       <VBox.margin>
-         <Insets />
+         <Insets/>
       </VBox.margin>
-      <children>
-         <HBox alignment="CENTER" prefHeight="71.0" prefWidth="330.0" spacing="10.0">
-            <HBox.margin>
-               <Insets left="50.0" />
-            </HBox.margin>
-            <ImageView fitHeight="112.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-               <Image url="@../Images/online_user.png" />
+      <VBox alignment="CENTER">
+         <HBox.margin>
+            <Insets right="100.0"/>
+         </HBox.margin>
+         <Label text="Online Users">
+            <font>
+               <Font size="24.0"/>
+            </font>
+            <VBox.margin>
+               <Insets/>
+            </VBox.margin>
+         </Label>
+         <HBox alignment="CENTER">
+            <ImageView fitHeight="112.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"
+                       HBox.hgrow="ALWAYS">
+               <Image url="@../Images/online_user.png"/>
             </ImageView>
-            <Label fx:id="onlineUsersLabel" prefHeight="47.0" prefWidth="161.0" text="54" HBox.hgrow="ALWAYS">
+            <Label fx:id="onlineUsersLabel" text="0" HBox.hgrow="ALWAYS">
                <font>
-                  <Font size="32.0" />
+                  <Font size="32.0"/>
                </font>
             </Label>
          </HBox>
-         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0" spacing="10.0">
-            <ImageView fitHeight="112.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-               <Image url="@../Images/offline_user.png" />
+      </VBox>
+      <VBox alignment="CENTER">
+         <HBox.margin>
+            <Insets left="100.0"/>
+         </HBox.margin>
+         <Label text="Offline Users">
+            <font>
+               <Font size="24.0"/>
+            </font>
+            <VBox.margin>
+               <Insets/>
+            </VBox.margin>
+         </Label>
+         <HBox alignment="CENTER">
+            <ImageView fitHeight="112.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"
+                       HBox.hgrow="ALWAYS">
+               <Image url="@../Images/offline_user.png"/>
             </ImageView>
-            <Label prefHeight="50.0" prefWidth="140.0" text="1554" HBox.hgrow="ALWAYS">
+            <Label fx:id="offlineUserLabel" text="0" HBox.hgrow="ALWAYS">
                <font>
-                  <Font size="32.0" />
+                  <Font size="32.0"/>
                </font>
             </Label>
          </HBox>
-      </children>
+      </VBox>
    </HBox>
-    <HBox VBox.vgrow="ALWAYS">
+    <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
         <VBox.margin>
-            <Insets bottom="150.0" />
+            <Insets bottom="30.0" top="50.0" />
         </VBox.margin>
-       <PieChart id="pieChart" fx:id="genderPieChart" legendVisible="false" prefHeight="400" prefWidth="400" HBox.hgrow="ALWAYS" />
-       <PieChart id="pieChart" fx:id="countryPieChart" legendVisible="false" prefHeight="400" prefWidth="400" HBox.hgrow="ALWAYS" />
+       <PieChart id="pieChart" fx:id="genderPieChart" prefHeight="400" prefWidth="400" title="Gender Stats" HBox.hgrow="ALWAYS" />
+       <PieChart id="pieChart" fx:id="countryPieChart" prefHeight="400" prefWidth="400" title="Country Stats" HBox.hgrow="ALWAYS" />
     </HBox>
 </VBox>

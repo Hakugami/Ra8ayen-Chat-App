@@ -5,39 +5,94 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="270.0" spacing="30.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
-   <children>
-      <Pane prefHeight="77.0" prefWidth="101.0" HBox.hgrow="ALWAYS">
-         <children>
-   
-   
-            <ImageView fx:id="ImagId">
-               <clip>
-                  <Circle fx:id="imageClip" centerX="30" centerY="30" radius="30" />
-              </clip>
-   
-            </ImageView>
-         </children>
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
-      </Pane>
-      <Label fx:id="Name" layoutX="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="92.0" text="Rawda" HBox.hgrow="ALWAYS">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
-      </Label>
-      <Circle fx:id="status" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
-         <HBox.margin>
-            <Insets left="10.0" right="5.0" top="30.0" />
-         </HBox.margin>
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="270.0" spacing="15.0" stylesheets="@../../Styles/Minimalist/Contacts.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContactElementController">
+   <Pane prefHeight="70.0" prefWidth="70.0">
+      <HBox.margin>
+         <Insets />
+      </HBox.margin>
+      <ImageView fx:id="ImagId" preserveRatio="true" visible="false">
+         <clip>
+            <Circle fx:id="imageClip" centerX="35" centerY="35" radius="35" />
+         </clip>
+      </ImageView>
+      <Circle fx:id="profilePicCircle" fill="DODGERBLUE" layoutX="35.0" layoutY="35.0" radius="25.0" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="OUTSIDE">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.8815789222717285" green="0.7064195275306702" blue="0.4611963927745819" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
       </Circle>
-      <Label fx:id="chatID" text="Label" visible="false" />
-   </children>
+      <Circle fx:id="status" fill="DODGERBLUE" layoutX="50.0" layoutY="56.0" radius="5.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.8815789222717285" green="0.7064195275306702" blue="0.4611963927745819" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.6842105388641357" green="0.42726200819015503" blue="0.1868908405303955" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+      </Circle>
+   </Pane>
+   <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="132.0">
+      <Label fx:id="Name" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" text="Rawda" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <HBox spacing="5.0">
+         <Label fx:id="chatID" prefHeight="18.0" prefWidth="0.0" text="Label" visible="false" />
+         <Label fx:id="lastMessage" prefHeight="18.0" prefWidth="114.0" textFill="WHITE" wrapText="true">
+            <font>
+               <Font name="Arial" size="12.0" />
+            </font></Label>
+      </HBox>
+   </VBox>
+   <VBox alignment="CENTER" prefHeight="70.0" prefWidth="37.0">
+      <children>
+         <Circle fx:id="notifyCircle" fill="DODGERBLUE" radius="9.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" visible="false">
+            <stroke>
+               <LinearGradient endX="1.0" endY="1.0">
+                  <stops>
+                     <Stop>
+                        <color>
+                           <Color red="0.42650464177131653" green="0.43421053886413574" blue="0.3417397737503052" />
+                        </color>
+                     </Stop>
+                     <Stop offset="1.0">
+                        <color>
+                           <Color red="1.0" green="1.0" blue="1.0" />
+                        </color>
+                     </Stop>
+                  </stops>
+               </LinearGradient>
+            </stroke>
+         </Circle>
+      </children>
+   </VBox>
 </HBox>

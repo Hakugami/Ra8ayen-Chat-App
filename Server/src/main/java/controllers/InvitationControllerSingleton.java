@@ -3,6 +3,7 @@ package controllers;
 import Mapper.InvitationMapper;
 import Mapper.UserMapper;
 import Mapper.UserMapperImpl;
+import concurrency.manager.ConcurrencyManager;
 import dto.Controller.InvitationController;
 import dto.Model.NotificationModel;
 import dto.Model.UserModel;
@@ -12,9 +13,9 @@ import dto.responses.GetNotificationsResponse;
 import model.entities.Notification;
 import model.entities.User;
 import service.ContactService;
+import service.EmailService;
 import service.InvitationService;
 import service.UserService;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -29,7 +30,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     private final InvitationMapper invitationMapper;
     private final UserMapper userMapper;
     private final UserService userService;
-
+    private final EmailService emailService;
     private final ContactService contactService;
     protected InvitationControllerSingleton() throws RemoteException {
         super();
@@ -38,6 +39,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         invitationMapper = new InvitationMapper();
         userMapper = new UserMapperImpl();
         contactService = new ContactService();
+        emailService = new EmailService();
     }
     public static InvitationControllerSingleton getInstance() throws RemoteException {
         if (instance == null) {
@@ -54,38 +56,69 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
     }
     @Override
     public AddContactResponse addContact(AddContactRequest addContactRequest) throws RemoteException {
-        System.out.println("addContact");
         AddContactResponse addContactResponse = new AddContactResponse();
-        boolean isDone = false;
         List<String> responses = new ArrayList<>();
+        User currentUser = userService.getUserById(addContactRequest.getUserId());
         for(String phoneNumber : addContactRequest.getFriendsPhoneNumbers()) {
             User user = userService.getUserByPhoneNumber(phoneNumber);
             if(user != null) {
-                Notification notification = invitationMapper.addContactRequestToNotification(addContactRequest.getUserId(), user.getUserID());
-              if(invitationService.ReceiverMakeInviteBefore(notification)){
-                  responses.add("Invitation has accepted " + phoneNumber);
-                  //in this function I added Friend To Chat and Contact List of user
-                  AcceptUserAsFriend(notification.getSenderId(),phoneNumber);
-              }
-              else {
-                  isDone = invitationService.inviteContact(notification);
-                  responses.add("Invitation has been sent to " + phoneNumber);
-                  FriendRequest friendRequest = new FriendRequest();
-                  friendRequest.setReceiverPhoneNumber(phoneNumber);
-                  friendRequest.setSenderPhoneNumber(userService.getUserById(addContactRequest.getUserId()).getPhoneNumber());
-                  friendRequest.setUserModel(userMapper.entityToModel(userService.getUserById(addContactRequest.getUserId())));
-                  if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
-                      OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
-                  }
-              }
+                if(phoneNumber.equalsIgnoreCase(currentUser.getPhoneNumber())){
+                    responses.add("You can't add yourself");
+                    continue;
+                }
+                Notification notification = invitationMapper.addContactRequestToNotification(currentUser.getUserID(), user.getUserID());
+                if(invitationService.ReceiverMakeInviteBefore(notification)){
+                    responses.add("Invitation has accepted " + phoneNumber);
+                    int notificationID = invitationService.deleteNotificationBySenderAndReceiver(notification);
+                    ConcurrencyManager.getInstance().submitTask(() -> {
+                        try {
+                            AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest();
+                            acceptFriendRequest.setId(notificationID);
+                            acceptFriendRequest.setUserID(user.getUserID());
+                            acceptFriendRequest.setMyPhoneNumber(currentUser.getPhoneNumber());
+                            acceptFriendRequest.setFriendPhoneNumber(user.getPhoneNumber());
+                            acceptFriendRequest.setUserModel(userMapper.entityToModel(user));
+                            OnlineControllerImpl.clients.get(currentUser.getPhoneNumber()).updateNotificationList(acceptFriendRequest);
+                        } catch (RemoteException e) {
+                            System.out.println("Error in updating notification list");
+                        }
+                    });
+                    AcceptUserAsFriend(notification.getSenderId(), currentUser.getPhoneNumber(), phoneNumber);
+                }
+                else {
+                    String myEmail = currentUser.getEmailAddress();
+
+                    ConcurrencyManager.getInstance().submitTask(() -> emailService.sendEmail(myEmail, user.getEmailAddress(),
+                            "Chat App (رغايين)",
+                            "You have a friend request from "
+                                    + currentUser.getUserName() +
+                                    " with phone number " + phoneNumber));
+                    int notificationID = invitationService.inviteContact(notification);
+                    responses.add("Invitation has been sent to " + phoneNumber);
+                    FriendRequest friendRequest = new FriendRequest();
+                    friendRequest.setReceiverPhoneNumber(phoneNumber);
+                    friendRequest.setSenderPhoneNumber(currentUser.getPhoneNumber());
+                    friendRequest.setUserModel(userMapper.entityToModel(currentUser));
+                    friendRequest.setId(notificationID);
+                    if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
+                        ConcurrencyManager.getInstance().submitTask(() -> {
+                            try {
+                                OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+                            } catch (RemoteException e) {
+                                addContactResponse.setDone(false);
+                            }
+                        });
+                    }
+                }
             }
             else {
                 responses.add(phoneNumber + "not found");
             }
         }
-        addContactResponse.setDone(isDone);
+        addContactResponse.setDone(true);
         addContactResponse.setResponses(responses);
         addContactResponse.setFriendsPhoneNumbers(addContactRequest.getFriendsPhoneNumbers());
+
         return addContactResponse;
     }
 
@@ -94,7 +127,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         GetNotificationsResponse getNotificationsResponse = new GetNotificationsResponse();
         List<Notification> notifications = invitationService.getNotifications();
         notifications = notifications.stream()
-                .filter(notification -> notification.getReceiverId() != getNotificationsRequest.getUserID())
+                .filter(notification -> notification.getReceiverId() == getNotificationsRequest.getUserID())
                 .toList();
         List<Integer> senderIds = notifications.stream()
                 .map(Notification::getSenderId)
@@ -117,8 +150,11 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         return getNotificationsResponse;
     }
 
-    private void AcceptUserAsFriend(int UserID, String PhoneNumber){
-        AcceptFriendRequest acceptFriendRequest= new AcceptFriendRequest(UserID,PhoneNumber);
+    private void AcceptUserAsFriend(int UserID, String PhoneNumber, String friendPhoneNumber){
+        AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest();
+        acceptFriendRequest.setUserID(UserID);
+        acceptFriendRequest.setMyPhoneNumber(PhoneNumber);
+        acceptFriendRequest.setFriendPhoneNumber(friendPhoneNumber);
         try {
             contactService.acceptContact(acceptFriendRequest);
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {

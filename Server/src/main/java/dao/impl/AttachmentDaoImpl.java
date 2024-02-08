@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.AttachmentDao;
 import model.entities.Attachment;
+import model.entities.AttachmentTable;
 import persistence.connection.DataSourceSingleton;
 import java.io.ByteArrayInputStream;
 import java.sql.*;
@@ -30,13 +31,16 @@ public class AttachmentDaoImpl implements AttachmentDao {
 
     @Override
     public Attachment get(int id) {
-        String query = "SELECT * FROM Attachment WHERE AttachmentID = ?";
+        String query = "SELECT * FROM Attachment WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+             //      System.out.println(createAttachmentFromResultSet(resultSet).getAttachment().length);
                     return createAttachmentFromResultSet(resultSet);
+                }else{
+                  //  System.out.println("No data Found From Attachment Table "+id);
                 }
             }
         } catch (SQLException e) {
@@ -63,7 +67,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
 
     @Override
     public boolean update(Attachment attachment) {
-        String query = "UPDATE Attachment SET Attachment = ? WHERE AttachmentID = ?";
+        String query = "UPDATE Attachment SET Attachment = ? WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             ByteArrayInputStream input = new ByteArrayInputStream(attachment.getAttachment());
@@ -81,7 +85,7 @@ public class AttachmentDaoImpl implements AttachmentDao {
 
     @Override
     public boolean delete(Attachment attachment) {
-        String query = "DELETE FROM Attachment WHERE AttachmentID = ?";
+        String query = "DELETE FROM Attachment WHERE MessageID = ?";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, attachment.getAttachmentId());
@@ -97,9 +101,9 @@ public class AttachmentDaoImpl implements AttachmentDao {
 
     private Attachment createAttachmentFromResultSet(ResultSet resultSet) throws SQLException {
         Attachment attachment = new Attachment();
-        attachment.setAttachmentId(resultSet.getInt("AttachmentID"));
-        attachment.setMessageId(resultSet.getInt("MessageID"));
-        Blob blob = resultSet.getBlob("Attachment");
+        attachment.setAttachmentId(resultSet.getInt(AttachmentTable.ATTACHMENTID.name()));
+        attachment.setMessageId(resultSet.getInt(AttachmentTable.MESSAGEID.name()));
+        Blob blob = resultSet.getBlob(AttachmentTable.ATTACHMENT.name());
         attachment.setAttachment(blob.getBytes(1, (int) blob.length()));
         return attachment;
     }

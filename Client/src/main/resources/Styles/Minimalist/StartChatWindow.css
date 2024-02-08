@@ -1,0 +1,25 @@
+/* StartChatWindow.css */
+
+.AnchorPane {
+    -fx-background-color: #323232; /* Dark background */
+}
+
+.BorderPane {
+    -fx-background-color: #4C4C4C; /* Dark gray */
+}
+
+.VBox {
+    -fx-background-color: #737373; /* Medium gray */
+}
+
+.Text {
+    -fx-fill: #FFFFFF; /* White text */
+    -fx-font: 15px 'SF Pro Display', 'Arial', sans-serif; /* New font */
+    -fx-font-weight: bold;
+}
+
+.ImageView {
+    -fx-border-color: #737373;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}

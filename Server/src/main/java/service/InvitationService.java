@@ -10,11 +10,11 @@ public class InvitationService {
         notificationDao = new NotificationDaoImpl();
     }
 
-    public boolean inviteContact(Notification notification) {
+    public int inviteContact(Notification notification) {
         if (notification.getSenderId() == notification.getReceiverId()) {
-            return false;
+            return -1;
         }
-        return notificationDao.save(notification);
+        return notificationDao.saveNotification(notification);
     }
     public boolean ReceiverMakeInviteBefore(Notification notification){
         return notificationDao.checkInvite(notification);
@@ -25,5 +25,8 @@ public class InvitationService {
 
     public boolean deleteNotification(Notification notification){
         return notificationDao.delete(notification);
+    }
+    public int deleteNotificationBySenderAndReceiver(Notification notification){
+        return notificationDao.deleteBySenderAndReceiver(notification);
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane styleClass="status-context-menu" stylesheets="@../../Styles/NeoOrange/StatusContextMenu.css"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.CustomizeFontStyleController">
+   <VBox prefHeight="153.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label onMouseClicked="#setArial" prefHeight="34.0" prefWidth="100.0" text="Arial">
+         <font>
+            <Font name="Arial" size="15.0"/>
+         </font>
+      </Label>
+      <Label onMouseClicked="#setRoman" prefHeight="34.0" prefWidth="100.0" text="Roman">
+         <font>
+            <Font name="Times New Roman" size="15.0"/>
+         </font>
+      </Label>
+      <Label onMouseClicked="#setGeorgia" prefHeight="34.0" prefWidth="100.0" text="Georgia">
+         <font>
+            <Font name="Georgia" size="15.0"/>
+         </font>
+      </Label>
+      <Label onMouseClicked="#setCalibri" prefHeight="34.0" prefWidth="100.0" text="Calibri">
+         <font>
+            <Font name="Calibri" size="15.0"/>
+         </font>
+      </Label>
+      <Label onMouseClicked="#setGaramond" prefHeight="34.0" prefWidth="100.0" text="Garamond">
+         <font>
+            <Font name="Garamond" size="15.0"/>
+         </font>
+      </Label>
+   </VBox>
+</AnchorPane>

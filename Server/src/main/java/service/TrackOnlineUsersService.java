@@ -30,7 +30,10 @@ public class TrackOnlineUsersService extends UnicastRemoteObject implements Trac
     }
     public static TrackOnlineUsersService getInstance() throws RemoteException {
 
-        trackOnlineUsersService = new TrackOnlineUsersService();
+        if(trackOnlineUsersService == null){
+            trackOnlineUsersService = new TrackOnlineUsersService();
+            logger.info("TrackOnlineUsersService object bound to name 'TrackOnlineUsers'.");
+        }
         logger.info("TrackOnlineUsersService object bound to name 'TrackOnlineUsers'.");
         onlineUsersCountString = new SimpleStringProperty(String.valueOf(onlineUsersCount));
         return trackOnlineUsersService;

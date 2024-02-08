@@ -67,6 +67,53 @@
     -fx-fill: rgb(79, 74, 69);
 }
 
+.menu_container ToggleButton{
+    -fx-background-color: rgb(108, 95, 91);
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton:hover{
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton:pressed{
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton FontAwesomeIconView{
+    -fx-fill: black;
+}
+
+.menu_container ToggleButton:hover FontAwesomeIconView{
+    -fx-fill: rgb(79, 74, 69);
+}
+
+.menu_container ToggleButton:pressed FontAwesomeIconView{
+    -fx-fill: rgb(79, 74, 69);
+}
+
+.menu_container ToggleButton:selected FontAwesomeIconView{
+    -fx-fill: rgb(79, 74, 69);
+    -fx-background-color: rgb(237, 125, 49);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
 .user_icon_container{
     -fx-alignment: bottom-center;
     -fx-padding: 10;

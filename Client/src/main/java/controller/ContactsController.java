@@ -20,16 +20,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.stage.Popup;
-import model.Chat;
-import model.CurrentUser;
-import model.Group;
-import model.Model;
+import model.*;
 import network.NetworkFactory;
-import view.ControllerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,6 +44,8 @@ public class ContactsController implements Initializable {
     TreeView<Node> treeView;
     @FXML
     public ImageView ImagProfile;
+    @FXML
+    public Circle myProfilePic;
 
     @FXML
     public Circle imageClip;
@@ -60,10 +59,17 @@ public class ContactsController implements Initializable {
         Model.getInstance().getControllerFactory().setContactsController(this);
         observableContactDataList = FXCollections.observableArrayList();
 
-        double parentWidth = statusCircle.getParent().getBoundsInLocal().getWidth();
-        double circleWidth = statusCircle.getRadius() * 2;
-        statusCircle.setLayoutX((parentWidth - circleWidth) / 2);
-        statusCircle.setLayoutY(parentWidth - circleWidth);
+
+        double myProfilePicBottomRightX = myProfilePic.getLayoutX() + myProfilePic.getRadius() * 2;
+        double myProfilePicBottomRightY = myProfilePic.getLayoutY() + myProfilePic.getRadius() * 2;
+
+        // Set the position of the statusCircle to the bottom right corner of the myProfilePic
+        statusCircle.setLayoutX(myProfilePicBottomRightX - statusCircle.getRadius());
+        statusCircle.setLayoutY(myProfilePicBottomRightY - statusCircle.getRadius()- 25);
+
+
+
+
         try {
             setImageProfileData();
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
@@ -120,16 +126,28 @@ public class ContactsController implements Initializable {
     }
 
     public void changeStatusColor(Color color) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
-        Platform.runLater(() -> statusCircle.setFill(color));
+        Platform.runLater(() -> {
+            statusCircle.getStyleClass().removeAll("online-status", "offline-status", "away-status", "busy-status");
+        });
+
         if(color.equals(Color.GREEN)){
+            Platform.runLater(()->statusCircle.getStyleClass().add("online-status"));
             CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Online);
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Available);
         }
         else if(color.equals(Color.RED)){
+            Platform.runLater(()->statusCircle.getStyleClass().add("busy-status"));
+            CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Online);
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Busy);
         }
         else if(color.equals(Color.YELLOW)){
+            Platform.runLater(()->statusCircle.getStyleClass().add("away-status"));
+            CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Online);
             CurrentUser.getInstance().setUserMode(CurrentUser.UserMode.Away);
+        }
+        else if(color.equals(Color.GRAY)){
+            Platform.runLater(()->statusCircle.getStyleClass().add("offline-status"));
+            CurrentUser.getInstance().setUserStatus(CurrentUser.UserStatus.Offline);
         }
         // Get the current user
         CurrentUser currentUser = CurrentUser.getInstance();
@@ -160,7 +178,7 @@ public class ContactsController implements Initializable {
 
     }
 
-    private void setImageProfileData() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+    public void setImageProfileData() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
         double newRadius = 28;
         imageClip.setRadius(newRadius);
         imageClip.setCenterX(newRadius);
@@ -174,6 +192,7 @@ public class ContactsController implements Initializable {
             System.out.println("Not Null data found");
             Image newImage = CurrentUser.getInstance().getProfilePictureImage();
             ImagProfile.setImage(newImage);
+            myProfilePic.setFill(new ImagePattern(newImage));
         } else {
             System.out.println("Null data found");
         }
@@ -186,7 +205,7 @@ public class ContactsController implements Initializable {
             StatusElementController controller = loader.getController();
             controller.setStatusName(status);
             controller.setStatusColor(color);
-            return new HBox(node); // Wrap the Node in an HBox
+            return  new HBox(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -201,7 +220,9 @@ public class ContactsController implements Initializable {
             controller.setStatus(contactData.getColor());
             controller.setImagId(contactData.getImage().getImage());
             controller.setChatID(contactData.getChatId());
-            return new HBox(node); // Wrap the Node in an HBox
+            controller.setLastMessageProperty(contactData.getLastMessage());
+            controller.setLastMessageLabel(contactData.getLastMessage());
+            return new HBox(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -215,6 +236,8 @@ public class ContactsController implements Initializable {
             controller.setStatus(Color.PURPLE);
             controller.setImagId(group.getGroupImage().getImage());
             controller.setChatID(group.getGroupId());
+            controller.setLastMessageProperty(group.getLastMessage());
+            controller.setLastMessageLabel(group.getLastMessage());
             return new HBox(node); // Wrap the Node in an HBox
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -243,10 +266,12 @@ public class ContactsController implements Initializable {
                         // It's a contact node
                         Pane pane = (Pane) rootHBox.getChildren().get(0);
                         ImageView imageView = (ImageView) pane.getChildren().getFirst();
-                        if (rootHBox.getChildren().get(1) instanceof Label) {
-                            System.out.println("Second child is a Label");
-                            Label label = (Label) rootHBox.getChildren().get(1);
-                            Label label2 = (Label)rootHBox.getChildren().get(3);
+                        if (rootHBox.getChildren().get(1) instanceof VBox) {
+                            System.out.println("Second child is a Vbox");
+                            VBox vBox = (VBox) rootHBox.getChildren().get(1);
+                            Label label = (Label) vBox.getChildren().get(0);
+                            HBox hBox = (HBox) vBox.getChildren().get(1);
+                            Label label2 = (Label)hBox.getChildren().get(0);
 
                             String name = label.getText();
                             int ID = Integer.parseInt(label2.getText());
@@ -268,6 +293,12 @@ public class ContactsController implements Initializable {
                                     contactData.setName(name);
                                     contactData.setImage(imageView);
                                     contactData.setChatId(ID);
+                                    for(int i = 0 ; i < CurrentUser.getInstance().getContactDataList().size(); i++){
+                                        if(CurrentUser.getInstance().getContactDataList().get(i).getChatId() == ID){
+                                            contactData.setPhoneNumber(CurrentUser.getInstance().getContactDataList().get(i).getPhoneNumber());
+                                            System.out.println("Phone Number of contact ------------------"+CurrentUser.getInstance().getContactDataList().get(i).getPhoneNumber());
+                                        }
+                                    }
                                     setSelectedContact(contactData);
                                     System.out.println("Id of contact "+contactData.getId());
                                     contactListener(contactData);
@@ -276,7 +307,7 @@ public class ContactsController implements Initializable {
                                 throw new RuntimeException(e);
                             }
                         } else {
-                            System.out.println("Second child is not a Label");
+                            System.out.println("Second child is not a vbox");
                         }
                     }
                 }
@@ -306,14 +337,14 @@ public class ContactsController implements Initializable {
     public void contactListener(Chat contactData) {
         Model.getInstance().getViewFactory().getSelectedContact().setValue(contactData);
 
-        try {
-            Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
-
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Model.getInstance().getControllerFactory().getChatController().getMessageOfContact();
+//
+//        } catch (RemoteException e) {
+//            throw new RuntimeException(e);
+//        } catch (NotBoundException e) {
+//            throw new RuntimeException(e);
+//        }
        // System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getName());
     }
 

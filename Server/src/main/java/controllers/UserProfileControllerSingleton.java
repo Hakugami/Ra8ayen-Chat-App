@@ -1,6 +1,7 @@
 package controllers;
 
 import Mapper.UserMapperImpl;
+import concurrency.manager.ConcurrencyManager;
 import dto.Controller.UserProfileController;
 import dto.Model.UserModel;
 import dto.requests.GetContactsRequest;
@@ -8,10 +9,12 @@ import dto.requests.UpdateUserRequest;
 import dto.responses.GetContactsResponse;
 import dto.responses.UpdateUserResponse;
 import model.entities.User;
+import server.ServerApplication;
 import service.ContactService;
 import service.UserService;
 import session.Session;
 import session.manager.SessionManager;
+import userstable.UsersTableStateSingleton;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -27,6 +30,7 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
     ContactService contactService;
     SessionManager sessionManager;
     UserMapperImpl userMapper;
+
     private UserProfileControllerSingleton() throws RemoteException {
         super();
         userService = new UserService();
@@ -34,6 +38,7 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         userMapper = new UserMapperImpl();
         contactService = new ContactService();
     }
+
     public static UserProfileControllerSingleton getInstance() throws RemoteException {
         if (userProfileControllerSingleton == null) {
             userProfileControllerSingleton = new UserProfileControllerSingleton();
@@ -41,6 +46,7 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         }
         return userProfileControllerSingleton;
     }
+
     @Override
     public UpdateUserResponse update(UpdateUserRequest updateUserRequest) throws RemoteException {
         User user = userMapper.modelToEntity(updateUserRequest.getUserModel());
@@ -48,24 +54,27 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         updateUserResponse.setUserModel(userMapper.entityToModel(user));
         updateUserResponse.setUpdated(userService.updateUser(user));
         List<GetContactsResponse> contacts = contactService.getContacts(new GetContactsRequest(user.getUserID()));
-        for (GetContactsResponse contact : contacts) {
-            try {
-                //check if the user is online
-                if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null){
-                    OnlineControllerImpl.clients.get(contact.getPhoneNumber()).updateOnlineList();
+        ConcurrencyManager.getInstance().submitTask(() -> {
+            for (GetContactsResponse contact : contacts) {
+                try {
+                    if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null) {
+                        OnlineControllerImpl.clients.get(contact.getPhoneNumber()).updateOnlineList();
+                    }
+                } catch (SQLException | ClassNotFoundException | NotBoundException | RemoteException e) {
+                    System.out.println(e.getMessage());
                 }
-            } catch (SQLException | ClassNotFoundException | NotBoundException e) {
-                throw new RuntimeException(e);
             }
-        }
+        });
+        UsersTableStateSingleton.getInstance().updateUser(user);
+        ((UserListController) ServerApplication.controllers.get(Scenes.USER_LIST_VIEW)).loadUsers();
         return updateUserResponse;
     }
 
     @Override
     public UserModel getUserModel(String Token) throws RemoteException {
         System.out.println("User profile request received from client.");
-        Session session = sessionManager.getSession(Token) ;
-        if(session != null){
+        Session session = sessionManager.getSession(Token);
+        if (session != null) {
             logger.info("User profile request received from client.");
             return userService.userMapper.phoneToModel(session.getUser().getPhoneNumber());
 
@@ -74,5 +83,16 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         return null;
     }
 
+    @Override
+    public boolean checkToken(String token) throws RemoteException {
+        Session session = sessionManager.getSession(token);
+        return session != null;
+    }
+
+    @Override
+    public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException {
+        User user = userService.getUserByPhoneNumber(phoneNumber);
+        return userMapper.entityToModel(user);
+    }
 
 }

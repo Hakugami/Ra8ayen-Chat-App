@@ -43,6 +43,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>21-ea+24</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.13.5</version>
@@ -50,7 +55,7 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.6.0.Beta1</version>
+            <version>1.5.5.Final</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
@@ -67,6 +72,12 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>11-ea+24</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.gluonhq/emoji -->
+        <dependency>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>emoji</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>

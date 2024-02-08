@@ -1,8 +1,7 @@
 package model;
 
 import controller.CallBackControllerImpl;
-import controller.ChatData;
-import controller.ContactData;
+import dto.Model.MessageModel;
 import dto.Model.UserModel;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
@@ -15,31 +14,32 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CurrentUser extends UserModel {
+
+    private static final int MAX_MESSAGES = 50;
+
     private static CurrentUser currentUser;
     private Image profilePictureImage;
     private CallBackControllerImpl callBackController = CallBackControllerImpl.getInstance();
+    private Map<Integer, Image> imageCache ;
+
 
     private List<ContactData> contactDataList;
     private List<Group> groupList;
     private Map<ContactData, ChatData> chatList;
 
-    public void setChatList(Map<ContactData, ChatData> chatList) {
-        this.chatList = chatList;
-    }
-    public void addInChatList(ContactData contactData, ChatData chatData){
-        chatList.put(contactData,chatData);
-    }
-
+    private Map<Integer, List<MessageModel>> chatMessageMap;
     private CurrentUser() throws RemoteException {
         contactDataList = new CopyOnWriteArrayList<>();
-        chatList = new ConcurrentHashMap<ContactData, ChatData>();
+        chatList = new ConcurrentHashMap<>();
+        chatMessageMap = new LinkedHashMap<>();
+        imageCache = new ConcurrentHashMap<>();
         groupList = new CopyOnWriteArrayList<>();
     }
 
@@ -50,6 +50,59 @@ public class CurrentUser extends UserModel {
         return currentUser;
     }
 
+    public void setChatMessageMap(Map<Integer, List<MessageModel>> chatMessageMap) {
+        this.chatMessageMap = chatMessageMap;
+    }
+
+    public void addImageToCache(int userId, Image image) {
+        imageCache.put(userId, image);
+    }
+
+    public Image getImageFromCache(int userId) {
+        return imageCache.get(userId);
+    }
+    public void addMessageToCache(int chatId, MessageModel message) {
+        if (chatMessageMap.containsKey(chatId)) {
+            List<MessageModel> messageModelList = chatMessageMap.get(chatId);
+            messageModelList.add(message);
+
+            // If the number of messages exceeds the maximum, remove the oldest one
+            if (messageModelList.size() > MAX_MESSAGES) {
+                messageModelList.removeFirst();
+            }
+        } else {
+            List<MessageModel> messageModelList = new CopyOnWriteArrayList<>();
+            messageModelList.add(message);
+            chatMessageMap.put(chatId, messageModelList);
+        }
+    }
+
+
+    public boolean isMessageCached(MessageModel messageModel) {
+        if (chatMessageMap.containsKey(messageModel.getChatId())) {
+            List<MessageModel> messageModelList = chatMessageMap.get(messageModel.getChatId());
+            for (MessageModel message : messageModelList) {
+                // Only consider messages with a message ID greater than the last message in the cache as new
+                System.out.println("Message id====="+message.getMessageId());
+                System.out.println("MessageModel id====="+messageModel.getMessageId());
+                if (message.getMessageId() < messageModel.getMessageId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Map<Integer, List<MessageModel>> getChatMessageMap() {
+        return chatMessageMap;
+    }
+
+    public void setChatList(Map<ContactData, ChatData> chatList) {
+        this.chatList = chatList;
+    }
+    public void addInChatList(ContactData contactData, ChatData chatData){
+        chatList.put(contactData,chatData);
+    }
     public CallBackControllerImpl getCallBackController() {
         return callBackController;
     }
@@ -85,19 +138,20 @@ public class CurrentUser extends UserModel {
             ContactData contactData = new ContactData();
             contactData.setName(userModel.getName());
             contactData.setPhoneNumber(userModel.getPhoneNumber());
+            System.out.println(contactData.getPhoneNumber());
             contactData.setId(userModel.getIdOfFriend());
             Color color = null;
             if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Available)){
                 color = Color.GREEN;
+            }
+            else if(userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)){
+                color = Color.GRAY;
             }
             else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Busy)){
                 color = Color.RED;
             }
             else if(userModel.getUserMode().equals(GetContactsResponse.UserMode.Away)){
                 color = Color.YELLOW;
-            }
-            else if(userModel.getUserStatus().equals(GetContactsResponse.UserStatus.Offline)){
-                color = Color.GRAY;
             }
             contactData.setColor(color);
             contactData.setChatId(userModel.getChatId());

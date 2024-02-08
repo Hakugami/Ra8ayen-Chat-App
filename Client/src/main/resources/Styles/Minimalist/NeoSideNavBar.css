@@ -1,0 +1,120 @@
+.main_menu_container {
+    -fx-background-color: #323232; /* Dark gray */
+    -fx-alignment: center;
+}
+
+.left_container {
+    -fx-background-color: #4C4C4C; /* Dark gray */
+    -fx-border-color: #737373; /* Dark gray border color */
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, #737373, 5, 0, 0, 4);
+}
+
+.title_container {
+    -fx-alignment: top-center;
+    -fx-padding: 10;
+}
+
+.title_container FontAwesomeIconView {
+    -fx-fill: #FF4A4A; /* Red */
+}
+
+.title_container Text {
+    -fx-fill: #FFFFFF; /* White */
+    -fx-font-size: 1.5em;
+}
+
+/* Navigation Menu */
+
+.menu_container {
+    -fx-alignment: top-center;
+}
+
+.menu_container Button {
+    -fx-background-color: #323232; /* Dark gray */
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container Button:hover {
+    -fx-background-color: #FF4A4A; /* Red on hover */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container Button:pressed {
+    -fx-background-color: #FF4A4A; /* Red on press */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container Button FontAwesomIconView {
+    -fx-fill: #FFFFFF; /* White */
+}
+
+.menu_container Button:hover FontAwesomIconView {
+    -fx-fill: #4C4C4C; /* Dark gray on hover */
+}
+
+.menu_container Button:pressed FontAwesomIconView {
+    -fx-fill: #4C4C4C; /* Dark gray on press */
+}
+
+.menu_container ToggleButton {
+    -fx-background-color: #737373; /* Dark gray */
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton:hover {
+    -fx-background-color: #FF4A4A; /* Red on hover */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton:pressed {
+    -fx-background-color: #FF4A4A; /* Red on press */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.menu_container ToggleButton FontAwesomeIconView {
+    -fx-fill: black;
+}
+
+.menu_container ToggleButton:hover FontAwesomeIconView {
+    -fx-fill: #4C4C4C; /* Dark gray on hover */
+}
+
+.menu_container ToggleButton:pressed FontAwesomeIconView {
+    -fx-fill: #4C4C4C; /* Dark gray on press */
+}
+
+.menu_container ToggleButton:selected FontAwesomeIconView {
+    -fx-fill: #4C4C4C; /* Dark gray */
+    -fx-background-color: #FF4A4A; /* Red */
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-alignment: center;
+}
+
+.user_icon_container {
+    -fx-alignment: bottom-center;
+    -fx-padding: 10;
+}
