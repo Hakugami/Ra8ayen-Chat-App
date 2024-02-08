@@ -9,10 +9,12 @@ import dto.requests.UpdateUserRequest;
 import dto.responses.GetContactsResponse;
 import dto.responses.UpdateUserResponse;
 import model.entities.User;
+import server.ServerApplication;
 import service.ContactService;
 import service.UserService;
 import session.Session;
 import session.manager.SessionManager;
+import userstable.UsersTableStateSingleton;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -60,6 +62,8 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
                 }
             }
         });
+        UsersTableStateSingleton.getInstance().updateUser(user);
+        ((UserListController) ServerApplication.controllers.get(Scenes.USER_LIST_VIEW)).loadUsers();
         return updateUserResponse;
     }
 

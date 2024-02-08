@@ -12,6 +12,8 @@ import service.HashService;
 import service.UserService;
 import session.Session;
 import session.manager.SessionManager;
+import userstable.UsersTableStateSingleton;
+
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -79,6 +81,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
         User user = userService.getUserByPhoneNumber(registerRequest.getPhoneNumber());
         if (user != null) {
             registerResponse.setSuccess(true);
+            UsersTableStateSingleton.getInstance().addUser(user);
         } else {
             registerResponse.setSuccess(false);
             registerResponse.setError("Registration failed. Please try again.");

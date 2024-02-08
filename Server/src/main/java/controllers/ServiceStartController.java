@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.VBox;
 import network.manager.NetworkManagerSingleton;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,13 +15,7 @@ public class ServiceStartController implements Initializable {
     @FXML
     private Button startButton;
     @FXML
-    private VBox vbRoot;
-    @FXML
     private ProgressIndicator progressIndicator;
-
-    public VBox getVBoxRoot() {
-        return vbRoot;
-    }
 
     @FXML
     private void handleStartButtonClick() {

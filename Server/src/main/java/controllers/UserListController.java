@@ -1,9 +1,8 @@
 package controllers;
 
 import concurrency.manager.ConcurrencyManager;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
@@ -17,6 +16,7 @@ import model.entities.User;
 import model.entities.UserTable;
 import org.controlsfx.control.Notifications;
 import service.UserService;
+import userstable.UsersTableStateSingleton;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -32,16 +32,9 @@ public class UserListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         usersTableView.setEditable(true);
-
         userService = new UserService();
         usersTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        for(UserTable userTable : UserTable.values()) {
-            if(userTable != UserTable.ProfilePicture && userTable != UserTable.PasswordHash) {
-                usersTableView.getColumns().add(getUserStringTableColumn(userTable));
-            }
-        }
-
-        usersTableView.getColumns().add(getIconColumn());
+        ConcurrencyManager.getInstance().submitTask(this::setupTableColumns);
         ConcurrencyManager.getInstance().submitTask(this::loadUsers);
     }
 
@@ -74,14 +67,21 @@ public class UserListController implements Initializable {
         TableColumn<User, String> column = new TableColumn<>(userTable.name());
         column.setCellValueFactory(cellData -> new SimpleStringProperty(getUserProperty(cellData.getValue(), userTable)));
 
-        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setCellFactory(tc -> {
+            TableCell<User, String> cell = new TextFieldTableCell<>();
+            cell.setStyle("-fx-alignment: CENTER;");
+            return cell;
+        });
+
         column.setOnEditCommit(event -> {
             User user = event.getRowValue();
             setUserProperty(user, userTable, event.getNewValue());
             userService.updateUser(user);
-            loadUsers();
+            UsersTableStateSingleton.getInstance().updateUser(user);
         });
         column.setEditable(true);
+
+        column.setMinWidth(100);
 
         return column;
     }
@@ -150,10 +150,18 @@ public class UserListController implements Initializable {
 
     public void loadUsers() {
         try {
-            ObservableList<User> users = FXCollections.observableArrayList(userService.getAllUsers());
-            usersTableView.setItems(users);
+            usersTableView.setItems(UsersTableStateSingleton.getInstance().getUsers());
         } catch (Exception e) {
             System.out.println("An error occurred while loading the users.");
         }
+    }
+
+    public void setupTableColumns() {
+        for(UserTable userTable : UserTable.values()) {
+            if(userTable != UserTable.ProfilePicture && userTable != UserTable.PasswordHash) {
+                Platform.runLater(() -> usersTableView.getColumns().add(getUserStringTableColumn(userTable)));
+            }
+        }
+        Platform.runLater(() -> usersTableView.getColumns().add(getIconColumn()));
     }
 }

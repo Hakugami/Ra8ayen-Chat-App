@@ -103,5 +103,26 @@ public class NetworkManagerSingleton {
             System.out.println(e.getMessage());
         }
     }
+
+    public void unexportStubsOnExit() {
+        for (Remote stub : stubs) {
+            try {
+                UnicastRemoteObject.unexportObject(stub, true);
+            } catch (NoSuchObjectException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    public void unexportRegistry() {
+        try {
+            UnicastRemoteObject.unexportObject(registry, true);
+        } catch (NoSuchObjectException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public boolean isFirsTimeStart() {
+        return isFirsTimeStart;
+    }
 }
 

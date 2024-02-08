@@ -17,7 +17,6 @@ import java.sql.SQLException;
 public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch(args);
-
     }
 
     @Override
@@ -33,7 +32,6 @@ public class HelloApplication extends Application {
         }
 
         Platform.exit();
-        System.exit(0);
     }
 
     private boolean makeUserOffline() {
@@ -49,18 +47,9 @@ public class HelloApplication extends Application {
 
     private UserModel getUserModel() {
         UserModel userModel = new UserModel();
-        userModel.setPhoneNumber(CurrentUser.getCurrentUser().getPhoneNumber());
         userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
-        userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
         userModel.setUserStatus(UserModel.UserStatus.Offline);
         userModel.setUsermode(UserModel.UserMode.Away);
-        userModel.setBio(CurrentUser.getCurrentUser().getBio());
-        userModel.setProfilePicture(CurrentUser.getCurrentUser().getProfilePicture());
-        userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
-        userModel.setGender(CurrentUser.getCurrentUser().getGender());
-        userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
-        userModel.setLastLogin(CurrentUser.getCurrentUser().getLastLogin());
-        userModel.setDateOfBirth(CurrentUser.getCurrentUser().getDateOfBirth());
         return userModel;
     }
 }

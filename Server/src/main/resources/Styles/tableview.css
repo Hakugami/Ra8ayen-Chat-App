@@ -11,6 +11,10 @@
     -fx-border-width: 1px;
 }
 
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
 .table-row-cell {
     -fx-border-color: transparent;
     -fx-border-width: 0px 0px 1px 0px;
@@ -38,14 +42,15 @@
     -fx-border-color: transparent;
 }
 
-.table-view .scroll-bar {
-    -fx-background-color: #ffffff;
-}
 .table-view .column-header {
     -fx-column-menu-button-visible: false;
 }
 
-.table-view .scroll-bar .thumb {
+.table-view .scroll-bar:horizontal {
+    -fx-pref-height: 15px;
+}
+
+.table-view .scroll-bar:horizontal .thumb {
     -fx-background-color: #d3d3d3;
     -fx-background-radius: 10;
 }

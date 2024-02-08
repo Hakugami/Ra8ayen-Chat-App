@@ -77,32 +77,32 @@ public class UserDaoImpl implements UserDao {
         StringBuilder query = new StringBuilder("UPDATE UserAccounts SET ");
         List<Object> parameters = new ArrayList<>();
 
-        if (!user.getUserName().equals(originalUser.getUserName())) {
+        if (user.getUserName() != null && !user.getUserName().equals(originalUser.getUserName())) {
             query.append("DisplayName = ?, ");
             parameters.add(user.getUserName());
         }
 
-        if (!user.getEmailAddress().equals(originalUser.getEmailAddress())) {
+        if (user.getEmailAddress() != null && !user.getEmailAddress().equals(originalUser.getEmailAddress())) {
             query.append("EmailAddress = ?, ");
             parameters.add(user.getEmailAddress());
         }
 
-        if (!Arrays.equals(user.getProfilePicture(), originalUser.getProfilePicture())) {
+        if (user.getProfilePicture() != null && !Arrays.equals(user.getProfilePicture(), originalUser.getProfilePicture())) {
             query.append("ProfilePicture = ?, ");
             parameters.add(user.getProfilePicture());
         }
 
-        if (!user.getBio().equals(originalUser.getBio())) {
+        if (user.getBio() != null && !user.getBio().equals(originalUser.getBio())) {
             query.append("Bio = ?, ");
             parameters.add(user.getBio());
         }
 
-        if (user.getUserStatus() != originalUser.getUserStatus()) {
+        if (user.getUserStatus() != null && user.getUserStatus() != originalUser.getUserStatus()) {
             query.append("UserStatus = ?, ");
             parameters.add(user.getUserStatus().name());
         }
 
-        if (user.getUsermode() != originalUser.getUsermode()) {
+        if (user.getUsermode() != null && user.getUsermode() != originalUser.getUsermode()) {
             query.append("UserMode = ?, ");
             parameters.add(user.getUsermode().name());
         }
