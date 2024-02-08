@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ public class AuthenticationControllerSingleton extends UnicastRemoteObject imple
     UserDaoImpl userDaoImp = new UserDaoImpl();
     List<User> users = userDaoImp.getAll();
     static int offlineUsers ;
+    static List<User> newUsersList = new ArrayList<>();
 private AuthenticationControllerSingleton() throws RemoteException {
     super();
     userService = new UserService();
@@ -40,6 +42,7 @@ private AuthenticationControllerSingleton() throws RemoteException {
     encryptionService = new EncryptionService(getClass().getClassLoader().getResourceAsStream("keystore.jceks"), "Buh123!","Buh1234!", getClass().getClassLoader().getResourceAsStream("encryption.properties"));
     sessionManager = SessionManager.getInstance();
     offlineUsers = users.size();
+    newUsersList.addAll(users);
 }
 
 
@@ -91,6 +94,7 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
             //offlineUsers++;
             UpdateOfflineUsers(getOfflineUsers()+1);
             UsersTableStateSingleton.getInstance().addUser(user);
+            newUsersList.add(user);
         } else {
             registerResponse.setSuccess(false);
             registerResponse.setError("Registration failed. Please try again.");

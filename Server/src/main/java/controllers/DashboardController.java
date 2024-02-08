@@ -49,7 +49,8 @@ public class DashboardController implements Initializable {
     int offlineUsers ;
     int onlineUsers;
     TrackOnlineUsersService finalTrackOnlineUsersService;
-
+    List<User> users = AuthenticationControllerSingleton.newUsersList;
+    private final StringProperty countryDataProperty = new SimpleStringProperty();
     public DashboardController() throws RemoteException, MalformedURLException {
         trackOnlineUsersService = TrackOnlineUsersService.getInstance();
         authenticationControllerSingleton = AuthenticationControllerSingleton.getInstance();
@@ -57,34 +58,14 @@ public class DashboardController implements Initializable {
         scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
-    private javafx.collections.ObservableList<PieChart.Data> getCountryChartData() {
-        return javafx.collections.FXCollections.observableArrayList(
-                new PieChart.Data("Egypt", 20),
-                new PieChart.Data("USA", 25),
-                new PieChart.Data("ENGLAND", 10),
-                new PieChart.Data("GERMANY", 15),
-                new PieChart.Data("ITALY", 30),
-                new PieChart.Data("FRANCE", 40)
-        );
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        int maleCount = 20;
-        int femaleCount = 25;
 
-        PieChart.Data maleData = new PieChart.Data("Male Users", maleCount);
-        PieChart.Data femaleData = new PieChart.Data("Female Users", femaleCount);
-
-        maleData.nameProperty().bind(Bindings.concat("Male Users: ", maleCount));
-        femaleData.nameProperty().bind(Bindings.concat("Female Users: ", femaleCount));
-
-        genderPieChart.getData().addAll(maleData, femaleData);
-        countryPieChart.getData().addAll(getCountryChartData());
+        System.out.println("users.size() ---> " + users.size());
 
         //--------------------------------------------------------------------------------------------
-
-
+        //online label
         scheduler.scheduleAtFixedRate(() -> {
 
             Platform.runLater(() -> {
@@ -96,22 +77,7 @@ public class DashboardController implements Initializable {
                 }
             });
         }, 0, 1, TimeUnit.SECONDS);
-        //--------------------------------------------------------------------------------------------
-//        scheduler = Executors.newSingleThreadScheduledExecutor();
-//        scheduler.scheduleAtFixedRate(() -> {
-//            System.out.println(TrackOnlineUsersService.onlineUsersCountStringProberty().get());
-//        }, 0, 1, TimeUnit.SECONDS);
-        //-------------------------------------not working -------------------------------------------
-        //onlineUsersLabel.textProperty().bind(TrackOnlineUsersService.onlineUsersCountStringProberty());
-        //-------------------------------------not working -------------------------------------------
-//        onlineUsersLabel.textProperty().addListener((observable, oldValue, newValue) -> {
-//            System.out.println("Updated label text: " + newValue);
-//        });
-//        try {
-//            onlineUsersLabel.setText(" " + trackOnlineUsersService.getOnlineUsersCount());
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
+
         //--------------------------------------------------------------------------------------------
         //offline label
         scheduler.scheduleAtFixedRate(() -> {
@@ -120,7 +86,79 @@ public class DashboardController implements Initializable {
             Platform.runLater(() -> offlineUserLabel.setText(""+offlineUsers));
         }, 0, 1, TimeUnit.SECONDS);
         //--------------------------------------------------------------------------------------------
+        //pie charts
+        scheduler.scheduleAtFixedRate(() -> {
+            System.out.println("users.size() ---> " + users.size());
+            updatePieChart();
+            updateCountryPieChart();
+        }, 0, 5, TimeUnit.SECONDS);
+
     }
+
+
+
+        //-------------------------------------- Gender -------------------------------------------------------
+
+
+        private void updatePieChart() {
+
+            int maleCount = 0;
+
+            int femaleCount = 0;
+
+            for (User user : users) {
+                if (user.getGender().toString().equalsIgnoreCase("male")) {
+                    maleCount++;
+                } else if (user.getGender().toString().equalsIgnoreCase("female")) {
+                    femaleCount++;
+                }
+            }
+            int finalMaleCount = maleCount;
+
+            int finalFemaleCount = femaleCount;
+
+            Platform.runLater(() -> {
+                PieChart.Data maleData = new PieChart.Data("Male Users", finalMaleCount);
+                PieChart.Data femaleData = new PieChart.Data("Female Users", finalFemaleCount);
+                maleData.nameProperty().bind(Bindings.concat("Male Users: ", finalMaleCount));
+                femaleData.nameProperty().bind(Bindings.concat("Female Users: ", finalFemaleCount));
+
+                genderPieChart.getData().clear();
+                genderPieChart.getData().addAll(maleData, femaleData);
+            });
+        }
+        //----------------------------------- Country -----------------------------------------------------
+        private void updateCountryPieChart() {
+            // count users per country
+            int totalCount = 0;
+            List<PieChart.Data> countryData = FXCollections.observableArrayList();
+            for (User user : users) {
+                String country = user.getCountry();
+                totalCount++;
+                boolean found = false;
+                for (PieChart.Data data : countryData) {
+                    if (data.getName().equals(country)) {
+                        data.setPieValue(data.getPieValue() + 1);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    countryData.add(new PieChart.Data(country, 1));
+                }
+            }
+
+            // update the pie chart
+            for (PieChart.Data data : countryData) {
+                data.nameProperty().bind(Bindings.concat(data.getName(), ": ", (int)data.getPieValue()));
+            }
+
+            Platform.runLater(() -> {
+                countryPieChart.getData().clear();
+                countryPieChart.getData().addAll(countryData);
+            });
+        }
+        //-----------------------------------------------------------------------------------------------------------
 
 
 
