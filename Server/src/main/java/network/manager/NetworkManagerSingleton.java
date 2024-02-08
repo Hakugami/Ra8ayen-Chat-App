@@ -40,7 +40,8 @@ public class NetworkManagerSingleton {
                     ContactsControllerSingleton.getInstance(),
                     TrackOnlineUsersService.getInstance(),
                     SendHeartBeatService.getInstance(),
-                    VoiceChatControllerSingleton.getInstance()
+                    VoiceChatControllerSingleton.getInstance(),
+                    BlockedUserControllerSinglton.getInstance()
             );
             lookUpMap = new HashMap<>();
             lookUpMap.put(LookUpNames.ONLINECONTROLLER.name(), OnlineControllerImpl.getInstance());

@@ -1,6 +1,7 @@
 package controllers;
 
 import concurrency.manager.ConcurrencyManager;
+import exceptions.DuplicateEntryException;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -76,7 +77,11 @@ public class UserListController implements Initializable {
         column.setOnEditCommit(event -> {
             User user = event.getRowValue();
             setUserProperty(user, userTable, event.getNewValue());
-            userService.updateUser(user);
+            try {
+                userService.updateUser(user);
+            } catch (DuplicateEntryException e) {
+                throw new RuntimeException(e);
+            }
             UsersTableStateSingleton.getInstance().updateUser(user);
         });
         column.setEditable(true);

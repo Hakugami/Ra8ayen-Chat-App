@@ -8,6 +8,7 @@ import dto.requests.GetContactsRequest;
 import dto.requests.UpdateUserRequest;
 import dto.responses.GetContactsResponse;
 import dto.responses.UpdateUserResponse;
+import exceptions.DuplicateEntryException;
 import model.entities.User;
 import server.ServerApplication;
 import service.BlockedUserService;
@@ -53,7 +54,15 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         User user = userMapper.modelToEntity(updateUserRequest.getUserModel());
         UpdateUserResponse updateUserResponse = new UpdateUserResponse();
         updateUserResponse.setUserModel(userMapper.entityToModel(user));
-        updateUserResponse.setUpdated(userService.updateUser(user));
+        try {
+            updateUserResponse.setUpdated(userService.updateUser(user));
+        } catch (DuplicateEntryException e) {
+            updateUserResponse.setUpdated(false);
+            updateUserResponse.setErrorMessage("Update failed due to " + e.getDuplicateColumn() + ": " + e.getDuplicateValue() + " already being used.");
+            return updateUserResponse;
+        }
+        System.out.println("User updated successfully.");
+
         List<GetContactsResponse> contacts = contactService.getContacts(new GetContactsRequest(user.getUserID()));
         ConcurrencyManager.getInstance().submitTask(() -> {
             for (GetContactsResponse contact : contacts) {

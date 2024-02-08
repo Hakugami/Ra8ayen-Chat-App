@@ -86,28 +86,33 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
                     AcceptUserAsFriend(notification.getSenderId(), currentUser.getPhoneNumber(), phoneNumber);
                 }
                 else {
-                    String myEmail = currentUser.getEmailAddress();
-
-                    ConcurrencyManager.getInstance().submitTask(() -> emailService.sendEmail(myEmail, user.getEmailAddress(),
-                            "Chat App (رغايين)",
-                            "You have a friend request from "
-                                    + currentUser.getUserName() +
-                                    " with phone number " + phoneNumber));
                     int notificationID = invitationService.inviteContact(notification);
-                    responses.add("Invitation has been sent to " + phoneNumber);
-                    FriendRequest friendRequest = new FriendRequest();
-                    friendRequest.setReceiverPhoneNumber(phoneNumber);
-                    friendRequest.setSenderPhoneNumber(currentUser.getPhoneNumber());
-                    friendRequest.setUserModel(userMapper.entityToModel(currentUser));
-                    friendRequest.setId(notificationID);
-                    if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
-                        ConcurrencyManager.getInstance().submitTask(() -> {
-                            try {
-                                OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
-                            } catch (RemoteException e) {
-                                addContactResponse.setDone(false);
-                            }
-                        });
+                    if(notificationID == 45000) {
+                       responses.add("You already sent to him");
+                    }
+                   else {
+                        responses.add("Invitation has been sent to " + phoneNumber);
+                        FriendRequest friendRequest = new FriendRequest();
+                        friendRequest.setReceiverPhoneNumber(phoneNumber);
+                        friendRequest.setSenderPhoneNumber(currentUser.getPhoneNumber());
+                        friendRequest.setUserModel(userMapper.entityToModel(currentUser));
+                        friendRequest.setId(notificationID);
+                        String myEmail = currentUser.getEmailAddress();
+
+                        ConcurrencyManager.getInstance().submitTask(() -> emailService.sendEmail(myEmail, user.getEmailAddress(),
+                                "Chat App (رغايين)",
+                                "You have a friend request from "
+                                        + currentUser.getUserName() +
+                                        " with phone number " + phoneNumber));
+                        if(OnlineControllerImpl.clients.containsKey(phoneNumber)){
+                            ConcurrencyManager.getInstance().submitTask(() -> {
+                                try {
+                                    OnlineControllerImpl.clients.get(phoneNumber).receiveNotification(friendRequest);
+                                } catch (RemoteException e) {
+                                    addContactResponse.setDone(false);
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -118,7 +123,7 @@ public class InvitationControllerSingleton extends UnicastRemoteObject implement
         addContactResponse.setDone(true);
         addContactResponse.setResponses(responses);
         addContactResponse.setFriendsPhoneNumbers(addContactRequest.getFriendsPhoneNumbers());
-
+        System.out.println("AddContactResponse: " + addContactResponse.getResponses());
         return addContactResponse;
     }
 

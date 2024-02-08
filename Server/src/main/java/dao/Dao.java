@@ -5,6 +5,6 @@ public interface Dao<T> {
     List<T>  getAll();
     T get(int id);
     boolean save(T t) throws SQLException;
-    boolean update(T t);
+    boolean update(T t) throws SQLException;
     boolean delete(T t);
 }

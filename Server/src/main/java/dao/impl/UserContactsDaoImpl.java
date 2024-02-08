@@ -1,11 +1,9 @@
 package dao.impl;
 
 import dao.UserContactsDao;
-import model.entities.User;
 import model.entities.UserContacts;
 import model.entities.UserContactsTable;
 import persistence.connection.DataSourceSingleton;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,11 +98,15 @@ public class UserContactsDaoImpl implements UserContactsDao {
 
     @Override
     public boolean delete(UserContacts userContacts) {
-        String query = "DELETE FROM UserContacts WHERE UserID = ? AND FriendID = ?";
+        String query = "DELETE FROM UserContacts " +
+                "WHERE (UserID = ? AND FriendID = ?)" +
+                "   OR (UserID = ? AND FriendID = ?);";
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userContacts.getUserID());
             statement.setInt(2, userContacts.getFriendID());
+            statement.setInt(3, userContacts.getFriendID());
+            statement.setInt(4, userContacts.getUserID());
             int rowsAffected = statement.executeUpdate();
             if(rowsAffected >= 1) {
                 return true;

@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class UpdateUserResponse implements Serializable {
     private UserModel userModel;
     private boolean updated;
+    private String errorMessage;
 
     public UpdateUserResponse(UserModel userModel, boolean updated) {
         this.userModel = userModel;
@@ -31,11 +32,20 @@ public class UpdateUserResponse implements Serializable {
         this.updated = updated;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     @Override
     public String toString() {
         return "UpdateUserResponse{" +
                 "userModel=" + userModel +
                 ", updated=" + updated +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }

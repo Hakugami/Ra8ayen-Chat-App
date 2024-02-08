@@ -17,6 +17,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import model.*;
 import network.NetworkFactory;
+import org.controlsfx.control.Notifications;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -101,7 +102,7 @@ public class UpdateProfileController {
         String phoneNumber = phoneNumberField.getText() != null && !phoneNumberField.getText().isEmpty() ? phoneNumberField.getText() : CurrentUser.getInstance().getPhoneNumber();
         String email = emailField.getText() != null && !emailField.getText().isEmpty() ? emailField.getText() : CurrentUser.getInstance().getEmailAddress();
         LocalDate localDateOfBirth = datePicker.getValue();
-        Date dateOfBirth = (localDateOfBirth != null) ? java.sql.Date.valueOf(localDateOfBirth) : java.sql.Date.valueOf(LocalDate.now());
+        Date dateOfBirth = (localDateOfBirth != null) ? java.sql.Date.valueOf(localDateOfBirth) : CurrentUser.getInstance().getDateOfBirth();
         UserModel userModel = new UserModel();
 
         if (profilePic.getImage() != null) {
@@ -141,7 +142,7 @@ public class UpdateProfileController {
                 Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
                 Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
             } else {
-                System.out.println("User update failed");
+                Notifications.create().title("Duplicate Entry").text(updateUserResponse.getErrorMessage()).showError();
             }
         } catch (NotBoundException | SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);

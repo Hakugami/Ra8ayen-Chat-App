@@ -20,10 +20,8 @@ import dto.responses.AcceptFriendResponse;
 import dto.responses.DeleteUserContactResponse;
 import dto.responses.GetContactChatResponse;
 import dto.responses.GetContactsResponse;
-import model.entities.Chat;
-import model.entities.ChatParticipant;
-import model.entities.User;
-import model.entities.UserContacts;
+import model.entities.*;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -33,8 +31,13 @@ import java.util.List;
 public class ContactService{
 
     public AcceptFriendResponse acceptContact(AcceptFriendRequest acceptFriendRequest) throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+        InvitationService invitationService = new InvitationService();
         int friendID = getFriendID(acceptFriendRequest);
         int chatID = createChat(acceptFriendRequest);
+        Notification notification = new Notification();
+        notification.setReceiverId(friendID);
+        notification.setSenderId(acceptFriendRequest.getUserID());
+        invitationService.deleteNotificationBySenderAndReceiver(notification);
         addChatParticipants(acceptFriendRequest, friendID, chatID);
         addUserContacts(acceptFriendRequest, friendID);
         ConcurrencyManager.getInstance().submitTask(() -> {
@@ -44,6 +47,7 @@ public class ContactService{
                 System.out.println(e.getMessage());
             }
         });
+
         ConcurrencyManager.getInstance().submitTask(() -> {
             try {
                 OnlineControllerImpl.clients.get(acceptFriendRequest.getMyPhoneNumber()).updateOnlineList();
@@ -51,6 +55,7 @@ public class ContactService{
                 System.out.println(e.getMessage());
             }
         });
+
         return new AcceptFriendResponse(true, "");
     }
 
@@ -145,6 +150,7 @@ public class ContactService{
         UserContactsDao userContactsDao = new UserContactsDaoImpl();
 
         userContactsDao.delete(userContacts);
+
 
         return new DeleteUserContactResponse();
     }

@@ -49,8 +49,15 @@ public class UserService {
 
         return storedPassword.equals(enteredPassword);
     }
-    public boolean updateUser(User user) {
-        return userDaoImpl.update(user);
+    public boolean updateUser(User user) throws DuplicateEntryException {
+        try {
+            userDaoImpl.update(user);
+        } catch (SQLException e) {
+            if(e.getErrorCode() == 1062) {
+                throw new DuplicateEntryException(e.getMessage(), e);
+            }
+        }
+        return false;
     }
     public void deleteUser(User user) {
         userDaoImpl.delete(user);
