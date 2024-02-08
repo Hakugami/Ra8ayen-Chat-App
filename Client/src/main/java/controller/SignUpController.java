@@ -49,25 +49,12 @@ class CustomDatePickerCellFactory implements Callback<DatePicker, DateCell> {
                 if (item == null || empty) {
                     setGraphic(null);
                 } else {
-                    setStyle("-fx-background-color: rgb(246, 241, 238); " + // Background color
-                            "-fx-text-fill: rgb(79, 74, 69); " + // Text color
-                            "-fx-border-color: rgb(108, 95, 91); " + // Border color
-                            "-fx-border-radius: 5; " +
-                            "-fx-font-size: 1.1em; " +
-                            "-fx-padding: 10px; " );
-                    setOnMouseEntered(event -> setStyle("-fx-background-color: rgb(237, 125, 49);"
-                            + "-fx-text-fill: rgb(255, 255, 255);"
-                            + "-fx-border-color: rgb(108, 95, 91);"
-                            + "-fx-border-radius: 5;"
-                            + "-fx-font-size: 1.1em;"
-                            + "-fx-padding: 10px;")); // Hover color
-                    setOnMouseExited(event -> setStyle("-fx-background-color: rgb(246, 241, 238);"
-                            + "-fx-text-fill: rgb(79, 74, 69);"
-                            + "-fx-border-color: rgb(108, 95, 91);"
-                            + "-fx-border-radius: 5;"
-                            + "-fx-font-size: 1.1em;"
-                            + "-fx-padding: 10px;"
-                    )); // Normal color
+                    getStyleClass().clear();
+                    getStyleClass().add("cell-default");
+
+
+                    setOnMouseEntered(event -> getStyleClass().setAll("cell-hover"));
+                    setOnMouseExited(event -> getStyleClass().setAll("cell-default"));
                 }
             }
         };
@@ -85,34 +72,18 @@ class CustomGenderComboBoxCellFactory implements Callback<ListView<String>, List
                     setGraphic(null);
                 } else {
                     setText(item);
-                    setStyle("-fx-background-color: rgb(246, 241, 238); " + // Background color
-                            "-fx-text-fill: rgb(79, 74, 69); " + // Text color
-                            "-fx-border-color: rgb(108, 95, 91); " + // Border color
-                            "-fx-border-radius: 5; " +
-                            "-fx-font-size: 1.1em; " +
-                            "-fx-padding: 10px; " +
-                            "-fx-border-width: 2px;");
-                    setOnMouseEntered(event -> setStyle("-fx-background-color: rgb(237, 125, 49);"
-                            + "-fx-text-fill: rgb(255, 255, 255);"
-                            + "-fx-border-color: rgb(108, 95, 91);"
-                            + "-fx-border-radius: 5;"
-                            + "-fx-font-size: 1.1em;"
-                            + "-fx-padding: 10px;"
-                            + "-fx-border-width: 2px;")); // Hover color
-                    setOnMouseExited(event -> setStyle("-fx-background-color: rgb(246, 241, 238);"
-                            + "-fx-text-fill: rgb(79, 74, 69);"
-                            + "-fx-border-color: rgb(108, 95, 91);"
-                            + "-fx-border-radius: 5;"
-                            + "-fx-font-size: 1.1em;"
-                            + "-fx-padding: 10px;"
-                            + "-fx-border-width: 2px;"
-                    )); // Normal color
+                    getStyleClass().add("cell-default");
+
+
+                    setOnMouseEntered(event -> getStyleClass().setAll("cell-hover"));
+                    setOnMouseExited(event -> getStyleClass().setAll("cell-default"));
                 }
             }
         };
     }
 }
-class CustomCountryComboBoxCellFactory implements Callback<ListView<Country>, ListCell<Country>> {
+
+ class customComboBoxCellFactory implements Callback<ListView<Country>, ListCell<Country>> {
     @Override
     public ListCell<Country> call(ListView<Country> param) {
         return new ListCell<>() {
@@ -123,33 +94,17 @@ class CustomCountryComboBoxCellFactory implements Callback<ListView<Country>, Li
                     setGraphic(null);
                 } else {
                     setText(item.getName());
-                    setStyle("-fx-background-color: rgb(246, 241, 238); " + // Background color
-                            "-fx-text-fill: rgb(79, 74, 69); " + // Text color
-                            "-fx-border-color: rgb(108, 95, 91); " + // Border color
-                            "-fx-border-radius: 5; " +
-                            "-fx-font-size: 1.1em; " +
-                            "-fx-padding: 10px; " +
-                            "-fx-border-width: 2px;");
-                    setOnMouseEntered(event -> setStyle("-fx-background-color: rgb(237, 125, 49);"
-                            + "-fx-text-fill: rgb(255, 255, 255);"
-                            + "-fx-border-color: rgb(108, 95, 91);"
-                            + "-fx-border-radius: 5;"
-                            + "-fx-font-size: 1.1em;"
-                            + "-fx-padding: 10px;"
-                            + "-fx-border-width: 2px;")); // Hover color
-                    setOnMouseExited(event -> setStyle("-fx-background-color: rgb(246, 241, 238);"
-                            + "-fx-text-fill: rgb(79, 74, 69);"
-                            + "-fx-border-color: rgb(108, 95, 91);"
-                            + "-fx-border-radius: 5;"
-                            + "-fx-font-size: 1.1em;"
-                            + "-fx-padding: 10px;"
-                            + "-fx-border-width: 2px;"
-                    )); // Normal color
+                    getStyleClass().add("cell-default");
+
+
+                    setOnMouseEntered(event -> getStyleClass().setAll("cell-hover"));
+                    setOnMouseExited(event -> getStyleClass().setAll("cell-default"));
                 }
             }
         };
     }
 }
+
 
 public class SignUpController implements Initializable {
     @FXML
@@ -186,7 +141,7 @@ public class SignUpController implements Initializable {
         signUpButton.setOnAction(this::handleSignUpButton);
         backToLoginButton.setOnAction(this::handleBackToLoginButton);
         profilePic.setOnMouseClicked(event -> handleProfilePicSelection());
-        countryComboBox.setCellFactory(new CustomCountryComboBoxCellFactory());
+        countryComboBox.setCellFactory(new customComboBoxCellFactory());
         gender.setCellFactory(new CustomGenderComboBoxCellFactory());
         datePicker.setDayCellFactory(new CustomDatePickerCellFactory());
 

@@ -34,7 +34,6 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     public boolean connect(String phoneNumber, CallBackController callBackController) throws RemoteException {
         ConcurrencyManager.getInstance().submitTask(() -> friendStatusNotifier(phoneNumber, User.UserStatus.Online));
         if(clients.containsKey(phoneNumber)) {
-            clients.remove(phoneNumber);
             return false;
         }
         else {

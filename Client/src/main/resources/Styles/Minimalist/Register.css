@@ -53,8 +53,24 @@
     -fx-padding: 10px;
     -fx-border-width: 2px;
     -fx-margin-bottom: 10px; /* Add space below each ComboBox */
-    -fx-text-fill: #737373; /* Medium gray text color */
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
+
+.register_form_container ComboBox .list-cell {
+    -fx-background-color: #323232; /* Dark background for the dropdown */
+    -fx-text-fill: #FFFFFF; /* White text color for unselected items in the dropdown */
+}
+
+.register_form_container ComboBox .list-cell:selected {
+    -fx-background-color: #4C4C4C; /* Darker background for the selected item in the dropdown */
+    -fx-text-fill: #FFFFFF; /* White text color for the selected item in the dropdown */
+}
+
+.register_form_container ComboBox .list-cell:hover {
+    -fx-background-color: #4C4C4C; /* Darker background on hover for items in the dropdown */
+    -fx-text-fill: #FFFFFF; /* White text color on hover for items in the dropdown */
+}
+
 
 .register_form_container DatePicker {
     -fx-background-color: #323232; /* Dark background */
@@ -65,8 +81,34 @@
     -fx-padding: 10px;
     -fx-border-width: 2px;
     -fx-margin-bottom: 10px; /* Add space below each DatePicker */
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #000000;
 }
+
+
+/* cell-styles.css */
+
+/* cell-styles.css */
+
+.cell-default {
+    -fx-background-color: #323232; /* Dark background color */
+    -fx-text-fill: #FFFFFF; /* White text color */
+    -fx-border-color: #737373; /* Medium gray border color */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+}
+
+.cell-hover {
+    -fx-background-color: #4C4C4C; /* Darker background color on hover */
+    -fx-text-fill: #FFFFFF; /* White text color on hover */
+    -fx-border-color: #737373; /* Medium gray border color on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+}
+
 
 .register_form_container DatePicker .arrow-button {
     -fx-background-color: #323232; /* Dark background */
@@ -114,7 +156,7 @@
 }
 
 .register_form_container TextArea {
-    -fx-control-inner-background: #323232; /* Dark background for the text area content */
+    -fx-control-inner-background: #4C4C4C; /* Dark background for the text area content */
     -fx-background-color: #323232; /* Dark background */
     -fx-border-color: #737373; /* Medium gray border color */
     -fx-border-radius: 5;
