@@ -36,6 +36,10 @@
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="400.0" HBox.hgrow="ALWAYS">
             <Label fx:id="User_Name_lbl" text="Display Name:" />
             <TextField fx:id="nameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0" styleClass="input_field" />
+            <Label fx:id="emailLabel" text="Email:" />
+            <TextField fx:id="emailField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0" styleClass="input_field" />
+            <Label fx:id="User_Name_lbl1" text="Phone Number:" />
+            <TextField fx:id="phoneNumberField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0" styleClass="input_field" />
             <Label fx:id="Country_lbl" text="Country:" />
             <ComboBox fx:id="countryComboBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="200.0" styleClass="input_field" />
             <Label fx:id="DateOfBirth_lbl" text="Date of Birth:" />
