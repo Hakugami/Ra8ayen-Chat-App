@@ -32,6 +32,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AddGroupGroupController implements Initializable {
     public TextField phoneField;
@@ -102,7 +103,9 @@ public class AddGroupGroupController implements Initializable {
                 e.printStackTrace();
             }
         }
-        List<String> friendsPhoneNumbers = contactsToAdd.stream().map(node -> ((AddContactElementController) node.getUserData()).phoneNumber.getText()).toList();
+        List<String> friendsPhoneNumbers = contactsToAdd.stream()
+                .map(node -> ((AddContactElementController) node.getUserData()).phoneNumber.getText())
+                .collect(Collectors.toList());
         createGroupChatRequest.setFriendsPhoneNumbers(friendsPhoneNumbers);
         try {
             CreateGroupChatResponse response = NetworkFactory.getInstance().createGroupChat(createGroupChatRequest);

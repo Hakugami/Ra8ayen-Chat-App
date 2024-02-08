@@ -26,6 +26,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AddContactController implements Initializable {
     @FXML
@@ -77,7 +78,9 @@ public class AddContactController implements Initializable {
     public void addAll(ActionEvent actionEvent) {
         AddContactRequest addContactRequest = new AddContactRequest();
         AddContactResponse addContactResponse;
-        List<String> friendsPhoneNumbers = contactsToAdd.stream().map(node -> ((AddContactElementController) node.getUserData()).phoneNumber.getText()).toList();
+        List<String> friendsPhoneNumbers = contactsToAdd.stream()
+                .map(node -> ((AddContactElementController) node.getUserData()).phoneNumber.getText())
+                .collect(Collectors.toList());
         try {
             addContactRequest.setUserId(CurrentUser.getInstance().getUserID());
             addContactRequest.setFriendsPhoneNumbers(friendsPhoneNumbers);

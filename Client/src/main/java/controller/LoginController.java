@@ -174,6 +174,7 @@ public class LoginController {
                     Notifications.create()
                             .title("Session Alert")
                             .text("There is an existing session.")
+                            .owner(loginButton.getScene().getWindow()) // Set the owner of the Notifications object
                             .showWarning();
                 });
 
