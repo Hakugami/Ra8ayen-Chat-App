@@ -2,8 +2,10 @@ package controller;
 
 import dto.Model.UserModel;
 import dto.requests.AddContactRequest;
+import dto.requests.BlockUserRequest;
 import dto.requests.FriendRequest;
 import dto.responses.AddContactResponse;
+import dto.responses.BlockUserResponse;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -22,6 +24,9 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -67,15 +72,29 @@ public class OthersProfileController implements Initializable {
         });
         blockButton.setOnAction(event -> {
             try {
-                handleBlockButton();
-            } catch (RemoteException | NotBoundException e) {
+               BlockUserResponse blockUserResponse=handleBlockButton();
+               if(blockUserResponse.isBlocked()){
+                   Notifications.create().title("Success").text(blockUserResponse.getBlockedMessage()).showInformation();
+               }else{
+                   Notifications.create().title("Failed").text(blockUserResponse.getBlockedMessage()).showInformation();
+               }
+
+            } catch (RemoteException | NotBoundException | SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    private void handleBlockButton() throws RemoteException, NotBoundException {
+    private BlockUserResponse handleBlockButton() throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
         System.out.println("Block Button Clicked");
+        BlockUserRequest blockUserRequest = new BlockUserRequest();
+
+        blockUserRequest.setUserPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
+        blockUserRequest.setFriendPhoneNumber(otherUserModel.getPhoneNumber());
+        blockUserRequest.setLocalDate(LocalDate.from(LocalDateTime.now()));
+
+        BlockUserResponse blockUserResponse = NetworkFactory.getInstance().blockUser(blockUserRequest);
+        return blockUserResponse;
     }
 
     private AddContactResponse handleAddButton() throws RemoteException, NotBoundException {
@@ -112,4 +131,6 @@ public class OthersProfileController implements Initializable {
     public void exitButtonClicked() {
         otherProfilePopup.hide();
     }
+
+
 }

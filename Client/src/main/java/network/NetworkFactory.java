@@ -174,5 +174,10 @@ public class NetworkFactory {
         return controller.retrieveAttachment(request);
     }
 
+    public BlockUserResponse blockUser(BlockUserRequest request) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
+        BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+        return controller.blockUserByPhoneNumber(request);
+    }
+
 
 }

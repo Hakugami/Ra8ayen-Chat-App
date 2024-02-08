@@ -53,6 +53,7 @@ public class NetworkManagerSingleton {
             lookUpMap.put(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
             lookUpMap.put(LookUpNames.VOICECHATCONTROLLER.name(), VoiceChatControllerSingleton.getInstance());
             lookUpMap.put(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name(), SendHeartBeatService.getInstance());
+            lookUpMap.put(LookUpNames.BLOCKUSERCONTROLLER.name(),BlockedUserControllerSinglton.getInstance());
         } catch (RemoteException | MalformedURLException e) {
             System.out.println(e.getMessage());
         }
