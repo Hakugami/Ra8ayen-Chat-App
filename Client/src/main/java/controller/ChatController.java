@@ -1,5 +1,6 @@
 package controller;
 
+import concurrency.manager.ConcurrencyManager;
 import dto.Model.MessageModel;
 import dto.Model.StyleMessage;
 import dto.Model.UserModel;
@@ -455,7 +456,7 @@ public class ChatController implements Initializable {
                     throw new RuntimeException(exception);
                 });
 
-                new Thread(loadFXMLTask).start();
+                ConcurrencyManager.getInstance().submitTask(loadFXMLTask);
             } else {
                 setGraphic(null);
             }
@@ -528,7 +529,7 @@ public class ChatController implements Initializable {
         GetMessageRequest getMessageRequest = new GetMessageRequest();
         getMessageRequest.setChatId(chatId);
         Task<Void> databaseQueryTask = createDatabaseQueryTask(getMessageRequest);
-        new Thread(databaseQueryTask).start();
+        ConcurrencyManager.getInstance().submitTask(databaseQueryTask);
     }
 
 //    private void retrieveMessages(GetMessageRequest getMessageRequest) throws RemoteException {
@@ -735,7 +736,7 @@ public class ChatController implements Initializable {
             });
         });
 
-        new Thread(displayTask).start();
+        ConcurrencyManager.getInstance().submitTask(displayTask);
 
 
     }
@@ -781,7 +782,7 @@ public class ChatController implements Initializable {
                     }
                 }
             });
-            t1.start();
+            ConcurrencyManager.getInstance().submitRunnable(t1);
         }
     }
 

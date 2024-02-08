@@ -1,5 +1,6 @@
 package controller;
 
+import concurrency.manager.ConcurrencyManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -137,9 +138,9 @@ public class MainWindowController implements Initializable {
 //            }
 //        }).start();
 
-        new Thread(() -> {
+        Thread helpUsGod = new Thread(() -> {
             try {
-                TimeUnit.SECONDS.sleep(10);
+                TimeUnit.SECONDS.sleep(8);
                 System.out.println("Setting tree view data");
                 Platform.runLater(() -> {
                     Model.getInstance().getViewFactory().refreshLatestMessages();
@@ -147,7 +148,8 @@ public class MainWindowController implements Initializable {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
+        ConcurrencyManager.getInstance().submitRunnable(helpUsGod);
 
     }
 

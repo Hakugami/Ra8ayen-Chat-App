@@ -56,9 +56,9 @@ public class NetworkFactory {
         return controller.getChatBotResponse(request);
     }
 
-    public void connect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
+    public boolean connect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
-        controller.connect(phoneNumber, callBackController);
+        return controller.connect(phoneNumber, callBackController);
     }
 
     //update Login Users numbers in dashboard----------------------------------------------
@@ -179,5 +179,15 @@ public class NetworkFactory {
         return controller.blockUserByPhoneNumber(request);
     }
 
+
+    public boolean checkToken(String token) throws RemoteException, NotBoundException {
+        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+        return controller.checkToken(token);
+    }
+
+    public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
+        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+        return controller.getUserModelByPhoneNumber(phoneNumber);
+    }
 
 }

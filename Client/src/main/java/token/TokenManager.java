@@ -3,6 +3,8 @@ package token;
 import utils.EncryptionService;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class TokenManager {
@@ -30,23 +32,53 @@ public class TokenManager {
     }
 
     public String getToken() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(TOKEN_FILE))) {
-            String encryptedToken = reader.readLine();
-            return Objects.requireNonNull(EncryptionService.decrypt(encryptedToken, AES_KEY)).split("\n")[0];
-        } catch (Exception e) {
+        try {
+            if (!Files.exists(Paths.get(TOKEN_FILE))) {
+                Files.createFile(Paths.get(TOKEN_FILE));
+            }
+            try (BufferedReader reader = new BufferedReader(new FileReader(TOKEN_FILE))) {
+                String encryptedToken = reader.readLine();
+                if (encryptedToken == null) {
+                    // return default value or throw an exception
+                    return null;
+                }
+                return Objects.requireNonNull(EncryptionService.decrypt(encryptedToken, AES_KEY)).split("\n")[0];
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     public String[] loadData(){
-        try (BufferedReader reader = new BufferedReader(new FileReader(TOKEN_FILE))) {
-            String encryptedToken = reader.readLine();
-            return Objects.requireNonNull(EncryptionService.decrypt(encryptedToken, AES_KEY)).split("\n");
-        } catch (Exception e) {
+        try {
+            if (!Files.exists(Paths.get(TOKEN_FILE))) {
+                Files.createFile(Paths.get(TOKEN_FILE));
+            }
+            try (BufferedReader reader = new BufferedReader(new FileReader(TOKEN_FILE))) {
+                String encryptedToken = reader.readLine();
+                if (encryptedToken == null) {
+                    // return default value or throw an exception
+                    return new String[0];
+                }
+                return Objects.requireNonNull(EncryptionService.decrypt(encryptedToken, AES_KEY)).split("\n");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void truncateToken() {
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(TOKEN_FILE)))) {
+            out.print("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

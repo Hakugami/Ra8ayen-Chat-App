@@ -14,16 +14,6 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public interface CallBackController extends Remote {
-   /* public void refreshOnlineList() throws RemoteException;
-    public void refreshGroupChatList() throws RemoteException;
-    public void refreshGroupChatMessageList() throws RemoteException;
-    public void refreshPrivateChatList() throws RemoteException;
-    public void refreshPrivateChatMessageList() throws RemoteException;
-    public void addNewGroupChat() throws RemoteException;
-    public void addNewContact() throws RemoteException;
-    public void deleteGroupChat() throws RemoteException;
-    public void deleteContact() throws RemoteException;*/
-
     public void respond() throws RemoteException;
     public void userIsOnline(String username) throws RemoteException;
     public void updateNotificationList(AcceptFriendRequest notification) throws RemoteException;
@@ -35,7 +25,7 @@ public interface CallBackController extends Remote {
     public void createNewChat(String senderPhoneNumber) throws RemoteException;
     public void receiveAnnouncement(String announcement, String announcementTitle) throws RemoteException;
     public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException;
-
+    public void logout() throws RemoteException;
     public void receiveVoiceCallRequest(VoiceCallRequest voiceCallRequest) throws RemoteException;
     public void establishVoiceCall(AcceptVoiceCallResponse acceptVoiceCallResponse) throws RemoteException;
     public void receiveVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException;

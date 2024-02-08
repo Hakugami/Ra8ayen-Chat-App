@@ -18,8 +18,6 @@ import javafx.stage.StageStyle;
 import model.Chat;
 import model.CurrentUser;
 import model.Model;
-import network.NetworkFactory;
-import token.TokenManager;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -49,19 +47,18 @@ public class ViewFactory {
     }
 
     public BorderPane getMainArea() {
-        if (mainArea == null) {
+
             try {
                 mainArea = new FXMLLoader(getClass().getResource("/fxml/Home/MainWindow.fxml")).load();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+
         return mainArea;
     }
 
-    public BorderPane autoLogin() throws NotBoundException, RemoteException {
-        NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken());
-        return getMainArea();
+    public void autoLogin(){
+        Model.getInstance().getControllerFactory().getLoginController().autoLoginTransition();
     }
 
     public void showProfile() {
@@ -166,19 +163,13 @@ public class ViewFactory {
 
     public Node getContacts() {
         try {
-            return new FXMLLoader(getClass().getResource("/Fxml/Contacts/Contacts.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Contacts/Contacts.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Node getSettings() {
-        try {
-            return new FXMLLoader(getClass().getResource("/FXML/Settings.fxml")).load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     public Node getRegister() {
         try {

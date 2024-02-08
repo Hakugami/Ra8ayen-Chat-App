@@ -1,5 +1,6 @@
 package controller;
 
+import concurrency.manager.ConcurrencyManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.MessageModel;
@@ -284,7 +285,7 @@ void openDownloadSelector() throws NotBoundException, RemoteException {
                     }
                 });
 
-                downloadThread.start();
+                ConcurrencyManager.getInstance().submitRunnable(downloadThread);
             }
         }
     }

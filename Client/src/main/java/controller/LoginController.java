@@ -2,6 +2,7 @@ package controller;
 
 //import dto.Controller.TrackOnlineUsers;
 
+import concurrency.manager.ConcurrencyManager;
 import dto.requests.*;
 import dto.responses.GetContactsResponse;
 import dto.responses.GetGroupResponse;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.ContactData;
 import model.CurrentUser;
@@ -35,9 +37,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class LoginController {
 
@@ -68,9 +67,8 @@ public class LoginController {
         // Initially hide the password label and password field
         Model.getInstance().getControllerFactory().setLoginController(this);
         String[] data = TokenManager.getInstance().loadData();
-        if (data != null) {
+        if (data != null && data.length > 1) {
             phoneNumberField.setText(data[1]);
-            passwordField.setText(data[2]);
         }
         Password_lbl.setVisible(false);
         passwordField.setVisible(false);
@@ -134,16 +132,12 @@ public class LoginController {
                 if (validateFields()) {
                     LoginRequest loginRequest = new LoginRequest(phoneNumberField.getText(), passwordField.getText());
                     LoginResponse loginResponse = NetworkFactory.getInstance().login(loginRequest);
-                    StringBuilder sb = new StringBuilder();
-                    String token = loginResponse.getToken();
-                    sb.append(token).append("\n").append(phoneNumberField.getText()).append("\n").append(passwordField.getText()).append("\n").append('1');
-                    TokenManager.getInstance().setToken(sb.toString());
-                    System.out.println(loginResponse);
                     if (loginResponse.getSuccess()) {
-                        retrieveData();
-                        Stage currentStage = (Stage) loginButton.getScene().getWindow();
-                        BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
-                        currentStage.setScene(new Scene(mainArea));
+                        StringBuilder sb = new StringBuilder();
+                        String token = loginResponse.getToken();
+                        sb.append(token).append("\n").append(phoneNumberField.getText()).append("\n");
+                        TokenManager.getInstance().setToken(sb.toString());
+                        loginTransition();
                         /*
                          *
                          * tracking number of online users
@@ -169,6 +163,50 @@ public class LoginController {
         });
     }
 
+    private boolean checkConnection() {
+        try {
+            if (!NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController())) {
+                // Halt the thread
+                Thread.currentThread().interrupt();
+
+                // Display a notification on the JavaFX Application Thread
+                Platform.runLater(() -> {
+                    Notifications.create()
+                            .title("Session Alert")
+                            .text("There is an existing session.")
+                            .showWarning();
+                });
+
+                return false;
+            }
+        } catch (RemoteException | NotBoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    public void loginTransition() {
+        if (checkConnection()) {
+            retrieveData();
+            Stage currentStage = (Stage) loginButton.getScene().getWindow();
+            BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
+            currentStage.setScene(new Scene(mainArea));
+        }
+    }
+
+    public void autoLoginTransition() {
+        if (checkConnection()) {
+            retrieveData();
+            BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(mainArea));
+            stage.setTitle("Chat App");
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        }
+    }
+
     private void shakeAnimation() {
         final int shakeDistance = 20; // Increase the shake distance
         final int shakeCount = 4; // Increase the shake count
@@ -187,9 +225,9 @@ public class LoginController {
 
         // Create a flash animation (Timeline) for the password field
         Timeline flashTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;")),
-                new KeyFrame(Duration.millis(250), new KeyValue(passwordField.styleProperty(), "-fx-background-color: red;")),
-                new KeyFrame(Duration.millis(500), new KeyValue(passwordField.styleProperty(), "-fx-background-color: white;"))
+                new KeyFrame(Duration.ZERO, new KeyValue(passwordField.styleProperty(), "-fx-border-color: white;")),
+                new KeyFrame(Duration.millis(250), new KeyValue(passwordField.styleProperty(), "-fx-border-color: red;")),
+                new KeyFrame(Duration.millis(500), new KeyValue(passwordField.styleProperty(), "-fx-border-color: white;"))
         );
         flashTimeline.setCycleCount(4);
 
@@ -202,7 +240,6 @@ public class LoginController {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                NetworkFactory.getInstance().connect(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
                 CurrentUser.getInstance().loadUser(NetworkFactory.getInstance().getUserModel(TokenManager.getInstance().getToken()));
                 List<GetContactsResponse> responses = NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID()));
                 CurrentUser.getInstance().loadContactsList(responses);
@@ -228,7 +265,7 @@ public class LoginController {
                     friendRequest.setUserModel(response.getUsers().get(i));
                     NotificationManager.getInstance().addNotification(friendRequest);
                     Platform.runLater(() -> {
-                    Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
+                        Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
                     });
                 }
 
@@ -265,29 +302,29 @@ public class LoginController {
         });
 
         // Start the task on a new thread
-        new Thread(task).start();
+        ConcurrencyManager.getInstance().submitTask(task);
     }
 
     private void startTrackingOnlineUsers() {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(() -> {
-            try {
-                // online users in the dashboard
-                onlineUsersInDashboard = NetworkFactory.getInstance().getOnlineUsersCount();
-                //compare between current users numbers in dashboard and if there is a new user login
-                if (onlineUsersCount > onlineUsersInDashboard) {
-                    // if yes ---> increment online users numbers in dashbpard
-                    onlineUsersInDashboard = onlineUsersCount;
-                    // update dashboard
-                    NetworkFactory.getInstance().updateOnlineUsersCount(onlineUsersInDashboard);
-                    System.out.println("onlineUsersCount : " + onlineUsersCount + " , " + "onlineUsersInDashboard : " + onlineUsersInDashboard);
-
-                }
-
-            } catch (RemoteException | NotBoundException e) {
-                e.printStackTrace();
-            }
-        }, 0, 5, TimeUnit.SECONDS);
+//        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+//        executor.scheduleAtFixedRate(() -> {
+//            try {
+//                // online users in the dashboard
+//                onlineUsersInDashboard = NetworkFactory.getInstance().getOnlineUsersCount();
+//                //compare between current users numbers in dashboard and if there is a new user login
+//                if (onlineUsersCount > onlineUsersInDashboard) {
+//                    // if yes ---> increment online users numbers in dashbpard
+//                    onlineUsersInDashboard = onlineUsersCount;
+//                    // update dashboard
+//                    NetworkFactory.getInstance().updateOnlineUsersCount(onlineUsersInDashboard);
+//                    System.out.println("onlineUsersCount : " + onlineUsersCount + " , " + "onlineUsersInDashboard : " + onlineUsersInDashboard);
+//
+//                }
+//
+//            } catch (RemoteException | NotBoundException e) {
+//                e.printStackTrace();
+//            }
+//        }, 0, 5, TimeUnit.SECONDS);
     }
 
 

@@ -43,7 +43,7 @@ public class ControllerFactory {
     }
     public LoginController getLoginController() {
         if (loginController == null) {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Login/Login.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Authentication/Login.fxml"));
             try {
                 Parent parent = fxmlLoader.load();
                 loginController = fxmlLoader.getController();

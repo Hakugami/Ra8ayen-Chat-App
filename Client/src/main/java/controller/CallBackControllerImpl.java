@@ -178,6 +178,22 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     }
 
     @Override
+    public void logout() throws RemoteException {
+        Platform.runLater(()->{
+            try {
+                try {
+                    Model.getInstance().getViewFactory().showLoginWindow();
+                    Notifications.create().title("Logged Out").text("You have been logged out").showInformation();
+                } catch (NotBoundException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
     public void receiveVoiceCallRequest(VoiceCallRequest voiceCallRequest) throws RemoteException {
         Platform.runLater(()->{
             try {
