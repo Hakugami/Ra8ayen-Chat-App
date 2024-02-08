@@ -14,6 +14,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineController {
@@ -43,8 +46,6 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     @Override
     public boolean connect(String phoneNumber, CallBackController callBackController) throws RemoteException {
         ConcurrencyManager.getInstance().submitTask(() -> friendStatusNotifier(phoneNumber, User.UserStatus.Online));
-
-
 
         if(clients.containsKey(phoneNumber)) {
             return false;
@@ -92,6 +93,30 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     private boolean UserNotBlocked(String UserPhoneNumber , String FriendPhoneNumber){
         return !blockedUserService.checkIfUserBlocked(UserPhoneNumber, FriendPhoneNumber);
     }
+
+    public void heartBeat(String phoneNumber, CallBackController callBackController){
+        ConcurrencyManager.getInstance().submitTask(() -> friendStatusNotifier(phoneNumber, User.UserStatus.Offline));
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        executorService.scheduleAtFixedRate(() -> {
+            try {
+                callBackController.respond();
+            } catch (RemoteException e) {
+                clients.remove(phoneNumber);
+                System.out.println("disconnect clients = " + clients.size());
+                try {
+                    trackOnlineUsersService.updateOnlineUsersCount(clients.size());
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+                int offlineUsers = auth.getOfflineUsers() + 1;
+                auth.UpdateOfflineUsers(offlineUsers);
+                System.out.println("disconnect 1 : " + offlineUsers);
+                executorService.shutdown();
+            }
+        }, 0, 5, TimeUnit.SECONDS);
+    }
+
 
 }
 

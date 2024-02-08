@@ -61,9 +61,38 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         System.out.println("users.size() ---> " + users.size());
 
+        /*ObservableList<PieChart.Data> genderChartData = FXCollections.observableArrayList();
+        ObservableList<PieChart.Data> countryChartData = FXCollections.observableArrayList();
+
+        genderPieChart.setData(genderChartData);
+        countryPieChart.setData(countryChartData);
+        Platform.runLater(() -> {
+            for (PieChart.Data data : genderChartData) {
+                Node node = data.getNode();
+                node.setStyle("-fx-pie-color: lightgray;");
+            }
+
+            for (PieChart.Data data : countryChartData) {
+                Node node = data.getNode();
+                node.setStyle("-fx-pie-color: lightgray;");
+            }
+        });
+
+        // Indicate No Data
+        if (genderChartData.isEmpty()) {
+            genderChartData.add(new PieChart.Data("No Data", 100));
+        }
+        if (countryChartData.isEmpty()) {
+            countryChartData.add(new PieChart.Data("No Data", 100));
+        }*/
+        loadAll();
+
+        }
+        //--------------------------------------------------------------------------------------------
+
+    public void loadAll(){
         //--------------------------------------------------------------------------------------------
         //online label
         scheduler.scheduleAtFixedRate(() -> {
@@ -97,69 +126,67 @@ public class DashboardController implements Initializable {
 
 
 
-        //-------------------------------------- Gender -------------------------------------------------------
+    //-------------------------------------- Gender -------------------------------------------------------
 
 
-        private void updatePieChart() {
+    private void updatePieChart() {
 
-            int maleCount = 0;
+        int maleCount = 0;
 
-            int femaleCount = 0;
+        int femaleCount = 0;
 
-            for (User user : users) {
-                if (user.getGender().toString().equalsIgnoreCase("male")) {
-                    maleCount++;
-                } else if (user.getGender().toString().equalsIgnoreCase("female")) {
-                    femaleCount++;
-                }
+        for (User user : users) {
+            if (user.getGender().toString().equalsIgnoreCase("male")) {
+                maleCount++;
+            } else if (user.getGender().toString().equalsIgnoreCase("female")) {
+                femaleCount++;
             }
-            int finalMaleCount = maleCount;
-
-            int finalFemaleCount = femaleCount;
-
-            Platform.runLater(() -> {
-                PieChart.Data maleData = new PieChart.Data("Male Users", finalMaleCount);
-                PieChart.Data femaleData = new PieChart.Data("Female Users", finalFemaleCount);
-                maleData.nameProperty().bind(Bindings.concat("Male Users: ", finalMaleCount));
-                femaleData.nameProperty().bind(Bindings.concat("Female Users: ", finalFemaleCount));
-
-                genderPieChart.getData().clear();
-                genderPieChart.getData().addAll(maleData, femaleData);
-            });
         }
-        //----------------------------------- Country -----------------------------------------------------
-        private void updateCountryPieChart() {
-            // count users per country
-            int totalCount = 0;
-            List<PieChart.Data> countryData = FXCollections.observableArrayList();
-            for (User user : users) {
-                String country = user.getCountry();
-                totalCount++;
-                boolean found = false;
-                for (PieChart.Data data : countryData) {
-                    if (data.getName().equals(country)) {
-                        data.setPieValue(data.getPieValue() + 1);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    countryData.add(new PieChart.Data(country, 1));
-                }
-            }
+        int finalMaleCount = maleCount;
 
-            // update the pie chart
+        int finalFemaleCount = femaleCount;
+
+        Platform.runLater(() -> {
+            PieChart.Data maleData = new PieChart.Data("Male Users", finalMaleCount);
+            PieChart.Data femaleData = new PieChart.Data("Female Users", finalFemaleCount);
+            maleData.nameProperty().bind(Bindings.concat("Male Users: ", finalMaleCount));
+            femaleData.nameProperty().bind(Bindings.concat("Female Users: ", finalFemaleCount));
+
+            genderPieChart.getData().clear();
+            genderPieChart.getData().addAll(maleData, femaleData);
+        });
+    }
+    //----------------------------------- Country -----------------------------------------------------
+    private void updateCountryPieChart() {
+        // count users per country
+        int totalCount = 0;
+        List<PieChart.Data> countryData = FXCollections.observableArrayList();
+        for (User user : users) {
+            String country = user.getCountry();
+            totalCount++;
+            boolean found = false;
             for (PieChart.Data data : countryData) {
-                data.nameProperty().bind(Bindings.concat(data.getName(), ": ", (int)data.getPieValue()));
+                if (data.getName().equals(country)) {
+                    data.setPieValue(data.getPieValue() + 1);
+                    found = true;
+                    break;
+                }
             }
-
-            Platform.runLater(() -> {
-                countryPieChart.getData().clear();
-                countryPieChart.getData().addAll(countryData);
-            });
+            if (!found) {
+                countryData.add(new PieChart.Data(country, 1));
+            }
         }
-        //-----------------------------------------------------------------------------------------------------------
 
+        // update the pie chart
+        for (PieChart.Data data : countryData) {
+            data.nameProperty().bind(Bindings.concat(data.getName(), ": ", (int)data.getPieValue()));
+        }
+
+        Platform.runLater(() -> {
+            countryPieChart.getData().clear();
+            countryPieChart.getData().addAll(countryData);
+        });
+    }
 
 
 }

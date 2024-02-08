@@ -146,6 +146,7 @@ public class LoginController {
                         //onlineUsersCount++;
                         //startTrackingOnlineUsers();
                         //new Logout().startHeartbeat();
+                        NetworkFactory.getInstance().heartBeat(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
                     } else {
                         System.err.println("Invalid fields1");
                         shakeAnimation();
@@ -157,7 +158,7 @@ public class LoginController {
                     //startTrackingOnlineUsers();
                     shakeAnimation();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (SQLException | ClassNotFoundException | RemoteException | NotBoundException e) {
                 System.out.println(e.getMessage());
             }
         });

@@ -82,6 +82,11 @@ public class NetworkFactory {
         controller.disconnect(phoneNumber, callBackController);
     }
 
+    public void heartBeat(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
+        OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+        controller.heartBeat(phoneNumber, callBackController);
+    }
+
     public UserModel getUserModel(String Token) throws RemoteException, NotBoundException {
         UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
         return controller.getUserModel(Token);
