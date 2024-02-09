@@ -13,14 +13,14 @@
 <?import javafx.scene.text.TextFlow?>
 
 <AnchorPane stylesheets="@../../Styles/Minimalist/AddGroup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddGroupGroupController">
-    <VBox alignment="BOTTOM_CENTER" prefWidth="200.0" styleClass="listView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" styleClass="listView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox alignment="CENTER">
-            <ImageView fx:id="groupImage" fitHeight="69.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true" styleClass="ImageView" VBox.vgrow="SOMETIMES">
+            <ImageView fx:id="groupImage" fitHeight="69.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true" styleClass="ImageView" VBox.vgrow="ALWAYS">
                 <Image url="@../../Images/group.png" />
             </ImageView>
         </VBox>
         <TextField fx:id="groupName" minHeight="-Infinity" minWidth="-Infinity" prefHeight="43.0" prefWidth="259.0" promptText="Group name" styleClass="textField" />
-      <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+      <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
               <TextField fx:id="phoneField" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="200.0" promptText="Enter Phone Number" styleClass="textField" />
                <Button fx:id="addButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="54.0" text="+" textAlignment="CENTER" HBox.hgrow="ALWAYS">

@@ -71,6 +71,7 @@ public class MainWindowController implements Initializable {
                 case "Contacts":
                     swappableMenu.getChildren().clear();
                     swappableMenu.getChildren().add(Model.getInstance().getViewFactory().getContacts());
+
                     break;
                 case "UpdateProfile":
                     swappableWindow.getChildren().clear();
@@ -79,8 +80,7 @@ public class MainWindowController implements Initializable {
                     break;
                 case "BlockedContact":
                     swappableMenu.getChildren().clear();
-                    setSwappableWindow(Model.getInstance().getViewFactory().getBlockedScreen());
-                    Model.getInstance().getViewFactory().getSelectedMenuItem().set("");
+                    swappableMenu.getChildren().add(Model.getInstance().getViewFactory().getBlockedScreen());
                 default:
                     break;
             }

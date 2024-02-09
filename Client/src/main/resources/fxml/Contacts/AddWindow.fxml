@@ -4,15 +4,15 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="tabWindow" prefHeight="500.0" prefWidth="265.0" stylesheets="@../../Styles/Minimalist/AddWindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddWindowController">
-    <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane fx:id="tabWindow" stylesheets="@../../Styles/Minimalist/AddWindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddWindowController">
+    <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Tab text="Add Contact">
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane prefHeight="400.0" prefWidth="400.0">
                 <fx:include fx:id="addContact" source="AddContact.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </AnchorPane>
         </Tab>
         <Tab text="Add Group">
-            <AnchorPane maxWidth="-Infinity" prefHeight="342.0" prefWidth="240.0">
+            <AnchorPane maxWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
                 <fx:include fx:id="addGroup" source="AddGroup.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </AnchorPane>
         </Tab>

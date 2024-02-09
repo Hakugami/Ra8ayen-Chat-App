@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane stylesheets="@../../Styles/Minimalist/AddContact.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddContactController">
-   <VBox alignment="CENTER" prefWidth="200.0" styleClass="listView" stylesheets="@../../Styles/Minimalist/AddContact.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <HBox alignment="CENTER" prefHeight="49.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+   <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" styleClass="listView" stylesheets="@../../Styles/Minimalist/AddContact.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <TextField fx:id="phoneField" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" prefWidth="149.0" promptText="Enter Phone Number" styleClass="textField">
             <HBox.margin>
                <Insets left="5.0" />

@@ -37,6 +37,10 @@
     -fx-alignment: center;
 }
 
+.menu_container Button FontAwesomeIconView {
+    -fx-fill: #FFFFFF; /* White */
+}
+
 .menu_container Button:hover {
     -fx-background-color: #FF4A4A; /* Red on hover */
     -fx-background-radius: 5;
@@ -93,7 +97,7 @@
 }
 
 .menu_container ToggleButton FontAwesomeIconView {
-    -fx-fill: black;
+    -fx-fill: white;
 }
 
 .menu_container ToggleButton:hover FontAwesomeIconView {
