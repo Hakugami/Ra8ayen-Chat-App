@@ -300,6 +300,7 @@ public class ChatController implements Initializable {
             request.setAttachmentData(null);
             request.setIsAttachment(false);
 
+            messageModel.setTime(LocalDateTime.now());
             request.setTime(LocalDateTime.now());
 
             request.setStyleMessage(styleMessage);
@@ -332,7 +333,7 @@ public class ChatController implements Initializable {
             messageModel.setStyleMessage(Model.getInstance().getControllerFactory().getCustomizeController().getMessageStyle());
             Model.getInstance().getControllerFactory().getCustomizeController().setNewStyle();
             messageModel.setTime(LocalDateTime.now());
-            System.out.println("Message Style set from chat controller");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -368,21 +369,19 @@ public class ChatController implements Initializable {
             request.setGroupMessage(false);
         }
         if (uploadedFileBytes == null) {
-            System.out.println("UploadFile NULL");
+
             request.setIsAttachment(false);
         } else {
             request.setIsAttachment(true);
             request.setAttachmentData(uploadedFileBytes);
         }
+        messageModel.setTime(LocalDateTime.now());
         request.setTime(LocalDateTime.now());
 
         try {
-            //  System.out.println(Model.getInstance().getViewFactory().getSelectedContact().get().getId());
-            System.out.println(request);
             CurrentUser.getInstance().addMessageToCache(request.getReceiverId(), messageModel);
             Model.getInstance().getViewFactory().refreshLatestMessages();
             SendMessageResponse response = NetworkFactory.getInstance().sendMessage(request);
-            System.out.println(response);
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
@@ -729,9 +728,15 @@ public class ChatController implements Initializable {
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
-                if(!chatMessages.isEmpty()){
-                    Model.getInstance().getControllerFactory().getChatController().chatListView.scrollTo(chatMessages.getLast());
-                }
+//                if (!chatMessages.isEmpty()) {
+//                    Model.getInstance().getControllerFactory().getChatController().chatListView.scrollTo(chatMessages.getLast());
+                    double cellHeight = 24.0; // This should be the height of your cell. Adjust as necessary.
+                    double listViewHeight = chatListView.getHeight();
+                    int visibleCells = (int) Math.floor(listViewHeight / cellHeight);
+
+                    int indexToScroll = Math.max(chatMessages.size() - visibleCells, 0);
+                    chatListView.scrollTo(indexToScroll);
+//                }
             });
         });
 
@@ -786,9 +791,6 @@ public class ChatController implements Initializable {
     }
 
 
-
-
-
     private Task<Void> createDatabaseQueryTask(GetMessageRequest getMessageRequest) {
         return new Task<Void>() {
             @Override
@@ -800,7 +802,7 @@ public class ChatController implements Initializable {
                     for (MessageModel message : getMessageResponse.getMessageList()) {
                         // Add the sender's and receiver's profile pictures to the image cache
                         if (!CurrentUser.getInstance().isMessageCached(message)) {
-                            System.out.println("Adding message to cache chatId "+getMessageRequest.getChatId());
+                            System.out.println("Adding message to cache chatId " + getMessageRequest.getChatId());
                             CurrentUser.getInstance().addMessageToCache(getMessageRequest.getChatId(), message);
                         }
                     }

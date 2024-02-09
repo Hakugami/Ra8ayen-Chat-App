@@ -1,7 +1,6 @@
 package controller;
 
 import dto.Controller.CallBackController;
-import dto.Controller.SendHeartBeatToServerFromClient;
 import dto.requests.LoginRequest;
 import model.CurrentUser;
 import network.NetworkFactory;

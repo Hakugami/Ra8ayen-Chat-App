@@ -127,7 +127,7 @@ public class ViewFactory {
     }
 
     public void showRegisterWindow() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Authentication/Register.fxml"));
         createStage(loader);
     }
 
@@ -142,7 +142,8 @@ public class ViewFactory {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
-        stage.setTitle("Chat App");
+        stage.setTitle("Ra8ayen");
+        stage.getIcons().add(Model.getInstance().getIcon());
         stage.show();
     }
 

@@ -4,6 +4,7 @@ import dto.Controller.*;
 import dto.Model.UserModel;
 import dto.requests.*;
 import dto.responses.*;
+import javafx.application.Platform;
 import lookupnames.LookUpNames;
 import network.manager.NetworkManager;
 import notification.NetworkDownNotification;
@@ -31,7 +32,7 @@ public class NetworkFactory {
         try {
             return function.onNetworkDown();
         } catch (Exception e) {
-            Notifications.create().title("Server Down").text("Server is currently down").showError();
+            Platform.runLater(()-> Notifications.create().title("Server Down").text("Server is currently down").showError());
             return null;
         }
     }

@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
+import org.controlsfx.control.Notifications;
 import token.TokenManager;
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -56,6 +57,8 @@ public class HelloApplication extends Application {
             NetworkFactory.getInstance().disconnect(CurrentUser.getCurrentUser().getPhoneNumber(), CurrentUser.getInstance().getCallBackController());
             UnicastRemoteObject.unexportObject(CurrentUser.getCurrentUser().getCallBackController(), true);
             ConcurrencyManager.getInstance().forceShutdown();
+        }else {
+            Platform.runLater(()-> Notifications.create().title("Error").text("Failed to disconnect user").showError());
         }
         Platform.exit();
     }
@@ -64,6 +67,8 @@ public class HelloApplication extends Application {
     public static void disconnectUser() throws RemoteException {
         if (makeUserOffline()) {
             NetworkFactory.getInstance().disconnect(CurrentUser.getCurrentUser().getPhoneNumber(), CurrentUser.getInstance().getCallBackController());
+        }else {
+            Platform.runLater(()-> Notifications.create().title("Error").text("Failed to disconnect user").showError());
         }
 
     }
@@ -73,6 +78,9 @@ public class HelloApplication extends Application {
             UserModel userModel = getUserModel();
             UpdateUserRequest updateUserRequest = new UpdateUserRequest();
             updateUserRequest.setUserModel(userModel);
+            if(userModel==null){
+                return false;
+            }
             return NetworkFactory.getInstance().updateUser(updateUserRequest).isUpdated();
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
             return false;
@@ -81,6 +89,9 @@ public class HelloApplication extends Application {
 
     private static UserModel getUserModel() {
         UserModel userModel = new UserModel();
+        if(CurrentUser.getCurrentUser()==null){
+            return null;
+        }
         userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
         userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
         userModel.setPhoneNumber(CurrentUser.getCurrentUser().getPhoneNumber());

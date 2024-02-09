@@ -18,6 +18,7 @@ import userstable.UsersTableStateSingleton;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ServerApplication extends Application {
     public static Map<Scenes, Parent> scenes = new HashMap<>();
@@ -37,6 +38,8 @@ public class ServerApplication extends Application {
     public void start(Stage stage) {
         Scene scene = new Scene(scenes.get(Scenes.SERVER));
         stage.setScene(scene);
+        stage.setTitle("Ra8ayen Server");
+        stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/speak.png"))));
         ((ServerController)controllers.get(Scenes.SERVER)).setSubSceneInitialNode();
         stage.setResizable(false);
         stage.show();
