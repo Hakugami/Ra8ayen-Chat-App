@@ -2,7 +2,6 @@ package network.manager;
 
 import controllers.*;
 import lookupnames.LookUpNames;
-import service.SendHeartBeatService;
 import service.TrackOnlineUsersService;
 //import service.TrackOnlineUsersService;
 
@@ -39,7 +38,6 @@ public class NetworkManagerSingleton {
                     UserProfileControllerSingleton.getInstance(),
                     ContactsControllerSingleton.getInstance(),
                     TrackOnlineUsersService.getInstance(),
-                    SendHeartBeatService.getInstance(),
                     VoiceChatControllerSingleton.getInstance(),
                     BlockedUserControllerSinglton.getInstance()
             );
@@ -53,7 +51,6 @@ public class NetworkManagerSingleton {
             lookUpMap.put(LookUpNames.CONTACTCONTROLLER.name(), ContactsControllerSingleton.getInstance());
             lookUpMap.put(LookUpNames.TRACKONLINEUSERS.name(), TrackOnlineUsersService.getInstance());
             lookUpMap.put(LookUpNames.VOICECHATCONTROLLER.name(), VoiceChatControllerSingleton.getInstance());
-            lookUpMap.put(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name(), SendHeartBeatService.getInstance());
             lookUpMap.put(LookUpNames.BLOCKUSERCONTROLLER.name(),BlockedUserControllerSinglton.getInstance());
         } catch (RemoteException | MalformedURLException e) {
             System.out.println(e.getMessage());

@@ -146,7 +146,7 @@ public class LoginController {
                         //onlineUsersCount++;
                         //startTrackingOnlineUsers();
                         //new Logout().startHeartbeat();
-                        NetworkFactory.getInstance().heartBeat(phoneNumberField.getText(), CurrentUser.getInstance().getCallBackController());
+                        NetworkFactory.getInstance().heartBeat();
                     } else {
                         System.err.println("Invalid fields1");
                         shakeAnimation();
@@ -171,13 +171,22 @@ public class LoginController {
                 Thread.currentThread().interrupt();
 
                 // Display a notification on the JavaFX Application Thread
-                Platform.runLater(() -> {
+                try {
+                    Platform.runLater(() -> {
+                        Notifications.create()
+                                .title("Session Alert")
+                                .text("There is an existing session.")
+                                .owner(loginButton.getScene().getWindow()) // Set the owner of the Notifications object
+                                .showWarning();
+                    });
+                }
+                catch (IllegalStateException e) {
+                    System.out.println("Session Alert: " + e.getMessage());
                     Notifications.create()
                             .title("Session Alert")
                             .text("There is an existing session.")
-                            .owner(loginButton.getScene().getWindow()) // Set the owner of the Notifications object
                             .showWarning();
-                });
+                }
 
                 return false;
             }
@@ -190,6 +199,7 @@ public class LoginController {
 
     public void loginTransition() {
         if (checkConnection()) {
+            System.out.println("Login successful");
             retrieveData();
             Stage currentStage = (Stage) loginButton.getScene().getWindow();
             BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
@@ -199,6 +209,7 @@ public class LoginController {
 
     public void autoLoginTransition() {
         if (checkConnection()) {
+            System.out.println("Auto login successful");
             retrieveData();
             BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
             Stage stage = new Stage();
@@ -248,18 +259,21 @@ public class LoginController {
                 List<GetGroupResponse> groupResponses = NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID()));
                 CurrentUser.getInstance().loadGroups(groupResponses);
                 // Retrieve messages for each contact chat ID
+                System.out.println("loading messages for contacts");
                 for (ContactData contact : CurrentUser.getInstance().getContactDataList()) {
                     Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(contact.getChatId());
                     System.out.println("loading messages for contact: " + contact.getName());
                 }
 
                 // Retrieve messages for each group ID
+                System.out.println("loading messages for groups");
                 for (Group group : CurrentUser.getInstance().getGroupList()) {
                     Model.getInstance().getControllerFactory().getChatController().retrieveMessagesByChatId(group.getGroupId());
                     System.out.println("loading messages for group: " + group.getGroupName());
                 }
                 GetNotificationsRequest request = new GetNotificationsRequest(CurrentUser.getInstance().getUserID());
                 GetNotificationsResponse response = NetworkFactory.getInstance().getNotifications(request);
+                System.out.println("loading notifications");
                 for (int i = 0; i < response.getNotifications().size(); i++) {
                     FriendRequest friendRequest = new FriendRequest();
                     friendRequest.setReceiverPhoneNumber(CurrentUser.getInstance().getPhoneNumber());
@@ -399,7 +413,7 @@ public class LoginController {
                 rotateTransition2.play();
                 rotateTransition3.play();
             } else {
-                System.exit(0);
+               Platform.exit();
             }
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);

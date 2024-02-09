@@ -65,12 +65,17 @@ public class AddGroupGroupController implements Initializable {
     private void addContact(ActionEvent actionEvent) {
         try {
             UserModel userModel = NetworkFactory.getInstance().getUserModelByPhoneNumber(phoneField.getText());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
-            Parent root = loader.load();
-            AddContactElementController addContactElementController = loader.getController();
-            addContactElementController.setDataGroup(userModel.getUserName(), userModel.getProfilePicture(), userModel.getPhoneNumber(), root, this);
-            root.setUserData(addContactElementController); // Set the controller as user data
-            contactsToAdd.add(root);
+            if(userModel==null){
+                serverReply.setText("User not found");
+                serverReply.setStyle("-fx-text-fill: red");
+            }else{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
+                Parent root = loader.load();
+                AddContactElementController addContactElementController = loader.getController();
+                addContactElementController.setDataGroup(userModel.getUserName(), userModel.getProfilePicture(), userModel.getPhoneNumber(), root, this);
+                root.setUserData(addContactElementController); // Set the controller as user data
+                contactsToAdd.add(root);
+            }
         } catch (NotBoundException | IOException e) {
             throw new RuntimeException(e);
         }

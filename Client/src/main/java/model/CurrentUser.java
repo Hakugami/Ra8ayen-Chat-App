@@ -13,9 +13,7 @@ import utils.ImageUtls;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.sql.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -133,7 +131,12 @@ public class CurrentUser extends UserModel {
 
     public void loadContactsList(List<GetContactsResponse> contactDataList) {
         this.contactDataList.clear();
+        Set<Integer> chatIds = new HashSet<>();
         for (GetContactsResponse userModel : contactDataList) {
+            if (!chatIds.add(userModel.getChatId())) {
+                System.out.println("Duplicate chat ID: " + userModel.getChatId());
+                continue;
+            }
             ContactData contactData = new ContactData();
             contactData.setName(userModel.getName());
             contactData.setPhoneNumber(userModel.getPhoneNumber());
@@ -180,7 +183,12 @@ public class CurrentUser extends UserModel {
 
     public void loadGroups(List<GetGroupResponse> getGroupResponses){
         this.groupList.clear();
+        Set<Integer> groupIds = new HashSet<>();
         for (GetGroupResponse groupResponse : getGroupResponses) {
+            if (!groupIds.add(groupResponse.getGroupId())) {
+                System.out.println("Duplicate group ID: " + groupResponse.getGroupId());
+                continue;
+            }
             Group group = new Group();
             group.setGroupId(groupResponse.getGroupId());
             group.setGroupName(groupResponse.getGroupName());

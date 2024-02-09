@@ -71,10 +71,10 @@ public class NetworkFactory {
         trackOnlineUsers.updateOnlineUsersCount(onlineUsersCount);
     }
     //--------------------------------------------------------------------------------------
-    public void  sendHeartbeat(String phoneNumber,CallBackController callBackController) throws RemoteException, NotBoundException {
-        SendHeartBeatToServerFromClient sendHeartBeatToServerFromClient = (SendHeartBeatToServerFromClient) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name());
-        sendHeartBeatToServerFromClient.sendHeartbeat(phoneNumber,callBackController);
-    }
+//    public void  sendHeartbeat(String phoneNumber,CallBackController callBackController) throws RemoteException, NotBoundException {
+//        SendHeartBeatToServerFromClient sendHeartBeatToServerFromClient = (SendHeartBeatToServerFromClient) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name());
+//        sendHeartBeatToServerFromClient.sendHeartbeat(phoneNumber,callBackController);
+//    }
     //--------------------------------------------------------------------------------------
 
     public void disconnect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
@@ -82,9 +82,9 @@ public class NetworkFactory {
         controller.disconnect(phoneNumber, callBackController);
     }
 
-    public void heartBeat(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
+    public void heartBeat() throws RemoteException, NotBoundException {
         OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
-        controller.heartBeat(phoneNumber, callBackController);
+        controller.heartBeat();
     }
 
     public UserModel getUserModel(String Token) throws RemoteException, NotBoundException {
@@ -206,6 +206,15 @@ public class NetworkFactory {
     public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
         UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
         return controller.getUserModelByPhoneNumber(phoneNumber);
+    }
+
+    public void disconnectVoiceChat(String phoneNumber) throws RemoteException, NotBoundException {
+        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+        try {
+            controller.disconnectVoiceChat(phoneNumber);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

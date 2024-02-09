@@ -25,16 +25,20 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException, NotBoundException {
         String[] data = TokenManager.getInstance().loadData();
         if(data==null|| data.length < 3){
+            System.out.println("No token found");
             Model.getInstance().getViewFactory().showLoginWindow();
             return;
         }
         int checkBit = Integer.parseInt(data[2]);
+        System.out.println("checkBit = " + checkBit);
         if(checkBit==1 ){
             if(!NetworkFactory.getInstance().checkToken(data[0])){
+                System.out.println("Token is not valid");
                 TokenManager.getInstance().truncateToken();
                 Model.getInstance().getViewFactory().showLoginWindow();
             }
             else{
+                System.out.println("Token is valid");
                 Model.getInstance().getViewFactory().autoLogin();
             }
         }

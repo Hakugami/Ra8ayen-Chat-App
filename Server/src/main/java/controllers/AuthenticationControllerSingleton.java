@@ -93,7 +93,6 @@ public static AuthenticationControllerSingleton getInstance() throws RemoteExcep
             UsersTableStateSingleton.getInstance().addUser(user);
             //offlineUsers++;
             UpdateOfflineUsers(getOfflineUsers()+1);
-            UsersTableStateSingleton.getInstance().addUser(user);
             newUsersList.add(user);
         } else {
             registerResponse.setSuccess(false);

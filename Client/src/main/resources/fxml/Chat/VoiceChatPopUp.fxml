@@ -2,33 +2,75 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../Styles/NeoOrange/VoiceChat.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VoiceChatPopUpController">
-   <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" styleClass="VBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Circle fx:id="profilePic" fill="DODGERBLUE" radius="100.0" stroke="BLACK" strokeType="INSIDE" styleClass="Circle">
+<AnchorPane prefWidth="600.0" stylesheets="@../../Styles/Minimalist/VoiceChat.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VoiceChatPopUpController">
+   <VBox alignment="TOP_CENTER" prefWidth="600.0" styleClass="voice-chat-pop-up-vbox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="560.0">
+         <children>
+            <Button fx:id="exitButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="54.0" text="X" />
+         </children>
+      </HBox>
+      <Circle fx:id="profilePic" radius="100.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
          <VBox.margin>
             <Insets top="15.0" />
          </VBox.margin>
+         <stroke>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.42105263471603394" green="0.21052631735801697" blue="0.21052631735801697" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </stroke>
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.18640351295471191" green="0.4979897737503052" blue="0.7894737124443054" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
       </Circle>
-      <Label fx:id="nameLabel" styleClass="Label" text="Label">
+      <Label fx:id="nameLabel" styleClass="voice-chat-pop-up-label" text="Label">
          <VBox.margin>
             <Insets top="30.0" />
          </VBox.margin>
       </Label>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <ComboBox fx:id="audioDevices" prefHeight="27.0" prefWidth="168.0" promptText="Select Audio Device" />
+      <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="51.0" prefWidth="560.0">
          <VBox.margin>
             <Insets top="30.0" />
          </VBox.margin>
          <VBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
-            <Button fx:id="acceptButton" mnemonicParsing="false" styleClass="Button" text="Accept" />
+            <Button fx:id="acceptButton" mnemonicParsing="false" styleClass="voice-chat-pop-up-button" text="Accept" />
          </VBox>
          <VBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
-            <Button fx:id="refuseButton" mnemonicParsing="false" styleClass="Button" text="Refuse" />
+            <Button fx:id="refuseButton" mnemonicParsing="false" styleClass="voice-chat-pop-up-button" text="Refuse" />
          </VBox>
       </HBox>
    </VBox>

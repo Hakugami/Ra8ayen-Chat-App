@@ -1,16 +1,22 @@
 package controller;
 
+import concurrency.manager.ConcurrencyManager;
 import controller.soundUtils.AudioChat;
 import dto.requests.AcceptVoiceCallRequest;
 import dto.requests.RefuseVoiceCallRequest;
 import dto.responses.AcceptVoiceCallResponse;
 import dto.responses.RefuseVoiceCallResponse;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 import model.ContactData;
 import model.CurrentUser;
 import model.Model;
@@ -35,6 +41,12 @@ public class VoiceChatPopUpController implements Initializable {
     public Button refuseButton;
     public String phoneNumber;
     public Popup popup;
+    public ComboBox<Mixer.Info> audioDevices;
+    public Button exitButton;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+    private AudioChat audioChat;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -54,13 +66,64 @@ public class VoiceChatPopUpController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+
+        audioChat = AudioChat.getInstance();
+
+        // Set the audio format
+        AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
+        audioChat.setFormat(format);
+
+// Get all available mixers
+        Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
+
+        // Load mixers into ComboBox
+        audioDevices.setItems(FXCollections.observableArrayList(mixerInfos));
+
+        // Set a default mixer
+        if (mixerInfos.length > 0) {
+            Mixer.Info defaultMixerInfo = mixerInfos[0];
+            audioChat.setMixer(AudioSystem.getMixer(defaultMixerInfo));
+            audioDevices.getSelectionModel().select(defaultMixerInfo);
+        }
+
+        // Add action listener to ComboBox
+        audioDevices.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                audioChat.setMixer(AudioSystem.getMixer(newValue));
+            }
+        });
+
+        Platform.runLater(() -> {
+            Node root = profilePic.getScene().getRoot();
+
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                popup.setX(event.getScreenX() - xOffset);
+                popup.setY(event.getScreenY() - yOffset);
+            });
+        });
+        exitButton.setOnAction(actionEvent -> {
+            try {
+                handleExitButton();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void handleAcceptButton() throws RemoteException, NotBoundException {
         Notifications.create().title("Voice Call").text("Voice call established").showInformation();
-        System.out.println("IS THIS MISSING????-------- "+phoneNumber);
+        System.out.println("IS THIS MISSING????-------- " + phoneNumber);
         AcceptVoiceCallRequest acceptVoiceCallRequest = new AcceptVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(), phoneNumber);
         AcceptVoiceCallResponse acceptVoiceCallResponse = NetworkFactory.getInstance().acceptVoiceCallRequest(acceptVoiceCallRequest);
+        acceptButton.setDisable(true);
+        refuseButton.setDisable(true);
+        acceptButton.setVisible(false);
+        refuseButton.setVisible(false);
         if (acceptVoiceCallResponse.isAccepted()) {
             System.out.println("Call accepted");
         } else {
@@ -71,53 +134,39 @@ public class VoiceChatPopUpController implements Initializable {
     private void handleRefuseButton() throws RemoteException, NotBoundException {
         RefuseVoiceCallRequest refuseVoiceCallRequest = new RefuseVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(), phoneNumber);
         RefuseVoiceCallResponse refuseVoiceCallResponse = NetworkFactory.getInstance().refuseVoiceCallRequest(refuseVoiceCallRequest);
-        if (refuseVoiceCallResponse.isRefused()) {
-            System.out.println("Call refused");
-        } else {
-            System.out.println("Call accepted");
-        }
+        audioChat.stop();
+        popup.hide();
     }
 
     public void establishVoiceCall(AcceptVoiceCallResponse acceptVoiceCallResponse) throws RemoteException {
-        AudioChat audioChat;
+        Notifications.create().title("Voice Call").text("Voice call established").showInformation();
         System.out.println("Voice call established");
-        AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
 
-        // Get all available mixers
-        Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
-
-        // Select a specific mixer
-        Mixer mixer = null;
-        for (Mixer.Info mixerInfo : mixerInfos) {
-            System.out.println(mixerInfo.getName());
-            if (mixerInfo.getName().equals("Microphone Array (Realtek(R) Audio)")) {
-                mixer = AudioSystem.getMixer(mixerInfo);
-                break;
-            }
-        }
-
-        if (mixer == null) {
-            System.out.println("Mixer not found");
-
-        }
         System.out.println("Receiver phone number: " + acceptVoiceCallResponse.getReceiverPhoneNumber());
         System.out.println("Sender phone number: " + acceptVoiceCallResponse.getSenderPhoneNumber());
 
-        audioChat = AudioChat.getInstance();
-        audioChat.setFormat(format);
-        audioChat.setMixer(mixer);
         audioChat.setReceiverPhoneNumber(acceptVoiceCallResponse.getSenderPhoneNumber());
         audioChat.setSenderPhoneNumber(acceptVoiceCallResponse.getReceiverPhoneNumber());
 
-        new Thread(() -> {
+        Thread callThread = new Thread(() -> {
             try {
+                System.out.println("Starting audio chat Receiver");
                 audioChat.start();
             } catch (LineUnavailableException | IOException e) {
                 throw new RuntimeException(e);
             }
-        }).start();
+        });
+        ConcurrencyManager.getInstance().submitRunnable(callThread);
+    }
 
-
+    private void handleExitButton() throws RemoteException {
+        audioChat.stop();
+        popup.hide();
+        try {
+            NetworkFactory.getInstance().disconnectVoiceChat(CurrentUser.getInstance().getPhoneNumber());
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setPopup(Popup popup, String phoneNumber) throws RemoteException {

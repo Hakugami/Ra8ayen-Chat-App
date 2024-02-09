@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import network.manager.NetworkManagerSingleton;
+import server.ServerApplication;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,6 +36,7 @@ public class ServiceStartController implements Initializable {
         try {
             if (NetworkManagerSingleton.getInstance().isServerRunning()) {
                 ConcurrencyManager.getInstance().submitTask(() ->NetworkManagerSingleton.getInstance().stop());
+                ServerApplication.disconnectUsers();
                 progressIndicator.setStyle("-fx-progress-color: red;");
             }
         } catch (Exception e) {

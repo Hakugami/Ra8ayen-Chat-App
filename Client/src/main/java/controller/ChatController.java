@@ -156,7 +156,7 @@ public class ChatController implements Initializable {
         VoiceChatPopUpController voiceChatPopUpController = loader.getController();
         voiceChatPopUpController.setPopup(popup, phoneNumber);
 
-        popup.setAutoHide(true);
+        popup.setAutoHide(false);
 
         // Show the popup first to calculate its height
         popup.show(voiceChat.getScene().getWindow());
@@ -223,7 +223,7 @@ public class ChatController implements Initializable {
         VoiceChatWaitController voiceChatWaitController = loader.getController();
         voiceChatWaitController.setPopup(popup, phoneNumber, CurrentUser.getInstance().getPhoneNumber());
 
-        popup.setAutoHide(true);
+        popup.setAutoHide(false);
 
         // Show the popup first to calculate its height
         popup.show(voiceChat.getScene().getWindow());
@@ -284,6 +284,7 @@ public class ChatController implements Initializable {
             userModel.setBio(CurrentUser.getCurrentUser().getBio());
             userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
             userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
+            userModel.setGender(CurrentUser.getCurrentUser().getGender());
             request.setSenderId(CurrentUser.getInstance().getUserID());
             request.setSender(userModel);
 
@@ -296,13 +297,8 @@ public class ChatController implements Initializable {
                 request.setReceiverId(((ContactData) Model.getInstance().getViewFactory().getSelectedContact().get()).getChatId());
                 request.setGroupMessage(false);
             }
-            if (uploadedFileBytes == null) {
-                System.out.println("UploadFile NULL");
-                request.setIsAttachment(false);
-            } else {
-                request.setIsAttachment(true);
-                request.setAttachmentData(uploadedFileBytes);
-            }
+            request.setAttachmentData(null);
+            request.setIsAttachment(false);
 
             request.setTime(LocalDateTime.now());
 
@@ -402,6 +398,7 @@ public class ChatController implements Initializable {
         userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
         userModel.setBio(CurrentUser.getCurrentUser().getBio());
         userModel.setDateOfBirth(CurrentUser.getInstance().getDateOfBirth());
+        userModel.setGender(CurrentUser.getCurrentUser().getGender());
         userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
         return userModel;
     }
@@ -732,7 +729,9 @@ public class ChatController implements Initializable {
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
-                Model.getInstance().getControllerFactory().getChatController().chatListView.scrollTo(chatMessages.getLast());
+                if(!chatMessages.isEmpty()){
+                    Model.getInstance().getControllerFactory().getChatController().chatListView.scrollTo(chatMessages.getLast());
+                }
             });
         });
 

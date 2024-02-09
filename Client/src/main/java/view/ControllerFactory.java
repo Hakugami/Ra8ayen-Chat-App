@@ -97,7 +97,7 @@ public class ControllerFactory {
     public ChatController getChatController() {
         if (chatController == null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
                 Parent parent = fxmlLoader.load();
                 chatController = fxmlLoader.getController();
             } catch (IOException e) {
@@ -176,7 +176,7 @@ public class ControllerFactory {
     }
     public CustomizeController getCustomizeController() throws IOException {
         if(customizeController==null){
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/customizeText.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/customizeText.fxml"));
             Parent parent= fxmlLoader.load();
             customizeController = fxmlLoader.getController();
         }
@@ -190,7 +190,7 @@ public class ControllerFactory {
 
     public CustomizeFontStyleController getCustomizeFontStyleController() throws IOException {
         if(customizeFontStyleController==null){
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/CustomizeFontStyle.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/CustomizeFontStyle.fxml"));
             Parent parent= fxmlLoader.load();
             customizeFontStyleController = fxmlLoader.getController();
         }

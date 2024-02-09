@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import model.Chat;
 import model.CurrentUser;
 import model.Model;
@@ -297,5 +298,9 @@ public class ViewFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Window getStage() {
+        return mainArea.getScene().getWindow();
     }
 }

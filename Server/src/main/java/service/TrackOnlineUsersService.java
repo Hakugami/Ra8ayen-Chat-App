@@ -23,7 +23,7 @@ public class TrackOnlineUsersService extends UnicastRemoteObject implements Trac
 
 
 
-    public TrackOnlineUsersService() throws RemoteException {
+    private TrackOnlineUsersService() throws RemoteException {
         super();
         this.onlineUsersCount = 0;
         this.onlineUsersCountString = new SimpleStringProperty(String.valueOf(onlineUsersCount));

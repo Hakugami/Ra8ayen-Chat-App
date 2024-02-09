@@ -24,6 +24,7 @@ public class AudioChat {
 
     private  String receiverPhoneNumber;
     private  String senderPhoneNumber;
+    private volatile boolean running = false; // Add this line
 
     private SendVoicePacketRequest sendVoicePacketRequest;
 
@@ -73,8 +74,12 @@ public void start() throws LineUnavailableException, IOException {
     // Initialize JavaFX
     new JFXPanel();
 
+    running = true; // Add this line
     // Capture microphone data into a byte array and send it to the server continuously
-    while (true) {
+    while (running) {
+        if (mixer == null) {
+            throw new IllegalStateException("Mixer has not been initialized");
+        }
         if ((numBytesRead = microphone.read(buffer, 0, buffer.length)) > 0) {
             SendVoicePacketRequest sendVoicePacketRequest = new SendVoicePacketRequest(receiverPhoneNumber, senderPhoneNumber ,buffer);
             // Send the audio data to the server
@@ -115,4 +120,9 @@ public void start() throws LineUnavailableException, IOException {
         }
     }
 }
+
+    public void stop() {
+        running = false; // Add this line
+        Thread.currentThread().interrupt();
+    }
 }

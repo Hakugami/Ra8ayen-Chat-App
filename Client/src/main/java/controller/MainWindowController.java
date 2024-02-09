@@ -69,9 +69,8 @@ public class MainWindowController implements Initializable {
                     swappableMenu.getChildren().add(Model.getInstance().getViewFactory().getCalls());
                     break;
                 case "Contacts":
-                    swappableMenu.getChildren().clear();
-                    swappableMenu.getChildren().add(Model.getInstance().getViewFactory().getContacts());
-
+//                    swappableMenu.getChildren().clear();
+//                    swappableMenu.getChildren().add(Model.getInstance().getViewFactory().getContacts());
                     break;
                 case "UpdateProfile":
                     swappableWindow.getChildren().clear();
