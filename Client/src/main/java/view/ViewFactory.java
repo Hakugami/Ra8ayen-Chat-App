@@ -284,4 +284,11 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
+    public AnchorPane getBlockedScreen(){
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContacts.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

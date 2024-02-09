@@ -4,6 +4,7 @@ import dto.Model.UserModel;
 import dto.requests.AddContactRequest;
 import dto.requests.BlockUserRequest;
 import dto.requests.FriendRequest;
+import dto.requests.UpdateUserRequest;
 import dto.responses.AddContactResponse;
 import dto.responses.BlockUserResponse;
 import javafx.embed.swing.SwingFXUtils;
@@ -75,6 +76,7 @@ public class OthersProfileController implements Initializable {
                BlockUserResponse blockUserResponse=handleBlockButton();
                if(blockUserResponse.isBlocked()){
                    Notifications.create().title("Success").text(blockUserResponse.getBlockedMessage()).showInformation();
+                   updateStatusForBlocked();
                }else{
                    Notifications.create().title("Failed").text(blockUserResponse.getBlockedMessage()).showInformation();
                }
@@ -132,5 +134,34 @@ public class OthersProfileController implements Initializable {
         otherProfilePopup.hide();
     }
 
+    public void updateStatusForBlocked(){
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        UserModel userModel = new UserModel();
+        try {
+            userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
+            userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
+            userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
+            userModel.setBio(CurrentUser.getCurrentUser().getBio());
+            userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
+            userModel.setDateOfBirth(CurrentUser.getCurrentUser().getDateOfBirth());
+            userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
+            userModel.setProfilePicture(CurrentUser.getCurrentUser().getProfilePicture());
+            userModel.setGender(CurrentUser.getCurrentUser().getGender());
+            userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
+            userModel.setUserMode(CurrentUser.getCurrentUser().getUserMode());
+            userModel.setLastLogin(CurrentUser.getInstance().getLastLogin());
 
+            updateUserRequest.setUserModel(userModel);
+            //updateUserRequest.setChangeStatus();
+            NetworkFactory.getInstance().updateUser(updateUserRequest);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

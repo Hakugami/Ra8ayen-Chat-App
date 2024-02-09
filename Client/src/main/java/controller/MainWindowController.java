@@ -77,6 +77,10 @@ public class MainWindowController implements Initializable {
                     setSwappableWindow(Model.getInstance().getViewFactory().getUpdateProfile());
                     Model.getInstance().getViewFactory().getSelectedMenuItem().set("");
                     break;
+                case "BlockedContact":
+                    swappableMenu.getChildren().clear();
+                    setSwappableWindow(Model.getInstance().getViewFactory().getBlockedScreen());
+                    Model.getInstance().getViewFactory().getSelectedMenuItem().set("");
                 default:
                     break;
             }

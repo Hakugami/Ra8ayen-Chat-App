@@ -185,6 +185,15 @@ public class NetworkFactory {
     }
 
 
+    public List<GetBlockedContactResponse> getBlockedContactResponseList(GetBlockedContactRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+        return controller.getBlockedContacts(request);
+    }
+
+    public DeleteBlockContactResponse deleteBlockedContact(DeleteBlockContactRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+        return controller.deleteBlockedContact(request);
+    }
     public boolean checkToken(String token) throws RemoteException, NotBoundException {
         UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
         return controller.checkToken(token);

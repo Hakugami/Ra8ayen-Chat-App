@@ -147,6 +147,24 @@ public class BlockedUserDaoImpl implements BlockedUserDao {
         }
     }
 
+    @Override
+    public List<BlockedUsers> getBlockedContact(BlockedUsers blockedUsers){
+        List<BlockedUsers> blockedUsersList = new ArrayList<>();
+        String query = "SELECT * FROM BlockedUsers WHERE BlockingUserID = ?";
+        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, blockedUsers.getBlockingUserId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    blockedUsersList.add(createBlockedUser(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return blockedUsersList;
+        }
+        return blockedUsersList;
+    }
     private BlockedUsers createBlockedUser(ResultSet resultSet) throws SQLException {
         int blockId = resultSet.getInt(BlockedUsersTable.BLOCKID.name());
         int blockingUserId = resultSet.getInt(BlockedUsersTable.BLOCKINGUSERID.name());
@@ -155,4 +173,5 @@ public class BlockedUserDaoImpl implements BlockedUserDao {
 
         return new BlockedUsers(blockId, blockingUserId, blockedUserId, blockDate);
     }
+
 }

@@ -22,6 +22,7 @@ public class ControllerFactory {
     private CustomizeFontStyleController customizeFontStyleController;
     private AddContactController addContactController;
 
+    private BlockedContactsController blockedContactsController;
 
     public void setAddContactController(AddContactController addContactController) {
         this.addContactController = addContactController;

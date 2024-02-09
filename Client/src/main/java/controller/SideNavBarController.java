@@ -1,6 +1,7 @@
 package controller;
 
 import application.HelloApplication;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +40,8 @@ public class SideNavBarController implements Initializable {
     @FXML
     private ToggleButton chatBotToggleButton;
 
+    @FXML
+    private Button blockBtn;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getControllerFactory().setSideNavBarController(this);
@@ -62,7 +65,16 @@ public class SideNavBarController implements Initializable {
                 e.printStackTrace();
             }
         });
-    }
+
+        blockBtn.setOnAction(event->{
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    handleBlockButton();
+                }
+            });
+        });
+        }
 
     public boolean isChatBotEnabled() {
         return chatBotToggleButton.isSelected();
@@ -122,5 +134,8 @@ private void handleLogout() throws NotBoundException, RemoteException {
         } catch (IOException e) {
             System.out.println("Failed to load settings context menu");
         }
+    }
+    private void handleBlockButton(){
+        Model.getInstance().getViewFactory().getSelectedMenuItem().set("BlockedContact");
     }
 }
