@@ -194,6 +194,10 @@ public class NetworkFactory {
         BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
         return controller.deleteBlockedContact(request);
     }
+    public CheckIfFriendBlockedResponse checkIfUserBlocked(CheckIfFriendBlockedRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+        return controller.checkIfFriendBlocked(request);
+    }
     public boolean checkToken(String token) throws RemoteException, NotBoundException {
         UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
         return controller.checkToken(token);

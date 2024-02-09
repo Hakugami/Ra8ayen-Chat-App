@@ -9,8 +9,10 @@ import service.TrackOnlineUsersService;
 import service.UserService;
 
 import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -117,6 +119,10 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
         }, 0, 5, TimeUnit.SECONDS);
     }
 
-
+    public void updateListOfContactBlockedContact(String phoneNumber) throws SQLException, NotBoundException, RemoteException, ClassNotFoundException {
+        if(clients.containsKey(phoneNumber)){
+            clients.get(phoneNumber).updateOnlineList();
+        }
+    }
 }
 

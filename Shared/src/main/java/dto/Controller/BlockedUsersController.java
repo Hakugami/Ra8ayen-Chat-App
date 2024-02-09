@@ -1,9 +1,11 @@
 package dto.Controller;
 
 import dto.requests.BlockUserRequest;
+import dto.requests.CheckIfFriendBlockedRequest;
 import dto.requests.DeleteBlockContactRequest;
 import dto.requests.GetBlockedContactRequest;
 import dto.responses.BlockUserResponse;
+import dto.responses.CheckIfFriendBlockedResponse;
 import dto.responses.DeleteBlockContactResponse;
 import dto.responses.GetBlockedContactResponse;
 
@@ -19,4 +21,5 @@ public interface BlockedUsersController  extends Remote {
 
     DeleteBlockContactResponse deleteBlockedContact(DeleteBlockContactRequest deleteBlockContactRequest) throws RemoteException, SQLException, ClassNotFoundException;
 
+    CheckIfFriendBlockedResponse checkIfFriendBlocked(CheckIfFriendBlockedRequest checkIfFriendBlockedRequest) throws RemoteException, SQLException, ClassNotFoundException;
 }

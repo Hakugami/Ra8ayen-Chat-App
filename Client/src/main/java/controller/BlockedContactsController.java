@@ -74,7 +74,7 @@ public class BlockedContactsController {
                     System.out.println("item need to delete");
                     if (deleteBlockedContact(item)) {
                         getListView().getItems().remove(item);
-                        updateStatusForBlocked();
+                        //updateStatusForBlocked();
                     }
                 });
                 setGraphic(controller.getView());
@@ -126,35 +126,6 @@ public class BlockedContactsController {
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void updateStatusForBlocked(){
-        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
-        UserModel userModel = new UserModel();
-        try {
-            userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
-            userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
-            userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
-            userModel.setBio(CurrentUser.getCurrentUser().getBio());
-            userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
-            userModel.setDateOfBirth(CurrentUser.getCurrentUser().getDateOfBirth());
-            userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
-            userModel.setProfilePicture(CurrentUser.getCurrentUser().getProfilePicture());
-            userModel.setGender(CurrentUser.getCurrentUser().getGender());
-            userModel.setUserStatus(CurrentUser.getCurrentUser().getUserStatus());
-            userModel.setUserMode(CurrentUser.getCurrentUser().getUserMode());
-            userModel.setLastLogin(CurrentUser.getInstance().getLastLogin());
-
-            updateUserRequest.setUserModel(userModel);
-            NetworkFactory.getInstance().updateUser(updateUserRequest);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (NotBoundException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

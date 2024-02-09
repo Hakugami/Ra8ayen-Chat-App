@@ -2,9 +2,11 @@ package controllers;
 
 import dto.Controller.BlockedUsersController;
 import dto.requests.BlockUserRequest;
+import dto.requests.CheckIfFriendBlockedRequest;
 import dto.requests.DeleteBlockContactRequest;
 import dto.requests.GetBlockedContactRequest;
 import dto.responses.BlockUserResponse;
+import dto.responses.CheckIfFriendBlockedResponse;
 import dto.responses.DeleteBlockContactResponse;
 import dto.responses.GetBlockedContactResponse;
 import service.BlockedUserService;
@@ -45,6 +47,19 @@ public class BlockedUserControllerSinglton extends UnicastRemoteObject implement
     @Override
     public DeleteBlockContactResponse deleteBlockedContact(DeleteBlockContactRequest deleteBlockContactRequest) throws RemoteException, SQLException, ClassNotFoundException {
         return blockedUserService.deleteBlockedContact(deleteBlockContactRequest);
+    }
+
+    @Override
+    public CheckIfFriendBlockedResponse checkIfFriendBlocked(CheckIfFriendBlockedRequest checkIfFriendBlockedRequest) throws RemoteException, SQLException, ClassNotFoundException {
+      boolean CheckBlocked = blockedUserService.checkIfUserBlocked(checkIfFriendBlockedRequest.getPhoneNumberUser(), checkIfFriendBlockedRequest.getFriendPhoneNumber());
+      CheckIfFriendBlockedResponse checkIfFriendBlockedResponse = new CheckIfFriendBlockedResponse();
+      checkIfFriendBlockedResponse.setBlocked(CheckBlocked);
+      if(CheckBlocked){
+          checkIfFriendBlockedResponse.setBlockMessage("User Is Blocked");
+      }else{
+          checkIfFriendBlockedResponse.setBlockMessage("User Is not Blocked");
+      }
+        return checkIfFriendBlockedResponse;
     }
 
 

@@ -1,6 +1,7 @@
 package service;
 
 import Mapper.BlockMapper;
+import controllers.OnlineControllerImpl;
 import dao.BlockedUserDao;
 import dao.ChatDao;
 import dao.UserContactsDao;
@@ -17,6 +18,10 @@ import dto.responses.GetBlockedContactResponse;
 import model.entities.BlockedUsers;
 import model.entities.Chat;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +47,20 @@ public class BlockedUserService {
             if(!isBlocked){
                 blockUserResponse = blockMapper.getBlockUserResponseFromBlockUser(blockedUsers,false,"Already Blocked");
             }else{
+                try {
+                    OnlineControllerImpl onlineController = OnlineControllerImpl.getInstance();
+                    onlineController.updateListOfContactBlockedContact(blockUserRequest.getFriendPhoneNumber());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (NotBoundException e) {
+                    throw new RuntimeException(e);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
                 blockUserResponse = blockMapper.getBlockUserResponseFromBlockUser(blockedUsers,true,"Blocked Successfully");
             }
 
@@ -83,6 +102,20 @@ public class BlockedUserService {
             deleteBlockContactResponse.setDeleted(false);
             deleteBlockContactResponse.setDeleteMessage("Failed To Delete Blocked Contact");
         }else{
+            try {
+                OnlineControllerImpl onlineController = OnlineControllerImpl.getInstance();
+                onlineController.updateListOfContactBlockedContact(deleteBlockContactRequest.getPhoneNumberFriend());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (NotBoundException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             deleteBlockContactResponse.setDeleted(true);
             deleteBlockContactResponse.setDeleteMessage("Delete Blocked Contact Successfully");
         }
