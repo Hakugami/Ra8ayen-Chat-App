@@ -56,19 +56,23 @@ public class UserProfileControllerSingleton extends UnicastRemoteObject implemen
         updateUserResponse.setUserModel(userMapper.entityToModel(user));
         try {
             updateUserResponse.setUpdated(userService.updateUser(user));
+            if (updateUserResponse.isUpdated()) {
+                updateUserResponse.setErrorMessage("Update successful.");
+            } else {
+                updateUserResponse.setErrorMessage("Nothing is changed to update");
+            }
         } catch (DuplicateEntryException e) {
             updateUserResponse.setUpdated(false);
             updateUserResponse.setErrorMessage("Update failed due to " + e.getDuplicateColumn() + ": " + e.getDuplicateValue() + " already being used.");
             return updateUserResponse;
         }
-        System.out.println("User updated successfully.");
 
-        List<GetContactsResponse> contacts = contactService.getContacts(new GetContactsRequest(user.getUserID()));
         ConcurrencyManager.getInstance().submitTask(() -> {
+            List<GetContactsResponse> contacts = contactService.getContacts(new GetContactsRequest(user.getUserID()));
             for (GetContactsResponse contact : contacts) {
                 try {
                     if (OnlineControllerImpl.clients.get(contact.getPhoneNumber()) != null){
-                        //here i check if user need to change his status
+                        //here I check if user need to change his status
                         if(updateUserRequest.isChangeStatus() && getInstance().FriendIsBlocked(updateUserRequest.getUserModel().getPhoneNumber(), contact.getPhoneNumber()) ){
                           System.out.println("This Contact is Blocked "+contact.getPhoneNumber());
                             continue;

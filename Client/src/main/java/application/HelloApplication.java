@@ -9,9 +9,7 @@ import javafx.stage.Stage;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
-import org.controlsfx.control.Notifications;
 import token.TokenManager;
-
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -80,8 +78,16 @@ public class HelloApplication extends Application {
     private static UserModel getUserModel() {
         UserModel userModel = new UserModel();
         userModel.setUserID(CurrentUser.getCurrentUser().getUserID());
+        userModel.setCountry(CurrentUser.getCurrentUser().getCountry());
+        userModel.setPhoneNumber(CurrentUser.getCurrentUser().getPhoneNumber());
+        userModel.setUserName(CurrentUser.getCurrentUser().getUserName());
+        //userModel.setProfilePicture(CurrentUser.getCurrentUser().getProfilePicture());
         userModel.setUserStatus(UserModel.UserStatus.Offline);
         userModel.setUsermode(UserModel.UserMode.Away);
+        userModel.setGender(CurrentUser.getCurrentUser().getGender());
+        userModel.setDateOfBirth(CurrentUser.getCurrentUser().getDateOfBirth());
+        userModel.setBio(CurrentUser.getCurrentUser().getBio());
+        userModel.setEmailAddress(CurrentUser.getCurrentUser().getEmailAddress());
         return userModel;
     }
 }

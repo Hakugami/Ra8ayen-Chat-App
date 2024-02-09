@@ -10,10 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import utils.ImageUtls;
-
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
-import java.util.Date;
+import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,7 +172,7 @@ public class CurrentUser extends UserModel {
         this.setDateOfBirth(user.getDateOfBirth());
         this.setGender(user.getGender());
         //set last login to the current time
-        this.setLastLogin(String.valueOf(new Date()));
+        this.setLastLogin(String.valueOf(new Date(System.currentTimeMillis())));
         BufferedImage bufferedImage = ImageUtls.convertByteToImage(user.getProfilePicture());
         Image fxImage= SwingFXUtils.toFXImage(bufferedImage, null);
         this.profilePictureImage = fxImage;

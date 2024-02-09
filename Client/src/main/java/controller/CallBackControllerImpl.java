@@ -31,7 +31,6 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     private CallBackControllerImpl() throws RemoteException {
         super();
     }
-
     public static CallBackControllerImpl getInstance() throws RemoteException {
         if (callBackController == null) {
             callBackController = new CallBackControllerImpl();
@@ -39,6 +38,26 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         return callBackController;
     }
 
+    @Override
+    public void updateUserModel(UserModel userModel) throws RemoteException {
+        CurrentUser.getInstance().setPhoneNumber(userModel.getPhoneNumber());
+        CurrentUser.getInstance().setUserName(userModel.getUserName());
+        CurrentUser.getInstance().setEmailAddress(userModel.getEmailAddress());
+        //CurrentUser.getInstance().setProfilePicture(userModel.getProfilePicture());
+        CurrentUser.getInstance().setGender(userModel.getGender());
+        CurrentUser.getInstance().setBio(userModel.getBio());
+        CurrentUser.getInstance().setCountry(userModel.getCountry());
+        CurrentUser.getInstance().setDateOfBirth(userModel.getDateOfBirth());
+
+        Platform.runLater(() -> {
+            try {
+                Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
+            } catch (SQLException | NotBoundException | ClassNotFoundException  | RemoteException e) {
+                Notifications.create().title("Error").text("Error updating the image").showError();
+            }
+        });
+    }
     @Override
     public void respond() throws RemoteException {
         System.out.println("You are still connected");

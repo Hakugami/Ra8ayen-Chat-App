@@ -117,6 +117,11 @@ public class UserDaoImpl implements UserDao {
             parameters.add(user.getCountry());
         }
 
+        if (user.getDateOfBirth() != null && !user.getDateOfBirth().equals(originalUser.getDateOfBirth())) {
+            query.append("DateOfBirth = ?, ");
+            parameters.add(user.getDateOfBirth());
+        }
+
         if (!parameters.isEmpty()) {
             query.setLength(query.length() - 2);
             query.append(" WHERE UserID = ?");
@@ -275,6 +280,8 @@ public class UserDaoImpl implements UserDao {
             } else if (parameters.get(i) instanceof byte[]) {
                 ByteArrayInputStream input = new ByteArrayInputStream((byte[]) parameters.get(i));
                 statement.setBinaryStream(i + 1, input);
+            } else if (parameters.get(i) instanceof java.sql.Date) {
+                statement.setDate(i + 1, (java.sql.Date) parameters.get(i));
             }
         }
     }

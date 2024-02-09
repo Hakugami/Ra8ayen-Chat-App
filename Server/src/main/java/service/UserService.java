@@ -57,7 +57,7 @@ public class UserService {
                 throw new DuplicateEntryException(e.getMessage(), e);
             }
         }
-        return false;
+        return true;
     }
     public void deleteUser(User user) {
         userDaoImpl.delete(user);

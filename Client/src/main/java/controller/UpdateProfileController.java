@@ -2,6 +2,7 @@ package controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import concurrency.manager.ConcurrencyManager;
 import dto.Model.UserModel;
 import dto.requests.UpdateUserRequest;
 import dto.responses.UpdateUserResponse;
@@ -18,7 +19,6 @@ import javafx.stage.FileChooser;
 import model.*;
 import network.NetworkFactory;
 import org.controlsfx.control.Notifications;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -30,7 +30,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public class UpdateProfileController {
@@ -138,11 +138,10 @@ public class UpdateProfileController {
         try {
             UpdateUserResponse updateUserResponse = NetworkFactory.getInstance().updateUser(updateUserRequest);
             if (updateUserResponse.isUpdated()) {
-                System.out.println("User updated successfully");
                 Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
                 Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
             } else {
-                Notifications.create().title("Duplicate Entry").text(updateUserResponse.getErrorMessage()).showError();
+                Notifications.create().title("Update Error").text(updateUserResponse.getErrorMessage()).showError();
             }
         } catch (NotBoundException | SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
