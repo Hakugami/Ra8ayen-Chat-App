@@ -12,8 +12,8 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="350.0" spacing="30.0" stylesheets="@../../Styles/NeoOrange/NotificationContextMenuElement.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NotificationElementController">
-    <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="68.0" styleClass="Pane" HBox.hgrow="ALWAYS">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="350.0" spacing="30.0" stylesheets="@../../Styles/Minimalist/NotificationContextMenuElement.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NotificationElementController">
+    <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="68.0" styleClass="notification-context-image-view" HBox.hgrow="ALWAYS">
         <HBox.margin>
             <Insets />
         </HBox.margin>
@@ -44,7 +44,7 @@
 
         </ImageView>
     </Pane>
-    <Label fx:id="Name" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="78.0" styleClass="Label" text="Rawda" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
+    <Label fx:id="Name" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="78.0" styleClass="notification-context-label" text="Rawda" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
@@ -52,8 +52,8 @@
             <Insets />
         </HBox.margin>
     </Label>
-    <Button fx:id="acceptButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="65.0" styleClass="Button" text="Accept" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
-    <Button fx:id="refuseButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="83.0" styleClass="Button" text="Refuse" HBox.hgrow="ALWAYS">
+    <Button fx:id="acceptButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="65.0" styleClass="notification-context-button" text="Accept" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+    <Button fx:id="refuseButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="83.0" styleClass="notification-context-button" text="Refuse" HBox.hgrow="ALWAYS">
         <HBox.margin>
           <Insets right="10.0" />
         </HBox.margin>

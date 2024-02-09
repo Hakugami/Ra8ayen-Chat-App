@@ -1,6 +1,7 @@
 package exceptions;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class DuplicateEntryException extends SQLException {
 

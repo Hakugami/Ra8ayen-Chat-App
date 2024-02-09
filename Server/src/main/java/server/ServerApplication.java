@@ -1,6 +1,7 @@
 package server;
 
 import concurrency.manager.ConcurrencyManager;
+import controllers.OnlineControllerImpl;
 import controllers.Scenes;
 import controllers.ServerController;
 import javafx.application.Application;
@@ -17,25 +18,28 @@ import userstable.UsersTableStateSingleton;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ServerApplication extends Application {
     public static Map<Scenes, Parent> scenes = new HashMap<>();
     public static Map<Scenes, Initializable> controllers = new HashMap<>();
     @Override
     public void init() throws Exception {
-        UserService userService = new UserService();
-        UsersTableStateSingleton.getInstance().setUsers(FXCollections.observableArrayList(userService.getAllUsers()));
         for (Scenes scene : Scenes.values()) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(scene.getFxmlPath()));
             scenes.put(scene, loader.load());
             controllers.put(scene, loader.getController());
         }
+        UserService userService = new UserService();
+        UsersTableStateSingleton.getInstance().setUsers(FXCollections.observableArrayList(userService.getAllUsers()));
     }
 
     @Override
     public void start(Stage stage) {
         Scene scene = new Scene(scenes.get(Scenes.SERVER));
         stage.setScene(scene);
+        stage.setTitle("Ra8ayen Server");
+        stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/speak.png"))));
         ((ServerController)controllers.get(Scenes.SERVER)).setSubSceneInitialNode();
         stage.setResizable(false);
         stage.show();
@@ -52,11 +56,25 @@ public class ServerApplication extends Application {
             NetworkManagerSingleton.getInstance().unexportStubsOnExit();
         }
 
+        disconnectUsers();
+
         NetworkManagerSingleton.getInstance().unexportRegistry();
 
         ConcurrencyManager.getInstance().shutdown();
 
         Platform.exit();
+
+    }
+
+    public static  void disconnectUsers(){
+        OnlineControllerImpl.clients.forEach((k,v)->{
+            try {
+                v.logout();
+                OnlineControllerImpl.getInstance().disconnect(k, v);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static void main(String[] args) {

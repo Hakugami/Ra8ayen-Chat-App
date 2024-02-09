@@ -1,5 +1,6 @@
 package controllers;
 
+import concurrency.manager.ConcurrencyManager;
 import dao.impl.UserDaoImpl;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -17,9 +18,11 @@ import javafx.scene.layout.VBox;
 import model.entities.User;
 import network.manager.NetworkManagerSingleton;
 import service.TrackOnlineUsersService;
+import userstable.UsersTableStateSingleton;
 
 //import service.TrackOnlineUsersService;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -41,78 +44,28 @@ public class DashboardController implements Initializable {
     private PieChart genderPieChart;
     @FXML
     private PieChart countryPieChart;
-    //private int count = 0;
+    private int count = 0;
     private ScheduledExecutorService scheduler;
-    String onlineUsersCountString ;
-    UserDaoImpl userDaoImp = new UserDaoImpl();
-    List<User> users = userDaoImp.getAll();
-    private final StringProperty countryDataProperty = new SimpleStringProperty();
-    private ObservableList<User> userss = FXCollections.observableArrayList();
     private TrackOnlineUsersService trackOnlineUsersService;
-
-    public DashboardController() throws RemoteException {
-        scheduler = Executors.newScheduledThreadPool(1);
+    private AuthenticationControllerSingleton authenticationControllerSingleton;
+    int offlineUsers ;
+    int onlineUsers;
+    TrackOnlineUsersService finalTrackOnlineUsersService;
+    List<User> users = AuthenticationControllerSingleton.newUsersList;
+    private final StringProperty countryDataProperty = new SimpleStringProperty();
+    public DashboardController() throws RemoteException, MalformedURLException {
+        trackOnlineUsersService = TrackOnlineUsersService.getInstance();
+        authenticationControllerSingleton = AuthenticationControllerSingleton.getInstance();
+        finalTrackOnlineUsersService = trackOnlineUsersService;
+        scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
-
-    VBox getVBoxRoot()
-    {
-        return vbRoot;
-    }
-
-    private javafx.collections.ObservableList<PieChart.Data> getCountryChartData() {
-        return javafx.collections.FXCollections.observableArrayList();
-    }
-
-    /*private javafx.collections.ObservableList<PieChart.Data> getCountryChartData() {
-        return javafx.collections.FXCollections.observableArrayList(
-                new PieChart.Data("Egypt", 20),
-                new PieChart.Data("USA", 25),
-                new PieChart.Data("ENGLAND", 10),
-                new PieChart.Data("GERMANY", 15),
-                new PieChart.Data("ITALY", 30),
-                new PieChart.Data("FRANCE", 40)
-        );
-    }*/
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Fetch users from the database
-        userDaoImp = new UserDaoImpl();
-        users = userDaoImp.getAll();
+        System.out.println("users.size() ---> " + users.size());
 
-        TrackOnlineUsersService trackOnlineUsersService = null;
-        try {
-            trackOnlineUsersService = TrackOnlineUsersService.getInstance();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
-        // binding label with stringProperty
-        onlineUsersLabel.textProperty().bind(trackOnlineUsersService.onlineUsersCountStringProberty());
-
-        //offlineUserLabel
-        TrackOnlineUsersService finalTrackOnlineUsersService = trackOnlineUsersService;
-        StringBinding offlineUserCountBinding = new StringBinding() {
-            {
-                super.bind(finalTrackOnlineUsersService.onlineUsersCountStringProberty(), userss);
-            }
-
-            @Override
-            protected String computeValue() {
-                int totalUserCount = users.size();
-                int onlineUserCount = Integer.parseInt(finalTrackOnlineUsersService.onlineUsersCountStringProberty().get());
-                int offlineUserCount = totalUserCount - onlineUserCount;
-                return String.valueOf(offlineUserCount);
-            }
-        };
-        offlineUserLabel.textProperty().bind(offlineUserCountBinding);
-
-        startUpdatingPieChart();
-        startUpdatingCountryPieChart();
-        bindCountryPieChartData();
-
-        ObservableList<PieChart.Data> genderChartData = FXCollections.observableArrayList();
+        /*ObservableList<PieChart.Data> genderChartData = FXCollections.observableArrayList();
         ObservableList<PieChart.Data> countryChartData = FXCollections.observableArrayList();
 
         genderPieChart.setData(genderChartData);
@@ -133,109 +86,137 @@ public class DashboardController implements Initializable {
         if (genderChartData.isEmpty()) {
             genderChartData.add(new PieChart.Data("No Data", 100));
         }
-
         if (countryChartData.isEmpty()) {
             countryChartData.add(new PieChart.Data("No Data", 100));
+        }*/
+        loadAll();
+
         }
-    }
-    //-----------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------
 
-    public void startUpdatingPieChart() {
+    public void loadAll() {
+        //--------------------------------------------------------------------------------------------
+//        //online label
+//        scheduler.scheduleAtFixedRate(() -> {
+//
+//            Platform.runLater(() -> {
+//                try {
+//                    onlineUsers = finalTrackOnlineUsersService.getOnlineUsersCount();
+//                    onlineUsersLabel.setText(" " + onlineUsers);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//        }, 0, 1, TimeUnit.SECONDS);
+        Thread thread = new Thread(() -> {
+            Platform.runLater(() -> {
+                try {
+                    onlineUsers = finalTrackOnlineUsersService.getOnlineUsersCount();
+                    onlineUsersLabel.setText(" " + onlineUsers);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
+        ConcurrencyManager.getInstance().submitScheduledTask(thread, 0, 1, TimeUnit.SECONDS);
 
-        scheduler.scheduleAtFixedRate(() -> {
+//
+//        //--------------------------------------------------------------------------------------------
+//        //offline label
+//        scheduler.scheduleAtFixedRate(() -> {
+//            offlineUsers = authenticationControllerSingleton.getOfflineUsers();
+////            System.out.println("offlineUsers ---> "+offlineUsers);
+//            Platform.runLater(() -> offlineUserLabel.setText("" + offlineUsers));
+//        }, 0, 1, TimeUnit.SECONDS);
 
+        Thread thread1 = new Thread(() -> {
+            offlineUsers = authenticationControllerSingleton.getOfflineUsers();
+            Platform.runLater(() -> offlineUserLabel.setText("" + offlineUsers));
+        });
+        ConcurrencyManager.getInstance().submitScheduledTask(thread1, 0, 1, TimeUnit.SECONDS);
+
+//        //--------------------------------------------------------------------------------------------
+//        //pie charts
+//        scheduler.scheduleAtFixedRate(() -> {
+////            System.out.println("users.size() ---> " + users.size());
+//            updatePieChart();
+//            updateCountryPieChart();
+//        }, 0, 5, TimeUnit.SECONDS);
+        Thread thread2 = new Thread(() -> {
             updatePieChart();
-
-        }, 0, 1, TimeUnit.MINUTES);
-    }
-
-    private void updatePieChart() {
-
-        int maleCount = 0;
-
-        int femaleCount = 0;
-
-        for (User user : users) {
-            if (user.getGender().toString().equalsIgnoreCase("male")) {
-                maleCount++;
-            } else if (user.getGender().toString().equalsIgnoreCase("female")) {
-                femaleCount++;
-            }
-        }
-        int finalMaleCount = maleCount;
-
-        int finalFemaleCount = femaleCount;
-
-        Platform.runLater(() -> {
-            PieChart.Data maleData = new PieChart.Data("Male Users", finalMaleCount);
-            PieChart.Data femaleData = new PieChart.Data("Female Users", finalFemaleCount);
-            maleData.nameProperty().bind(Bindings.concat("Male Users: ", finalMaleCount));
-            femaleData.nameProperty().bind(Bindings.concat("Female Users: ", finalFemaleCount));
-
-            genderPieChart.getData().clear();
-            genderPieChart.getData().addAll(maleData, femaleData);
+            updateCountryPieChart();
         });
-    }
-    //-----------------------------------------------------------------------------------------------------------
-    private void startUpdatingCountryPieChart() {
-        scheduler.scheduleAtFixedRate(this::updateCountryDataFromDatabase, 0, 1, TimeUnit.MINUTES);
+        ConcurrencyManager.getInstance().submitScheduledTask(thread2, 0, 5, TimeUnit.SECONDS);
+
     }
 
-    private void updateCountryDataFromDatabase() {
 
-        StringBuilder newData = new StringBuilder();
-        for (User user : users) {
-            String country = user.getCountry();
-            newData.append(country).append(",");
+
+    //-------------------------------------- Gender -------------------------------------------------------
+
+
+private void updatePieChart() {
+    // Get users from UsersTableStateSingleton
+    List<User> users = UsersTableStateSingleton.getInstance().getUsers();
+
+    int maleCount = 0;
+    int femaleCount = 0;
+
+    for (User user : users) {
+        if (user.getGender().toString().equalsIgnoreCase("male")) {
+            maleCount++;
+        } else if (user.getGender().toString().equalsIgnoreCase("female")) {
+            femaleCount++;
         }
-
-        Platform.runLater(() -> countryDataProperty.set(newData.toString()));
     }
 
-    private void bindCountryPieChartData() {
-        countryDataProperty.addListener((observable, oldValue, newValue) -> {
-            countryPieChart.getData().clear();
-            /*
-            //Another Way
-            newValue is a string containing ---> country names separated by commas
-            String[] countries = newValue.split(",");
-            Map<String, Integer> countryCounts = new HashMap<>();
+    int finalMaleCount = maleCount;
+    int finalFemaleCount = femaleCount;
 
-            for (String country : countries) {
-                countryCounts.put(country, countryCounts.getOrDefault(country, 0) + 1);
-             }
-            */
+    Platform.runLater(() -> {
+        PieChart.Data maleData = new PieChart.Data("Male Users", finalMaleCount);
+        PieChart.Data femaleData = new PieChart.Data("Female Users", finalFemaleCount);
+        maleData.nameProperty().bind(Bindings.concat("Male Users: ", finalMaleCount));
+        femaleData.nameProperty().bind(Bindings.concat("Female Users: ", finalFemaleCount));
 
-            Map<String, Integer> countryCounts = getStringIntegerMap(newValue);
+        genderPieChart.getData().clear();
+        genderPieChart.getData().addAll(maleData, femaleData);
+    });
+}
+    //----------------------------------- Country -----------------------------------------------------
+private void updateCountryPieChart() {
+    // Get users from UsersTableStateSingleton
+    List<User> users = UsersTableStateSingleton.getInstance().getUsers();
 
-            //iterates through each entry in the countryCounts map
-            for (Map.Entry<String, Integer> entry : countryCounts.entrySet()) {
-                String country = entry.getKey();
-                int count = entry.getValue();
-                //PieChart.Data object represents a slice of data in the pie chart
-                PieChart.Data data = new PieChart.Data(country ,count);
-                countryPieChart.getData().add(data);
+    // count users per country
+    int totalCount = 0;
+    List<PieChart.Data> countryData = FXCollections.observableArrayList();
+    for (User user : users) {
+        String country = user.getCountry();
+        totalCount++;
+        boolean found = false;
+        for (PieChart.Data data : countryData) {
+            if (data.getName().equals(country)) {
+                data.setPieValue(data.getPieValue() + 1);
+                found = true;
+                break;
             }
-
-            for (PieChart.Data data : countryPieChart.getData()) {
-                // updates the label [name] of each slice.
-                data.nameProperty().set(data.getName() + " : " + (int) data.getPieValue());
-            }
-        });
-    }
-
-    private static Map<String, Integer> getStringIntegerMap(String newValue) {
-        String[] countries = newValue.split(",");
-
-        Map<String, Integer> countryCounts = new HashMap<>();
-
-        for (String country : countries) {
-            //increments the count by 1 ---> if the country already exists in the map
-            //mapped each country with the number of users exist in it
-            countryCounts.put(country, countryCounts.getOrDefault(country, 0) + 1);
         }
-        return countryCounts;
+        if (!found) {
+            countryData.add(new PieChart.Data(country, 1));
+        }
     }
-    //-----------------------------------------------------------------------------------------------------------
+
+    // update the pie chart
+    for (PieChart.Data data : countryData) {
+        data.nameProperty().bind(Bindings.concat(data.getName(), ": ", (int)data.getPieValue()));
+    }
+
+    Platform.runLater(() -> {
+        countryPieChart.getData().clear();
+        countryPieChart.getData().addAll(countryData);
+    });
+}
+
 
 }

@@ -17,13 +17,13 @@ public class TrackOnlineUsersService extends UnicastRemoteObject implements Trac
     static int  onlineUsersCount;
     private static StringProperty onlineUsersCountString;
 
-    public StringProperty onlineUsersCountStringProberty(){
+    public static  StringProperty onlineUsersCountStringProberty(){
         return onlineUsersCountString;
     }
 
 
 
-    public TrackOnlineUsersService() throws RemoteException {
+    private TrackOnlineUsersService() throws RemoteException {
         super();
         this.onlineUsersCount = 0;
         this.onlineUsersCountString = new SimpleStringProperty(String.valueOf(onlineUsersCount));
@@ -40,11 +40,13 @@ public class TrackOnlineUsersService extends UnicastRemoteObject implements Trac
     }
     @Override
     public void updateOnlineUsersCount(int count) throws RemoteException {
-        System.out.println("before ---> Online users count updated: " + onlineUsersCount);
+        System.out.println("before ---> online users count = " + onlineUsersCount
+                +" , onlineUsersCountString = "+onlineUsersCountString);
         setOnlineUsersCount(count);
         setOnlineUsersCountString(String.valueOf(count));
-        System.out.println("after  ---> Online users count updated: " + onlineUsersCount);
-        System.out.println("#2 setOnlineUsersCount method : "+onlineUsersCount+" , "+onlineUsersCountString);
+        System.out.println("after  --->  online users count = " + onlineUsersCount
+                +" , onlineUsersCountString = "+onlineUsersCountString);
+
     }
 
     @Override
@@ -54,17 +56,13 @@ public class TrackOnlineUsersService extends UnicastRemoteObject implements Trac
 
     public void setOnlineUsersCount(int onlineUsersCount) {
         this.onlineUsersCount = onlineUsersCount;
-        //Platform.runLater(() -> this.onlineUsersCountString.set(String.valueOf(onlineUsersCount)));
-        System.out.println("#1 setOnlineUsersCount method : "+onlineUsersCount+" , "+onlineUsersCountString);
     }
 
     public  void  setOnlineUsersCountString(String onlineUsersCountString) {
-        System.out.println("#1 print ---------> "+onlineUsersCountString);
-        Platform.runLater(() -> this.onlineUsersCountString.set(onlineUsersCountString));
+        this.onlineUsersCountString.set(onlineUsersCountString);
     }
 
     public  String  getOnlineUsersCountString() {
-        System.out.println("#2 print ---------> "+onlineUsersCountString);
         return this.onlineUsersCountString.get();
     }
 

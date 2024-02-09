@@ -1,8 +1,6 @@
 package controller;
 
 import concurrency.manager.ConcurrencyManager;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import dto.Model.MessageModel;
 import dto.Model.UserModel;
 import dto.requests.RetrieveAttachmentRequest;
@@ -14,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -37,7 +34,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -126,6 +122,9 @@ public class MessageBubbleController implements Initializable {
         OthersProfileController controller = Model.getInstance().getControllerFactory().getOthersProfileController();
         controller.setPopup(popup, user);
         controller.setData();
+        if(controller.checkIfUserFriend()){
+            controller.checkIfBlocked();
+        }
 
         popup.show(senderImage.getScene().getWindow());
         //show the left of the chat window

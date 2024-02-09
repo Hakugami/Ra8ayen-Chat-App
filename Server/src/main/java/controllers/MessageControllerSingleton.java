@@ -67,6 +67,7 @@ public class MessageControllerSingleton extends UnicastRemoteObject implements M
                 messageModel.setAttachment(false);
             }
             //add UseModel to messageModel
+            messageModel.setTime(request.getTime());
             messageModel.setStyleMessage(request.getStyleMessage());
             messageModel.setSender(request.getSender());
 

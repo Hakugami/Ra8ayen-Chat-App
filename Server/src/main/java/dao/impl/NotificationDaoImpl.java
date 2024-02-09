@@ -73,7 +73,7 @@ public class NotificationDaoImpl implements NotificationDao {
                 }
             }
         } catch (SQLException e) {
-            return -1;
+            return Integer.parseInt(e.getSQLState());
         }
         return -1;
     }

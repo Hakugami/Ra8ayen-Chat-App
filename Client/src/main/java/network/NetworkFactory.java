@@ -4,8 +4,10 @@ import dto.Controller.*;
 import dto.Model.UserModel;
 import dto.requests.*;
 import dto.responses.*;
+import javafx.application.Platform;
 import lookupnames.LookUpNames;
 import network.manager.NetworkManager;
+import notification.NetworkDownNotification;
 import org.controlsfx.control.Notifications;
 
 import java.rmi.NotBoundException;
@@ -26,168 +28,232 @@ public class NetworkFactory {
         return instance;
     }
 
-    public LoginResponse login(LoginRequest loginRequest) throws SQLException, ClassNotFoundException {
+    private <T> T executeWithNotification(NetworkDownNotification<T> function) {
         try {
-            AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
-            return controller.login(loginRequest);
+            return function.onNetworkDown();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Platform.runLater(()-> Notifications.create().title("Server Down").text("Server is currently down").showError());
             return null;
         }
+    }
+
+
+    public LoginResponse login(LoginRequest loginRequest) throws SQLException, ClassNotFoundException, RemoteException, NotBoundException {
+        return executeWithNotification(() -> {
+            AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
+            return controller.login(loginRequest);
+        });
     }
 
     public RegisterResponse register(RegisterRequest registerRequest) throws SQLException, ClassNotFoundException {
-        try {
+        return executeWithNotification(() -> {
             AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
             return controller.register(registerRequest);
-        } catch (Exception e) {
-            Notifications.create().title("Server Down").text("Server is currently down").showError();
-            return null;
-        }
+        });
     }
 
     public SendMessageResponse sendMessage(SendMessageRequest request) throws RemoteException, NotBoundException {
-        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
-        return controller.sendMessage(request);
+        return executeWithNotification(() -> {
+            MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+            return controller.sendMessage(request);
+        });
     }
 
     public ChatBotResponse chatBot(ChatBotRequest request) throws RemoteException, NotBoundException {
-        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
-        return controller.getChatBotResponse(request);
+        return executeWithNotification(() -> {
+            MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+            return controller.getChatBotResponse(request);
+        });
     }
 
     public boolean connect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
-        OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
-        return controller.connect(phoneNumber, callBackController);
+        return Boolean.TRUE.equals(executeWithNotification(() -> {
+            OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+            return controller.connect(phoneNumber, callBackController);
+        }));
     }
 
-    //update Login Users numbers in dashboard----------------------------------------------
-    public int  getOnlineUsersCount() throws RemoteException, NotBoundException {
-        TrackOnlineUsers trackOnlineUsers = (TrackOnlineUsers) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.TRACKONLINEUSERS.name());
-        return trackOnlineUsers.getOnlineUsersCount();
-    }
-    public void updateOnlineUsersCount(int onlineUsersCount) throws RemoteException, NotBoundException {
-        TrackOnlineUsers trackOnlineUsers = (TrackOnlineUsers) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.TRACKONLINEUSERS.name());
-        trackOnlineUsers.updateOnlineUsersCount(onlineUsersCount);
-    }
-    //--------------------------------------------------------------------------------------
-    public void  sendHeartbeat(String phoneNumber,CallBackController callBackController) throws RemoteException, NotBoundException {
-        SendHeartBeatToServerFromClient sendHeartBeatToServerFromClient = (SendHeartBeatToServerFromClient) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.SENDHEARTBEATTOSERVERFROMCLIENT.name());
-        sendHeartBeatToServerFromClient.sendHeartbeat(phoneNumber,callBackController);
-    }
-    //--------------------------------------------------------------------------------------
-
-    public void disconnect(String phoneNumber, CallBackController callBackController) throws RemoteException, NotBoundException {
-        OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
-        controller.disconnect(phoneNumber, callBackController);
+    public void disconnect(String phoneNumber, CallBackController callBackController) {
+        executeWithNotification(() -> {
+            OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+            controller.disconnect(phoneNumber, callBackController);
+            return null;
+        });
     }
 
-    public UserModel getUserModel(String Token) throws RemoteException, NotBoundException {
-        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
-        return controller.getUserModel(Token);
+    public void heartBeat() throws RemoteException, NotBoundException {
+        executeWithNotification(() -> {
+            OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+            controller.heartBeat();
+            return null;
+        });
+    }
+
+    public UserModel getUserModel(String Token) {
+        return executeWithNotification(() -> {
+            UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+            return controller.getUserModel(Token);
+        });
     }
 
     public AddContactResponse addContact(AddContactRequest request) throws RemoteException, NotBoundException {
-        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
-        return controller.addContact(request);
+        return executeWithNotification(() -> {
+            InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+            return controller.addContact(request);
+        });
     }
 
-    public AcceptFriendResponse acceptFriendRequest(AcceptFriendRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
-        ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
-        return controller.acceptContact(request);
+    public AcceptFriendResponse acceptFriendRequest(AcceptFriendRequest request) {
+        return executeWithNotification(() -> {
+            ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
+            return controller.acceptContact(request);
+        });
     }
 
     public boolean rejectFriendRequest(RejectContactRequest request) throws RemoteException, NotBoundException {
-        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
-        return controller.rejectFriendRequest(request);
+        return Boolean.TRUE.equals(executeWithNotification(() -> {
+            InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+            return controller.rejectFriendRequest(request);
+        }));
     }
 
-    public List<GetContactsResponse> getContacts(GetContactsRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
-        ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
-        return controller.getContacts(request);
+    public List<GetContactsResponse> getContacts(GetContactsRequest request) {
+        return executeWithNotification(() -> {
+            ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
+            return controller.getContacts(request);
+        });
     }
     public UpdateUserResponse updateUser(UpdateUserRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
-        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
-        return controller.update(request);
-    }
-    public List<GetContactChatResponse> getPrivateChats(List<GetContactChatRequest> getContactChatRequests) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
-        ContactsController controller = (ContactsController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.CONTACTCONTROLLER.name());
-        return controller.getPrivateChats(getContactChatRequests);
-
+        return executeWithNotification(() -> {
+            UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+            return controller.update(request);
+        });
     }
 
     public CreateGroupChatResponse createGroupChat(CreateGroupChatRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
-        GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
-        return controller.createGroupChat(request);
+        return executeWithNotification(() -> {
+            GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
+            return controller.createGroupChat(request);
+        });
     }
 
-    public List<GetGroupResponse> getGroups(GetGroupRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
-        GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
-        return controller.getGroups(request);
+    public List<GetGroupResponse> getGroups(GetGroupRequest request) {
+        return executeWithNotification(() -> {
+            GroupChatController controller = (GroupChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.GROUPCHATCONTROLLER.name());
+            return controller.getGroups(request);
+        });
     }
-    public GetMessageResponse getMessageOfChatID(GetMessageRequest request) throws RemoteException, NotBoundException {
-        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
-        return controller.getAllMessages(request);
-    }
-
-    public void sendVoicePacket(SendVoicePacketRequest request) throws RemoteException, NotBoundException {
-        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
-        controller.sendVoiceMessage(request);
-    }
-
-    public VoiceCallResponse connect(VoiceCallRequest request) throws RemoteException, NotBoundException {
-        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
-        return controller.connect(request);
+    public GetMessageResponse getMessageOfChatID(GetMessageRequest request) {
+        return executeWithNotification(() -> {
+            MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+            return controller.getAllMessages(request);
+        });
     }
 
-    public AcceptVoiceCallResponse acceptVoiceCallRequest(AcceptVoiceCallRequest request) throws RemoteException, NotBoundException {
-        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
-        return controller.AcceptVoiceCallRequest(request);
+    public void sendVoicePacket(SendVoicePacketRequest request) throws NotBoundException {
+        executeWithNotification(() -> {
+            VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+            controller.sendVoiceMessage(request);
+            return null;
+        });
     }
 
-    public RefuseVoiceCallResponse refuseVoiceCallRequest(RefuseVoiceCallRequest request) throws RemoteException, NotBoundException {
-        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
-        return controller.refuseVoiceCallRequest(request);
+    public VoiceCallResponse connect(VoiceCallRequest request) throws NotBoundException {
+        return executeWithNotification(() -> {
+            VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+            return controller.connect(request);
+        });
     }
 
-    public SendVoicePacketRequest receiveVoiceMessage(String phoneNumber) throws RemoteException, NotBoundException {
-        VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
-        return controller.receiveVoiceMessage(phoneNumber);
+    public AcceptVoiceCallResponse acceptVoiceCallRequest(AcceptVoiceCallRequest request) {
+        return executeWithNotification(() -> {
+            VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+            return controller.AcceptVoiceCallRequest(request);
+        });
+    }
+
+    public RefuseVoiceCallResponse refuseVoiceCallRequest(RefuseVoiceCallRequest request) {
+        return executeWithNotification(() -> {
+            VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+            return controller.refuseVoiceCallRequest(request);
+        });
+    }
+
+    public SendVoicePacketRequest receiveVoiceMessage(String phoneNumber) throws NotBoundException {
+        return executeWithNotification(() -> {
+            VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+            return controller.receiveVoiceMessage(phoneNumber);
+        });
     }
 
     public boolean checkPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
-        AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
-        try {
+        return Boolean.TRUE.equals(executeWithNotification(() -> {
+            AuthenticationController controller = (AuthenticationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.AUTHENTICATIONCONTROLLER.name());
             return controller.checkPhoneNumber(phoneNumber);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        }));
     }
 
-    public GetNotificationsResponse getNotifications(GetNotificationsRequest request) throws RemoteException, NotBoundException {
-        InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
-        return controller.getNotifications(request);
+    public GetNotificationsResponse getNotifications(GetNotificationsRequest request) {
+        return executeWithNotification(() -> {
+            InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
+            return controller.getNotifications(request);
+        });
     }
 
-    public RetrieveAttachmentResponse retrieveAttachment(RetrieveAttachmentRequest request) throws RemoteException, NotBoundException {
-        MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
-        return controller.retrieveAttachment(request);
+    public RetrieveAttachmentResponse retrieveAttachment(RetrieveAttachmentRequest request) {
+        return executeWithNotification(() -> {
+            MessageController controller = (MessageController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.MESSAGECONTROLLER.name());
+            return controller.retrieveAttachment(request);
+        });
     }
 
-    public BlockUserResponse blockUser(BlockUserRequest request) throws RemoteException, SQLException, ClassNotFoundException, NotBoundException {
-        BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
-        return controller.blockUserByPhoneNumber(request);
+    public BlockUserResponse blockUser(BlockUserRequest request) {
+        return executeWithNotification(() -> {
+            BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+            return controller.blockUserByPhoneNumber(request);
+        });
     }
 
 
-    public boolean checkToken(String token) throws RemoteException, NotBoundException {
-        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
-        return controller.checkToken(token);
+    public List<GetBlockedContactResponse> getBlockedContactResponseList(GetBlockedContactRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        return executeWithNotification(() -> {
+            BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+            return controller.getBlockedContacts(request);
+        });
+    }
+
+    public DeleteBlockContactResponse deleteBlockedContact(DeleteBlockContactRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        return executeWithNotification(() -> {
+            BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+            return controller.deleteBlockedContact(request);
+        });
+    }
+    public CheckIfFriendBlockedResponse checkIfUserBlocked(CheckIfFriendBlockedRequest request) throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
+        return executeWithNotification(() -> {
+            BlockedUsersController controller = (BlockedUsersController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.BLOCKUSERCONTROLLER.name());
+            return controller.checkIfFriendBlocked(request);
+        });
+    }
+    public boolean checkToken(String token) {
+        return Boolean.TRUE.equals(executeWithNotification(() -> {
+            UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+            return controller.checkToken(token);
+        }));
     }
 
     public UserModel getUserModelByPhoneNumber(String phoneNumber) throws RemoteException, NotBoundException {
-        UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
-        return controller.getUserModelByPhoneNumber(phoneNumber);
+        return executeWithNotification(() -> {
+            UserProfileController controller = (UserProfileController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.USERPROFILECONTROLLER.name());
+            return controller.getUserModelByPhoneNumber(phoneNumber);
+        });
+    }
+
+    public void disconnectVoiceChat(String phoneNumber) throws RemoteException, NotBoundException {
+        executeWithNotification(() -> {
+            VoiceChatController controller = (VoiceChatController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.VOICECHATCONTROLLER.name());
+            controller.disconnectVoiceChat(phoneNumber);
+            return null;
+        });
     }
 
 }

@@ -86,3 +86,24 @@ CREATE TABLE BlockedUsers (
     FOREIGN KEY (BlockedUserID) REFERENCES UserAccounts(UserID),
     UNIQUE (BlockingUserID, BlockedUserID)
 );
+
+DELIMITER //
+
+CREATE TRIGGER beforeInsertUserNotifications
+BEFORE INSERT ON UserNotifications
+FOR EACH ROW
+BEGIN
+    DECLARE existingCount INT;
+
+    SELECT COUNT(*) INTO existingCount
+    FROM UserNotifications
+    WHERE ReceiverID = NEW.ReceiverID AND SenderID = NEW.SenderID;
+
+    IF existingCount > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Duplicate entry: This combination of ReceiverID and SenderID already exists.';
+    END IF;
+END;
+
+//
+DELIMITER ;

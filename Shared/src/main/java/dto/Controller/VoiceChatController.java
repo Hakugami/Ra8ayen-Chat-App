@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 
 public interface VoiceChatController extends Remote {
     public VoiceCallResponse connect(VoiceCallRequest voiceCallRequest) throws RemoteException;
-    public void disconnect(String phoneNumber) throws Exception;
+    public void disconnectVoiceChat(String phoneNumber) throws Exception;
     public AcceptVoiceCallResponse AcceptVoiceCallRequest(AcceptVoiceCallRequest acceptVoiceCallRequest) throws RemoteException;
     public RefuseVoiceCallResponse refuseVoiceCallRequest(RefuseVoiceCallRequest refuseVoiceCallRequest) throws RemoteException;
     public void sendVoiceMessage(SendVoicePacketRequest voicePacketRequest) throws RemoteException;

@@ -1,26 +1,26 @@
-/* NotificationContextMenuElement.css */
+/* notification-context-menu-element-styles.css */
 
-.Label {
+.notification-context-label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: rgb(246, 241, 238);
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
 
-.Button {
-    -fx-background-color: rgb(108, 95, 91);
-    -fx-text-fill: rgb(246, 241, 238);
+.notification-context-button {
+    -fx-background-color: #323232; /* Dark background color */
+    -fx-text-fill: #FFFFFF; /* White text color */
     -fx-font-size: 12px;
     -fx-border-radius: 5px;
     -fx-pref-width: 80px; /* Set the preferred width */
     -fx-pref-height: 30px; /* Set the preferred height */
 }
 
-.Button:hover {
-    -fx-background-color: rgb(237, 125, 49);
+.notification-context-button:hover {
+    -fx-background-color: #FF4A4A; /* Red background color on hover */
 }
 
 /* Style for the ImageView */
-.ImageView {
+.notification-context-image-view {
     -fx-smooth: true;
 }
 

@@ -69,7 +69,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean update(User user) {
+    public boolean update(User user) throws SQLException {
         User originalUser = get(user.getUserID());
         if(originalUser == null) {
             return false;
@@ -107,6 +107,21 @@ public class UserDaoImpl implements UserDao {
             parameters.add(user.getUsermode().name());
         }
 
+        if (user.getPhoneNumber() != null && !user.getPhoneNumber().equals(originalUser.getPhoneNumber())) {
+            query.append("PhoneNumber = ?, ");
+            parameters.add(user.getPhoneNumber());
+        }
+
+        if (user.getCountry() != null && !user.getCountry().equals(originalUser.getCountry())) {
+            query.append("Country = ?, ");
+            parameters.add(user.getCountry());
+        }
+
+        if (user.getDateOfBirth() != null && !user.getDateOfBirth().equals(originalUser.getDateOfBirth())) {
+            query.append("DateOfBirth = ?, ");
+            parameters.add(user.getDateOfBirth());
+        }
+
         if (!parameters.isEmpty()) {
             query.setLength(query.length() - 2);
             query.append(" WHERE UserID = ?");
@@ -114,13 +129,9 @@ public class UserDaoImpl implements UserDao {
 
             try (Connection connection = DataSourceSingleton.getInstance().getConnection();
                  PreparedStatement statement = connection.prepareStatement(query.toString())) {
-
                 createUpdateStatement(statement, parameters);
-
                 int rowsAffected = statement.executeUpdate();
                 return rowsAffected > 0;
-            } catch (SQLException e) {
-                System.out.println("Failed to update user");
             }
         }
 
@@ -269,6 +280,8 @@ public class UserDaoImpl implements UserDao {
             } else if (parameters.get(i) instanceof byte[]) {
                 ByteArrayInputStream input = new ByteArrayInputStream((byte[]) parameters.get(i));
                 statement.setBinaryStream(i + 1, input);
+            } else if (parameters.get(i) instanceof java.sql.Date) {
+                statement.setDate(i + 1, (java.sql.Date) parameters.get(i));
             }
         }
     }

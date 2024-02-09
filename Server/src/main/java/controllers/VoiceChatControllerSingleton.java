@@ -44,8 +44,8 @@ public class VoiceChatControllerSingleton extends UnicastRemoteObject implements
     }
 
     @Override
-    public void disconnect(String phoneNumber) throws Exception {
-
+    public void disconnectVoiceChat(String phoneNumber) throws Exception {
+        voicePackets.remove(phoneNumber);
     }
 
     @Override

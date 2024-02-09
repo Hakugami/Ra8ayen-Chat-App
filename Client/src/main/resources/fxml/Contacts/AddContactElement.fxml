@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddContactElementController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane>
+               <children>
+                  <Circle fx:id="circlePic" layoutX="20.0" layoutY="25.0" radius="18.0" strokeLineCap="ROUND" strokeLineJoin="ROUND">
+                     <fill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.17543859779834747" green="0.5742689967155457" blue="0.9473684430122375" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                     <stroke>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.17543859779834747" green="0.5742689967155457" blue="0.9473684430122375" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="0.7631579041481018" green="0.7490253448486328" blue="0.7490253448486328" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </stroke>
+                  </Circle>
+               </children>
+            </Pane>
+            <VBox>
+               <children>
+                  <Label fx:id="nameLabel" alignment="CENTER" prefHeight="28.0" prefWidth="112.0" text="Label" wrapText="true" />
+                  <Label fx:id="phoneNumber" alignment="CENTER" prefHeight="18.0" prefWidth="111.0" text="Label" textAlignment="CENTER" />
+               </children>
+            </VBox>
+             <VBox alignment="CENTER" prefHeight="50.0" prefWidth="102.0">
+                 <Button fx:id="deleteButton" mnemonicParsing="false" text="-" />
+             </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

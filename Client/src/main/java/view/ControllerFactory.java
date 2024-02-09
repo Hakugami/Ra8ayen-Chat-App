@@ -20,8 +20,27 @@ public class ControllerFactory {
     private OthersProfileController othersProfileController;
     private CustomizeController customizeController;
     private CustomizeFontStyleController customizeFontStyleController;
+    private AddContactController addContactController;
 
+    private BlockedContactsController blockedContactsController;
 
+    private BlockedContacElementController blockedContacElementController;
+
+    public void setAddContactController(AddContactController addContactController) {
+        this.addContactController = addContactController;
+    }
+    public AddContactController getAddContactController() {
+        if (addContactController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                addContactController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return addContactController;
+    }
     public void setOthersProfileController(OthersProfileController othersProfileController) {
         this.othersProfileController = othersProfileController;
     }
@@ -78,7 +97,7 @@ public class ControllerFactory {
     public ChatController getChatController() {
         if (chatController == null) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
                 Parent parent = fxmlLoader.load();
                 chatController = fxmlLoader.getController();
             } catch (IOException e) {
@@ -157,7 +176,7 @@ public class ControllerFactory {
     }
     public CustomizeController getCustomizeController() throws IOException {
         if(customizeController==null){
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/customizeText.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/customizeText.fxml"));
             Parent parent= fxmlLoader.load();
             customizeController = fxmlLoader.getController();
         }
@@ -171,7 +190,7 @@ public class ControllerFactory {
 
     public CustomizeFontStyleController getCustomizeFontStyleController() throws IOException {
         if(customizeFontStyleController==null){
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Fxml/Chat/CustomizeFontStyle.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Chat/CustomizeFontStyle.fxml"));
             Parent parent= fxmlLoader.load();
             customizeFontStyleController = fxmlLoader.getController();
         }
@@ -181,5 +200,34 @@ public class ControllerFactory {
     public void setCustomizeFontStyleController(CustomizeFontStyleController customizeFontStyleController) {
 
         this.customizeFontStyleController = customizeFontStyleController;
+    }
+    public BlockedContacElementController getBlockedContacElementController() throws IOException{
+        if (blockedContacElementController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContactElement.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                blockedContacElementController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return blockedContacElementController;
+    }
+
+    public BlockedContactsController getBlockedContactsController() {
+        if(blockedContactsController == null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContacts.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                blockedContactsController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return blockedContactsController;
+    }
+
+    public void setBlockedContactsController(BlockedContactsController blockedContactsController) {
+        this.blockedContactsController = blockedContactsController;
     }
 }

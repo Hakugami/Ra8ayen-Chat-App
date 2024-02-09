@@ -1,11 +1,11 @@
 package controller;
 
 import dto.Model.UserModel;
-import dto.requests.AddContactRequest;
-import dto.requests.BlockUserRequest;
-import dto.requests.FriendRequest;
+import dto.requests.*;
 import dto.responses.AddContactResponse;
 import dto.responses.BlockUserResponse;
+import dto.responses.CheckIfFriendBlockedResponse;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
+import model.ContactData;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
@@ -75,14 +76,17 @@ public class OthersProfileController implements Initializable {
                BlockUserResponse blockUserResponse=handleBlockButton();
                if(blockUserResponse.isBlocked()){
                    Notifications.create().title("Success").text(blockUserResponse.getBlockedMessage()).showInformation();
+                   setStatusForBlockButton("Blocked", true);
                }else{
                    Notifications.create().title("Failed").text(blockUserResponse.getBlockedMessage()).showInformation();
+                   setStatusForBlockButton("Block",false);
                }
 
             } catch (RemoteException | NotBoundException | SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
+
     }
 
     private BlockUserResponse handleBlockButton() throws RemoteException, NotBoundException, SQLException, ClassNotFoundException {
@@ -130,6 +134,64 @@ public class OthersProfileController implements Initializable {
 
     public void exitButtonClicked() {
         otherProfilePopup.hide();
+    }
+
+    public void checkIfBlocked()  {
+        CheckIfFriendBlockedRequest request = new CheckIfFriendBlockedRequest();
+        try {
+            request.setPhoneNumberUser(CurrentUser.getInstance().getPhoneNumber());
+            request.setFriendPhoneNumber(otherUserModel.getPhoneNumber());
+            CheckIfFriendBlockedResponse checkIfFriendBlockedResponse= NetworkFactory.getInstance().checkIfUserBlocked(request);
+            if(checkIfFriendBlockedResponse.isBlocked()){
+                setStatusForBlockButton("Blocked",true);
+            }else{
+                setStatusForBlockButton("Block",false);
+            }
+        } catch (RemoteException e) {
+           // throw new RuntimeException(e);
+        } catch (SQLException e) {
+           // throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            //throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            //throw new RuntimeException(e);
+        }
+
+    }
+    void setStatusForBlockButton(String text, boolean disable){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                blockButton.setText(text);
+                blockButton.setDisable(disable);
+            }
+        });
+
+    }
+    public boolean checkIfUserFriend(){
+            for(ContactData contactData: CurrentUser.getCurrentUser().getContactDataList()){
+                if(contactData.getPhoneNumber().equals(otherUserModel.getPhoneNumber())){
+                    System.out.println(contactData.getPhoneNumber()+" "+otherUserModel.getPhoneNumber());
+                    setStatusForAddButton(" ",false);
+                    return true;
+                }
+            }
+
+        setStatusForAddButton("Add",true);
+        return false;
+    }
+    void setStatusForAddButton(String text, boolean Visiable){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                addButton.setText(text);
+                addButton.setVisible(Visiable);
+                if(Visiable){ //user is not Friend
+                    blockButton.setVisible(false);
+                }
+            }
+        });
+
     }
 
 

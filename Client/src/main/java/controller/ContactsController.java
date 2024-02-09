@@ -1,6 +1,7 @@
 package controller;
 import dto.Model.UserModel;
 import dto.requests.UpdateUserRequest;
+import dto.responses.GetContactsResponse;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -33,7 +34,9 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ContactsController implements Initializable {
     public Label displayName;
@@ -86,7 +89,15 @@ public class ContactsController implements Initializable {
 
 
     public void setTreeViewData() throws RemoteException {
-        observableContactDataList.setAll(CurrentUser.getInstance().getContactDataList());
+        observableContactDataList.clear();
+        Set<Integer> chatIds = new HashSet<>();
+        for (ContactData userModel : CurrentUser.getInstance().getContactDataList()) {
+            if (!chatIds.add(userModel.getChatId())) {
+                System.out.println("Duplicate chat ID: " + userModel.getChatId());
+                continue;
+            }
+            observableContactDataList.add(userModel);
+        }
 
         TreeItem<Node> rootParent = new TreeItem<>();
 
@@ -171,6 +182,7 @@ public class ContactsController implements Initializable {
 
 // Create the UpdateUserRequest with the new UserModel instance
         UpdateUserRequest updateUserRequest = new UpdateUserRequest(user);
+        updateUserRequest.setChangeStatus(true);
 
 // Send the request
         NetworkFactory.getInstance().updateUser(updateUserRequest);

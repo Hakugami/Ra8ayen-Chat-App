@@ -5,7 +5,10 @@ import dao.UserDao;
 import dao.impl.ChatDaoImpl;
 import dao.impl.UserDaoImpl;
 import dto.requests.BlockUserRequest;
+import dto.requests.DeleteBlockContactRequest;
+import dto.requests.GetBlockedContactRequest;
 import dto.responses.BlockUserResponse;
+import dto.responses.GetBlockedContactResponse;
 import model.entities.BlockedUsers;
 import model.entities.Chat;
 import model.entities.User;
@@ -30,9 +33,21 @@ public class BlockMapper {
         blockedUsers.setBlockDate(date);
         return blockedUsers;
     }
+    public BlockedUsers getBlockUserFromPhoneNumberUserAndFriendUser(String UserPhoneNumber ,String FriendPhoneNumber){
+        UserDao userDao;
+        userDao = new UserDaoImpl();
+        User user = userDao.getUserByPhoneNumber(UserPhoneNumber);
+        User Friend = userDao.getUserByPhoneNumber(FriendPhoneNumber);
+
+        BlockedUsers blockedUsers = new BlockedUsers();
+        blockedUsers.setBlockingUserId(user.getUserID());
+        blockedUsers.setBlockedUserId(Friend.getUserID());
+
+        return blockedUsers;
+    }
     public BlockUserResponse getBlockUserResponseFromBlockUser(BlockedUsers blockedUsers,boolean isBlocked , String blockMessage){
         ChatDao chatDao = new ChatDaoImpl();
-        Chat chat=chatDao.getPrivateChat(blockedUsers.getBlockingUserId(), blockedUsers.getBlockId());
+        Chat chat=chatDao.getPrivateChat(blockedUsers.getBlockingUserId(), blockedUsers.getBlockedUserId());
         UserDao userDao = new UserDaoImpl();
         if(chat==null){
             chat = new Chat();
@@ -44,10 +59,30 @@ public class BlockMapper {
         blockUserResponse.setIDofFriend(blockedUsers.getBlockedUserId());
         blockUserResponse.setChatID(chat.getChatId());
         blockUserResponse.setPhoneNumberOfFriend(userDao.get(blockedUsers.getBlockedUserId()).getPhoneNumber());
-        if(!isBlocked){
+       // if(!isBlocked){
             blockUserResponse.setBlockedMessage(blockMessage);
-        }
+      //  }
         return blockUserResponse;
+    }
+    public BlockedUsers getBlockUserFromGetBlockedRequest(GetBlockedContactRequest getBlockedContactRequest){
+        BlockedUsers blockedUsers = new BlockedUsers();
+        blockedUsers.setBlockingUserId(getBlockedContactRequest.getUserID());
+        return blockedUsers;
+    }
+    public GetBlockedContactResponse getBlockedContactResponseFromBlockedUsers(BlockedUsers blockedUsers){
+        GetBlockedContactResponse getBlockedContactResponse = new GetBlockedContactResponse();
+        UserDao userDao = new UserDaoImpl();
+        User Friend = userDao.get(blockedUsers.getBlockedUserId());
+        getBlockedContactResponse.setFriendID(blockedUsers.getBlockedUserId());
+        getBlockedContactResponse.setFriendPhoneNumber(Friend.getPhoneNumber());
+        getBlockedContactResponse.setName(Friend.getUserName());
+        return getBlockedContactResponse;
+    }
+    public BlockedUsers getBlockContactFromDeleteContactRequest(DeleteBlockContactRequest deleteBlockContactRequest){
+        BlockedUsers blockedUsers = new BlockedUsers();
+        blockedUsers.setBlockingUserId(deleteBlockContactRequest.getUserID());
+        blockedUsers.setBlockedUserId(deleteBlockContactRequest.getFriendUserID());
+        return blockedUsers;
     }
 
 }

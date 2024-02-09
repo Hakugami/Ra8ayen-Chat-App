@@ -10,6 +10,7 @@ public class BlockUserRequest implements Serializable {
 
    private LocalDate localDate;
 
+   private int chatID;
     public BlockUserRequest(){
 
     }
@@ -41,5 +42,13 @@ public class BlockUserRequest implements Serializable {
 
     public void setLocalDate(LocalDate localDate) {
         this.localDate = localDate;
+    }
+
+    public int getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(int chatID) {
+        this.chatID = chatID;
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="root" prefHeight="52.0" prefWidth="300.0" stylesheets="@../../Styles/Minimalist/BlockedElement.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BlockedContacElementController">
+   <children>
+      <HBox styleClass="custom-hbox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="NameLabel" prefHeight="52.0" prefWidth="70.0" styleClass="name-label" text="Name">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="phoneNumberLabel" prefHeight="52.0" prefWidth="159.0" styleClass="phone-label" text="Phone Number">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="52.0" prefWidth="64.0" styleClass="delete-button" text="X">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

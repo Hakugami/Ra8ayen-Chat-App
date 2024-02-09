@@ -12,4 +12,8 @@ public interface BlockedUserDao extends Dao<BlockedUsers> {
     List<BlockedUsers> getAll();
     boolean update(BlockedUsers blockedUser);
     boolean delete(BlockedUsers blockedUser);
+
+    boolean FriendIsBlocked(BlockedUsers blockedUsers);
+
+    List<BlockedUsers> getBlockedContact(BlockedUsers blockedUsers);
 }

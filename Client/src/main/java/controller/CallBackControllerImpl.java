@@ -9,6 +9,7 @@ import dto.requests.*;
 import dto.responses.AcceptVoiceCallResponse;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import model.ContactData;
 import model.CurrentUser;
 import model.Group;
@@ -31,7 +32,6 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     private CallBackControllerImpl() throws RemoteException {
         super();
     }
-
     public static CallBackControllerImpl getInstance() throws RemoteException {
         if (callBackController == null) {
             callBackController = new CallBackControllerImpl();
@@ -39,6 +39,26 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         return callBackController;
     }
 
+    @Override
+    public void updateUserModel(UserModel userModel) throws RemoteException {
+        CurrentUser.getInstance().setPhoneNumber(userModel.getPhoneNumber());
+        CurrentUser.getInstance().setUserName(userModel.getUserName());
+        CurrentUser.getInstance().setEmailAddress(userModel.getEmailAddress());
+        //CurrentUser.getInstance().setProfilePicture(userModel.getProfilePicture());
+        CurrentUser.getInstance().setGender(userModel.getGender());
+        CurrentUser.getInstance().setBio(userModel.getBio());
+        CurrentUser.getInstance().setCountry(userModel.getCountry());
+        CurrentUser.getInstance().setDateOfBirth(userModel.getDateOfBirth());
+
+        Platform.runLater(() -> {
+            try {
+                Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
+                Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
+            } catch (SQLException | NotBoundException | ClassNotFoundException  | RemoteException e) {
+                Notifications.create().title("Error").text("Error updating the image").showError();
+            }
+        });
+    }
     @Override
     public void respond() throws RemoteException {
         System.out.println("You are still connected");
@@ -161,13 +181,7 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
         System.out.println("updateOnlineList");
         CurrentUser.getInstance().loadContactsList(NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID())));
-        CurrentUser.getInstance().getContactDataList().forEach(contactData ->{
-            System.out.println(contactData.getColor());
-        });
         CurrentUser.getInstance().loadGroups(NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID())));
-        CurrentUser.getInstance().getGroupList().forEach(groupData ->{
-            System.out.println(groupData.getGroupName());
-        });
         Platform.runLater(()-> {
             try {
                 Model.getInstance().getControllerFactory().getContactsController().setTreeViewData();
@@ -182,6 +196,8 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         Platform.runLater(()->{
             try {
                 try {
+                    Stage stage = (Stage) Model.getInstance().getViewFactory().getStage().getScene().getWindow();
+                    stage.close();
                     Model.getInstance().getViewFactory().showLoginWindow();
                     Notifications.create().title("Logged Out").text("You have been logged out").showInformation();
                 } catch (NotBoundException e) {

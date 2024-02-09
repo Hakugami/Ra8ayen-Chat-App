@@ -13,7 +13,7 @@ public interface UserDao extends Dao<User> {
     List<User> getContactsByUserID(int userID);
     List<String> getContactsPhoneNumbers(int userID);
     boolean save(User user) throws SQLException;
-    boolean update(User user);
+    boolean update(User user) throws SQLException;
     boolean delete(int userId);
 
 } 

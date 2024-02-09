@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import model.Chat;
 import model.CurrentUser;
 import model.Model;
@@ -126,7 +127,7 @@ public class ViewFactory {
     }
 
     public void showRegisterWindow() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Authentication/Register.fxml"));
         createStage(loader);
     }
 
@@ -141,7 +142,8 @@ public class ViewFactory {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
-        stage.setTitle("Chat App");
+        stage.setTitle("Ra8ayen");
+        stage.getIcons().add(Model.getInstance().getIcon());
         stage.show();
     }
 
@@ -232,6 +234,10 @@ public class ViewFactory {
         return new FXMLLoader(getClass().getResource("/fxml/Chat/CustomizeFontStyle.fxml")).load();
     }
 
+    public AnchorPane getAddContactElement() throws IOException {
+        return new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml")).load();
+    }
+
 
     public void refreshLatestMessages() {
         try {
@@ -279,5 +285,23 @@ public class ViewFactory {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+    }
+    public AnchorPane getBlockedScreen(){
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContacts.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public Node getBlockedElementScreen(){
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContactElement.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Window getStage() {
+        return mainArea.getScene().getWindow();
     }
 }

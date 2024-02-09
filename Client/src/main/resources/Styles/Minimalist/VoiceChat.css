@@ -1,27 +1,26 @@
-/* VoiceChatPopUp.css */
+/* voice-chat-pop-up-styles.css */
 
-.VBox {
-    -fx-background-color: rgb(246, 241, 238); /* light gray */
+.voice-chat-pop-up-vbox {
+    -fx-background-color: #323232; /* Dark background color */
     -fx-padding: 20px; /* Add padding */
 }
 
-
-.Label {
-    -fx-text-fill: rgb(79, 74, 69); /* dark gray */
-    -fx-font:  20px 'SF Pro Display', 'Arial' , 'sans-serif'; /* Increase font size */
+.voice-chat-pop-up-label {
+    -fx-text-fill: #FFFFFF; /* White text color */
+    -fx-font: 20px 'SF Pro Display', 'Arial', 'sans-serif'; /* Increase font size */
 }
 
-.Button {
-    -fx-background-color: rgb(237, 125, 49); /* orange */
-    -fx-text-fill: rgb(246, 241, 238); /* light gray */
-    -fx-border-color: rgb(108, 95, 91); /* dark brown */
+.voice-chat-pop-up-button {
+    -fx-background-color: #FF4A4A; /* Red background color */
+    -fx-text-fill: #FFFFFF; /* White text color */
+    -fx-border-color: #737373; /* Medium gray border color */
     -fx-border-width: 2px;
     -fx-cursor: hand; /* Change cursor to hand when hovering over the button */
-    -fx-font:  18px 'SF Pro Display', 'Arial' , 'sans-serif'; /* Increase font size */
+    -fx-font: 18px 'SF Pro Display', 'Arial', 'sans-serif'; /* Increase font size */
     -fx-padding: 10px 20px; /* Add padding */
 }
 
-.Button:hover {
-    -fx-background-color: rgb(246, 241, 238); /* light gray */
-    -fx-text-fill: rgb(237, 125, 49); /* orange */
+.voice-chat-pop-up-button:hover {
+    -fx-background-color: #323232; /* Dark background color */
+    -fx-text-fill: #FF4A4A; /* Red text color on hover */
 }

@@ -1,15 +1,18 @@
+/* dark-styles.css */
+
 #sidebar {
-    -fx-background-color: #6C5F5B;
+    -fx-background-color: #323232; /* Dark gray background color */
 }
 
-#sidebarButtons{
-    -fx-background-color: #6C5F5B;
-    -fx-text-fill: #ffffff;
+#sidebarButtons {
+    -fx-background-color: #323232; /* Dark brown background color */
+    -fx-text-fill: #FFFFFF; /* White text color */
 }
 
 #sidebarButtons:hover {
-    -fx-background-color: #5B514D;
+    -fx-background-color: #3F3F3F; /* Slightly darker brown background color on hover */
 }
+
 
 #subScene {
    -fx-background-color:
