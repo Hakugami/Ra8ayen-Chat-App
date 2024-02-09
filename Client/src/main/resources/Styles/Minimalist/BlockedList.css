@@ -1,0 +1,8 @@
+.list-view {
+    -fx-background-color: rgb(218, 255, 251); /* Light background color */
+}
+.blocked-contacts-header {
+    -fx-font-size: 20px; /* Adjust font size */
+    -fx-text-fill: white; /* White text color */
+    -fx-background-color: rgb(0, 28, 48); /* Dark blue background color */
+}

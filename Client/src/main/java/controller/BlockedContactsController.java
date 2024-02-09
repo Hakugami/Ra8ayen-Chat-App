@@ -13,14 +13,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
 import network.manager.NetworkManager;
 import org.controlsfx.control.Notifications;
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -31,38 +34,32 @@ public class BlockedContactsController {
     ListView<GetBlockedContactResponse> blockedListScreen;
 
     ObservableList<GetBlockedContactResponse>blockedListData;
+
+    @FXML
+    Button exitButton;
+
+    static Popup popup;
     @FXML
     void initialize(){
-       // System.out.println("Blocked Initialize ");
+        Model.getInstance().getControllerFactory().setBlockedContactsController(this);
         blockedListData = FXCollections.observableArrayList();
-     //   blockedListScreen = new ListView<>();
         blockedListScreen.setCellFactory(param -> new CustomListCell());
         getData();
         blockedListScreen.setItems(blockedListData);
+        exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,this::hidePopup);
     }
-    private class CustomListCell extends ListCell<GetBlockedContactResponse> {
-        private final Label nameLabel = new Label();
-        private final Label phoneNumberLabel = new Label();
-        private final Button deleteButton = new Button("Delete");
-
-        private final HBox hbox = new HBox(10, nameLabel, phoneNumberLabel, deleteButton); // Adjust spacing here
+    public class CustomListCell extends ListCell<GetBlockedContactResponse> {
+        private BlockedContacElementController controller;
 
         public CustomListCell() {
-            // Adjust font size here
-            nameLabel.setFont(new Font(14)); // Example font size
-            phoneNumberLabel.setFont(new Font(14)); // Example font size
-
-            deleteButton.setOnAction(event -> {
-                GetBlockedContactResponse item = getItem();
-                System.out.println("item need to delete");
-                if (deleteBlockedContact(item)) {
-                    getListView().getItems().remove(item);
-                    updateStatusForBlocked();
-                }
-                //  getListView().getItems().remove(item);
-            });
+            super();
+            try {
+                controller = Model.getInstance().getControllerFactory().getBlockedContacElementController();
+                Model.getInstance().getViewFactory().getBlockedElementScreen();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-
         @Override
         protected void updateItem(GetBlockedContactResponse item, boolean empty) {
             super.updateItem(item, empty);
@@ -71,9 +68,16 @@ public class BlockedContactsController {
                 setText(null);
                 setGraphic(null);
             } else {
-                nameLabel.setText(item.getName());
-                phoneNumberLabel.setText(item.getFriendPhoneNumber());
-                setGraphic(hbox);
+                controller.setNameLabel(item.getName());
+                controller.setPhoneNumberLabel(item.getFriendPhoneNumber());
+                controller.getDeleteButton().setOnAction(event -> {
+                    System.out.println("item need to delete");
+                    if (deleteBlockedContact(item)) {
+                        getListView().getItems().remove(item);
+                        updateStatusForBlocked();
+                    }
+                });
+                setGraphic(controller.getView());
             }
         }
     }
@@ -155,5 +159,11 @@ public class BlockedContactsController {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+    void setPopUp(Popup popup){
+        this.popup= popup;
+    }
+    void hidePopup(MouseEvent mouseEvent){
+        popup.hide();
     }
 }

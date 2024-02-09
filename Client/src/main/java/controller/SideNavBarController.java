@@ -66,14 +66,7 @@ public class SideNavBarController implements Initializable {
             }
         });
 
-        blockBtn.setOnAction(event->{
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    handleBlockButton();
-                }
-            });
-        });
+        blockBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleBlockButton);
         }
 
     public boolean isChatBotEnabled() {
@@ -135,7 +128,14 @@ private void handleLogout() throws NotBoundException, RemoteException {
             System.out.println("Failed to load settings context menu");
         }
     }
-    private void handleBlockButton(){
-        Model.getInstance().getViewFactory().getSelectedMenuItem().set("BlockedContact");
+    private void handleBlockButton(MouseEvent event){
+        Popup popup = new Popup();
+        Model.getInstance().getControllerFactory().getBlockedContactsController().setPopUp(popup);
+        Model.getInstance().getControllerFactory().getBlockedContactsController().getData();
+        popup.getContent().add(Model.getInstance().getViewFactory().getBlockedScreen());
+        popup.setAutoHide(true);
+        popup.show(blockBtn.getScene().getWindow(), event.getX()+100, event.getY());
+
+        //  Model.getInstance().getViewFactory().getSelectedMenuItem().set("BlockedContact");
     }
 }

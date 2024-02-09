@@ -291,4 +291,11 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
+    public Node getBlockedElementScreen(){
+        try {
+            return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContactElement.fxml")).load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

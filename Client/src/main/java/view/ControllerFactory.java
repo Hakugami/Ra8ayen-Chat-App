@@ -24,6 +24,8 @@ public class ControllerFactory {
 
     private BlockedContactsController blockedContactsController;
 
+    private BlockedContacElementController blockedContacElementController;
+
     public void setAddContactController(AddContactController addContactController) {
         this.addContactController = addContactController;
     }
@@ -198,5 +200,34 @@ public class ControllerFactory {
     public void setCustomizeFontStyleController(CustomizeFontStyleController customizeFontStyleController) {
 
         this.customizeFontStyleController = customizeFontStyleController;
+    }
+    public BlockedContacElementController getBlockedContacElementController() throws IOException{
+        if (blockedContacElementController == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContactElement.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                blockedContacElementController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return blockedContacElementController;
+    }
+
+    public BlockedContactsController getBlockedContactsController() {
+        if(blockedContactsController == null){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContacts.fxml"));
+            try {
+                Parent parent = fxmlLoader.load();
+                blockedContactsController = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return blockedContactsController;
+    }
+
+    public void setBlockedContactsController(BlockedContactsController blockedContactsController) {
+        this.blockedContactsController = blockedContactsController;
     }
 }
