@@ -67,7 +67,7 @@ public class ServerApplication extends Application {
         OnlineControllerImpl.clients.forEach((k,v)->{
             try {
                 v.logout();
-                OnlineControllerImpl.clients.remove(k);
+                OnlineControllerImpl.getInstance().disconnect(k, v);
             } catch (Exception e) {
                 e.printStackTrace();
             }
