@@ -149,7 +149,7 @@ public class ViewFactory {
 
     public Node getCalls() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Calls.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Calls.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -175,7 +175,7 @@ public class ViewFactory {
 
     public Node getRegister() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Authentication/Register.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Authentication/Register.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -183,7 +183,7 @@ public class ViewFactory {
 
     public Node getLogin() {
         try {
-            return new FXMLLoader(getClass().getResource("/FXML/Authentication/Login.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Authentication/Login.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -191,7 +191,7 @@ public class ViewFactory {
 
     public Node getChat() {
         try {
-            return new FXMLLoader(getClass().getResource("/Fxml/Chat/Chat.fxml")).load();
+            return new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml")).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -199,7 +199,7 @@ public class ViewFactory {
 
 
     public Node getContactElement() throws IOException {
-        return new FXMLLoader(getClass().getResource("/Fxml/Contacts/ContactElement.fxml")).load();
+        return new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml")).load();
     }
 
     public Node getUpdateProfile() {
