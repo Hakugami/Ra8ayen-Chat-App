@@ -16,9 +16,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Popup;
+import model.Contact;
+import model.ContactData;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
+import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,17 +58,22 @@ public class AddContactController implements Initializable {
     }
 
     private void addFriend(ActionEvent actionEvent) {
-        try {
-            UserModel userModel = NetworkFactory.getInstance().getUserModelByPhoneNumber(phoneField.getText());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
-            Parent root = loader.load();
-            AddContactElementController addContactElementController = loader.getController();
-            addContactElementController.setData(userModel.getUserName(), userModel.getProfilePicture(), userModel.getPhoneNumber(), root, this);
-            root.setUserData(addContactElementController); // Set the controller as user data
-            contactsToAdd.add(root);
-        } catch (NotBoundException | IOException e) {
-            throw new RuntimeException(e);
-        }
+
+            //check if user in your contacts
+            if (!checkIfPhoneNumberInContacts(phoneField.getText())) {
+                try{
+                UserModel userModel = NetworkFactory.getInstance().getUserModelByPhoneNumber(phoneField.getText());
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
+                Parent root = loader.load();
+                AddContactElementController addContactElementController = loader.getController();
+                addContactElementController.setData(userModel.getUserName(), userModel.getProfilePicture(), userModel.getPhoneNumber(), root, this);
+                root.setUserData(addContactElementController); // Set the controller as user data
+                contactsToAdd.add(root);}
+             catch(NotBoundException | IOException e){
+                    throw new RuntimeException(e);
+                }
+            }
+
     }
 
     public void removeFromList(String phoneNumber) {
@@ -80,6 +88,7 @@ public class AddContactController implements Initializable {
         AddContactResponse addContactResponse;
         List<String> friendsPhoneNumbers = contactsToAdd.stream()
                 .map(node -> ((AddContactElementController) node.getUserData()).phoneNumber.getText())
+                .filter(this::checkIfPhoneNumberInContacts)
                 .collect(Collectors.toList());
         try {
             addContactRequest.setUserId(CurrentUser.getInstance().getUserID());
@@ -97,6 +106,16 @@ public class AddContactController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+    boolean checkIfPhoneNumberInContacts(String PhoneNumber){
+        for(ContactData contact:CurrentUser.getCurrentUser().getContactDataList()){
+            if(contact.getPhoneNumber().equals(PhoneNumber)){
+                Notifications.create().title("Failed").text("Phone Number " + phoneField + "in your Contacts").showInformation();
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 
