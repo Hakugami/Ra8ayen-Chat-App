@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="signUpXml" prefHeight="550.0" prefWidth="750.0" stylesheets="@../CssStyles/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+<AnchorPane fx:id="signUpXml" prefHeight="550.0" prefWidth="750.0" stylesheets="@../CssStyles/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
     <children>
         <SplitPane dividerPositions="0.36" layoutX="10.399999618530273" layoutY="10.399999618530273" style="-fx-background-radius: 15;" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
             <items>

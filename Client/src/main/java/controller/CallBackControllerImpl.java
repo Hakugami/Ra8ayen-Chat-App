@@ -80,6 +80,7 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         NotificationManager.getInstance().addNotification(notification);
             Platform.runLater(()-> {
                 Model.getInstance().getControllerFactory().getNotificationContextMenuController().populateNotificationListItems();
+                NotificationManager.getInstance().getNotificationSounds().playFriendRequestSound();
                 Notifications.create().title("New Friend Request").text("You have a new friend request").showInformation();
             });
     }
@@ -97,6 +98,7 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
         }
         else {
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
+            NotificationManager.getInstance().getNotificationSounds().sentMessageSound();
             Platform.runLater(() -> Notifications.create().title("New Message").text(message.getSender().getUserName() + " sent you a new message.").showInformation());
         }
         // Find the contact in the contact list that matches the sender of the new message
@@ -131,6 +133,7 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
             CurrentUser.getInstance().addMessageToCache(message.getChatId(), message);
             Optional<Group> groupName = CurrentUser.getCurrentUser().getGroupList().stream().
                     filter(group -> group.getGroupId() == message.getChatId()).findFirst();
+            NotificationManager.getInstance().getNotificationSounds().sentMessageSound();
             groupName.ifPresent(group -> Platform.runLater(() -> Notifications.create().title("New Group Message").text(message.getSender().getUserName() + " sent a new message to " + group.getGroupName()).showInformation()));
         }
         for (Group group : CurrentUser.getInstance().getGroupList()) {
@@ -174,11 +177,14 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
 
     @Override
     public void receiveAnnouncement(String announcement, String announcementTitle) {
-        Platform.runLater(()->Notifications.create().title(announcementTitle).text(announcement).showInformation());
+        Platform.runLater(()->{
+            Notifications.create().title(announcementTitle).text(announcement).showInformation();
+            NotificationManager.getInstance().getNotificationSounds().playAnnouncementSound();
+        });
     }
 
     @Override
-    public void updateOnlineList() throws RemoteException, SQLException, NotBoundException, ClassNotFoundException {
+    public void updateOnlineList() throws RemoteException {
         System.out.println("updateOnlineList");
         CurrentUser.getInstance().loadContactsList(NetworkFactory.getInstance().getContacts(new GetContactsRequest(CurrentUser.getInstance().getUserID())));
         CurrentUser.getInstance().loadGroups(NetworkFactory.getInstance().getGroups(new GetGroupRequest(CurrentUser.getInstance().getUserID())));

@@ -28,6 +28,6 @@
             <Insets bottom="5.0" />
          </VBox.margin>
       </Button>
-      <Label fx:id="serverReply" alignment="CENTER" prefHeight="16.0" prefWidth="93.0" />
+      <Label fx:id="serverReply" alignment="CENTER" prefHeight="16.0" prefWidth="250.0" wrapText="true" />
    </VBox>
 </AnchorPane>

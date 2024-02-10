@@ -18,7 +18,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class AudioChat {
-    private static AudioChat audioChat;
+//    private static AudioChat audioChat;
     private AudioFormat format;
     private Mixer mixer;
 
@@ -30,14 +30,14 @@ public class AudioChat {
 
     private byte[] receivedData;
 
-    private AudioChat() {
-    }
-    public static AudioChat getInstance() {
-        if (audioChat == null) {
-            audioChat = new AudioChat();
-        }
-        return audioChat;
-    }
+//    private AudioChat() {
+//    }
+//    public static AudioChat getInstance() {
+//        if (audioChat == null) {
+//            audioChat = new AudioChat();
+//        }
+//        return audioChat;
+//    }
 
     public void setMixer(Mixer mixer) {
         this.mixer = mixer;
@@ -58,6 +58,8 @@ public class AudioChat {
     public void setReceivedData(SendVoicePacketRequest sendVoicePacketRequest) {
        this.sendVoicePacketRequest = sendVoicePacketRequest;
     }
+
+
 
 
 public void start() throws LineUnavailableException, IOException {
@@ -91,7 +93,7 @@ public void start() throws LineUnavailableException, IOException {
             System.out.println("Sent audio data of length: " + numBytesRead);
             try {
                 SendVoicePacketRequest receivedPacket = NetworkFactory.getInstance().receiveVoiceMessage(senderPhoneNumber);
-                System.out.println("THIS SHOULD BE DIFFERENT FOR THE CLIENTS------------------- " + receiverPhoneNumber+" MY PHONE IS  "+CurrentUser.getInstance().getPhoneNumber());
+//                System.out.println("THIS SHOULD BE DIFFERENT FOR THE CLIENTS------------------- " + receiverPhoneNumber+" MY PHONE IS  "+CurrentUser.getInstance().getPhoneNumber());
                 if (receivedPacket != null&&!receivedPacket.getSenderPhoneNumber().equals(CurrentUser.getInstance().getPhoneNumber())) {
                     receivedData = receivedPacket.getData();
                 } else {
@@ -119,10 +121,10 @@ public void start() throws LineUnavailableException, IOException {
             }
         }
     }
+    microphone.close();
 }
 
     public void stop() {
         running = false; // Add this line
-        Thread.currentThread().interrupt();
     }
 }

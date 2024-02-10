@@ -34,7 +34,7 @@
       <Button fx:id="addAllButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="confirm" />
         <HBox alignment="CENTER" prefHeight="46.0" prefWidth="152.0" VBox.vgrow="ALWAYS">
             <TextFlow prefHeight="200.0" prefWidth="200.0">
-                <Label fx:id="serverReply" prefHeight="45.0" prefWidth="87.0" />
+                <Label fx:id="serverReply" prefHeight="45.0" prefWidth="198.0" wrapText="true" />
             </TextFlow>
         </HBox>
     </VBox>

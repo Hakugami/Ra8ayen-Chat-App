@@ -1,5 +1,7 @@
 package network.manager;
 
+import sharednetwork.ConnectionIP;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -14,7 +16,8 @@ public class NetworkManager {
     public static NetworkManager getInstance() throws RemoteException {
         if (instance == null) {
             instance = new NetworkManager();
-            registry= LocateRegistry.getRegistry(PORT);
+//            registry= LocateRegistry.getRegistry(ConnectionIP.serverIP, PORT);
+            registry= LocateRegistry.getRegistry( PORT);
         }
         return instance;
     }

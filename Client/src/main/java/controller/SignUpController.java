@@ -6,12 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.requests.RegisterRequest;
 import dto.responses.RegisterResponse;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -110,6 +112,8 @@ public class SignUpController implements Initializable {
     @FXML
     public ImageView profilePic;
     public TextArea bioArea;
+    public Button minimizeButton;
+    public Button exitButton;
     @FXML
     TextField nameField;
     @FXML
@@ -132,6 +136,8 @@ public class SignUpController implements Initializable {
     Button signUpButton;
     @FXML
     Button backToLoginButton;
+    double xOffset =0;
+    double yOffset =0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -144,6 +150,30 @@ public class SignUpController implements Initializable {
         countryComboBox.setCellFactory(new customComboBoxCellFactory());
         gender.setCellFactory(new CustomGenderComboBoxCellFactory());
         datePicker.setDayCellFactory(new CustomDatePickerCellFactory());
+
+        Platform.runLater(() -> {
+            Node root = signUpXml; // Assuming signUpXml is the root node of your scene
+
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                Stage stage = (Stage) root.getScene().getWindow();
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            });
+        });
+
+        exitButton.setOnAction(event -> {
+            Platform.exit();
+        });
+        minimizeButton.setOnAction(event -> {
+            Stage stage = (Stage) minimizeButton.getScene().getWindow();
+            stage.setIconified(true);
+        });
+
 
 
     }

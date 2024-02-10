@@ -36,6 +36,7 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
         blockedUserService = new BlockedUserService();
         trackOnlineUsersService = TrackOnlineUsersService.getInstance();
         auth = AuthenticationControllerSingleton.getInstance();
+        heartBeat();
     }
 
     public static OnlineControllerImpl getInstance() throws RemoteException, MalformedURLException {
@@ -94,6 +95,7 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
     }
 
     public void heartBeat() {
+
         Thread thread = new Thread(() -> {
             for (Map.Entry<String, CallBackController> entry : clients.entrySet()) {
                 String phoneNumber = entry.getKey();
@@ -123,7 +125,7 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
                 }
             }
         });
-        ConcurrencyManager.getInstance().submitScheduledTask(thread, 0, 5, java.util.concurrent.TimeUnit.SECONDS);
+        ConcurrencyManager.getInstance().submitScheduledTask(thread, 0, 2, java.util.concurrent.TimeUnit.SECONDS);
     }
 
     public void updateListOfContactBlockedContact(String phoneNumber) throws SQLException, NotBoundException, RemoteException, ClassNotFoundException {

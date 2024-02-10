@@ -30,8 +30,6 @@ public class ServerApplication extends Application {
             scenes.put(scene, loader.load());
             controllers.put(scene, loader.getController());
         }
-        UserService userService = new UserService();
-        UsersTableStateSingleton.getInstance().setUsers(FXCollections.observableArrayList(userService.getAllUsers()));
     }
 
     @Override
@@ -41,7 +39,7 @@ public class ServerApplication extends Application {
         stage.setTitle("Ra8ayen Server");
         stage.getIcons().add(new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/speak.png"))));
         ((ServerController)controllers.get(Scenes.SERVER)).setSubSceneInitialNode();
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
     }
 

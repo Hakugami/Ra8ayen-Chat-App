@@ -78,7 +78,7 @@ public class NotificationElementController implements Initializable {
         AcceptFriendRequest acceptFriendRequest = new AcceptFriendRequest(CurrentUser.getInstance().getUserID(),CurrentUser.getInstance().getPhoneNumber(),friendModel.getPhoneNumber(),model);
         AcceptFriendResponse acceptFriendResponse= NetworkFactory.getInstance().acceptFriendRequest(acceptFriendRequest);
         if(acceptFriendResponse.isDone()){
-            CurrentUser.getInstance().getCallBackController().userIsOnline(friendModel.getUserName());
+//            CurrentUser.getInstance().getCallBackController().userIsOnline(friendModel.getUserName());
             for(NotificationModel notificationModel : NotificationManager.getInstance().getNotifactionsList()){
                 if(((FriendRequest)notificationModel).getUserModel().getPhoneNumber().equals(friendModel.getPhoneNumber())){
                     NotificationManager.getInstance().getNotifactionsList().remove(notificationModel);

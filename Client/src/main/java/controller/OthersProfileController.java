@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class OthersProfileController implements Initializable {
@@ -170,23 +171,32 @@ public class OthersProfileController implements Initializable {
     }
     public boolean checkIfUserFriend(){
             for(ContactData contactData: CurrentUser.getCurrentUser().getContactDataList()){
-                if(contactData.getPhoneNumber().equals(otherUserModel.getPhoneNumber())){
+                if(Objects.equals(CurrentUser.getCurrentUser().getPhoneNumber(), otherUserModel.getPhoneNumber())) {
+                    setStatusForAddButton(" ",true, true);
+                    return true;
+                }
+                else if(contactData.getPhoneNumber().equals(otherUserModel.getPhoneNumber())){
                     System.out.println(contactData.getPhoneNumber()+" "+otherUserModel.getPhoneNumber());
-                    setStatusForAddButton(" ",false);
+                    setStatusForAddButton(" ",false, false);
                     return true;
                 }
             }
 
-        setStatusForAddButton("Add",true);
+        setStatusForAddButton("Add",true, false);
         return false;
     }
-    void setStatusForAddButton(String text, boolean Visiable){
+    void setStatusForAddButton(String text, boolean visible, boolean isMe){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                if(isMe) {
+                    addButton.setVisible(false);
+                    blockButton.setVisible(false);
+                    return;
+                }
                 addButton.setText(text);
-                addButton.setVisible(Visiable);
-                if(Visiable){ //user is not Friend
+                addButton.setVisible(visible);
+                if(visible){ //user is not Friend
                     blockButton.setVisible(false);
                 }
             }

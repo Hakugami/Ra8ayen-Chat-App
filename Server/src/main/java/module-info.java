@@ -14,6 +14,7 @@ module server {
     requires javax.mail;
     requires org.controlsfx.controls;
     requires chatter.bot.api;
+    requires com.google.gson;
 
     opens server to javafx.fxml;
     exports server;

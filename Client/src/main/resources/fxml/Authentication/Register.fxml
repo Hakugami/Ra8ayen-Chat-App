@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" styleClass="register_container" stylesheets="@../../Styles/Minimalist/Register.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+<AnchorPane fx:id="signUpXml" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" styleClass="register_container" stylesheets="@../../Styles/Minimalist/Register.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
     <HBox prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox prefHeight="400.0" prefWidth="200.0" styleClass="register_logo_container">
          <ImageView fitHeight="130.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
@@ -27,7 +27,7 @@
         </VBox>
         <AnchorPane prefHeight="871.0" prefWidth="1078.0" styleClass="register_form_container">
             <children>
-                <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1085.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <ImageView fx:id="profilePic" fitHeight="82.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -82,4 +82,18 @@
             </children>
         </AnchorPane>
     </HBox>
+   <HBox fx:id="titleBar" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="1280.0">
+      <children>
+         <Button fx:id="minimizeButton" mnemonicParsing="false" text="-">
+            <HBox.margin>
+               <Insets right="5.0" />
+            </HBox.margin>
+         </Button>
+         <Button fx:id="exitButton" mnemonicParsing="false" text="X">
+            <HBox.margin>
+               <Insets right="20.0" />
+            </HBox.margin>
+         </Button>
+      </children>
+   </HBox>
 </AnchorPane>
