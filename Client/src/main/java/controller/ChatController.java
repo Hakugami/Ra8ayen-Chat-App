@@ -753,6 +753,7 @@ public class ChatController implements Initializable {
             public void run() {
                 fileChooser = new FileChooser();
                 ChooseFileToSend();
+
             }
         });
     }
@@ -763,26 +764,19 @@ public class ChatController implements Initializable {
         AtomicReference<File> selectedFile = new AtomicReference<>();
         selectedFile.set(fileChooser.showOpenDialog(null));
         if (selectedFile.get() != null) {
-            Thread t1 = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (selectedFile.get().length() > MAX_FILE_SIZE) {
-                        System.out.println("File Size is Big");
-                    } else {
-                        try {
-                            uploadedFileBytes = Files.readAllBytes(selectedFile.get().toPath());
-                            FileName = selectedFile.get().getName();
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    messageBox.setText(FileName);
-                                    messageBox.setEditable(false);
-                                }
-                            });
-                            System.out.println("uploaded File Size is : " + uploadedFileBytes.length);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+            Thread t1 = new Thread(() -> {
+                if (selectedFile.get().length() > MAX_FILE_SIZE) {
+                    System.out.println("File Size is Big");
+                } else {
+                    try {
+                        uploadedFileBytes = Files.readAllBytes(selectedFile.get().toPath());
+                        FileName = selectedFile.get().getName();
+                        Platform.runLater(() -> {
+                            messageBox.setText(FileName);
+                        });
+                        System.out.println("uploaded File Size is : " + uploadedFileBytes.length);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             });
