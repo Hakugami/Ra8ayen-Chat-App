@@ -73,9 +73,8 @@ public class AddContactController implements Initializable {
                     });
                     return;
                 }
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
-                Parent root = loader.load();
-                AddContactElementController addContactElementController = loader.getController();
+                Parent root = Model.getInstance().getViewFactory().getAddContactElement();
+                AddContactElementController addContactElementController = (AddContactElementController)  root.getProperties().get("controller");
                 addContactElementController.setData(userModel.getUserName(), userModel.getProfilePicture(), userModel.getPhoneNumber(), root, this);
                 root.setUserData(addContactElementController); // Set the controller as user data
                 contactsToAdd.add(root);}

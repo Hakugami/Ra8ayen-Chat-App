@@ -115,9 +115,7 @@ public class MessageBubbleController implements Initializable {
     public void showProfile() throws IOException {
         Popup popup = new Popup();
         UserModel user = message.getSender();
-        System.out.println("press show profile========="+user.getUserName());
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/OthersProfile.fxml"));
-        Parent root = loader.load();
+        Parent root = (Parent) Model.getInstance().getViewFactory().getOthersProfile();
         popup.getContent().add(root);
         OthersProfileController controller = Model.getInstance().getControllerFactory().getOthersProfileController();
         controller.setPopup(popup, user);

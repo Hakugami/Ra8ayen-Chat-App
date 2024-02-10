@@ -35,9 +35,8 @@ public class NotificationContextMenuController implements Initializable {
                     setGraphic(null);
                 } else {
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationElement.fxml"));
-                        Pane pane = loader.load();
-                        NotificationElementController controller = loader.getController();
+                        Pane pane = (Pane) Model.getInstance().getViewFactory().getNotificationElement();
+                        NotificationElementController controller = (NotificationElementController)  pane.getProperties().get("controller");
                         controller.setData(item); // Assume this method sets the data on the controller
                         setGraphic(pane);
                     } catch (Exception e) {

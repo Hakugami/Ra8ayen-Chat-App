@@ -102,35 +102,25 @@ private void handleLogout() throws NotBoundException, RemoteException {
 }
 
     private void handleNotification(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationContextMenu.fxml"));
-            Parent root = fxmlLoader.load();
-            Popup popup = new Popup();
-            popup.getContent().add(root);
-            popup.setAutoHide(true);
-            //make it appear at the top of the button
-            double x = notificationButton.getScene().getWindow().getX() + notificationButton.getScene().getX() + notificationButton.getWidth() / 2;
-            double y = notificationButton.getScene().getWindow().getY() + notificationButton.getScene().getY() + notificationButton.getHeight() / 2;
-            popup.show(notificationButton.getScene().getWindow(), x, y + 500);
-        } catch (IOException e) {
-            System.out.println("Failed to load notification context menu");
-        }
+        Parent root = (Parent) Model.getInstance().getViewFactory().getNotificationContextMenu();
+        Popup popup = new Popup();
+        popup.getContent().add(root);
+        popup.setAutoHide(true);
+        //make it appear at the top of the button
+        double x = notificationButton.getScene().getWindow().getX() + notificationButton.getScene().getX() + notificationButton.getWidth() / 2;
+        double y = notificationButton.getScene().getWindow().getY() + notificationButton.getScene().getY() + notificationButton.getHeight() / 2;
+        popup.show(notificationButton.getScene().getWindow(), x, y + 500);
     }
 
     private void handleSettingsButton(MouseEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/SettingsContextMenu.fxml"));
-            Parent root = fxmlLoader.load();
-            Popup popup = new Popup();
-            popup.getContent().add(root);
-            popup.setAutoHide(true);
-            //make it appear at the top of the button
-            double x = settings_btn.getScene().getWindow().getX() + settings_btn.getScene().getX() + settings_btn.getWidth() / 2;
-            double y = settings_btn.getScene().getWindow().getY() + settings_btn.getScene().getY() + settings_btn.getHeight() / 2;
-            popup.show(settings_btn.getScene().getWindow(), x, y + 500);
-        } catch (IOException e) {
-            System.out.println("Failed to load settings context menu");
-        }
+        Parent root = (Parent) Model.getInstance().getViewFactory().getProfileContextMenu();
+        Popup popup = new Popup();
+        popup.getContent().add(root);
+        popup.setAutoHide(true);
+        //make it appear at the top of the button
+        double x = settings_btn.getScene().getWindow().getX() + settings_btn.getScene().getX() + settings_btn.getWidth() / 2;
+        double y = settings_btn.getScene().getWindow().getY() + settings_btn.getScene().getY() + settings_btn.getHeight() / 2;
+        popup.show(settings_btn.getScene().getWindow(), x, y + 500);
     }
     private void handleBlockButton(MouseEvent event){
         Popup popup = new Popup();

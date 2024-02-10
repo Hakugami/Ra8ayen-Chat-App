@@ -142,11 +142,10 @@ public class ChatController implements Initializable {
 
     public void receiveVoiceChatRequest(String phoneNumber) throws IOException {
         Popup popup = new Popup();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatPopUp.fxml"));
-        Parent root = loader.load();
+        Node root = Model.getInstance().getViewFactory().getVoiceChatPopUp();
         popup.getContent().add(root);
 
-        VoiceChatPopUpController voiceChatPopUpController = loader.getController();
+        VoiceChatPopUpController voiceChatPopUpController = (VoiceChatPopUpController) root.getProperties().get("controller");
         voiceChatPopUpController.setPopup(popup, phoneNumber);
 
         popup.setAutoHide(false);
@@ -208,12 +207,10 @@ public class ChatController implements Initializable {
 //            throw new RuntimeException(e);
 //        }
         Popup popup = new Popup();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatWait.fxml"));
-        Parent root = loader.load();
-
+        Node root = Model.getInstance().getViewFactory().getVoiceChatWait();
         popup.getContent().add(root);
 
-        VoiceChatWaitController voiceChatWaitController = loader.getController();
+        VoiceChatWaitController voiceChatWaitController = (VoiceChatWaitController) root.getProperties().get("controller");
         voiceChatWaitController.setPopup(popup, phoneNumber, CurrentUser.getInstance().getPhoneNumber());
 
         popup.setAutoHide(false);
@@ -422,14 +419,11 @@ public class ChatController implements Initializable {
                 Task<Node> loadFXMLTask = new Task<Node>() {
                     @Override
                     protected Node call() throws Exception {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/MessageBubble.fxml"));
                         MessageBubbleController controller = new MessageBubbleController();
                         if (item.getStyleMessage() != null)
                             System.out.println("Message Style arrive to update item");
                         controller.setMessage(item);
-
-                        loader.setController(controller);
-                        return loader.load();
+                        return Model.getInstance().getViewFactory().getMessageBubble(controller);
                     }
                 };
 

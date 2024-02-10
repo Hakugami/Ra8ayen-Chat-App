@@ -1,6 +1,8 @@
 package view;
 
 import controller.ContactsController;
+import controller.MessageBubbleController;
+import controller.VoiceChatWaitController;
 import dto.Model.MessageModel;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -191,16 +193,16 @@ public class ViewFactory {
 
     public Node getChat() {
         try {
-            return new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml")).load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public Node getContactElement() throws IOException {
-        return new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml")).load();
-    }
 
     public Node getUpdateProfile() {
         try {
@@ -216,7 +218,10 @@ public class ViewFactory {
 
     public Node getVoiceChatPopUp() {
         try {
-            return new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatPopUp.fxml")).load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatPopUp.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -224,7 +229,11 @@ public class ViewFactory {
 
     public Node getVoiceChatWait() {
         try {
-            return new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatWait.fxml")).load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/VoiceChatWait.fxml"));
+            Node node = loader.load();
+            VoiceChatWaitController controller = loader.getController();
+            node.getProperties().put("controller", controller);
+            return node;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -235,7 +244,10 @@ public class ViewFactory {
     }
 
     public AnchorPane getAddContactElement() throws IOException {
-        return new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml")).load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
+        AnchorPane anchorPane = loader.load();
+        anchorPane.getProperties().put("controller", loader.getController());
+        return anchorPane;
     }
 
 
@@ -293,6 +305,7 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
+
     public Node getBlockedElementScreen(){
         try {
             return new FXMLLoader(getClass().getResource("/fxml/NavigationBar/BlockedContactElement.fxml")).load();
@@ -300,6 +313,100 @@ public class ViewFactory {
             throw new RuntimeException(e);
         }
     }
+
+    public Node getMessageBubble(MessageBubbleController controller) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/MessageBubble.fxml"));
+            loader.setController(controller);
+
+            return loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getStatusElement() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/StatusElement.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getContactElement() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getAddWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddWindow.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getOthersProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/OthersProfile.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getNotificationElement() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationElement.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getNotificationContextMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/NotificationContextMenu.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Node getProfileContextMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NavigationBar/SettingsContextMenu.fxml"));
+            Node node = loader.load();
+            node.getProperties().put("controller", loader.getController());
+            return node;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+
+
 
     public Window getStage() {
         return mainArea.getScene().getWindow();

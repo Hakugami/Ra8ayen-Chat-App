@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import model.CurrentUser;
+import model.Model;
 import network.NetworkFactory;
 
 import javax.imageio.ImageIO;
@@ -69,9 +70,8 @@ public class AddGroupGroupController implements Initializable {
                 serverReply.setText("User not found");
                 serverReply.setStyle("-fx-text-fill: red");
             }else{
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
-                Parent root = loader.load();
-                AddContactElementController addContactElementController = loader.getController();
+                Parent root = Model.getInstance().getViewFactory().getAddContactElement();
+                AddContactElementController addContactElementController = (AddContactElementController) root.getProperties().get("controller");
                 addContactElementController.setDataGroup(userModel.getUserName(), userModel.getProfilePicture(), userModel.getPhoneNumber(), root, this);
                 root.setUserData(addContactElementController); // Set the controller as user data
                 contactsToAdd.add(root);

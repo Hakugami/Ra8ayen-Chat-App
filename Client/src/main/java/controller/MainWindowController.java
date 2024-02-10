@@ -87,21 +87,16 @@ public class MainWindowController implements Initializable {
 
         Model.getInstance().getViewFactory().getSelectedContact().addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Chat/Chat.fxml"));
-                    Parent root = loader.load();
-                    ChatController chatController = loader.getController();
-                    if (newValue instanceof Group) {
-                        chatController.setName(((Group) newValue).getGroupName());
-                        chatController.setImage(((Group) newValue).getGroupImage().getImage());
-                    } else {
-                        chatController.setName(((ContactData) newValue).getName());
-                        chatController.setImage(((ContactData) newValue).getImage().getImage());
-                    }
-                    setSwappableWindow(root);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                Parent root = (Parent) Model.getInstance().getViewFactory().getChat();
+                ChatController chatController = Model.getInstance().getControllerFactory().getChatController();
+                if (newValue instanceof Group) {
+                    chatController.setName(((Group) newValue).getGroupName());
+                    chatController.setImage(((Group) newValue).getGroupImage().getImage());
+                } else {
+                    chatController.setName(((ContactData) newValue).getName());
+                    chatController.setImage(((ContactData) newValue).getImage().getImage());
                 }
+                setSwappableWindow(root);
             }
         });
 
@@ -225,67 +220,62 @@ public class MainWindowController implements Initializable {
 
 
     public void openAddWindow(ActionEvent event) {
-        try {
-            Popup popup = new Popup();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddWindow.fxml"));
-            Parent root = loader.load();
-            popup.getContent().add(root);
+        Popup popup = new Popup();
+        Parent root = (Parent) Model.getInstance().getViewFactory().getAddWindow();
+        popup.getContent().add(root);
 
-            AddWindowController addWindowController = loader.getController();
-            addWindowController.setPopup(popup); // Pass the Popup reference to AddWindowController
+        AddWindowController addWindowController = (AddWindowController) root.getProperties().get("controller");
+        addWindowController.setPopup(popup); // Pass the Popup reference to AddWindowController
 
-            // Get the AddGroupGroupController from the AddWindowController
-            AddGroupGroupController addGroupGroupController = addWindowController.getAddGroupGroupController();
-            addGroupGroupController.setPopup(popup); // Pass the Popup reference to AddGroupGroupController
+        // Get the AddGroupGroupController from the AddWindowController
+        AddGroupGroupController addGroupGroupController = addWindowController.getAddGroupGroupController();
+        addGroupGroupController.setPopup(popup); // Pass the Popup reference to AddGroupGroupController
 
-            popup.setAutoHide(true);
+        popup.setAutoHide(true);
 
-            // Show the popup first to calculate its height
-            popup.show(addContact_btn.getScene().getWindow());
+        // Show the popup first to calculate its height
+        popup.show(addContact_btn.getScene().getWindow());
 
-            // Calculate the x and y coordinates
-            double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
-            double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
+        // Calculate the x and y coordinates
+        double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
+        double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
 
-            // Hide the popup
+        // Hide the popup
 //        popup.hide();
 
-            // Show the popup again at the correct position
-            popup.show(addContact_btn.getScene().getWindow(), x, y);
+        // Show the popup again at the correct position
+        popup.show(addContact_btn.getScene().getWindow(), x, y);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    private void showAddContactWindow(ActionEvent event) {
-        try {
-            Popup popup = new Popup();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
-            Parent root = loader.load();
-            popup.getContent().add(root);
-
-            AddContactController addContactController = loader.getController();
-            addContactController.setPopup(popup);
-
-            popup.setAutoHide(true);
-
-            // Show the popup first to calculate its height
-            popup.show(addContact_btn.getScene().getWindow());
-
-            // Calculate the x and y coordinates
-            double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
-            double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
-
-            // Hide the popup
-            popup.hide();
-
-            // Show the popup again at the correct position
-            popup.show(addContact_btn.getScene().getWindow(), x, y);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void showAddContactWindow(ActionEvent event) {
+//        try {
+//            Popup popup = new Popup();
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContact.fxml"));
+//            Parent root = loader.load();
+//            popup.getContent().add(root);
+//
+//            AddContactController addContactController = loader.getController();
+//            addContactController.setPopup(popup);
+//
+//            popup.setAutoHide(true);
+//
+//            // Show the popup first to calculate its height
+//            popup.show(addContact_btn.getScene().getWindow());
+//
+//            // Calculate the x and y coordinates
+//            double x = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinX() + addContact_btn.getWidth() / 2;
+//            double y = addContact_btn.localToScreen(addContact_btn.getBoundsInLocal()).getMinY() - popup.getHeight();
+//
+//            // Hide the popup
+//            popup.hide();
+//
+//            // Show the popup again at the correct position
+//            popup.show(addContact_btn.getScene().getWindow(), x, y);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

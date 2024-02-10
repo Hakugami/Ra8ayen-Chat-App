@@ -211,49 +211,36 @@ public class ContactsController implements Initializable {
     }
 
     private Node loadFXML(String status, Color color) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/StatusElement.fxml"));
-            Node node = loader.load();
-            StatusElementController controller = loader.getController();
-            controller.setStatusName(status);
-            controller.setStatusColor(color);
-            return  new HBox(node);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        Node node = Model.getInstance().getViewFactory().getStatusElement();
+        StatusElementController controller = (StatusElementController) node.getProperties().get("controller");
+        controller.setStatusName(status);
+        controller.setStatusColor(color);
+        return  new HBox(node);
     }
 
     private Node loadFXML(ContactData contactData) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
-            Node node = loader.load();
-            ContactElementController controller = loader.getController();
-            controller.setName(contactData.getName());
-            controller.setStatus(contactData.getColor());
-            controller.setImagId(contactData.getImage().getImage());
-            controller.setChatID(contactData.getChatId());
-            controller.setLastMessageProperty(contactData.getLastMessage());
-            controller.setLastMessageLabel(contactData.getLastMessage());
-            return new HBox(node);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Node node = Model.getInstance().getViewFactory().getContactElement();
+        ContactElementController controller = (ContactElementController) node.getProperties().get("controller");
+        controller.setName(contactData.getName());
+        controller.setStatus(contactData.getColor());
+        controller.setImagId(contactData.getImage().getImage());
+        controller.setChatID(contactData.getChatId());
+        controller.setLastMessageProperty(contactData.getLastMessage());
+        controller.setLastMessageLabel(contactData.getLastMessage());
+        return new HBox(node);
     }
     private Node loadFXML(Group group) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/ContactElement.fxml"));
-            Node node = loader.load();
-            ContactElementController controller = loader.getController();
-            controller.setName(group.getGroupName());
-            controller.setStatus(Color.PURPLE);
-            controller.setImagId(group.getGroupImage().getImage());
-            controller.setChatID(group.getGroupId());
-            controller.setLastMessageProperty(group.getLastMessage());
-            controller.setLastMessageLabel(group.getLastMessage());
-            return new HBox(node); // Wrap the Node in an HBox
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        Node node = Model.getInstance().getViewFactory().getContactElement();
+        ContactElementController controller = (ContactElementController) node.getProperties().get("controller");
+        controller.setName(group.getGroupName());
+        controller.setStatus(Color.PURPLE);
+        controller.setImagId(group.getGroupImage().getImage());
+        controller.setChatID(group.getGroupId());
+        controller.setLastMessageProperty(group.getLastMessage());
+        controller.setLastMessageLabel(group.getLastMessage());
+        return new HBox(node); // Wrap the Node in an HBox
     }
 
     private void addListenerToTreeView() {
