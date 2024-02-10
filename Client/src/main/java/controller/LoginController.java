@@ -14,6 +14,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -53,9 +54,13 @@ public class LoginController {
     public Label User_Name_lbl;
     public Button minimizeButton;
     public Button exitButton;
+    public Button backButton;
 
     @FXML
     AnchorPane loginXml;
+
+    double xOffset=0;
+    double yOffset=0;
 
     //  private TrackOnlineUsers server;
     private int onlineUsersInDashboard;
@@ -97,14 +102,33 @@ public class LoginController {
                 throw new RuntimeException(e);
             }
         });
+
+        backButton.setOnAction(event -> {
+            reverseAnimation();
+        });
         registerButton.setOnAction(this::handleRegisterButton);
 
         exitButton.setOnAction(event -> {
-            System.exit(0);
+            Platform.exit();
         });
         minimizeButton.setOnAction(event -> {
             Stage stage = (Stage) minimizeButton.getScene().getWindow();
             stage.setIconified(true);
+        });
+
+        Platform.runLater(() -> {
+            Node root = loginXml; // Assuming loginXml is the root node of your scene
+
+            root.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
+
+            root.setOnMouseDragged(event -> {
+                Stage stage = (Stage) root.getScene().getWindow();
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            });
         });
 
 
@@ -132,7 +156,7 @@ public class LoginController {
                 if (validateFields()) {
                     LoginRequest loginRequest = new LoginRequest(phoneNumberField.getText(), passwordField.getText());
                     LoginResponse loginResponse = NetworkFactory.getInstance().login(loginRequest);
-                    if (loginResponse.getSuccess()) {
+                    if (loginResponse != null && loginResponse.getSuccess()) {
                         StringBuilder sb = new StringBuilder();
                         String token = loginResponse.getToken();
                         sb.append(token).append("\n").append(phoneNumberField.getText()).append("\n");
@@ -179,8 +203,7 @@ public class LoginController {
                                 .owner(loginButton.getScene().getWindow()) // Set the owner of the Notifications object
                                 .showWarning();
                     });
-                }
-                catch (IllegalStateException e) {
+                } catch (IllegalStateException e) {
                     System.out.println("Session Alert: " + e.getMessage());
                     Notifications.create()
                             .title("Session Alert")
@@ -204,6 +227,7 @@ public class LoginController {
             Stage currentStage = (Stage) loginButton.getScene().getWindow();
             BorderPane mainArea = Model.getInstance().getViewFactory().getMainArea();
             currentStage.setScene(new Scene(mainArea));
+            NotificationManager.getInstance().getNotificationSounds().playSuccessSound();
         }
     }
 
@@ -217,6 +241,7 @@ public class LoginController {
             stage.setTitle("Chat App");
             stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
+            NotificationManager.getInstance().getNotificationSounds().playSuccessSound();
         }
     }
 
@@ -247,6 +272,50 @@ public class LoginController {
         // Play the animations
         shakeTimeline.play();
         flashTimeline.play();
+    }
+
+    public void reverseAnimation() {
+        // Create a TranslateTransition for the password label, password field and backButton
+        TranslateTransition transition1 = new TranslateTransition(Duration.seconds(1), Password_lbl);
+        TranslateTransition transition2 = new TranslateTransition(Duration.seconds(1), passwordField);
+        TranslateTransition transition3 = new TranslateTransition(Duration.seconds(1), loginButton);
+        TranslateTransition transition4 = new TranslateTransition(Duration.seconds(1), backButton);
+
+        // Create a RotateTransition for the password label, password field and backButton
+        RotateTransition rotateTransition1 = new RotateTransition(Duration.seconds(1), Password_lbl);
+        RotateTransition rotateTransition2 = new RotateTransition(Duration.seconds(1), passwordField);
+        RotateTransition rotateTransition3 = new RotateTransition(Duration.seconds(1), loginButton);
+        RotateTransition rotateTransition4 = new RotateTransition(Duration.seconds(1), backButton);
+
+        // Set the end position (original position) for the animation
+        transition1.setToX(200);
+        transition2.setToX(200);
+        transition3.setToX(200);
+        transition4.setToX(200);
+
+        // Set the rotation angle for the RotateTransition
+        rotateTransition1.setToAngle(0);
+        rotateTransition2.setToAngle(0);
+        rotateTransition3.setToAngle(0);
+        rotateTransition4.setToAngle(0);
+
+        Password_lbl.setVisible(false);
+        passwordField.setVisible(false);
+        loginButton.setVisible(false);
+        User_Name_lbl.setVisible(true);
+        next.setVisible(true);
+        phoneNumberField.setVisible(true);
+        backButton.setVisible(false);
+
+        // Start the animations
+        transition1.play();
+        transition2.play();
+        transition3.play();
+        transition4.play();
+        rotateTransition1.play();
+        rotateTransition2.play();
+        rotateTransition3.play();
+        rotateTransition4.play();
     }
 
     public void retrieveData() {
@@ -322,28 +391,6 @@ public class LoginController {
         ConcurrencyManager.getInstance().submitTask(task);
     }
 
-    private void startTrackingOnlineUsers() {
-//        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-//        executor.scheduleAtFixedRate(() -> {
-//            try {
-//                // online users in the dashboard
-//                onlineUsersInDashboard = NetworkFactory.getInstance().getOnlineUsersCount();
-//                //compare between current users numbers in dashboard and if there is a new user login
-//                if (onlineUsersCount > onlineUsersInDashboard) {
-//                    // if yes ---> increment online users numbers in dashbpard
-//                    onlineUsersInDashboard = onlineUsersCount;
-//                    // update dashboard
-//                    NetworkFactory.getInstance().updateOnlineUsersCount(onlineUsersInDashboard);
-//                    System.out.println("onlineUsersCount : " + onlineUsersCount + " , " + "onlineUsersInDashboard : " + onlineUsersInDashboard);
-//
-//                }
-//
-//            } catch (RemoteException | NotBoundException e) {
-//                e.printStackTrace();
-//            }
-//        }, 0, 5, TimeUnit.SECONDS);
-    }
-
 
     private boolean validateFields() throws SQLException, ClassNotFoundException {
         if (!isValidPhoneNumber(phoneNumberField.getText()) ||
@@ -375,28 +422,31 @@ public class LoginController {
     }
 
     private void checkPhoneNumberAnimation(ActionEvent event) {
-
         try {
             if (NetworkFactory.getInstance().checkPhoneNumber(phoneNumberField.getText())) {
-                // Create a TranslateTransition for the password label and password field
+                // Create a TranslateTransition for the password label, password field and backButton
                 TranslateTransition transition1 = new TranslateTransition(Duration.seconds(1), Password_lbl);
                 TranslateTransition transition2 = new TranslateTransition(Duration.seconds(1), passwordField);
                 TranslateTransition transition3 = new TranslateTransition(Duration.seconds(1), loginButton);
+                TranslateTransition transition4 = new TranslateTransition(Duration.seconds(1), backButton);
 
-                // Create a RotateTransition for the password label and password field
+                // Create a RotateTransition for the password label, password field and backButton
                 RotateTransition rotateTransition1 = new RotateTransition(Duration.seconds(1), Password_lbl);
                 RotateTransition rotateTransition2 = new RotateTransition(Duration.seconds(1), passwordField);
                 RotateTransition rotateTransition3 = new RotateTransition(Duration.seconds(1), loginButton);
+                RotateTransition rotateTransition4 = new RotateTransition(Duration.seconds(1), backButton);
 
                 // Set the end position (original position) for the animation
                 transition1.setToX(0);
                 transition2.setToX(0);
                 transition3.setToX(0);
+                transition4.setToX(0);
 
                 // Set the rotation angle for the RotateTransition
                 rotateTransition1.setToAngle(360);
                 rotateTransition2.setToAngle(360);
-
+                rotateTransition3.setToAngle(360);
+                rotateTransition4.setToAngle(360);
 
                 User_Name_lbl.setVisible(false);
                 next.setVisible(false);
@@ -404,16 +454,19 @@ public class LoginController {
                 Password_lbl.setVisible(true);
                 passwordField.setVisible(true);
                 loginButton.setVisible(true);
+                backButton.setVisible(true);
 
                 // Start the animations
                 transition1.play();
                 transition2.play();
                 transition3.play();
+                transition4.play();
                 rotateTransition1.play();
                 rotateTransition2.play();
                 rotateTransition3.play();
+                rotateTransition4.play();
             } else {
-               Platform.exit();
+                Platform.exit();
             }
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);

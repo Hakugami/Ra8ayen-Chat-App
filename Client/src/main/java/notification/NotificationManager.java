@@ -9,9 +9,11 @@ public class NotificationManager {
 
     private static NotificationManager instance;
     private final List<NotificationModel> notificationModelMap;
+    NotificationSounds notificationSounds ;
 
     private NotificationManager() {
         notificationModelMap = new CopyOnWriteArrayList<>();
+        notificationSounds = new NotificationSounds();
     }
 
     public static NotificationManager getInstance() {
@@ -35,6 +37,10 @@ public class NotificationManager {
 
     public List<NotificationModel> getNotifactionsList() {
         return notificationModelMap;
+    }
+
+    public NotificationSounds getNotificationSounds() {
+        return notificationSounds;
     }
 
 

@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import lookupnames.LookUpNames;
 import network.manager.NetworkManager;
 import notification.NetworkDownNotification;
+import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
 
 import java.rmi.NotBoundException;
@@ -32,7 +33,10 @@ public class NetworkFactory {
         try {
             return function.onNetworkDown();
         } catch (Exception e) {
-            Platform.runLater(()-> Notifications.create().title("Server Down").text("Server is currently down").showError());
+            Platform.runLater(()-> {
+                Notifications.create().title("Server Down").text("Server is currently down").showError();
+                NotificationManager.getInstance().getNotificationSounds().playWarningSound();
+            });
             return null;
         }
     }
@@ -110,11 +114,11 @@ public class NetworkFactory {
         });
     }
 
-    public boolean rejectFriendRequest(RejectContactRequest request) throws RemoteException, NotBoundException {
-        return Boolean.TRUE.equals(executeWithNotification(() -> {
+    public void rejectFriendRequest(RejectContactRequest request) throws RemoteException, NotBoundException {
+        executeWithNotification(() -> {
             InvitationController controller = (InvitationController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.INVITATIONCONTROLLER.name());
             return controller.rejectFriendRequest(request);
-        }));
+        });
     }
 
     public List<GetContactsResponse> getContacts(GetContactsRequest request) {

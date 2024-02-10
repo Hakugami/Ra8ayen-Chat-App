@@ -41,7 +41,14 @@
                <StackPane>
                   <children>
                      <Button fx:id="loginButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Log in" textAlignment="CENTER" />
-                     <Button fx:id="next" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" text="Next" textAlignment="CENTER" />
+                     <Button fx:id="next" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="250.0" textAlignment="CENTER">
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="50.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../Images/arrow.png" />
+                              </image>
+                           </ImageView>
+                        </graphic></Button>
                   </children>
                </StackPane>
                <HBox alignment="CENTER">
@@ -54,6 +61,15 @@
                      <Button fx:id="registerButton" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Register" />
                   </children>
                </HBox>
+               <Button fx:id="backButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="71.0" visible="false">
+                  <graphic>
+                     <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../Images/arrow.png" />
+                        </image>
+                     </ImageView>
+                  </graphic>
+               </Button>
                <Label fx:id="Error_lbl" styleClass="error_lbl" />
             </VBox>
          </children>

@@ -203,3 +203,33 @@
 .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
+
+
+
+#exitButton,
+#minimizeButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #FFFFFF; /* White text color */
+}
+
+#exitButton:hover {
+    -fx-background-color: #FF4A4A; /* Red color on hover */
+    -fx-background-radius: 5;
+    -fx-border-color: #FF4A4A; /* Red border color on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #FFFFFF; /* White text color on hover */
+    -fx-cursor: hand;
+}
+
+#minimizeButton:hover {
+    -fx-background-color: #737373; /* Medium gray background on hover */
+    -fx-background-radius: 5;
+    -fx-border-color: #737373; /* Medium gray border color on hover */
+    -fx-border-radius: 5;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: #FFFFFF; /* White text color on hover */
+    -fx-cursor: hand;
+}
