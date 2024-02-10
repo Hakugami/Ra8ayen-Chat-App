@@ -1,6 +1,6 @@
 package server;
 
-import static network.ConnectionIP.serverIP;
+import static sharednetwork.ConnectionIP.serverIP;
 
 public class StartServer {
     public static void main(String[] args) {

@@ -81,13 +81,13 @@ public class NetworkFactory {
         });
     }
 
-    public void heartBeat() throws RemoteException, NotBoundException {
-        executeWithNotification(() -> {
-            OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
-            controller.heartBeat();
-            return null;
-        });
-    }
+//    public void heartBeat() throws RemoteException, NotBoundException {
+//        executeWithNotification(() -> {
+//            OnlineController controller = (OnlineController) NetworkManager.getInstance().getRegistry().lookup(LookUpNames.ONLINECONTROLLER.name());
+//            controller.heartBeat();
+//            return null;
+//        });
+//    }
 
     public UserModel getUserModel(String Token) {
         return executeWithNotification(() -> {

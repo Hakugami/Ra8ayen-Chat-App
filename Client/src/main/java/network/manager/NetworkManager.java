@@ -1,6 +1,6 @@
 package network.manager;
 
-import network.ConnectionIP;
+import sharednetwork.ConnectionIP;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

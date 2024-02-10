@@ -146,7 +146,7 @@ public class LoginController {
                         //onlineUsersCount++;
                         //startTrackingOnlineUsers();
                         //new Logout().startHeartbeat();
-                        NetworkFactory.getInstance().heartBeat();
+//                        NetworkFactory.getInstance().heartBeat();
                     } else {
                         System.err.println("Invalid fields1");
                         shakeAnimation();
