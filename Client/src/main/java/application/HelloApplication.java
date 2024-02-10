@@ -57,8 +57,6 @@ public class HelloApplication extends Application {
             NetworkFactory.getInstance().disconnect(CurrentUser.getCurrentUser().getPhoneNumber(), CurrentUser.getInstance().getCallBackController());
             UnicastRemoteObject.unexportObject(CurrentUser.getCurrentUser().getCallBackController(), true);
             ConcurrencyManager.getInstance().forceShutdown();
-        }else {
-            Platform.runLater(()-> Notifications.create().title("Error").text("Failed to disconnect user").showError());
         }
         Platform.exit();
     }

@@ -25,6 +25,7 @@ import javafx.util.Duration;
 import model.Country;
 import model.Model;
 import network.NetworkFactory;
+import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
 
 import javax.imageio.ImageIO;
@@ -251,14 +252,17 @@ public class SignUpController implements Initializable {
                 RegisterResponse registerResponse = NetworkFactory.getInstance().register(registerRequest);
                 if (registerResponse.isSuccess()) {
                     System.out.println("User registered successfully");
+                    NotificationManager.getInstance().getNotificationSounds().playSuccessSound();
                     backToLoginScreen(signUpButton);
                 } else {
+
                     Notifications.create().title("Duplicate Entry").text(registerResponse.getError()).showError();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
+            NotificationManager.getInstance().getNotificationSounds().playErrorSound();
             System.err.println("Invalid fields");
         }
     }

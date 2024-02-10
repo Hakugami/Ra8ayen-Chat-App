@@ -11,10 +11,10 @@ import java.net.URL;
 public class NotificationSounds {
     private MediaPlayer mediaPlayer;
 
-    public void playWarningSound() {
+    private void playSound(String soundFile) {
         try {
-            new JFXPanel(); // Initializes the JavaFX environment
-            URL resource = getClass().getResource("/sounds/warningReal.mp3");
+            new JFXPanel();
+            URL resource = getClass().getResource(soundFile);
             if (resource == null) {
                 System.out.println("Sound file not found");
                 return;
@@ -25,100 +25,7 @@ public class NotificationSounds {
             mediaPlayer.setVolume(0.5);
             mediaPlayer.play();
 
-            // Stop the sound after 5 seconds
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));
-            pause.setOnFinished(event -> stopSound());
-            pause.play();
-        } catch (Exception e) {
-            System.out.println("Error initializing JavaFX environment: " + e.getMessage());
-        }
-    }
-
-    public void playSuccessSound() {
-        try {
-            new JFXPanel(); // Initializes the JavaFX environment
-            URL resource = getClass().getResource("/sounds/success.mp3");
-            if (resource == null) {
-                System.out.println("Sound file not found");
-                return;
-            }
-            Media media = new Media(resource.toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setOnError(() -> System.out.println("Error playing sound: " + mediaPlayer.getError()));
-            mediaPlayer.setVolume(0.5);
-            mediaPlayer.play();
-
-            // Stop the sound after 5 seconds
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));
-            pause.setOnFinished(event -> stopSound());
-            pause.play();
-        } catch (Exception e) {
-            System.out.println("Error initializing JavaFX environment: " + e.getMessage());
-        }
-    }
-
-    public void sentMessageSound() {
-        try {
-            new JFXPanel(); // Initializes the JavaFX environment
-            URL resource = getClass().getResource("/sounds/messageSent.mp3");
-            if (resource == null) {
-                System.out.println("Sound file not found");
-                return;
-            }
-            Media media = new Media(resource.toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setOnError(() -> System.out.println("Error playing sound: " + mediaPlayer.getError()));
-            mediaPlayer.setVolume(0.5);
-            mediaPlayer.play();
-
-            // Stop the sound after 5 seconds
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));
-            pause.setOnFinished(event -> stopSound());
-            pause.play();
-        } catch (Exception e) {
-            System.out.println("Error initializing JavaFX environment: " + e.getMessage());
-        }
-    }
-
-    public void playFriendRequestSound() {
-        try {
-            new JFXPanel(); // Initializes the JavaFX environment
-            URL resource = getClass().getResource("/sounds/friendRequest.mp3");
-            if (resource == null) {
-                System.out.println("Sound file not found");
-                return;
-            }
-            Media media = new Media(resource.toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setOnError(() -> System.out.println("Error playing sound: " + mediaPlayer.getError()));
-            mediaPlayer.setVolume(0.5);
-            mediaPlayer.play();
-
-            // Stop the sound after 5 seconds
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));
-            pause.setOnFinished(event -> stopSound());
-            pause.play();
-        } catch (Exception e) {
-            System.out.println("Error initializing JavaFX environment: " + e.getMessage());
-        }
-    }
-
-    public void playAnnouncementSound() {
-        try {
-            new JFXPanel(); // Initializes the JavaFX environment
-            URL resource = getClass().getResource("/sounds/announcement.mp3");
-            if (resource == null) {
-                System.out.println("Sound file not found");
-                return;
-            }
-            Media media = new Media(resource.toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setOnError(() -> System.out.println("Error playing sound: " + mediaPlayer.getError()));
-            mediaPlayer.setVolume(0.5);
-            mediaPlayer.play();
-
-            // Stop the sound after 5 seconds
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));
+            PauseTransition pause = new PauseTransition(Duration.seconds(7));
             pause.setOnFinished(event -> stopSound());
             pause.play();
         } catch (Exception e) {
@@ -130,5 +37,37 @@ public class NotificationSounds {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
+    }
+
+    public void playWarningSound() {
+        playSound("/sounds/warningReal.mp3");
+    }
+
+    public void playSuccessSound() {
+        playSound("/sounds/success.mp3");
+    }
+
+    public void sentMessageSound() {
+        playSound("/sounds/messageSent.mp3");
+    }
+
+    public void playFriendRequestSound() {
+        playSound("/sounds/friendRequest.mp3");
+    }
+
+    public void playAnnouncementSound() {
+        playSound("/sounds/announcement.mp3");
+    }
+
+    public void playErrorSound() {
+        playSound("/sounds/invalidInput.mp3");
+    }
+
+    public void playRobotSound() {
+        playSound("/sounds/robot.mp3");
+    }
+
+    public void playRobotCloseSound() {
+        playSound("/sounds/robotClose.mp3");
     }
 }
