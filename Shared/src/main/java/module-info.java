@@ -4,6 +4,7 @@ module Shared {
     exports lookupnames;
     exports dto.Controller;
     exports dto.Model;
+    exports network;
 
     requires java.rmi;
     requires java.sql;
