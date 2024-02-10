@@ -1,14 +1,16 @@
 package controllers;
 
 import Mapper.UserMapperImpl;
+import com.google.gson.reflect.TypeToken;
 import concurrency.manager.ConcurrencyManager;
 import exceptions.DuplicateEntryException;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import com.google.gson.Gson;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.DefaultStringConverter;
@@ -17,9 +19,15 @@ import model.entities.UserTable;
 import org.controlsfx.control.Notifications;
 import service.UserService;
 import userstable.UsersTableStateSingleton;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class UserListController implements Initializable {
@@ -45,45 +53,104 @@ public class UserListController implements Initializable {
         TableColumn<User, String> column = new TableColumn<>(userTable.name());
         column.setCellValueFactory(cellData -> new SimpleStringProperty(getUserProperty(cellData.getValue(), userTable)));
 
-        column.setCellFactory(tc -> {
-            TextFieldTableCell<User, String> cell = new TextFieldTableCell<>(new DefaultStringConverter());
-            cell.setStyle("-fx-alignment: CENTER;");
-            return cell;
-        });
+        if (userTable == UserTable.Country) {
+            column.setCellFactory(tc -> new TableCell<>() {
+                private final ComboBox<String> comboBox = new ComboBox<>();
 
-        column.setOnEditCommit(event -> {
-            User user = event.getRowValue();
-            User originalUser = getOriginalUser(user);
-            setUserProperty(user, userTable, event.getNewValue());
-            try {
-                userService.updateUser(user);
-                ConcurrencyManager.getInstance().submitTask(() -> {
-                    try {
-                        OnlineControllerImpl.clients.get(user.getPhoneNumber()).updateUserModel(userMapper.entityToModel(user));
-                    } catch (RemoteException e) {
-                        Notifications.create().title("Error").text("An error occurred while updating the user").showError();
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        List<Map<String, String>> countries = loadCountries();
+                        comboBox.getItems().setAll(countries.stream().map(country -> country.get("name")).collect(Collectors.toList()));
+                        comboBox.setValue(item);
+                        setGraphic(comboBox);
+                        setAlignment(Pos.CENTER);
+                        comboBox.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            user.setCountry(comboBox.getValue());
+                            setUserProperty(user, userTable, comboBox.getValue());
+                            try {
+                                userService.updateUser(user);
+                            } catch (DuplicateEntryException e) {
+                                Notifications.create().title("Failed to update country").text(e.getMessage()).showError();
+                            }
+                            UsersTableStateSingleton.getInstance().updateUser(user);
+                        });
                     }
-                });
+                }
+            });
+        } else if (userTable == UserTable.DateOfBirth) {
+            column.setCellFactory(tc -> new TableCell<>() {
+                private final DatePicker datePicker = new DatePicker();
 
-            } catch (DuplicateEntryException e) {
-                Notifications.create().title("Duplicate Entry").text(e.getMessage()).showError();
-                user.setUserID(originalUser.getUserID());
-                user.setPhoneNumber(originalUser.getPhoneNumber());
-                user.setUserName(originalUser.getUserName());
-                user.setEmailAddress(originalUser.getEmailAddress());
-                user.setGender(originalUser.getGender());
-                user.setCountry(originalUser.getCountry());
-                user.setDateOfBirth(originalUser.getDateOfBirth());
-                user.setBio(originalUser.getBio());
-                user.setUserStatus(originalUser.getUserStatus());
-                user.setUsermode(originalUser.getUsermode());
-                user.setLastLogin(originalUser.getLastLogin());
-            }
-            UsersTableStateSingleton.getInstance().updateUser(user);
-        });
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        if (item != null) {
+                            datePicker.setValue(LocalDate.parse(item));
+                        }
+                        setGraphic(datePicker);
+                        setAlignment(Pos.CENTER_RIGHT);
+                        datePicker.setOnAction(event -> {
+                            User user = getTableView().getItems().get(getIndex());
+                            user.setDateOfBirth(java.sql.Date.valueOf(datePicker.getValue()));
+                            setUserProperty(user, userTable, datePicker.getValue().toString());
+                            try {
+                                userService.updateUser(user);
+                            } catch (DuplicateEntryException e) {
+                                Notifications.create().title("Failed to update date").text(e.getMessage()).showError();
+                            }
+                            UsersTableStateSingleton.getInstance().updateUser(user);
+                        });
+                    }
+                }
+            });
+        } else {
+            column.setCellFactory(tc -> {
+                TextFieldTableCell<User, String> cell = new TextFieldTableCell<>(new DefaultStringConverter());
+                cell.setStyle("-fx-alignment: CENTER;");
+                return cell;
+            });
+
+            column.setOnEditCommit(event -> {
+                User user = event.getRowValue();
+                User originalUser = getOriginalUser(user);
+                setUserProperty(user, userTable, event.getNewValue());
+                try {
+                    userService.updateUser(user);
+                    ConcurrencyManager.getInstance().submitTask(() -> {
+                        try {
+                            OnlineControllerImpl.clients.get(user.getPhoneNumber()).updateUserModel(userMapper.entityToModel(user));
+                        } catch (RemoteException e) {
+                            Notifications.create().title("Error").text("An error occurred while updating the user").showError();
+                        }
+                    });
+
+                } catch (DuplicateEntryException e) {
+                    Notifications.create().title("Duplicate Entry").text(e.getMessage()).showError();
+                    user.setUserID(originalUser.getUserID());
+                    user.setPhoneNumber(originalUser.getPhoneNumber());
+                    user.setUserName(originalUser.getUserName());
+                    user.setEmailAddress(originalUser.getEmailAddress());
+                    user.setGender(originalUser.getGender());
+                    user.setCountry(originalUser.getCountry());
+                    user.setDateOfBirth(originalUser.getDateOfBirth());
+                    user.setBio(originalUser.getBio());
+                    user.setUserStatus(originalUser.getUserStatus());
+                    user.setUsermode(originalUser.getUsermode());
+                    user.setLastLogin(originalUser.getLastLogin());
+                }
+                UsersTableStateSingleton.getInstance().updateUser(user);
+            });
+        }
 
         column.setEditable(true);
-
         column.setMinWidth(200);
 
         return column;
@@ -286,6 +353,17 @@ public class UserListController implements Initializable {
                     && userTable != UserTable.ProfilePicture) {
                 Platform.runLater(() -> usersTableView.getColumns().add(getUserStringTableColumn(userTable)));
             }
+        }
+    }
+    private List<Map<String, String>> loadCountries() {
+        Gson gson = new Gson();
+        Type countryListType = new TypeToken<List<Map<String, String>>>(){}.getType();
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/countries/CountryCodes.json")) {
+            return gson.fromJson(new InputStreamReader(Objects.requireNonNull(inputStream)), countryListType);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return Collections.emptyList();
         }
     }
 }
