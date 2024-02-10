@@ -30,8 +30,6 @@ public class ServerApplication extends Application {
             scenes.put(scene, loader.load());
             controllers.put(scene, loader.getController());
         }
-        UserService userService = new UserService();
-        UsersTableStateSingleton.getInstance().setUsers(FXCollections.observableArrayList(userService.getAllUsers()));
     }
 
     @Override

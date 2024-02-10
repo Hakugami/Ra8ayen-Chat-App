@@ -6,6 +6,7 @@ import concurrency.manager.ConcurrencyManager;
 import exceptions.DuplicateEntryException;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import com.google.gson.Gson;
@@ -38,11 +39,13 @@ public class UserListController implements Initializable {
     private UserService userService;
     private UserMapperImpl userMapper;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userMapper = new UserMapperImpl();
         usersTableView.setEditable(true);
         userService = new UserService();
+        UsersTableStateSingleton.getInstance().setUsers(FXCollections.observableArrayList(userService.getAllUsers()));
         usersTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         usersTableView.setFixedCellSize(60);
         ConcurrencyManager.getInstance().submitTask(this::setupTableColumns);
