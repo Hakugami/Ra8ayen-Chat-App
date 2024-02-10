@@ -3,6 +3,7 @@ package controller;
 import dto.Model.UserModel;
 import dto.requests.AddContactRequest;
 import dto.responses.AddContactResponse;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -60,7 +61,7 @@ public class AddContactController implements Initializable {
     private void addFriend(ActionEvent actionEvent) {
 
             //check if user in your contacts
-            if (!checkIfPhoneNumberInContacts(phoneField.getText())) {
+            if (checkIfPhoneNumberNotInContacts(phoneField.getText())) {
                 try{
                 UserModel userModel = NetworkFactory.getInstance().getUserModelByPhoneNumber(phoneField.getText());
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
@@ -88,7 +89,7 @@ public class AddContactController implements Initializable {
         AddContactResponse addContactResponse;
         List<String> friendsPhoneNumbers = contactsToAdd.stream()
                 .map(node -> ((AddContactElementController) node.getUserData()).phoneNumber.getText())
-                .filter(this::checkIfPhoneNumberInContacts)
+                .filter(this::checkIfPhoneNumberNotInContacts)
                 .collect(Collectors.toList());
         try {
             addContactRequest.setUserId(CurrentUser.getInstance().getUserID());
@@ -106,14 +107,20 @@ public class AddContactController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    boolean checkIfPhoneNumberInContacts(String PhoneNumber){
+    boolean checkIfPhoneNumberNotInContacts(String PhoneNumber){
         for(ContactData contact:CurrentUser.getCurrentUser().getContactDataList()){
             if(contact.getPhoneNumber().equals(PhoneNumber)){
-                Notifications.create().title("Failed").text("Phone Number " + phoneField + "in your Contacts").showInformation();
-                return true;
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Notifications.create().title("Failed").text("Phone Number " + PhoneNumber + "in your Contacts").showInformation();
+                    }
+                });
+
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
 }
