@@ -43,7 +43,7 @@ public class VoiceChatWaitController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        audioChat = AudioChat.getInstance();
+        audioChat = new AudioChat();
         cancelCall.setOnAction(this::handleCancelCall);
 
         // Set the audio format

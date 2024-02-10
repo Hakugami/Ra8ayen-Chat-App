@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../Styles/NeoOrange/OthersProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OthersProfileController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../Styles/Minimalist/OthersProfile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OthersProfileController">
    <VBox alignment="CENTER" layoutY="-2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" styleClass="container_vbox">
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
          <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="41.0" prefWidth="200.0">

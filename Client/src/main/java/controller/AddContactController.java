@@ -64,6 +64,15 @@ public class AddContactController implements Initializable {
             if (checkIfPhoneNumberNotInContacts(phoneField.getText())) {
                 try{
                 UserModel userModel = NetworkFactory.getInstance().getUserModelByPhoneNumber(phoneField.getText());
+                if(userModel == null){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            Notifications.create().title("Failed").text("Phone Number " + phoneField.getText() + "not found").showInformation();
+                        }
+                    });
+                    return;
+                }
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Contacts/AddContactElement.fxml"));
                 Parent root = loader.load();
                 AddContactElementController addContactElementController = loader.getController();

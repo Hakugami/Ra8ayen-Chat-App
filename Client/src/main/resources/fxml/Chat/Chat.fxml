@@ -22,7 +22,7 @@
          <top>
             <HBox prefHeight="61.0" prefWidth="900.0" styleClass="header" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER" prefHeight="51.0" prefWidth="234.0">
+                  <HBox alignment="CENTER" prefHeight="51.0" prefWidth="332.0">
                      <children>
                         <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="51.0" prefWidth="50.0">
                            <opaqueInsets>
@@ -40,7 +40,7 @@
                                     </ImageView>
                            </children>
                         </Pane>
-                        <Label fx:id="NameContact" prefHeight="26.0" prefWidth="112.0" text="TEST NAME" textFill="WHITE">
+                        <Label fx:id="NameContact" prefHeight="26.0" prefWidth="252.0" text="TEST NAME" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="17.0" />
                            </font>

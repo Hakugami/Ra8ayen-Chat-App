@@ -1,0 +1,72 @@
+/* othersProfile.css */
+
+/* Apply the updated color scheme to the desired elements */
+.root {
+    /* Background color */
+    -fx-background-color: #323232;
+
+    /* Add a border */
+    -fx-border-color: #FF4A4A;
+}
+
+.container_vbox {
+    /* Background color */
+    -fx-background-color: #323232;
+
+    /* Add a border */
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-border-color: #FF4A4A;
+}
+
+.button {
+    /* Button color */
+    -fx-background-color: #FF4A4A;
+
+    /* Make the button round */
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+
+    /* Add some cool effects */
+    -fx-text-fill: #FFFFFF;
+}
+
+.button:hover {
+    /* Darker color on hover */
+    -fx-background-color: #737373;
+}
+
+.label {
+    /* Label color */
+    -fx-text-fill: #737373;
+
+    /* Add some nice effects */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
+
+.circle {
+    /* Circle color */
+    -fx-fill: #4C4C4C;
+}
+
+/* Existing styles... */
+
+/* Updated style for the exit button */
+#exitButton {
+    /* Button color */
+    -fx-background-color: #FF4A4A;
+
+    /* Make the button round */
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+
+    /* Add some cool effects */
+    -fx-text-fill: #FFFFFF;
+}
+
+#exitButton:hover {
+    /* Darker color on hover */
+    -fx-background-color: #737373;
+}

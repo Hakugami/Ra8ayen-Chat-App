@@ -67,7 +67,7 @@ public class VoiceChatPopUpController implements Initializable {
             }
         });
 
-        audioChat = AudioChat.getInstance();
+        audioChat = new AudioChat();
 
         // Set the audio format
         AudioFormat format = new AudioFormat(8000.0f, 16, 1, true, true);
@@ -117,7 +117,7 @@ public class VoiceChatPopUpController implements Initializable {
 
     private void handleAcceptButton() throws RemoteException, NotBoundException {
         Notifications.create().title("Voice Call").text("Voice call established").showInformation();
-        System.out.println("IS THIS MISSING????-------- " + phoneNumber);
+//        System.out.println("IS THIS MISSING????-------- " + phoneNumber);
         AcceptVoiceCallRequest acceptVoiceCallRequest = new AcceptVoiceCallRequest(CurrentUser.getInstance().getPhoneNumber(), phoneNumber);
         AcceptVoiceCallResponse acceptVoiceCallResponse = NetworkFactory.getInstance().acceptVoiceCallRequest(acceptVoiceCallRequest);
         acceptButton.setDisable(true);

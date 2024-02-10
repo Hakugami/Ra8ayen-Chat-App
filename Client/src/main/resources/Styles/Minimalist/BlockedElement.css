@@ -1,28 +1,31 @@
 /* Name Label */
 .custom-hbox {
     -fx-spacing: 10; /* Adjust spacing here */
-    -fx-background-color: rgb(0, 28, 48); /* Dark background */
-    -fx-text-fill: white; /* White text color */
+    -fx-background-color: #323232; /* Dark gray background */
 }
 
 /* Name Label */
 .name-label {
-    -fx-text-fill: rgb(218, 255, 251); /* White */
+    -fx-text-fill: #FFFFFF; /* White text color */
     -fx-font-size: 20px;
 }
 
 /* Phone Number Label */
 .phone-label {
-    -fx-text-fill: rgb(100, 204, 197); /* Turquoise */
+    -fx-text-fill: #919191; /* Light gray text color */
     -fx-font-size: 20px;
 }
 
 /* Delete Button */
 .delete-button {
-     -fx-text-fill: white; /* White text color */
-     -fx-background-color: red; /* Red background */
+     -fx-text-fill: #FFFFFF; /* White text color */
+     -fx-background-color: #FF4A4A; /* Red background */
      -fx-background-radius: 30; /* Rounded corners */
      -fx-min-width: 15px; /* Adjust width as needed */
      -fx-min-height: 15px; /* Adjust height as needed */
      -fx-font-size: 25px; /* Adjust font size as needed */
+}
+
+.delete-button:hover {
+    -fx-background-color: #FF0000; /* Darker red background color on hover */
 }

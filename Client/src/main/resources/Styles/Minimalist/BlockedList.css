@@ -1,8 +1,55 @@
 .list-view {
-    -fx-background-color: rgb(218, 255, 251); /* Light background color */
+    -fx-background-color: #323232; /* Dark gray background color */
 }
+
 .blocked-contacts-header {
-    -fx-font-size: 20px; /* Adjust font size */
-    -fx-text-fill: white; /* White text color */
-    -fx-background-color: rgb(0, 28, 48); /* Dark blue background color */
+    -fx-font-size: 24px; /* Increase font size */
+    -fx-text-fill: #FFFFFF; /* White text color */
+    -fx-background-color: #4C4C4C; /* Darker gray background color */
+    -fx-padding: 10px; /* Add padding */
+    -fx-border-radius: 5px; /* Rounded corners */
+}
+
+.blocked-contacts-header:hover {
+    -fx-background-color: #737373; /* Lighter gray background color on hover */
+}
+
+.exitButton {
+    -fx-background-color: #FF4A4A; /* Red background color */
+    -fx-text-fill: #FFFFFF; /* White text color */
+    -fx-font-size: 18px; /* Increase font size */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-padding: 5px 10px; /* Add padding */
+}
+
+.exitButton:hover {
+    -fx-background-color: #FF0000; /* Darker red background color on hover */
+}
+
+.list-view .list-cell {
+    -fx-background-color: #353535; /* Dark gray background for cells */
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #3F3F3F; /* Slightly lighter gray selection color */
+    -fx-text-fill: #FFFFFF; /* White text for selection */
+}
+
+.list-view .list-cell:filled:hover {
+    -fx-background-color: #4C4C4C; /* Even lighter gray hover color */
+    -fx-text-fill: #FFFFFF; /* White text for hover */
+}
+
+.list-view .scroll-bar {
+    -fx-background-color: #737373; /* Light gray background for scrollbar */
+}
+
+.list-view .scroll-bar .thumb,
+.list-view .scroll-bar .track {
+    -fx-background-color: #919191; /* Lighter gray color for scrollbar thumb and track */
+}
+
+.list-view .scroll-bar .thumb:horizontal:hover,
+.list-view .scroll-bar .thumb:horizontal:pressed {
+    -fx-background-color: #FF4A4A; /* Red color for horizontal scrollbar thumb on hover/press */
 }
