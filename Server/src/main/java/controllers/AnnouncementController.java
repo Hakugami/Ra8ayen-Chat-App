@@ -21,6 +21,7 @@ public class AnnouncementController implements Initializable {
     private void handleAnnouncementButtonAction() {
         String announcement = announcementTextArea.getText();
         String announcementTitle = announcementTitleTextField.getText();
+
         ConcurrencyManager.getInstance().submitTask(() ->
         {
             for (String username : OnlineControllerImpl.clients.keySet()) {

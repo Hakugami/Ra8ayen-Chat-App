@@ -1,6 +1,7 @@
 package controller;
 
 import application.HelloApplication;
+import dto.Model.NotificationModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,8 @@ import javafx.stage.Stage;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
+import notification.NotificationManager;
+import notification.NotificationSounds;
 import token.TokenManager;
 
 import java.io.IOException;
@@ -67,6 +70,7 @@ public class SideNavBarController implements Initializable {
         });
 
         blockBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleBlockButton);
+        chatBotToggleButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleChatBotToggle);
         }
 
     public boolean isChatBotEnabled() {
@@ -137,5 +141,12 @@ private void handleLogout() throws NotBoundException, RemoteException {
         popup.show(blockBtn.getScene().getWindow(), event.getX()+100, event.getY());
 
         //  Model.getInstance().getViewFactory().getSelectedMenuItem().set("BlockedContact");
+    }
+    private void handleChatBotToggle(MouseEvent event){
+        if (chatBotToggleButton.isSelected()){
+            NotificationManager.getInstance().getNotificationSounds().playRobotSound();
+        }else{
+            NotificationManager.getInstance().getNotificationSounds().playRobotCloseSound();
+        }
     }
 }

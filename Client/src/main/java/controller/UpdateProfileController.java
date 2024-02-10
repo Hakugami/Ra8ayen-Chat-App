@@ -18,6 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import model.*;
 import network.NetworkFactory;
+import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -142,6 +143,7 @@ public class UpdateProfileController {
                 Model.getInstance().getControllerFactory().getContactsController().setImageProfileData();
             } else {
                 Notifications.create().title("Update Error").text(updateUserResponse.getErrorMessage()).showError();
+                NotificationManager.getInstance().getNotificationSounds().playErrorSound();
             }
         } catch (NotBoundException | SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);

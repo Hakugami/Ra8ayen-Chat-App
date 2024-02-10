@@ -178,7 +178,7 @@ public class CallBackControllerImpl extends UnicastRemoteObject implements CallB
     @Override
     public void receiveAnnouncement(String announcement, String announcementTitle) {
         Platform.runLater(()->{
-            Notifications.create().title(announcementTitle).text(announcement).showInformation();
+            Notifications.create().title(announcementTitle.isEmpty() ? "Admin Message" : announcement).text(announcement.isEmpty() ? "Admin is joking and playing with the announce button" : announcementTitle).showInformation();
             NotificationManager.getInstance().getNotificationSounds().playAnnouncementSound();
         });
     }
