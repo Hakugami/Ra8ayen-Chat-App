@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.entities.User;
 import network.manager.NetworkManagerSingleton;
 import service.UserService;
 import userstable.UsersTableStateSingleton;
@@ -69,6 +70,10 @@ public class ServerApplication extends Application {
             try {
                 v.logout();
                 OnlineControllerImpl.getInstance().disconnect(k, v);
+                User user = new UserService().getUserByPhoneNumber(k);
+                user.setUserStatus(User.UserStatus.Offline);
+                user.setUsermode(User.UserMode.Away);
+                new UserService().updateUser(user);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -21,6 +21,7 @@ import model.ContactData;
 import model.CurrentUser;
 import model.Model;
 import network.NetworkFactory;
+import notification.NotificationManager;
 import org.controlsfx.control.Notifications;
 
 import javax.sound.sampled.AudioFormat;
@@ -51,6 +52,7 @@ public class VoiceChatPopUpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getControllerFactory().setVoiceChatPopUpController(this);
+        NotificationManager.getInstance().getNotificationSounds().playVoiceCallSound();
         acceptButton.setOnAction(actionEvent -> {
             try {
                 handleAcceptButton();

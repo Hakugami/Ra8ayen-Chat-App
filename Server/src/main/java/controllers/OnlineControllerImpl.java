@@ -103,23 +103,13 @@ public class OnlineControllerImpl extends UnicastRemoteObject implements OnlineC
                 try {
                     callBackController.respond();
                 } catch (RemoteException e) {
-                    clients.remove(phoneNumber);
-                    System.out.println("disconnect clients = " + clients.size());
                     try {
                         trackOnlineUsersService.updateOnlineUsersCount(clients.size());
-                    } catch (RemoteException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    try {
                         disconnect(phoneNumber, callBackController);
-                    } catch (RemoteException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    User user = new User();
-                    user.setUserStatus(User.UserStatus.Offline);
-                    try {
+                        User user = new User();
+                        user.setUserStatus(User.UserStatus.Offline);
                         new UserService().updateUser(user);
-                    } catch (DuplicateEntryException ex) {
+                    } catch (RemoteException | DuplicateEntryException ex) {
                         throw new RuntimeException(ex);
                     }
                 }

@@ -14,6 +14,8 @@ public class Country {
 
     public Country(String name) {
         this.name = name;
+        this.code = "";
+        this.dial_code = "";
     }
 
     public void setName(String name) {
@@ -42,6 +44,6 @@ public class Country {
 
     @Override
     public String toString() {
-        return " (" + dial_code + ") "+name  ;
+        return name  ;
     }
 }

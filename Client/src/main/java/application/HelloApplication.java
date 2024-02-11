@@ -3,6 +3,7 @@ package application;
 import concurrency.manager.ConcurrencyManager;
 import dto.Model.UserModel;
 import dto.requests.UpdateUserRequest;
+import dto.responses.UpdateUserResponse;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -50,14 +51,14 @@ public class HelloApplication extends Application {
 
     @Override
     public void stop() throws RemoteException, NotBoundException {
-        if (makeUserOffline()) {
+            makeUserOffline();
             String[] data = TokenManager.getInstance().loadData();
             String write = data[0] + "\n" + data[1] + "\n" +1;
             TokenManager.getInstance().setToken(write);
             NetworkFactory.getInstance().disconnect(CurrentUser.getCurrentUser().getPhoneNumber(), CurrentUser.getInstance().getCallBackController());
             UnicastRemoteObject.unexportObject(CurrentUser.getCurrentUser().getCallBackController(), true);
             ConcurrencyManager.getInstance().forceShutdown();
-        }
+
         Platform.exit();
     }
 
@@ -79,7 +80,8 @@ public class HelloApplication extends Application {
             if(userModel==null){
                 return false;
             }
-            return NetworkFactory.getInstance().updateUser(updateUserRequest).isUpdated();
+            UpdateUserResponse updateUserResponse = NetworkFactory.getInstance().updateUser(updateUserRequest);
+            return updateUserResponse != null && updateUserResponse.isUpdated();
         } catch (RemoteException | SQLException | NotBoundException | ClassNotFoundException e) {
             return false;
         }

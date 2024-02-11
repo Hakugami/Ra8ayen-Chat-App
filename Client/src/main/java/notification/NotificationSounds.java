@@ -70,4 +70,7 @@ public class NotificationSounds {
     public void playRobotCloseSound() {
         playSound("/sounds/robotClose.mp3");
     }
+    public  void playVoiceCallSound(){
+        playSound("/sounds/voiceCall.mp3");
+    }
 }

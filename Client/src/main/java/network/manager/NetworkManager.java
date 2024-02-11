@@ -16,8 +16,8 @@ public class NetworkManager {
     public static NetworkManager getInstance() throws RemoteException {
         if (instance == null) {
             instance = new NetworkManager();
-//            registry= LocateRegistry.getRegistry(ConnectionIP.serverIP, PORT);
-            registry= LocateRegistry.getRegistry( PORT);
+            registry= LocateRegistry.getRegistry(ConnectionIP.serverIP, PORT);
+//            registry= LocateRegistry.getRegistry( PORT);
         }
         return instance;
     }

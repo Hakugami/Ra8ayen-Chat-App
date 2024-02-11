@@ -191,10 +191,12 @@ public class SignUpController implements Initializable {
                 List<Country> countryList = new ArrayList<>();
                 for (JsonNode node : jsonNode) {
                     String name = node.get("name").asText();
-                    String dialCode = node.get("dial_code").asText();
-                    String code = node.get("code").asText();
-                    countryList.add(new Country(name, dialCode, code));
+//                    String dialCode = node.get("dial_code").asText();
+//                    String code = node.get("code").asText();
+//                    countryList.add(new Country(name, dialCode, code));
+                    countryList.add(new Country(name));
                 }
+
 
                 return FXCollections.observableArrayList(countryList);
             } else {
