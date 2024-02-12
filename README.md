@@ -108,11 +108,11 @@
 <!-- Color Reference -->
 ### :art: Color Reference
 
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
+| Color           | Hex                                                              |
+|-----------------|------------------------------------------------------------------|
+| Primary Color   | ![#323232](https://via.placeholder.com/10/323232?text=+) #323232 |
+| Secondary Color | ![#353535](https://via.placeholder.com/10/353535?text=+) #353535 |
+| Text Color      | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
 
 
 <!-- Getting Started -->
