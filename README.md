@@ -178,7 +178,7 @@ To run the client, navigate to the client directory and run the following comman
 
 Mostafa Abdallah - [LinkedIn](https://www.linkedin.com/in/mostafa-abdallah-a35130151/) - mostafaabdallah009@gmail.com
 
-Islam Ahmed - [LinkedIn]() - @gmail.com
+Islam Ahmed - [LinkedIn](https://www.linkedin.com/in/islam-ahmed-18713129a/) - islam.ahmed.dev@gmail.com
 
 Rashida Mohamed - [LinkedIn]() - @gmail.com
 
