@@ -121,7 +121,7 @@
 <!-- Prerequisites -->
 ### :bangbang: Prerequisites
 
-This project uses Maven as a build tool and package manager, and requires Java JDK 21. Make sure you have them installed on your system. You can check by running the following commands in your terminal:
+This project requires Java JDK 21. Make sure you have them installed on your system. You can check by running the following commands in your terminal:
 
 ```bash
 java -version
