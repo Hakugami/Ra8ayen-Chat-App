@@ -121,7 +121,7 @@
 <!-- Prerequisites -->
 ### :bangbang: Prerequisites
 
-This project requires Java JDK 21. Make sure you have them installed on your system. You can check by running the following commands in your terminal:
+This project requires Java JDK 21. Make sure you have installed it on your system. You can check by running the following command in your terminal:
 
 ```bash
 java -version
