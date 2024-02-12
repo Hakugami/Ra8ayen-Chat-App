@@ -157,13 +157,13 @@ Compile and package the project using Maven:
 To run the server, navigate to the server directory and run the following command:
 
 ```bash
-  java -jar Server/target/Server-1.0-SNAPSHOT-shaded.jar
+  java -jar target/Server-1.0-SNAPSHOT-shaded.jar
 ```
 
 To run the client, navigate to the client directory and run the following command:
 
 ```bash
-  java -jar Client/target/Client-1.0-SNAPSHOT-shaded.jar
+  java -jar target/Client-1.0-SNAPSHOT-shaded.jar
 ```
 
 <!-- Contributing -->
