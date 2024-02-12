@@ -12,11 +12,11 @@
 <!-- Badges -->
 <p>
   <a href="https://github.com/Hakugami/Ra8ayen-Chat-App/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/Louis3797/awesome-readme-template" alt="contributors" />
+    <img src="https://img.shields.io/github/contributors/Hakugami/Ra8ayen-Chat-App" alt="contributors" />
   </a>
 
-  <a href="https://github.com/Louis3797/awesome-readme-template/stargazers">
-    <img src="https://img.shields.io/github/stars/Louis3797/awesome-readme-template" alt="stars" />
+  <a href="https://github.com/Hakugami/Ra8ayen-Chat-App/stargazers">
+    <img src="https://img.shields.io/github/stars/Hakugami/Ra8ayen-Chat-App" alt="stars" />
   </a>
 </p>
 
@@ -90,9 +90,20 @@
 <!-- Features -->
 ### :dart: Features
 
-- Feature 1
-- Feature 2
-- Feature 3
+- Group Chat
+- Voice Chat
+- Blocking Contact
+- Sending Files
+- Email Sending on Invitation
+- Chat Bot to answer on your behalf
+- Changing your status
+- Updating your profile
+- Showing statistics about online/offline users
+- Showing statistics about the gender
+- Showing statistics about the country
+- Table View for the admin showing users
+- Ability to send announcements to all users
+- Ability to start and shutdown server
 
 <!-- Color Reference -->
 ### :art: Color Reference
@@ -159,7 +170,7 @@ To run the client, navigate to the client directory and run the following comman
 ## :wave: Contributing
 
 <a href="https://github.com/Hakugami/Ra8ayen-Chat-App/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Hakugami/Ra8ayen-Chat-App" />
+  <img src="https://contrib.rocks/image?repo=Hakugami/Ra8ayen-Chat-App"  alt="Contributors"/>
 </a>
 
 <!-- Contact -->
@@ -167,14 +178,10 @@ To run the client, navigate to the client directory and run the following comman
 
 Mostafa Abdallah - [LinkedIn](https://www.linkedin.com/in/mostafa-abdallah-a35130151/) - mostafaabdallah009@gmail.com
 
+Islam Ahmed - [LinkedIn]() - @gmail.com
+
+Rashida Mohamed - [LinkedIn]() - @gmail.com
+
+Hajar Ramadan - [LinkedIn]() - @gmail.com
+
 Project Link: [https://github.com/Hakugami/Ra8ayen-Chat-App)
-
-
-<!-- Acknowledgments -->
-## :gem: Acknowledgements
-
-Useful resources and libraries.
-
-- [Shields.io](https://shields.io/)
-- [README Template](https://github.com/Louis3797/awesome-readme-template)
-
